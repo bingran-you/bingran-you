@@ -1,5 +1,4 @@
 - 👋 Hi, I’m @bingran-you
-- 👀 I’m interested in AMO and Condensed Matter physics
 - To reach me, use bingran.you.us@gmail.com
 
 <!---

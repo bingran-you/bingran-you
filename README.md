@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @bingran-you
-- To reach me, use bingran.you.us@gmail.com
+- To reach me, use bingran.bry@gmail.com
 
 <!---
 bingran-you/bingran-you is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.

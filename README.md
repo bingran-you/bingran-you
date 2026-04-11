@@ -36,6 +36,7 @@ I build and study systems that make agents more reliable, measurable, and useful
 - 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - Seeded mock environments for testing agent behavior in realistic workflows.
 - 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
 - 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
+- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - An ARTIQ control framework for photonics integration experiments.
 
 ## Selected Papers
 

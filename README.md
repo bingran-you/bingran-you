@@ -4,6 +4,19 @@
 
 I build and study systems that make agents more reliable, measurable, and useful in real workflows. This page is a short snapshot of projects and papers I've been lucky to work on.
 
+## How I Build
+
+- 🤖 My primary daily development stack is `Codex + GPT-5.4`.
+
+| Last 7 days | Value |
+| --- | ---: |
+| Requests | 26.98K |
+| Total tokens | 2.61B |
+| Prompt tokens | 2.59B |
+| Completion tokens | 16.06M |
+
+<sub>Average per request: 96,575 total · 95,980 prompt · 595 completion</sub>
+
 ## Current Focus
 
 - 🧪 Agent evaluation and skills-based benchmarking

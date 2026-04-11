@@ -57,7 +57,7 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
   <img alt="Integrated photonics" src="https://img.shields.io/badge/Integrated%20Photonics-1E7F5C?style=flat-square" />
   <img alt="Ion shuttling" src="https://img.shields.io/badge/Ion%20Shuttling-0F766E?style=flat-square" />
   <img alt="Quantum networking" src="https://img.shields.io/badge/Quantum%20Networking-0369A1?style=flat-square" />
-  <img alt="3D microtraps" src="https://img.shields.io/badge/3D%20Microtraps-92400E?style=flat-square" />
+  <img alt="3D Printing" src="https://img.shields.io/badge/3D%20Printing-92400E?style=flat-square" />
 </p>
 
 <p align="center">

@@ -19,6 +19,11 @@ I focus on systems that make agents more reliable, measurable, and useful in rea
 - [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
 - [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
 
+## Selected Papers
+
+- [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
+- [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+
 ## Contact
 
 - Email: bingran.bry@gmail.com

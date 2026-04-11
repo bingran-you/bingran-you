@@ -12,12 +12,12 @@ I build and study systems that make agents more reliable, measurable, and useful
 
 ## Selected Work
 
-- 🧠 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
+- 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
 - 🌲 [first-tree](https://github.com/agent-team-foundation/first-tree) - A Git-native context layer for decisions, ownership, and shared team knowledge.
-- 🤝 [DoWhiz](https://github.com/KnoWhiz/DoWhiz) - An agent-native product for getting work done across email, chat, documents, and related tools.
-- 🧪 [smolclaw](https://github.com/bingran-you/smolclaw) - Seeded mock environments for testing agent behavior in realistic workflows.
-- 💻 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
-- 🔬 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
+- 🥷 [DoWhiz](https://github.com/KnoWhiz/DoWhiz) - An agent-native product for getting work done across email, chat, documents, and related tools.
+- 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - Seeded mock environments for testing agent behavior in realistic workflows.
+- 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
+- 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
 
 ## Selected Papers
 

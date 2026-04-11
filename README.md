@@ -48,6 +48,7 @@ I build and study systems that make agents more reliable, measurable, and useful
 <p align="center">
   <a href="https://x.com/bingran_bry"><img alt="X" src="https://img.shields.io/badge/-X-000000?style=flat-square&logo=x&logoColor=white" /></a>
   <a href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en&authuser=2"><img alt="Google Scholar" src="https://img.shields.io/badge/-Google%20Scholar-4285F4?style=flat-square&logo=googlescholar&logoColor=white" /></a>
+  <a href="https://orcid.org/0000-0002-0316-2115"><img alt="ORCID" src="https://img.shields.io/badge/-ORCID-A6CE39?style=flat-square&logo=orcid&logoColor=white" /></a>
   <a href="https://huggingface.co/bingran-you"><img alt="Hugging Face" src="https://img.shields.io/badge/-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>
   <a href="https://www.linkedin.com/in/bingran-you-775b4017b/"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
   <a href="mailto:bingran.bry@gmail.com"><img alt="Email" src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /></a>

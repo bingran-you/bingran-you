@@ -4,7 +4,7 @@
 
 I build reliable AI systems and trapped-ion quantum experiments. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
-## AI Builder
+## 🖥️ AI Builder
 
 ### How I Build
 
@@ -45,7 +45,7 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 - 📑 [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
 - 📑 [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
 
-## Ion Trapper
+## ⚛︎ Ion Trapper
 
 ### How I Build
 

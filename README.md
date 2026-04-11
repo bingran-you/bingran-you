@@ -50,7 +50,7 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 ### How I Build
 
 <p align="center">
-  <img alt="Primary stack: ARTIQ + Laser + RF Engineering + Ultra High Vacuum" src="https://img.shields.io/badge/Primary%20stack-ARTIQ%20%2B%20Laser%20%2B%20RF%20Engineering%20%2B%20Ultra%20High%20Vacuum-0B3D2E?style=for-the-badge&logo=python&logoColor=white" />
+  <img alt="⚛︎ Primary stack: ARTIQ + Laser + RF Engineering + Ultra High Vacuum" src="https://img.shields.io/badge/%E2%9A%9B%EF%B8%8E%20Primary%20stack-ARTIQ%20%2B%20Laser%20%2B%20RF%20Engineering%20%2B%20Ultra%20High%20Vacuum-0B3D2E?style=for-the-badge" />
 </p>
 
 <p align="center">

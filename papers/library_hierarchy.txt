@@ -1,0 +1,1581 @@
+我的文库/
+├── AI/
+│   ├── Agents/
+│   │   └── Towards_a_Science_of_Scaling_Agent_Systems.md
+│   ├── mHC DeepSeek/
+│   │   ├── Deep_Residual_Learning_for_Image_Recognition.md
+│   │   ├── Hyper-Connections.md
+│   │   ├── Hyper-Connections__Seed_Hyper-Connections.md
+│   │   ├── mHC_Manifold-Constrained_Hyper-Connections.md
+│   │   ├── mHC_Manifold-Constrained_Hyper-Connections__DeepSeek-AI的流形约束超连接_增强深度模型稳定性与可扩展性_-_NotebookLM.html
+│   │   ├── mHC_Manifold-Constrained_Hyper-Connections__[Translated_-_ZH]_mHC_Manifold-Constrained_Hyper-Connections.md
+│   │   ├── mHC_Manifold-Constrained_Hyper-Connections__mHC_Manifold-Constrained_Hyper-Connections.md
+│   │   └── mHC_Manifold-Constrained_Hyper-Connections__微信公众号文章.html
+│   ├── (LEC#4_Inside-out_interpretability_training_dynamics_in_multi-layer_transformer)_JoMA_Demystifying_Multilayer_Transformers_via_JOint_Dynamic.md
+│   ├── (LEC#4_Inside-out_interpretability_training_dynamics_in_multi-layer_transformer)_Scan_and_Snap_Understanding_Training_Dynamics_and_Token_Com.md
+│   ├── (LEC#5_Models_within_models_how_do_LLMs_represent_the_world_)_Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthet.md
+│   ├── (LEC#5_Models_within_models_how_do_LLMs_represent_the_world_)_The_System_Model_and_the_User_Model_Exploring_AI_Dashboard_Design.md
+│   ├── (LEC#5_Optional)_Can_Language_Models_Encode_Perceptual_Structure_Without_Grounding_A_Case_Study_in_Color.md
+│   ├── (LEC#5_Optional)_Climbing_towards_NLU_On_Meaning_Form_and_Understanding_in_the_Age_of_Data.md
+│   ├── (LEC#6_Benchmarks_and_evals_safety_vs._capabilities_machine_ethics)_DecodingTrust_A_Comprehensive_Assessment_of_Trustworthiness_in_GPT_Model.md
+│   ├── (LEC#6_Benchmarks_and_evals_safety_vs._capabilities_machine_ethics)_Do_the_Rewards_Justify_the_Means_Measuring_Trade-Offs_Between_Rewards_an.md
+│   ├── Agentic_Context_Engineering_Evolving_Contexts_for_Self-Improving_Language_Models.md
+│   ├── Agentic_Context_Engineering_Evolving_Contexts_for_Self-Improving_Language_Models__2510.html
+│   ├── Deep_Residual_Learning_for_Image_Recognition.md
+│   ├── From_Local_to_Global_A_Graph_RAG_Approach_to_Query-Focused_Summarization__Edge_et_al._-_2024_-_From_Local_to_Global_A_Graph_RAG_Approa.md
+│   ├── Low-Noise_Quantum_Frequency_Conversion_of_Photons_from_a_Trapped_Barium_Ion_to_the_Telecom_O-band.md
+│   ├── Low-Noise_Quantum_Frequency_Conversion_of_Photons_from_a_Trapped_Barium_Ion_to_the_Telecom_O-band__win_Qian's_Qual_final_version.md
+│   ├── Probing_Classifiers_Promises_Shortcomings_and_Advances.md
+│   ├── RankRAG_Unifying_Context_Ranking_with_Retrieval-Augmented_Generation_in_LLMs.md
+│   ├── ReAct_Synergizing_Reasoning_and_Acting_in_Language_Models.md
+│   ├── Training-Free_Group_Relative_Policy_Optimization.md
+│   ├── Training-Free_Group_Relative_Policy_Optimization__2510.html
+│   ├── mHC_Manifold-Constrained_Hyper-Connections.md
+│   ├── mHC_Manifold-Constrained_Hyper-Connections__DeepSeek-AI的流形约束超连接_增强深度模型稳定性与可扩展性_-_NotebookLM.html
+│   ├── mHC_Manifold-Constrained_Hyper-Connections__[Translated_-_ZH]_mHC_Manifold-Constrained_Hyper-Connections.md
+│   ├── mHC_Manifold-Constrained_Hyper-Connections__mHC_Manifold-Constrained_Hyper-Connections.md
+│   └── mHC_Manifold-Constrained_Hyper-Connections__微信公众号文章.html
+├── Bingran You/
+│   ├── 3D-printed_micro_ion_trap_technology_for_quantum_information_applications.md
+│   ├── Bayesian_active_learning_of_interatomic_force_field_for_molecular_dynamics_simulation_of_Pt_Ag(111).md
+│   ├── Temporally_multiplexed_ion-photon_quantum_interface_via_fast_ion-chain_transport__You_et_al._-_2024_-_Temporally_multiplexed_ion-photon_quantu_1.md
+│   └── Test_of_Causal_Non-Linear_Quantum_Mechanics_by_Ramsey_Interferometry_on_the_vibrational_mode_of_a_trapped_ion.md
+├── Courses/
+│   ├── LLM/
+│   │   ├── (LEC#4_Inside-out_interpretability_training_dynamics_in_multi-layer_transformer)_JoMA_Demystifying_Multilayer_Transformers_via_JOint_Dynamic.md
+│   │   ├── (LEC#4_Inside-out_interpretability_training_dynamics_in_multi-layer_transformer)_Scan_and_Snap_Understanding_Training_Dynamics_and_Token_Com.md
+│   │   ├── (LEC#5_Models_within_models_how_do_LLMs_represent_the_world_)_Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthet.md
+│   │   ├── (LEC#5_Models_within_models_how_do_LLMs_represent_the_world_)_The_System_Model_and_the_User_Model_Exploring_AI_Dashboard_Design.md
+│   │   ├── (LEC#5_Optional)_Can_Language_Models_Encode_Perceptual_Structure_Without_Grounding_A_Case_Study_in_Color.md
+│   │   ├── (LEC#5_Optional)_Climbing_towards_NLU_On_Meaning_Form_and_Understanding_in_the_Age_of_Data.md
+│   │   ├── (LEC#6_Benchmarks_and_evals_safety_vs._capabilities_machine_ethics)_DecodingTrust_A_Comprehensive_Assessment_of_Trustworthiness_in_GPT_Model.md
+│   │   ├── (LEC#6_Benchmarks_and_evals_safety_vs._capabilities_machine_ethics)_Do_the_Rewards_Justify_the_Means_Measuring_Trade-Offs_Between_Rewards_an.md
+│   │   ├── From_Local_to_Global_A_Graph_RAG_Approach_to_Query-Focused_Summarization__Edge_et_al._-_2024_-_From_Local_to_Global_A_Graph_RAG_Approa.md
+│   │   ├── Low-Noise_Quantum_Frequency_Conversion_of_Photons_from_a_Trapped_Barium_Ion_to_the_Telecom_O-band.md
+│   │   ├── Low-Noise_Quantum_Frequency_Conversion_of_Photons_from_a_Trapped_Barium_Ion_to_the_Telecom_O-band__win_Qian's_Qual_final_version.md
+│   │   ├── Probing_Classifiers_Promises_Shortcomings_and_Advances.md
+│   │   └── RankRAG_Unifying_Context_Ranking_with_Retrieval-Augmented_Generation_in_LLMs.md
+│   ├── Modern Atomic Physics/
+│   │   ├── (AMO_Class_Presentation)_Improved_limit_on_the_electric_dipole_moment_of_the_electron.md
+│   │   ├── (AMO_Class_Presentation)_Improved_limit_on_the_electric_dipole_moment_of_the_electron__(AMO_Class_Presentation)_Improved_limit_on_the_electric_dipo.md
+│   │   ├── (AMO_Class_Presentation)_Improved_limit_on_the_electric_dipole_moment_of_the_electron__ACME_I_Experiment_Poster.md
+│   │   ├── (AMO_Class_Presentation)_Improved_limit_on_the_electric_dipole_moment_of_the_electron__Stimulated_Raman_adiabatic_passage_preparation_of_a_coherent.md
+│   │   ├── (AMO_Class_Presentation)_Improved_limit_on_the_electric_dipole_moment_of_the_electron__Supplementary_Information.md
+│   │   ├── (AMO_Class_Presentation)_Search_for_the_electric_dipole_moment_of_the_electron_with_thorium_monoxide.md
+│   │   ├── (AMO_Textbook_-_Foot)_Atomic_Physics.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Atoms_and_molecules_interacting_with_light_atomic_physics_for_the_laser_era.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Laser_Cooling_and_Trapping.md
+│   │   ├── (Coherent_States)_Coherent_States_of_the_Harmonic_Oscillator.pdf.md
+│   │   ├── (Quantization_of_EM)_Quantization_of_the_Free_Electromagnetic_Field_Photons_and_Operators.md
+│   │   ├── (Quantum_Optics)_Optical_Coherence_and_Quantum_Optics_-_Mandel_Wolf..pdf.md
+│   │   ├── (Quantum_Optics)_Quantum_Theory_of_Light_-_Rodney_Loudon.pdf.md
+│   │   ├── Bose-Einstein_Condensation_in_a_Gas_of_Sodium_Atoms.md
+│   │   ├── Electrostatic_trapping_of_ammonia_molecules.md
+│   │   ├── Evidence_for_Nonlinear_Isotope_Shift_in_Yb_+_Search_for_New_Boson.md
+│   │   ├── Investigation_of_the_fine_structure_of_antihydrogen.md
+│   │   ├── Jaynes-Cummings_Model.pdf.md
+│   │   ├── Michelson–Morley_analogue_for_electrons_using_trapped_ions_to_test_Lorentz_symmetry.md
+│   │   ├── Observation_of_Bose-Einstein_Condensation_in_a_Dilute_Atomic_Vapor.md
+│   │   ├── Photon_blockade_in_an_optical_cavity_with_one_trapped_atom.md
+│   │   ├── Probing_many-body_dynamics_on_a_51-atom_quantum_simulator.md
+│   │   ├── Quantum_Mechanics_-_LittleJohn.pdf.md
+│   │   ├── Test_of_general_relativity_by_a_pair_of_transportable_optical_lattice_clocks.md
+│   │   └── The_size_of_the_proton.md
+│   ├── Nanoscale Fabrication/
+│   │   ├── (3D_Printing_Textbook_-_2020_Tommaso_Baldacchini)_Three-Dimensional_Microfabrication_Using_Two-Photon_Polymerization.md
+│   │   ├── (Random_Access_PMD_-_2019_Nature)_Ultrafast_multi-focus_3-D_nano-fabrication_based_on_two-photon_polymerization.md
+│   │   ├── (Shuqi_Xu)_Miniaturize_3D_ion_traps_using_novel_3D_printing_technology.md
+│   │   ├── (Two-photon_Polymerization)_A_review_on_the_processing_accuracy_of_two-photon_polymerization.md
+│   │   ├── (Two-photon_Polymerization)_Two-photon_lithography_for_three-dimensional_fabrication_in_micro_nanoscale_regime_A_comprehensive_review.md
+│   │   ├── 3D_printing_–_A_review_of_processes_materials_and_applications_in_industry_4.0.md
+│   │   ├── High-resolution_two-photon_polymerization_the_most_versatile_technique_for_the_fabrication_of_microneedle_arrays.md
+│   │   ├── Two-photon_3D_lithography_materials_and_applications.md
+│   │   └── Two_decades_of_Two-Photon_Lithography_Materials_Science_Perspective_for_Additive_Manufacturing_of_2D_3D_Nano-Microstructures.md
+│   └── Quantum Mechanics/
+│       ├── Exact_solutions_for_1D_systems.pdf.md
+│       ├── Final_Review_Problems.pdf.md
+│       ├── Jaynes-Cummings_Model.pdf__Jaynes-Cummings_Model.md
+│       ├── Modern_Quantum_Mechanics.md
+│       ├── Modern_Quantum_Mechanics_Solutions_-_Sakurai.pdf.md
+│       ├── Quantum_Mechanics_-_LittleJohn.pdf.md
+│       ├── Review_Notes_-_Serah_Moldovsky.pdf.md
+│       ├── Tier_1_problem_solutions.pdf.md
+│       └── Tier_2_problem_solutions.pdf.md
+├── Integrated Photonics/
+│   ├── Ion Trap Charging and Movement/
+│   │   └── (Si_Charging_Effect)_Photoinduced_charge-carrier_dynamics_in_a_semiconductor-based_ion_trap_investigated_via_motion-sensitive_qubit_transiti.md
+│   ├── Noise control/
+│   │   ├── (Surface_Trap_Stable_Parameters)_State_Selected_and_State-To-State_Ion-Molecule_Reaction_Dynamics.md
+│   │   ├── Ion-trap_measurements_of_electric-field_noise_near_surfaces.md
+│   │   └── Thermal_equilibrium_noise_with_1_f_spectrum_from_frequency_independent_dielectric_losses_in_barium_strontium_titanate.md
+│   ├── (ETH)_Multizone_Trapped-Ion_Qubit_Control_in_an_Integrated_Photonics_QCCD_Device.md
+│   ├── (Integrated_photonics_-_2016_MIT)_Integrated_optical_addressing_of_an_ion_qubit.md
+│   ├── (Integrated_photonics_-_2022_Daniel)_High_efficiency_focusing_double-etched_SiN_grating_coupler_for_trapped_ion_qubit_manipulation.md
+│   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Beam_Steering_Using_a_2D_Focusing_Grating_Coupler_for_Scalable_Trapped_Ion_Quantum_Computing.md
+│   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Microlens_Coupler_for_Photonic_Integrated_Circuits.md
+│   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions.md
+│   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions__Knollmann_等_-_2024_-_Integrated_photonic_structures_for_phot.md
+│   ├── (On_chip_laser_-_2024_UMass)_Trapped_ion_qubit_and_clock_operations_with_a_visible_wavelength_photonic_coil_resonator_stabilized_integrated_.md
+│   ├── (Surface_Trap_Stable_Parameters)_State_Selected_and_State-To-State_Ion-Molecule_Reaction_Dynamics.md
+│   ├── (Thesis_-_Integrated_photonics_-_2017_MIT)_Integrated_optical_quantum_manipulation_and_measurement_of_trapped_ions.pdf.md
+│   ├── Scalable_Ion_Fluorescence_Collection_Using_a_Trap-Integrated_Metalens.md
+│   ├── Scalable_Ion_Fluorescence_Collection_Using_a_Trap-Integrated_Metalens__2507.html
+│   └── Subwavelength-thick_lenses_with_high_numerical_apertures_and_large_efficiency_based_on_high-contrast_transmitarrays__Subwavelength-thick_lenses_with_high_numerical_apertures_and.md
+├── Ion Trap/
+│   ├── Fundamental/
+│   │   ├── (3D_Printed_Ion_Trap_-_2022_Oregon)_Geometries_and_fabrication_methods_for_3D_printing_ion_traps.md
+│   │   ├── (AMO_Textbook_-_Foot)_Atomic_Physics.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Atoms_and_molecules_interacting_with_light_atomic_physics_for_the_laser_era.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Laser_Cooling_and_Trapping.md
+│   │   ├── (Bible)_(Roos_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+│   │   ├── (Bible)_Experimental_issues_in_coherent_quantum-state_manipulation_of_trapped_atomic_ions.md
+│   │   ├── (Bible)_Quantum_dynamics_of_single_trapped_ions.md
+│   │   ├── (Ca+_stark_shift_-_2003_Innsbruck)_Precision_Measurement_and_Compensation_of_Optical_Stark_Shifts_for_an_Ion-Trap_Quantum_Processor.pdf.md
+│   │   ├── (Chichi_Thesis_-_Toroidal_Half-Wave_(λ_2)_Resonator_-_2021_Da_An)_Electric-field_noise_scaling_and_wire-mediated_ion-ion_energy_exchange_in_.md
+│   │   ├── (Coupling_stength_of_motional_carrier_-_2003_Leibfried)_Quantum_dynamics_of_single_trapped_ions.md
+│   │   ├── (ETH_PIC_Nature_-_2016_ETH)_Integrated_optical_addressing_of_an_ion_qubit.md
+│   │   ├── (ETH_PIC_PRX_-_2025_ETH)_Multizone_Trapped-Ion_Qubit_Control_in_an_Integrated_Photonics_QCCD_Device.md
+│   │   ├── (GM_Thesis_-_Lattice_Setup_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   │   ├── (Heating_measurement_for_multiple_ions_-_2020_Mu_Qiao)_Double-Electromagnetically-Induced-Transparency_Ground-State_Cooling_of_Stationary_Tw.md
+│   │   ├── (Integrated_photonics_-_2016_MIT)_Integrated_optical_addressing_of_an_ion_qubit.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_High_efficiency_focusing_double-etched_SiN_grating_coupler_for_trapped_ion_qubit_manipulation.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Beam_Steering_Using_a_2D_Focusing_Grating_Coupler_for_Scalable_Trapped_Ion_Quantum_Computing.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Microlens_Coupler_for_Photonic_Integrated_Circuits.md
+│   │   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions.md
+│   │   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions__Knollmann_等_-_2024_-_Integrated_photonic_structures_for_phot.md
+│   │   ├── (Joe_Thesis_-_Lattice_Setup_-_2023_Joe)_Quantum_metrology_with_trapped_ions.pdf.md
+│   │   ├── (Laser_lock_-_2001_Eric)_An_introduction_to_Pound–Drever–Hall_laser_frequency_stabilization.md
+│   │   ├── (MS_Gate_-_2008_Roos)_Ion_trap_quantum_gates_with_amplitude-modulated_laser_beams.md
+│   │   ├── (Motional_Sideband_-_2023_Innsbruck)_Sideband_thermometry_of_ion_crystals.md
+│   │   ├── (Multiple_ions_cooling_-_2023_Qiming)_Continuous_Raman_sideband_cooling_beyond_the_Lamb-Dicke_regime_in_a_trapped_ion_chain.pdf.md
+│   │   ├── (Multipole_Potentials_-_2011_Innsbruck)_Classical_control_of_an_ion_in_a_surface_trap_(PhD_Thesis).pdf.md
+│   │   ├── (On_chip_laser_-_2024_UMass)_Trapped_ion_qubit_and_clock_operations_with_a_visible_wavelength_photonic_coil_resonator_stabilized_integrated_.md
+│   │   ├── (PIC_Trap_design_-_2021_Malinowski_ETH)_Unitary_and_Dissipative_Trapped-Ion_Entanglement_Using_Integrated_Optics.md
+│   │   ├── (QM_Thesis_-_2023_Qiming_Wu)_Quantum_information_processing_with_programmable_interaction_in_a_trapped_ion_chain.pdf.md
+│   │   ├── (Quant-NET_Blueprint_-_2021_Innsbruck)_Interface_between_Trapped-Ion_Qubits_and_Travelling_Photons_with_Close-to-Optimal_Efficiency.md
+│   │   ├── (Ramm_Thesis_-_Lattice_Setup_-_2014_Ramm)_Quantum_Correlations_and_Energy_Transport_in_Trapped_Ions.md
+│   │   ├── (Saturation_Parameter_-_2004_Peter_Staanum)_Quantum_Optics_with_Trapped_Calcium_Ions.pdf.md
+│   │   ├── (Scanned_-_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+│   │   ├── (Shuqi_Xu)_Miniaturize_3D_ion_traps_using_novel_3D_printing_technology.md
+│   │   ├── (Surface_Trap_-_2006_Boulder)_Microfabricated_Surface-Electrode_Ion_Trap_for_Scalable_Quantum_Information_Processing.md
+│   │   ├── (Surface_Trap_-_2017_Sankaranarayanan_Innsbruck)_Establishing_tools_to_optimize_surface_traps_for_wiring_up_trapped_ions.md
+│   │   ├── (Thesis_-_2023_Neil)_Creating_and_Destroying_Rotational_Quantum_Coherence_in_a_Trapped-Ion_Coulomb_Crystal_Rotor.md
+│   │   ├── (Thesis_-_2024_Ke_Sun)_Quantum_Simulation_of_Electron_Transfer_Dynamics_Using_A_Trapped-Ion_System.md
+│   │   ├── (Thesis_-_2024_Ke_Sun)_Quantum_Simulation_of_Electron_Transfer_Dynamics_Using_A_Trapped-Ion_System__Sun_-_2024_-_Quantum_Simulation_of_Electron_Transfer_Dynamic.md
+│   │   ├── (Thesis_-_Integrated_photonics_-_2017_MIT)_Integrated_optical_quantum_manipulation_and_measurement_of_trapped_ions.pdf.md
+│   │   ├── (Trap_Potential_-_2011_Littich)_Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   │   ├── (Trap_calculation_-_2008_UCLA)_Analytic_model_for_electrostatic_fields_in_surface-electrode_ion_traps.md
+│   │   ├── (Trapped_ion_QIP_-_2021_Ken_Brown)_Materials_Challenges_for_Trapped-Ion_Quantum_Computers.pdf.md
+│   │   ├── (Two-photon_Polymerization)_A_review_on_the_processing_accuracy_of_two-photon_polymerization.md
+│   │   ├── (Two-photon_Polymerization)_Two-photon_lithography_for_three-dimensional_fabrication_in_micro_nanoscale_regime_A_comprehensive_review.md
+│   │   ├── Dan_Steck_Rubidium.pdf.md
+│   │   └── Microwave_Engineering_-_Pozar.md
+│   ├── In Vaccum Resonator/
+│   │   ├── (In_Vaccum_Resonator_-_2014_NIST)_Frequency_Comb_Generation_in_Superconducting_Resonators.md
+│   │   ├── (In_Vaccum_Resonator_-_2014_NIST)_Frequency_Comb_Generation_in_Superconducting_Resonators__manuscript-supplement.md
+│   │   ├── (In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion_traps__(In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion.md
+│   │   └── (PCB_Resonator_-_2022_ETH)_Characterization_of_micromotion_induced_by_RF_phase_shift_with_photon_correlation_detection_in_a_Paul_trap.md
+│   ├── Junction Shuttling/
+│   │   └── (Ion_shuttling_-_2024_Quantinuum)_Scalable_Multispecies_Ion_Transport_in_a_Grid_Based_Surface-Electrode_Trap.pdf.md
+│   ├── Lab Notes/
+│   │   ├── (Shuqi_Xu)_Miniaturize_3D_ion_traps_using_novel_3D_printing_technology.md
+│   │   └── Group_Slides_3D_Trap_2021.4_-_2022.9.pdf.md
+│   ├── Laser free gate/
+│   │   ├── (43Ca+_spectrum_-_2008_Innsbruck)_Precision_Spectroscopy_and_Quantum_Information_Processing_with_Trapped_Calcium_Ions.md
+│   │   ├── (MW_gate_-_2019_R_Srinivas)_Versatile_laser-free_trapped-ion_entangling_gates.md
+│   │   ├── (MW_gate_theory_-_2016_Oxford)_High-Fidelity_Trapped-Ion_Quantum_Logic_Using_Near-Field_Microwaves.md
+│   │   ├── (MW_gate_theory_-_2023_Oxford)_Focusing_of_quantum_gate_interactions_using_dynamical_decoupling.md
+│   │   ├── (R_Srinivas_Thesis_-_2020_R_Srinivas)_Laser-free_trapped-ion_quantum_logic_with_a_radiofrequency_magnetic_field_gradient.pdf.md
+│   │   ├── (Thesis_-_MW_gate_-_2013_Thomas_P._Harty)_High-fidelity_microwave-driven_quantum_logic_in_intermediate-field_43Ca+.pdf.md
+│   │   ├── High-fidelity_laser-free_universal_control_of_trapped_ion_qubits.md
+│   │   └── Trapped-Ion_Quantum_Logic_Gates_Based_on_Oscillating_Magnetic_Fields.md
+│   ├── Random/
+│   │   ├── (43Ca+_spectrum_-_2008_Innsbruck)_Precision_Spectroscopy_and_Quantum_Information_Processing_with_Trapped_Calcium_Ions.md
+│   │   └── (Charging_effect_-_2010_R._Blatt)_Trapped-ion_probing_of_light-induced_charging_effects_on_dielectrics__Harlander_et_al._-_2010_-_Trapped-ion_probing_of_light-induc.md
+│   ├── Resonator/
+│   │   ├── (Chichi_Thesis_-_Toroidal_Half-Wave_(λ_2)_Resonator_-_2021_Da_An)_Electric-field_noise_scaling_and_wire-mediated_ion-ion_energy_exchange_in_.md
+│   │   ├── (Half-wave_Resonator_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   │   ├── (Helical_Resonator_-_2012_Sussex)_On_the_application_of_radio_frequency_voltages_to_ion_traps_via_helical_resonators.md
+│   │   ├── (Helical_Resonator_-_2014_Amherst_College)_Constructing_an_Ultra-High_Vacuum_Chamber_and_a_Radio_Frequency_Helical_Resonator_for_Trapping_Io.md
+│   │   ├── (In_Vaccum_Resonator_-_2014_NIST)_Frequency_Comb_Generation_in_Superconducting_Resonators.md
+│   │   ├── (In_Vaccum_Resonator_-_2014_NIST)_Frequency_Comb_Generation_in_Superconducting_Resonators__manuscript-supplement.md
+│   │   ├── (In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion_traps__(In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion.md
+│   │   ├── (Meander_Line_Resonator_-_2017_NIST)Ticking_near_the_Zero-Point_Energy_towards_1_×_10-18_Accuracy_in_Al+_Optical_Clocks.md
+│   │   ├── (PCB_Resonator_-_2022_ETH)_Characterization_of_micromotion_induced_by_RF_phase_shift_with_photon_correlation_detection_in_a_Paul_trap.md
+│   │   ├── (Pseudo_Potential_-_2011_Master)_Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   │   ├── (Transformer_-_2003_Sevick)_Understanding_building_and_using_Baluns_and_Ununs_theory_and_practical_designs_for_the_experimenter.md
+│   │   └── Microwave_Engineering_-_Pozar.md
+│   ├── Tweezer/
+│   │   ├── (280_qubits_-_2023_Lukin_Group)_Logical_quantum_processor_based_on_reconfigurable_atom_arrays.md
+│   │   ├── (Addressing_laser_-_2023_USTC)_A_low-crosstalk_double-side_addressing_system_using_acousto-optic_deflectors_for_atomic_ion_qubits.md
+│   │   ├── (Tweezer_experiment_-_2010_Schneider)_Optical_trapping_of_an_ion.md
+│   │   ├── (Tweezer_experiment_-_2023)_Optical_tweezers_throw_and_catch_single_atoms.md
+│   │   ├── (Tweezer_experiment_-_2023_Netherlands)_Trapped_Ion_Quantum_Computing_using_Optical_Tweezers_and_the_Magnus_Effect.md
+│   │   └── (Tweezer_theory_-_1999_Max-Planck-Institut)_Optical_dipole_traps_for_neutral_atoms.md
+│   ├── (Chichi_Thesis_-_Toroidal_Half-Wave_(λ_2)_Resonator_-_2021_Da_An)_Electric-field_noise_scaling_and_wire-mediated_ion-ion_energy_exchange_in_.md
+│   ├── (Half-wave_Resonator_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   ├── (Helical_Resonator_-_2012_Sussex)_On_the_application_of_radio_frequency_voltages_to_ion_traps_via_helical_resonators.md
+│   ├── (Helical_Resonator_-_2014_Amherst_College)_Constructing_an_Ultra-High_Vacuum_Chamber_and_a_Radio_Frequency_Helical_Resonator_for_Trapping_Io.md
+│   ├── (In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion_traps__(In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion.md
+│   ├── (Meander_Line_Resonator_-_2017_NIST)Ticking_near_the_Zero-Point_Energy_towards_1_×_10-18_Accuracy_in_Al+_Optical_Clocks.md
+│   ├── (Multipole_Potentials_-_2011_Innsbruck)_Classical_control_of_an_ion_in_a_surface_trap_(PhD_Thesis).pdf.md
+│   ├── (Pseudo_Potential_-_2011_Master)_Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   ├── (Scanned_-_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+│   ├── (Surface_Trap_-_2006_Boulder)_Microfabricated_Surface-Electrode_Ion_Trap_for_Scalable_Quantum_Information_Processing.md
+│   └── Group_Slides_3D_Trap_2021.4_-_2022.9.pdf.md
+├── Large Files/
+│   ├── Random Papers/
+│   │   ├── $MC^2$_Mixed_Integer_and_Linear_Programming.md
+│   │   ├── $_mathcal{E}_0$_Enhancing_Generalization_and_Fine-Grained_Control_in_VLA_Models_via_Continuized_Discrete_Diffusion.md
+│   │   ├── 2510.19619v1.md
+│   │   ├── 2510.23175v1.md
+│   │   ├── 2510.27277v1.md
+│   │   ├── 2511.03568v1.md
+│   │   ├── 2511.03917v1.md
+│   │   ├── 2511.10681v1.md
+│   │   ├── 2511.11293v1.md
+│   │   ├── 2511.12805v1.md
+│   │   ├── 2511.13747v1.md
+│   │   ├── 2511.14453v1.md
+│   │   ├── 2511.14523v1.md
+│   │   ├── 2511.14816v1.md
+│   │   ├── 2511.15298v1.md
+│   │   ├── 2511.15628v1.md
+│   │   ├── 2511.15721v1.md
+│   │   ├── 2511.16456v1.md
+│   │   ├── 2511.17627v1.md
+│   │   ├── 2511.18664v2.md
+│   │   ├── 2511.18748v1.md
+│   │   ├── 2511.19072v1.md
+│   │   ├── 2511.19081v1.md
+│   │   ├── 2511.19093v1.md
+│   │   ├── 2511.19095v1.md
+│   │   ├── 2511.19099v1.md
+│   │   ├── 2511.19114v1.md
+│   │   ├── 2511.19144v1.md
+│   │   ├── 2511.19159v1.md
+│   │   ├── 2511.19185v1.md
+│   │   ├── 2511.19195v1.md
+│   │   ├── 2511.19207v1.md
+│   │   ├── 2511.19226v1.md
+│   │   ├── 2511.19230v1.md
+│   │   ├── 2511.19237v2.md
+│   │   ├── 2511.19242v1.md
+│   │   ├── 2511.19281v1.md
+│   │   ├── 2511.19290v1.md
+│   │   ├── 2511.19322v1.md
+│   │   ├── 2511.19338v1.md
+│   │   ├── 2511.19393v1.md
+│   │   ├── 2511.19395v1.md
+│   │   ├── 2511.19432v1.md
+│   │   ├── 2511.19564v1.md
+│   │   ├── 2511.19570v1.md
+│   │   ├── 2511.19571v2.md
+│   │   ├── 2511.19638v1.md
+│   │   ├── 2511.19687v1.md
+│   │   ├── 2511.19702v1.md
+│   │   ├── 2511.19738v1.md
+│   │   ├── 2511.19742v1.md
+│   │   ├── 2511.19815v1.md
+│   │   ├── 2511.19817v1.md
+│   │   ├── 2511.19824v1.md
+│   │   ├── 2511.19876v1.md
+│   │   ├── 2511.19881v1.md
+│   │   ├── 2511.19906v2.md
+│   │   ├── 2511.19908v2.md
+│   │   ├── 2511.19915v1.md
+│   │   ├── 2511.19938v1.md
+│   │   ├── 2511.20040v1.md
+│   │   ├── 2511.20089v1.md
+│   │   ├── 2511.20115v1.md
+│   │   ├── 2511.20133v2.md
+│   │   ├── 2511.20149v1.md
+│   │   ├── 2511.20150v1.md
+│   │   ├── 2511.20161v1.md
+│   │   ├── 2511.20174v1.md
+│   │   ├── 2511.20208v1.md
+│   │   ├── 2511.20215v1.md
+│   │   ├── 2511.20219v1.md
+│   │   ├── 2511.20228v1.md
+│   │   ├── 2511.20232v1.md
+│   │   ├── 2511.20311v1.md
+│   │   ├── 2511.20337v1.md
+│   │   ├── 2511.20341v1.md
+│   │   ├── 2511.20346v1.md
+│   │   ├── 2511.20358v1.md
+│   │   ├── 2511.20373v1.md
+│   │   ├── 2511.20417v1.md
+│   │   ├── 2511.20424v1.md
+│   │   ├── 2511.20433v1.md
+│   │   ├── 2511.20445v1.md
+│   │   ├── 2511.20449v1.md
+│   │   ├── 2511.20454v1.md
+│   │   ├── 2511.20487v1.md
+│   │   ├── 2511.20504v1.md
+│   │   ├── 2511.20514v1.md
+│   │   ├── 2511.20518v1.md
+│   │   ├── 2511.20537v1.md
+│   │   ├── 2511.20548v2.md
+│   │   ├── 2511.20556v1.md
+│   │   ├── 2511.20568v1.md
+│   │   ├── 2511.20574v1.md
+│   │   ├── 2511.20588v1.md
+│   │   ├── 2511.20596v1.md
+│   │   ├── 2511.20611v1.md
+│   │   ├── 2511.20631v1.md
+│   │   ├── 2511.20632v1.md
+│   │   ├── 2511.20634v1.md
+│   │   ├── 2511.20638v1.md
+│   │   ├── 2511.20717v1.md
+│   │   ├── 2511.20742v1.md
+│   │   ├── 2511.20760v1.md
+│   │   ├── 2511.20773v1.md
+│   │   ├── 2511.20783v1.md
+│   │   ├── 2511.20786v1.md
+│   │   ├── 2511.20787v1.md
+│   │   ├── 2511.20789v1.md
+│   │   ├── 2511.20794v1.md
+│   │   ├── 2511.20798v1.md
+│   │   ├── 2511.20803v1.md
+│   │   ├── 2511.20825v1.md
+│   │   ├── 2511.20827v1.md
+│   │   ├── 2511.20829v1.md
+│   │   ├── 2511.20840v1.md
+│   │   ├── 2511.20843v1.md
+│   │   ├── 2511.20852v1.md
+│   │   ├── 2511.20855v1.md
+│   │   ├── 2511.20861v1.md
+│   │   ├── 2511.20864v1.md
+│   │   ├── 2511.20868v1.md
+│   │   ├── 2511.20875v1.md
+│   │   ├── 2511.20879v1.md
+│   │   ├── 2511.20881v1.md
+│   │   ├── 2511.20882v1.md
+│   │   ├── 2511.20885v1.md
+│   │   ├── 2511.20890v1.md
+│   │   ├── 2511.20898v1.md
+│   │   ├── 2511.20899v1.md
+│   │   ├── 2511.20905v1.md
+│   │   ├── 2511.20912v1.md
+│   │   ├── 2511.20915v1.md
+│   │   ├── 2511.20921v1.md
+│   │   ├── 2511.20925v1.md
+│   │   ├── 2511.20932v1.md
+│   │   ├── 2511.20949v1.md
+│   │   ├── 2511.20954v1.md
+│   │   ├── 2511.20958v1.md
+│   │   ├── 2511.20960v1.md
+│   │   ├── 2511.20963v1.md
+│   │   ├── 2511.20966v1.md
+│   │   ├── 2511.20969v1.md
+│   │   ├── 2511.20976v1.md
+│   │   ├── 2511.20978v1.md
+│   │   ├── 2511.20979v1.md
+│   │   ├── 2511.20981v1.md
+│   │   ├── 2511.20984v1.md
+│   │   ├── 2511.20987v1.md
+│   │   ├── 2511.20988v1.md
+│   │   ├── 2511.21023v1.md
+│   │   ├── 2511.21026v1.md
+│   │   ├── 2511.21030v1.md
+│   │   ├── 2511.21031v1.md
+│   │   ├── 2511.21041v1.md
+│   │   ├── 2511.21055v1.md
+│   │   ├── 2511.21059v1.md
+│   │   ├── 2511.21065v1.md
+│   │   ├── 2511.21072v1.md
+│   │   ├── 2511.21074v1.md
+│   │   ├── 2511.21077v1.md
+│   │   ├── 2511.21100v1.md
+│   │   ├── 2511.21102v1.md
+│   │   ├── 2511.21111v1.md
+│   │   ├── 2511.21112v1.md
+│   │   ├── 2511.21116v1.md
+│   │   ├── 2511.21119v1.md
+│   │   ├── 2511.21123v1.md
+│   │   ├── 2511.21125v1.md
+│   │   ├── 2511.21128v1.md
+│   │   ├── 2511.21130v1.md
+│   │   ├── 2511.21148v1.md
+│   │   ├── 2511.21159v1.md
+│   │   ├── 2511.21165v1.md
+│   │   ├── 2511.21167v1.md
+│   │   ├── 2511.21175v1.md
+│   │   ├── 2511.21178v1.md
+│   │   ├── 2511.21204v1.md
+│   │   ├── 2511.21206v1.md
+│   │   ├── 2511.21212v1.md
+│   │   ├── 2511.21217v1.md
+│   │   ├── 2511.21218v1.md
+│   │   ├── 2511.21224v1.md
+│   │   ├── 2511.21226v1.md
+│   │   ├── 2511.21230v1.md
+│   │   ├── 2511.21236v1.md
+│   │   ├── 2511.21237v1.md
+│   │   ├── 2511.21246v1.md
+│   │   ├── 2511.21248v1.md
+│   │   ├── 2511.21249v1.md
+│   │   ├── 2511.21252v1.md
+│   │   ├── 2511.21259v1.md
+│   │   ├── 2511.21260v1.md
+│   │   ├── 2511.21262v1.md
+│   │   ├── 2511.21267v1.md
+│   │   ├── 2511.21268v1.md
+│   │   ├── 2511.21270v1.md
+│   │   ├── 2511.21271v1.md
+│   │   ├── 2511.21272v1.md
+│   │   ├── 2511.21275v1.md
+│   │   ├── 2511.21279v1.md
+│   │   ├── 2511.21281v1.md
+│   │   ├── 2511.21283v1.md
+│   │   ├── 2511.21286v1.md
+│   │   ├── 2511.21288v1.md
+│   │   ├── 2511.21294v1.md
+│   │   ├── 2511.21295v1.md
+│   │   ├── 2511.21302v1.md
+│   │   ├── 2511.21303v1.md
+│   │   ├── 2511.21306v1.md
+│   │   ├── 2511.21311v1.md
+│   │   ├── 2511.21316v1.md
+│   │   ├── 2511.21321v1.md
+│   │   ├── 2511.21322v1.md
+│   │   ├── 2511.21324v1.md
+│   │   ├── 2511.21330v1.md
+│   │   ├── 2511.21331v1.md
+│   │   ├── 2511.21333v1.md
+│   │   ├── 2511.21341v1.md
+│   │   ├── 2511.21344v1.md
+│   │   ├── 2511.21346v1.md
+│   │   ├── 2511.21348v1.md
+│   │   ├── 2511.21349v1.md
+│   │   ├── 2511.21351v1.md
+│   │   ├── 2511.21352v1.md
+│   │   ├── 2511.21353v1.md
+│   │   ├── 2511.21354v1.md
+│   │   ├── 2511.21359v1.md
+│   │   ├── 2511.21360v1.md
+│   │   ├── 2511.21364v1.md
+│   │   ├── 2511.21367v1.md
+│   │   ├── 2511.21372v1.md
+│   │   ├── 2511.21376v1.md
+│   │   ├── 2511.21378v1.md
+│   │   ├── 2511.21381v1.md
+│   │   ├── 2511.21382v1.md
+│   │   ├── 2511.21384v1.md
+│   │   ├── 2511.21389v1.md
+│   │   ├── 2511.21391v1.md
+│   │   ├── 2511.21393v1.md
+│   │   ├── 2511.21394v1.md
+│   │   ├── 2511.21396v1.md
+│   │   ├── 2511.21397v1.md
+│   │   ├── 2511.21401v1.md
+│   │   ├── 2511.21418v1.md
+│   │   ├── 2511.21425v1.md
+│   │   ├── 2511.21426v1.md
+│   │   ├── 2511.21427v1.md
+│   │   ├── 2511.21433v1.md
+│   │   ├── 2511.21441v1.md
+│   │   ├── 2511.21442v1.md
+│   │   ├── 2511.21443v1.md
+│   │   ├── 2511.21444v1.md
+│   │   ├── 2511.21447v1.md
+│   │   ├── 2511.21450v1.md
+│   │   ├── 2511.21457v1.md
+│   │   ├── 2511.21465v1.md
+│   │   ├── 2511.21467v1.md
+│   │   ├── 2511.21471v1.md
+│   │   ├── 2511.21475v1.md
+│   │   ├── 2511.21478v1.md
+│   │   ├── 2511.21480v1.md
+│   │   ├── 2511.21481v1.md
+│   │   ├── 2511.21484v1.md
+│   │   ├── 2511.21489v1.md
+│   │   ├── 2511.21495v1.md
+│   │   ├── 2511.21498v1.md
+│   │   ├── 2511.21500v1.md
+│   │   ├── 2511.21503v1.md
+│   │   ├── 2511.21507v1.md
+│   │   ├── 2511.21516v1.md
+│   │   ├── 2511.21524v1.md
+│   │   ├── 2511.21525v1.md
+│   │   ├── 2511.21526v1.md
+│   │   ├── 2511.21527v1.md
+│   │   ├── 2511.21529v1.md
+│   │   ├── 2511.21533v1.md
+│   │   ├── 2511.21537v1.md
+│   │   ├── 2511.21543v1.md
+│   │   ├── 2511.21548v1.md
+│   │   ├── 2511.21554v1.md
+│   │   ├── 2511.21559v1.md
+│   │   ├── 2511.21561v1.md
+│   │   ├── 2511.21563v1.md
+│   │   ├── 2511.21564v1.md
+│   │   ├── 2511.21569v1.md
+│   │   ├── 2511.21586v1.md
+│   │   ├── 2511.21588v1.md
+│   │   ├── 2511.21594v1.md
+│   │   ├── 2511.21595v1.md
+│   │   ├── 2511.21596v1.md
+│   │   ├── 2511.21600v1.md
+│   │   ├── 2511.21602v1.md
+│   │   ├── 2511.21607v1.md
+│   │   ├── 2511.21613v1.md
+│   │   ├── 2511.21616v1.md
+│   │   ├── 2511.21617v1.md
+│   │   ├── 2511.21622v1.md
+│   │   ├── 2511.21623v1.md
+│   │   ├── 2511.21630v1.md
+│   │   ├── 2511.21632v1.md
+│   │   ├── 2511.21633v1.md
+│   │   ├── 2511.21642v1.md
+│   │   ├── 2511.21643v1.md
+│   │   ├── 2511.21645v1.md
+│   │   ├── 2511.21647v1.md
+│   │   ├── 2511.21656v1.md
+│   │   ├── 2511.21657v1.md
+│   │   ├── 2511.21658v1.md
+│   │   ├── 2511.21662v1.md
+│   │   ├── 2511.21666v1.md
+│   │   ├── 2511.21667v1.md
+│   │   ├── 2511.21669v1.md
+│   │   ├── 2511.21670v1.md
+│   │   ├── 2511.21671v1.md
+│   │   ├── 2511.21678v1.md
+│   │   ├── 2511.21680v1.md
+│   │   ├── 2511.21681v1.md
+│   │   ├── 2511.21682v1.md
+│   │   ├── 2511.21692v1.md
+│   │   ├── 2D_Sparse_Array_Design_via_Reweighted_L1_Second_Order_Cone_Programming_for_3D_Ultrasound_Imaging.md
+│   │   ├── 3S-Trader_A_Multi-LLM_Framework_for_Adaptive_Stock_Scoring_Strategy_and_Selection_in_Portfolio_Optimization.md
+│   │   ├── 6G_Satellite_Direct-to-Cell_Connectivity_To_distribute_or_not_to_distribute_that_is_the_question.md
+│   │   ├── ABIDES-MARL_A_Multi-Agent_Reinforcement_Learning_Environment_for_Endogenous_Price_Formation_and_Execution_in_a_Limit_Order_Book.md
+│   │   ├── AI_ML_Model_Cards_in_Edge_AI_Cyberinfrastructure_towards_Agentic_AI.md
+│   │   ├── AI_ML_based_Joint_Source_and_Channel_Coding_for_HARQ-ACK_Payload.md
+│   │   ├── AMR-MoEGA_Antimicrobial_Resistance_Prediction_using_Mixture_of_Experts_and_Genetic_Algorithms.md
+│   │   ├── AVFakeBench_A_Comprehensive_Audio-Video_Forgery_Detection_Benchmark_for_AV-LMMs.md
+│   │   ├── A_0.32_mm$^2$_100_Mb_s_223_mW_ASIC_in_22FDX_for_Joint_Jammer_Mitigation_Channel_Estimation_and_SIMO_Data_Detection.md
+│   │   ├── A_Brain_Wave_Encodes_a_Thousand_Tokens_Modeling_Inter-Cortical_Neural_Interactions_for_Effective_EEG-based_Emotion_Recognition.md
+│   │   ├── A_Deep_Learning-Based_Method_for_Fully_Coupled_Non-Markovian_FBSDEs_with_Applications.md
+│   │   ├── A_Disentangled_Low-Rank_RNN_Framework_for_Uncovering_Neural_Connectivity_and_Dynamics.md
+│   │   ├── A_Distributed_Gradient-based_Algorithm_for_Optimization_Problems_with_Coupled_Equality_Constraints.md
+│   │   ├── A_Fully_Probabilistic_Tensor_Network_for_Regularized_Volterra_System_Identification.md
+│   │   ├── A_Generalized_Additive_Partial-Mastery_Cognitive_Diagnosis_Model.md
+│   │   ├── A_Generalized_Control_Function_Approach_to_Production_Function_Estimation.md
+│   │   ├── A_Hybrid_Computational_Intelligence_Framework_for_scRNA-seq_Imputation_Integrating_scRecover_and_Random_Forests.md
+│   │   ├── A_Hybrid_Dominant-Interferer_Approximation_for_SINR_Coverage_in_Poisson_Cellular_Networks.md
+│   │   ├── A_Hybrid_Learning-to-Optimize_Framework_for_Mixed-Integer_Quadratic_Programming.md
+│   │   ├── A_Jammer-Resilient_2.87_mm$^2$_1.28_MS_s_310_mW_Multi-Antenna_Synchronization_ASIC_in_65_nm.md
+│   │   ├── A_Lightweight_Interpretable_Deep_Learning_System_for_Automated_Detection_of_Cervical_Adenocarcinoma_In_Situ_(AIS).md
+│   │   ├── A_Mixed-Form_PINNS_(MF-PINNS)_For_Solving_The_Coupled_Stokes-Darcy_Equations.md
+│   │   ├── A_Multi-Stage_Deep_Learning_Framework_with_PKCP-MixUp_Augmentation_for_Pediatric_Liver_Tumor_Diagnosis_Using_Multi-Phase_Contrast-Enhanced_C.md
+│   │   ├── A_Natural_Hedging_Framework_for_Longevity_Risk_with_Graphical_Risk_Assessment.md
+│   │   ├── A_Physics-Informed_U-net-LSTM_Network_for_Data-Driven_Seismic_Response_Modeling_of_Structures.md
+│   │   ├── A_Practical_Machine_Learning_Approach_for_Dynamic_Stock_Recommendation.md
+│   │   ├── A_Problem-Oriented_Taxonomy_of_Evaluation_Metrics_for_Time_Series_Anomaly_Detection.md
+│   │   ├── A_Risk-Neutral_Neural_Operator_for_Arbitrage-Free_SPX-VIX_Term_Structures.md
+│   │   ├── A_Robust_State_Filter_Against_Unmodeled_Process_And_Measurement_Noise.md
+│   │   ├── A_Sensitivity_Analysis_Framework_for_Causal_Inference_Under_Interference.md
+│   │   ├── A_Set_of_Rules_for_Model_Validation.md
+│   │   ├── A_Systematic_Study_of_Model_Merging_Techniques_in_Large_Language_Models.md
+│   │   ├── A_Topological_Approach_to_Parameterizing_Deep_Hedging_Networks.md
+│   │   ├── A_Unified_Spatiotemporal_Framework_for_Modeling_Censored_and_Missing_Areal_Responses.md
+│   │   ├── A_Win-Expectancy_Framework_for_Contextualizing_Runs_Batted_In_Introducing_ARBI_and_CRBI.md
+│   │   ├── A_characterization_of_strategy-proof_probabilistic_assignment_rules.md
+│   │   ├── A_complete_solution_of_the_Erdos-Kleitman_matching_problem_for_$n_le_3s$.md
+│   │   ├── A_decoupled_alignment_kernel_for_peptide_membrane_permeability_predictions.md
+│   │   ├── A_high-frequency_approach_to_Realized_Risk_Measures.md
+│   │   ├── A_mark_and_recapture_perspective_on_vaccination_touchpoints.md
+│   │   ├── A_mathematical_study_of_the_excess_growth_rate.md
+│   │   ├── A_model_for_mosquito-borne_epidemic_outbreaks_with_information-dependent_protective_behaviour.md
+│   │   ├── A_novel_approach_to_classification_of_ECG_arrhythmia_types_with_latent_ODEs.md
+│   │   ├── A_novel_nonparametric_framework_for_DIF_detection_using_kernel-smoothed_item_response_curves.md
+│   │   ├── A_parallel_monetary_system_based_on_the_redeemable_self-decaying_money_--_The_ultimate_hedge_and_safe_haven_of_private_wealth_in_the_rising_.md
+│   │   ├── A_region-specific_brain_dysfunction_underlies_cognitive_impairment.md
+│   │   ├── A_sensitivity_analysis_for_the_average_derivative_effect.md
+│   │   ├── A_short_way_to_the_stability.md
+│   │   ├── A_simple_model_for_the_population_dynamics_in_OTC_wholesale_fresh_product_markets.md
+│   │   ├── A_statistical_framework_for_comparing_epidemic_forests.md
+│   │   ├── A_universal_phase-plane_model_for_in_vivo_protein_aggregation.md
+│   │   ├── Abortion_Bans_and_Young_Women's_Labor_Supply_Evidence_from_the_Dobbs_Decision.md
+│   │   ├── Accelerated_ADMM_Automated_Parameter_Tuning_and_Improved_Linear_Convergence.md
+│   │   ├── Accelerating_Time-Optimal_Trajectory_Planning_for_Connected_and_Automated_Vehicles_with_Graph_Neural_Networks.md
+│   │   ├── Acoustic_neural_networks_Identifying_design_principles_and_exploring_physical_feasibility.md
+│   │   ├── Active_Learning_for_GCN-based_Action_Recognition.md
+│   │   ├── Active_Learning_with_Selective_Time-Step_Acquisition_for_PDEs.md
+│   │   ├── Active_Secure_Neighbor_Selection_in_Multi-Agent_Systems_with_Byzantine_Attacks.md
+│   │   ├── Adaptive_Gradient_Descent_MPPT_Algorithm_With_Complexity-Aware_Benchmarking_for_Low-Power_PV_Systems.md
+│   │   ├── Adaptive_Meshing_for_CPA_Lyapunov_Function_Synthesis.md
+│   │   ├── Adaptive_Multilevel_Splitting_First_Application_to_Rare-Event_Derivative_Pricing.md
+│   │   ├── Adaptive_SGD_with_Line-Search_and_Polyak_Stepsizes_Nonconvex_Convergence_and_Accelerated_Rates.md
+│   │   ├── Advanced_Data_Analysis_of_Spontaneous_Biophoton_Emission_A_Multi-Method_Approach.md
+│   │   ├── Agent-Based_Modelling_in_Cellular_Biology_-_Are_we_flexible_yet.md
+│   │   ├── Aligning_LLMs_Toward_Multi-Turn_Conversational_Outcomes_Using_Iterative_PPO.md
+│   │   ├── Aligning_Multilingual_News_for_Stock_Return_Prediction.md
+│   │   ├── An_Adaptive_Data-Integrated_Agent-Based_Modeling_Framework_for_Explainable_and_Contestable_Policy_Design.md
+│   │   ├── An_Efficient_Adaptive_Sequential_Procedure_for_Simple_Hypotheses_with_Expression_for_Finite_Number_of_Applications_of_Less_Effective_Treatme.md
+│   │   ├── An_Efficient_Calibration_Framework_for_Volatility_Derivatives_under_Rough_Volatility_with_Jumps.md
+│   │   ├── An_Exact_Solution_Algorithm_for_the_Bi-Level_Optimization_Problem_of_Electric_Vehicles_Charging_Station_Placement.md
+│   │   ├── An_Infinite_BART_model.md
+│   │   ├── An_operator_splitting_analysis_of_Wasserstein--Fisher--Rao_gradient_flows.md
+│   │   ├── An_uncertainty-aware_physics-informed_neural_network_solution_for_the_Black-Scholes_equation_a_novel_framework_for_option_pricing.md
+│   │   ├── Analytical_Phasor-Based_Fault_Location_Enhancement_for_Wind_Farm_Collector_Networks.md
+│   │   ├── Anchors_in_the_Machine_Behavioral_and_Attributional_Evidence_of_Anchoring_Bias_in_LLMs.md
+│   │   ├── Animal_social_networks_as_intersections_graphs_of_random_walks.md
+│   │   ├── Anytime-Feasible_First-Order_Optimization_via_Safe_Sequential_QCQP.md
+│   │   ├── Approximate_Least-Favorable_Distributions_and_Nearly_Optimal_Tests_via_Stochastic_Mirror_Descent.md
+│   │   ├── Arbitrage-Free_Bond_and_Yield_Curve_Forecasting_with_Neural_Filters_under_HJM_Constraints.md
+│   │   ├── Arctic_Auctions_Linear_Fisher_Markets_and_Rational_Convex_Programs.md
+│   │   ├── Artificial_intelligence_and_the_Gulf_Cooperation_Council_workforce_adapting_to_the_future_of_work.md
+│   │   ├── Assessing_Gaze_and_Pointing_Human_Cue_Interpretation_by_Indian_Free-Ranging_Dogs.md
+│   │   ├── Asset-liability_management_with_Epstein-Zin_utility$_quad$_under_stochastic_interest_rate_and_unknown_market_price_of_risk.md
+│   │   ├── Asylum_Assignment_and_Burden-Sharing.md
+│   │   ├── Asymptotic_linear_dependence_and_ellipse_statistics_for_multivariate_two-sample_homogeneity_test.md
+│   │   ├── AuthenLoRA_Entangling_Stylization_with_Imperceptible_Watermarks_for_Copyright-Secure_LoRA_Adapters.md
+│   │   ├── AutoMAS_A_Generic_Multi-Agent_System_for_Algorithm_Self-Adaptation_in_Wireless_Networks.md
+│   │   ├── Autoencoder_for_Position-Assisted_Beam_Prediction_in_mmWave_ISAC_Systems.md
+│   │   ├── Automated_Histopathologic_Assessment_of_Hirschsprung_Disease_Using_a_Multi-Stage_Vision_Transformer_Framework.md
+│   │   ├── Automated_Market_Making_for_Goods_with_Perishable_Utility.md
+│   │   ├── Automated_Protein_Motif_Localization_using_Concept_Activation_Vectors_in_Protein_Language_Model_Embedding_Space.md
+│   │   ├── Auxiliary_Gene_Learning_Spatial_Gene_Expression_Estimation_by_Auxiliary_Gene_Selection.md
+│   │   ├── BAMAS_Structuring_Budget-Aware_Multi-Agent_Systems.md
+│   │   ├── BUDGET_FORECASTING_AND_INTEGRATED_STRATEGIC_PLANNING_FOR_LEADERS.md
+│   │   ├── BaGGLS_A_Bayesian_Shrinkage_Framework_for_Interpretable_Modeling_of_Interactions_in_High-Dimensional_Biological_Data.md
+│   │   ├── Barriers_to_AI_Adoption_Image_Concerns_at_Work.md
+│   │   ├── Basically_Trapped_--_A_General_Equilibrium_Approach_to_the_Undersupply_of_Basic_Research_in_Free_Markets.md
+│   │   ├── Bayesian-based_Online_Label_Shift_Estimation_with_Dynamic_Dirichlet_Priors.md
+│   │   ├── Bayesian_Persuasion_without_Commitment.md
+│   │   ├── Bayesian_Semiparametric_Causal_Inference_Targeted_Doubly_Robust_Estimation_of_Treatment_Effects.md
+│   │   ├── Bayesian_probabilistic_exploration_of_Bitcoin_informational_quanta_and_interactions_under_the_GITT-VT_paradigm.md
+│   │   ├── Beat_Frequency_Induced_Transitions_in_Synchronization_Dynamics.md
+│   │   ├── Beyond_Protein_Language_Models_An_Agentic_LLM_Framework_for_Mechanistic_Enzyme_Design.md
+│   │   ├── Beyond_the_ACE_Score_Replicable_Combinations_of_Adverse_Childhood_Experiences_That_Worsen_Depression_Risk.md
+│   │   ├── Beyond_the_Expiry_Date_Uncovering_Hidden_Value_in_Functional_Drink_Waste_for_a_Circular_Future.md
+│   │   ├── BiRNe_Symbolic_bifurcation_analysis_of_reaction_networks_with_Python.md
+│   │   ├── Bifurcation-Based_Guidance_Law_for_Powered_Descent_Landing.md
+│   │   ├── Bipartiteness_in_Progressive_Second-Price_Multi-Auction_Networks_with_Perfect_Substitute.md
+│   │   ├── Bitcoin_Forecasting_with_Classical_Time_Series_Models_on_Prices_and_Volatility.md
+│   │   ├── Blind_Turbo_Demodulation_for_Differentially_Encoded_OFDM_with_2D_Trellis_Decomposition.md
+│   │   ├── Blini_lightweight_nucleotide_sequence_search_and_dereplication.md
+│   │   ├── BondBERT_What_we_learn_when_assigning_sentiment_in_the_bond_market.md
+│   │   ├── Boundary_Discontinuity_Designs_Theory_and_Practice.md
+│   │   ├── Brain-MGF_Multimodal_Graph_Fusion_Network_for_EEG-fMRI_Brain_Connectivity_Analysis_Under_Psilocybin.md
+│   │   ├── Branched_Signature_Model.md
+│   │   ├── Bridging_the_Educational_Divide_A_Delay-Tolerant_Networking_Approach_for_Equitable_Digital_Learning_in_Rural_Areas.md
+│   │   ├── Bridging_the_Unavoidable_A_Priori_A_Framework_for_Comparative_Causal_Modeling.md
+│   │   ├── Bridging_the_genotype-phenotype_gap_with_generative_artificial_intelligence.md
+│   │   ├── Building_Trust_in_Illiquid_Markets_an_AI-Powered_Replication_of_Private_Equity_Funds.md
+│   │   ├── CASPER_Cross-modal_Alignment_of_Spatial_and_single-cell_Profiles_for_Expression_Recovery.md
+│   │   ├── CLTree_A_Tool_for_Annotating_Rooting_and_Evaluating_Phylogenetic_Trees_Leveraging_Genomic_Lineages.md
+│   │   ├── CSI_Prediction_Frameworks_for_Enhanced_5G_Link_Adaptation_Performance-Complexity_Trade-offs.md
+│   │   ├── CT-CFAR_A_Robust_CFAR_Detector_Based_on_CLEAN_and_Truncated_Statistics_in_Sidelobe-_Contaminated_Environments.md
+│   │   ├── CaFlow_Enhancing_Long-Term_Action_Quality_Assessment_with_Causal_Counterfactual_Flow.md
+│   │   ├── CaliTex_Geometry-Calibrated_Attention_for_View-Coherent_3D_Texture_Generation.md
+│   │   ├── Can_discrete-time_analyses_be_trusted_for_stepped_wedge_trials_with_continuous_recruitment.md
+│   │   ├── Canalization_as_a_stabilizing_principle_of_gene_regulatory_networks_a_discrete_dynamical_systems_perspective.md
+│   │   ├── Carbon-Penalised_Portfolio_Insurance_Strategies_in_a_Stochastic_Factor_Model_with_Partial_Information.md
+│   │   ├── Causal_Inference_Biomarker_Discovery_Graph_Neural_Network_Feature_Selection.md
+│   │   ├── Causal_Inference_in_Financial_Event_Studies.md
+│   │   ├── Causal_and_Predictive_Modeling_of_Short-Horizon_Market_Risk_and_Systematic_Alpha_Generation_Using_Hybrid_Machine_Learning_Ensembles.md
+│   │   ├── CellStream_Dynamical_Optimal_Transport_Informed_Embeddings_for_Reconstructing_Cellular_Trajectories_from_Snapshots_Data.md
+│   │   ├── Centered_MA_Dirichlet_ARMA_for_Financial_Compositions_Theory_&_Empirical_Evidence.md
+│   │   ├── Characterizations_of_Proportional_Division_Value_in_TU-Games_via_Fixed-Population_Consistency.md
+│   │   ├── Characterizing_the_ELS_Values_with_Fixed-Population_Invariance_Axioms.md
+│   │   ├── ChatGPT_in_Systematic_Investing_--_Enhancing_Risk-Adjusted_Returns_with_LLMs.md
+│   │   ├── Cisco_Time_Series_Model_Technical_Report.md
+│   │   ├── Classification_EM-PCA_for_clustering_and_embedding.md
+│   │   ├── Classification_of_Aortic_Shape_with_Topographical_Pair_Correlation_Functions.md
+│   │   ├── Closed_Form_HJB_Solution_for_Continuous-Time_Optimal_Control_of_a_Non-Linear_Input-Affine_System.md
+│   │   ├── Closure_Term_Estimation_in_Spatiotemporal_Models_of_Dynamical_Systems.md
+│   │   ├── Cluster-robust_inference_with_a_single_treated_cluster_using_the_t-test.md
+│   │   ├── Clustering_Approaches_for_Mixed‐Type_Data_A_Comparative_Study.md
+│   │   ├── Cognitive_Biases_and_the_Evolutionary_Origins_of_Zero-Sum_Norms.md
+│   │   ├── Comment_on_“Repair_of_DNA_Double-Strand_Breaks_Leaves_Heritable_Impairment_to_Genome_Function”.md
+│   │   ├── Common_Knowledge_Sailboats_and_Publicity.md
+│   │   ├── Community-level_core-periphery_structures_in_collaboration_networks.md
+│   │   ├── Comparison_of_Oracles_Part_II.md
+│   │   ├── Compensation-based_risk-sharing.md
+│   │   ├── Competitive_optimal_portfolio_selection_under_mean-variance_criterion.md
+│   │   ├── Computing_Evolutionarily_Stable_Strategies_in_Multiplayer_Games.md
+│   │   ├── Confidence_Sets_for_the_Emergence_Collapse_and_Recovery_Dates_of_a_Bubble.md
+│   │   ├── Conformal_Prediction_for_Compositional_Data.md
+│   │   ├── Conformal_Safety_Monitoring_for_Flight_Testing_A_Case_Study_in_Data-Driven_Safety_Learning.md
+│   │   ├── Congestionamento_Aeroportuario_Escassez_de_Capacidade_e_Planejamento_na_Macrometropole_Paulista.md
+│   │   ├── Connectivity-Preserving_Multi-Agent_Area_Coverage_via_Optimal-Transport-Based_Density-Driven_Optimal_Control_(D2OC).md
+│   │   ├── Consistent_solutions_to_the_allocation_of_indivisible_objects_with_general_endowments.md
+│   │   ├── Constrained_deep_learning_for_pricing_and_hedging_european_options_in_incomplete_markets.md
+│   │   ├── Continual_Error_Correction_on_Low-Resource_Devices.md
+│   │   ├── Controlling_changes_to_attention_logits.md
+│   │   ├── Convex_Mixed-Integer_Programming_for_Causal_Additive_Models_with_Optimization_and_Statistical_Guarantees.md
+│   │   ├── Corporate_Earnings_Calls_and_Analyst_Beliefs.md
+│   │   ├── Cost-of-capital_valuation_with_risky_assets.md
+│   │   ├── DLADiff_A_Dual-Layer_Defense_Framework_against_Fine-Tuning_and_Zero-Shot_Customization_of_Diffusion_Models.md
+│   │   ├── Data-Driven_Post-Event_Analysis_with_Real-World_Oscillation_Data_from_Denmark.md
+│   │   ├── Data-Driven_Predictive_Modeling_of_Microfluidic_Cancer_Cell_Separation_Using_a_Deterministic_Lateral_Displacement_Device.md
+│   │   ├── Data-driven_Prediction_of_Species-Specific_Plant_Responses_to_Spectral-Shifting_Films_from_Leaf_Phenotypic_and_Photosynthetic_Traits.md
+│   │   ├── Data-driven_certificates_of_constraint_enforcement_and_stability_for_unmodeled_discrete_dynamical_systems_using_tree_data_structures.md
+│   │   ├── Data_Augmentation_Strategies_for_Robust_Lane_Marking_Detection.md
+│   │   ├── Data_Privatization_in_Vertical_Federated_Learning_with_Client-wise_Missing_Problem.md
+│   │   ├── Decentralized_Shepherding_of_Non-Cohesive_Swarms_Through_Cluttered_Environments_via_Deep_Reinforcement_Learning.md
+│   │   ├── Decomposing_Inequalities_using_Machine_Learning_and_Overcoming_Common_Support_Issues.md
+│   │   ├── Deep_Learning-Based_Multiclass_Classification_of_Oral_Lesions_with_Stratified_Augmentation.md
+│   │   ├── Deep_Neural_Operator_Learning_for_Probabilistic_Models.md
+│   │   ├── Deep_Pathomic_Learning_Defines_Prognostic_Subtypes_and_Molecular_Drivers_in_Colorectal_Cancer.md
+│   │   ├── Deep_reinforcement_learning_for_optimal_trading_with_partial_information.md
+│   │   ├── Delegation_and_Lobbying.md
+│   │   ├── Denoising_Complex_Covariance_Matrices_with_Hybrid_ResNet_and_Random_Matrix_Theory_Cryptocurrency_Portfolio_Applications.md
+│   │   ├── Departures_Distributional_Transport_for_Single-Cell_Perturbation_Prediction_with_Neural_Schrodinger_Bridges.md
+│   │   ├── Dependence-Aware_False_Discovery_Rate_Control_in_Two-Sided_Gaussian_Mean_Testing.md
+│   │   ├── Design_and_Measurements_of_mmWave_FMCW_Radar_Based_Non-Contact_Multi-Patient_Heart_Rate_and_Breath_Rate_Monitoring_System.md
+│   │   ├── Design_and_Performance_Assessment_of_a_Virtualized_IED_for_Digital_Substations.md
+│   │   ├── Deviations_from_Tradition_Stylized_Facts_in_the_Era_of_DeFi.md
+│   │   ├── Differentiable_Physics-Neural_Models_enable_Learning_of_Non-Markovian_Closures_for_Accelerated_Coarse-Grained_Physics_Simulations.md
+│   │   ├── Differential_Beliefs_in_Financial_Markets_Under_Information_Constraints_A_Modeling_Perspective.md
+│   │   ├── Differential_privacy_with_dependent_data.md
+│   │   ├── Differentially_Private_Computation_of_the_Gini_Index_for_Income_Inequality.md
+│   │   ├── Differentially_Private_Fisher_Randomization_Tests_for_Binary_Outcomes.md
+│   │   ├── Diffolio_A_Diffusion_Model_for_Multivariate_Probabilistic_Financial_Time-Series_Forecasting_and_Portfolio_Construction.md
+│   │   ├── Diffusion_Models_are_Molecular_Dynamics_Simulators.md
+│   │   ├── Diffusive_Limit_of_Hawkes_Driven_Order_Book_Dynamics_With_Liquidity_Migration.md
+│   │   ├── Digital_Twin-Assisted_High-Precision_Massive_MIMO_Localization_in_Urban_Canyons.md
+│   │   ├── Directional_Pinching-Antenna_Systems.md
+│   │   ├── Discovering_Spatial_Patterns_of_Readmission_Risk_Using_a_Bayesian_Competing_Risks_Model_with_Spatially_Varying_Coefficients.md
+│   │   ├── Discovery_of_a_13-Sharpe_OOS_Factor_Drift_Regimes_Unlock_Hidden_Cross-Sectional_Predictability.md
+│   │   ├── Discrete_Choice_with_Endogenous_Peer_Selection.md
+│   │   ├── Dissipativity_and_L2_Stability_of_Large-Scale_Networks_with_Changing_Interconnections.md
+│   │   ├── Distracting_from_the_Epstein_files_Media_attention_and_short-run_shifts_in_Trump's_Truth_Social_posts.md
+│   │   ├── Diverse_Instance_Generation_via_Diffusion_Models_for_Enhanced_Few-Shot_Object_Detection_in_Remote_Sensing_Images.md
+│   │   ├── Do_Test_Scores_Help_Teachers_Give_Better_Track_Advice_to_Students_A_Principal_Stratification_Analysis.md
+│   │   ├── Does_joint_liability_reduce_cheating_in_contests_with_agency_problems_Theory_and_experimental_evidence.md
+│   │   ├── Don't_Fall_Behind_A_Unified_Framework_of_Dynastic_Survival_Two-Stage_Belief_Error_and_the_Modern_Involution_Trap.md
+│   │   ├── Double-Profile_Intersection_(DoPIo)_Ultrasound_Pointwise_Shear_Elasticity_Estimation_using_Paired_Confocal_Displacement_Profiles.md
+│   │   ├── Double_machine_learning_for_causal_inference_in_a_multivariate_sample_selection_model.md
+│   │   ├── Doubly_Wild_Refitting_Model-Free_Evaluation_of_High_Dimensional_Black-Box_Predictions_under_Convex_Losses.md
+│   │   ├── Dual-Path_Knowledge-Augmented_Contrastive_Alignment_Network_for_Spatially_Resolved_Transcriptomics.md
+│   │   ├── DynamicAdaptiveClimb_Adaptive_Cache_Replacement_with_Dynamic_Resizing.md
+│   │   ├── Dynamic_Leader-Follower_Consensus_with_Adversaries_A_Multi-Hop_Relay_Approach.md
+│   │   ├── Dynamic_Mechanism_Collapse_A_Boundary_Characterization.md
+│   │   ├── Dynamic_Modeling_of_Load_Demand_in_Electrified_Highways_Based_on_the_EV_Composition.md
+│   │   ├── Dynamic_Multi-Species_Bird_Soundscape_Generation_with_Acoustic_Patterning_and_3D_Spatialization.md
+│   │   ├── Dynamic_Reward_Design.md
+│   │   ├── Dynamic_Risk_Assessment_of_Wildland-Urban_Interface_Fires.md
+│   │   ├── Dynamic_Spatial_Treatment_Effects_and_Network_Fragility_Theory_and_Evidence_from_European_Banking.md
+│   │   ├── Dynamic_Spatial_Treatment_Effects_and_Network_Fragility_Theory_and_Evidence_from_the_2008_Financial_Crisis.md
+│   │   ├── Dynamics_of_stochastic_microorganism_flocculation_models.md
+│   │   ├── E-M3RF_An_Equivariant_Multimodal_3D_Re-assembly_Framework.md
+│   │   ├── Efficient_Chromosome_Parallelization_for_Precision_Medicine_Genomic_Workflows.md
+│   │   ├── Efficient_Covariance_Estimation_for_Sparsified_Functional_Data.md
+│   │   ├── Efficient_bayesian_spatially_varying_coefficients_modeling_for_censored_data_using_the_vecchia_approximation.md
+│   │   ├── Efficient_multi-fidelity_Gaussian_process_regression_for_noisy_outputs_and_non-nested_experimental_designs.md
+│   │   ├── Election_and_Subjective_Well-Being_Evidence_from_the_2024_U.S._Presidential_Election.md
+│   │   ├── Emergence_of_Randomness_in_Temporally_Aggregated_Financial_Tick_Sequences.md
+│   │   ├── Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthetic_Task.md
+│   │   ├── Empirical_Assessment_of_the_Code_Comprehension_Effort_Needed_to_Attack_Programs_Protected_with_Obfuscation.md
+│   │   ├── Energy_Control_Strategy_to_Enhance_AC_Fault_Ride-_Through_in_Offshore_Wind_MMC-HVDC_Systems.md
+│   │   ├── Enhanced_Landmark_Detection_Model_in_Pelvic_Fluoroscopy_using_2D_3D_Registration_Loss.md
+│   │   ├── Enhancing_Breast_Cancer_Prediction_with_LLM-Inferred_Confounders.md
+│   │   ├── Enterprise_Profit_Prediction_Using_Multiple_Data_Sources_with_Missing_Values_through_Vertical_Federated_Learning.md
+│   │   ├── Entropy_Coding_for_Non-Rectangular_Transform_Blocks_using_Partitioned_DCT_Dictionaries_for_AV1.md
+│   │   ├── Enumeration_of_Autocatalytic_Subsystems_in_Large_Chemical_Reaction_Networks.md
+│   │   ├── Equilibrium_Portfolio_Selection_under_Utility-Variance_Analysis_of_Log_Returns_in_Incomplete_Markets.md
+│   │   ├── Equilibrium_Strategies_for_Singular_Dividend_Control_Problems_under_the_Mean-Variance_Criterion.md
+│   │   ├── Equivariant_Tracking_Control_for_Fully_Actuated_Mechanical_Systems_on_Matrix_Lie_Groups.md
+│   │   ├── EscalNet_Learn_isotropic_representation_space_for_biomolecular_dynamics_based_on_effective_energy.md
+│   │   ├── Estimating_Ising_Models_in_Total_Variation_Distance.md
+│   │   ├── Estimating_the_Hurst_parameter_from_the_zero_vanna_implied_volatility_and_its_dual.md
+│   │   ├── Estimation_of_High-dimensional_Nonlinear_Vector_Autoregressive_Models.md
+│   │   ├── Evaluating_and_Scoring_Ebolavirus_Protein-protein_Docking_Models_Using_PIsToN.md
+│   │   ├── Evaluation_of_Hardware-based_Video_Encoders_on_Modern_GPUs_for_UHD_Live-Streaming.md
+│   │   ├── Evaluation_of_Large_Language_Models_for_Numeric_Anomaly_Detection_in_Power_Systems.md
+│   │   ├── Evaluation_of_an_ITD-to-ILD_Transformation_as_a_Method_to_Restore_the_Spatial_Benefit_in_Speech_Intelligibility_in_Hearing_Impaired_Listener.md
+│   │   ├── EvilGenie_A_Reward_Hacking_Benchmark.md
+│   │   ├── Evolving_Rules_Imitation_and_Best_Response_Learning_in_Cournot_Oligopoly.md
+│   │   ├── Exact_Terminal_Condition_Neural_Network_for_American_Option_Pricing_Based_on_the_Black-Scholes-Merton_Equations.md
+│   │   ├── Expectation-enforcing_strategies_for_repeated_games.md
+│   │   ├── Explainable_Federated_Learning_for_U.S._State-Level_Financial_Distress_Modeling.md
+│   │   ├── Explainable_deep_learning_framework_for_cancer_therapeutic_target_prioritization_leveraging_PPI_centrality_and_node_embeddings.md
+│   │   ├── Explicit_Bounds_on_the_Hausdorff_Distance_for_Truncated_mRPI_Sets_via_Norm-Dependent_Contraction_Rates.md
+│   │   ├── Exploration_Is_Not_What_It_Seeks_Catalytic_Exploration_under_Status_Quo_Uncertainty.md
+│   │   ├── Exploring_Urban_Air_Mobility_Adoption_Potential_in_San_Francisco_Bay_Area_Region_A_Systems_of_Systems_Level_Case_Study_on_Passenger_Waiting_.md
+│   │   ├── Exploring_the_Synergy_of_Quantitative_Factors_and_Newsflow_Representations_from_Large_Language_Models_for_Stock_Return_Prediction.md
+│   │   ├── Extended_HJB_Equation_for_Mean-Variance_Stopping_Problem_Vanishing_Regularization_Method.md
+│   │   ├── Extrapolating_into_the_Extremes_with_Minimum_Distance_Estimation.md
+│   │   ├── FAST_Topology-Aware_Frequency-Domain_Distribution_Matching_for_Coreset_Selection.md
+│   │   ├── FCOC_A_Fractal-Chaotic_Co-driven_Framework_for_Financial_Volatility_Forecasting.md
+│   │   ├── Fairness_Meets_Privacy_Integrating_Differential_Privacy_and_Demographic_Parity_in_Multi-class_Classification.md
+│   │   ├── Fast_Escape_Slow_Convergence_Learning_Dynamics_of_Phase_Retrieval_under_Power-Law_Data.md
+│   │   ├── Fast_and_Flexible_Flow_Decompositions_in_General_Graphs_via_Dominators.md
+│   │   ├── Field_Test_of_5G_New_Radio_(NR)_UL-MIMO_and_UL-256QAM_for_HD_Live-Streaming.md
+│   │   ├── Fifty_Shades_of_Greenwashing_The_Political_Economy_of_Climate_Change_Advertising_on_Social_Media.md
+│   │   ├── FinCARE_Financial_Causal_Analysis_with_Reasoning_and_Evidence.md
+│   │   ├── Financial_Information_Theory.md
+│   │   ├── First_Deep_Learning_Approach_to_Hammering_Acoustics_for_Stem_Stability_Assessment_in_Total_Hip_Arthroplasty.md
+│   │   ├── Forecasting_implied_volatility_surface_with_generative_diffusion_models.md
+│   │   ├── Fraud-Proof_Revenue_Division_on_Subscription_Platforms.md
+│   │   ├── From_Consensus_to_Robust_Clustering_Multi-Agent_Systems_with_Nonlinear_Interactions.md
+│   │   ├── From_Double_to_Triple_Burden_Gender_Stratification_in_the_Latin_American_Data_Annotation_Gig_Economy.md
+│   │   ├── From_Longitudinal_Disease_Signatures_to_Model-driven_Disease_Networks_for_Causal_Analysis.md
+│   │   ├── From_sectorial_coarse_graining_to_extreme_coarse_graining_of_S&P_500_correlation_matrices.md
+│   │   ├── Further_Developments_on_Stochastic_Dominance_for_Different_Classes_of_Infinite-mean_Distributions.md
+│   │   ├── Fusing_Narrative_Semantics_for_Financial_Volatility_Forecasting.md
+│   │   ├── G$^2$VLM_Geometry_Grounded_Vision_Language_Model_with_Unified_3D_Reconstruction_and_Spatial_Reasoning.md
+│   │   ├── Gaussian_process_priors_with_Markov_properties_for_effective_reproduction_number_inference.md
+│   │   ├── Gene_Incremental_Learning_for_Single-Cell_Transcriptomics.md
+│   │   ├── Generating_Separated_Singing_Vocals_Using_a_Diffusion_Model_Conditioned_on_Music_Mixtures.md
+│   │   ├── Generative_Myopia_Why_Diffusion_Models_Fail_at_Structure.md
+│   │   ├── Generative_Pricing_of_Basket_Options_via_Signature-Conditioned_Mixture_Density_Networks.md
+│   │   ├── Genomic_Next-Token_Predictors_are_In-Context_Learners.md
+│   │   ├── GeoPl@ntNet_A_Platform_for_Exploring_Essential_Biodiversity_Variables.md
+│   │   ├── Geometric_Confinement_Reveals_Scale-Free_Velocity_Correlations_in_Epithelial_Cell_Monolayer.md
+│   │   ├── Geometric_Rough_Paths_above_Mixed_Fractional_Brownian_Motion.md
+│   │   ├── Geometry-Aware_Deep_Congruence_Networks_for_Manifold_Learning_in_Cross-Subject_Motor_Imagery.md
+│   │   ├── Going_with_the_Speed_of_Sound_Pushing_Neural_Surrogates_into_Highly-turbulent_Transonic_Regimes.md
+│   │   ├── Group-wise_Semantic_Splitting_Multiple_Access_for_Multi-User_Semantic_Communication.md
+│   │   ├── HIRE_A_Hybrid_Learned_Index_for_Robust_and_Efficient_Performance_under_Mixed_Workloads.md
+│   │   ├── HSBC_1950_to_2025_Conquering_the_world_from_British_Hong_Kong_and_London.md
+│   │   ├── HSBC_until_1950_From_its_colonial_cradle_past_the_World_Wars.md
+│   │   ├── HTTM_Head-wise_Temporal_Token_Merging_for_Faster_VGGT.md
+│   │   ├── Harmonic-Percussive_Disentangled_Neural_Audio_Codec_for_Bandwidth_Extension.md
+│   │   ├── HarmonicAttack_An_Adaptive_Cross-Domain_Audio_Watermark_Removal.md
+│   │   ├── Harmony_Harmonizing_Audio_and_Video_Generation_through_Cross-Task_Synergy.md
+│   │   ├── Harmony_Harmonizing_Audio_and_Video_Generation_through_Cross-Task_Synergy__Hu_et_al._-_2025_-_Harmony_Harmonizing_Audio_and_Video_Gener.md
+│   │   ├── Her_sey_bir_merhaba_ile_baslar.md
+│   │   ├── Heterogeneity_in_peer_effects_for_binary_outcomes.md
+│   │   ├── Hierarchical_Bayesian_spectral_analysis_of_multiple_stationary_time_series.md
+│   │   ├── Hierarchical_Ranking_Neural_Network_for_Long_Document_Readability_Assessment.md
+│   │   ├── Hierarchical_biomarker_thresholding_a_model-agnostic_framework_for_stability.md
+│   │   ├── High-Accuracy_List-Decodable_Mean_Estimation.md
+│   │   ├── High-Dimensional_Spatial_Arbitrage_Pricing_Theory_with_Heterogeneous_Interactions.md
+│   │   ├── Hormonal_Regulation_of_Breast_Cancer_Incidence_Dynamics_A_Mathematical_Analysis_Explaining_the_Clemmesen's_Hook.md
+│   │   ├── How_Digital_Asset_Treasury_Companies_Can_Survive_Bear_Markets_The_Case_of_the_Strategy_and_Bitcoin.md
+│   │   ├── How_FinTech_affects_financial_sustainability_Evidence_from_Chinese_commercial_banks_using_a_three-stage_network_DEA-Malmquist_model.md
+│   │   ├── How_Fixed-Amount_Transactions_and_Liquidity_Constraints_Amplify_Wealth_Inequality_A_Kinetic_Model_Deviating_from_the_Maximum_Entropy_Benchma.md
+│   │   ├── How_Founder_Expertise_Shapes_the_Impact_of_Generative_Artificial_Intelligence_on_Digital_Ventures.md
+│   │   ├── How_many_outbreaks_before_an_epidemic.md
+│   │   ├── How_to_Correctly_Report_LLM-as-a-Judge_Evaluations.md
+│   │   ├── How_to_Purchase_Labels_A_Cost-Effective_Approach_Using_Active_Learning_Markets.md
+│   │   ├── Hybrid_Control_for_Robotic_Nut_Tightening_Task.md
+│   │   ├── Hybrid_LLM_and_Higher-Order_Quantum_Approximate_Optimization_for_CSA_Collateral_Management.md
+│   │   ├── Hybrid_LSTM_and_PPO_Networks_for_Dynamic_Portfolio_Optimization.md
+│   │   ├── Hyperbolic_Graph_Embeddings_Reveal_the_Host–Pathogen_Interactome.md
+│   │   ├── Identification_estimation_and_inference_in_Panel_Vector_Autoregressions_using_external_instruments.md
+│   │   ├── Imaging_the_Topology_of_Dynamic_Brain_Connectivity.md
+│   │   ├── Impact_Analysis_of_COVID-19_in_Bangladesh_Power_Sector_and_Recommendations_based_on_Practical_Data_and_Machine_Learning_Approach.md
+│   │   ├── Impact_by_design_translating_Lead_times_in_flux_into_an_R_handbook_with_code.md
+│   │   ├── Improved_Sample_Complexity_for_Full_Coverage_in_Compact_and_Continuous_Spaces.md
+│   │   ├── Improving_Forecasts_of_Suicide_Attempts_for_Patients_with_Little_Data.md
+│   │   ├── Independent_policy_gradient-based_reinforcement_learning_for_economic_and_reliable_energy_management_of_multi-microgrid_systems.md
+│   │   ├── Inferring_Transmission_Dynamics_of_Respiratory_Syncytial_Virus_from_Houston_Wastewater.md
+│   │   ├── Infinite-Horizon_Optimal_Control_of_Jump-Diffusion_Models_for_Pollution-Dependent_Disasters.md
+│   │   ├── Influence_of_converter_current_limiting_and_prioritization_on_protection_of_highly_IBR-penetrated_networks.md
+│   │   ├── Innovative_Modular_Design_and_Kinematic_Approach_based_on_Screw_Theory_for_Triple_Scissors_Links_Deployable_Space_Antenna_Mechanism.md
+│   │   ├── Insights_into_Tail-Based_and_Order_Statistics.md
+│   │   ├── InstructAudio_Unified_speech_and_music_generation_with_natural_language_instruction.md
+│   │   ├── Insurance_Supervision_under_Climate_Change_A_Pioneer_Detection_Method.md
+│   │   ├── IntAttention_A_Fully_Integer_Attention_Pipeline_for_Efficient_Edge_Inference.md
+│   │   ├── Integral_Bayesian_symbolic_regression_for_optimal_discovery_of_governing_equations_from_scarce_and_noisy_data.md
+│   │   ├── Integrating_RCTs_RWD_AI_ML_and_Statistics_Next-Generation_Evidence_Synthesis.md
+│   │   ├── Integrating_Spatial_and_Temporal_Effects_in_Seat-Belt_Compliance_Assessment_with_Telematics_Data.md
+│   │   ├── Integrative_Model_for_Interoception_and_Exteroception_predictive_coding_points_of_modulation_and_testable_predictions..md
+│   │   ├── Interpreting_GFlowNets_for_Drug_Discovery_Extracting_Actionable_Insights_for_Medicinal_Chemistry.md
+│   │   ├── Intrinsic_Resonance_depends_on_Network_Size_of_Coupled-Delayed_Interacting_Oscillators.md
+│   │   ├── Inverse_Behavioral_Optimization_of_QALY-Based_Incentive_Systems_Quantifying_the_System_Impact_of_Adaptive_Health_Programs.md
+│   │   ├── Investigating_access_to_support_centers_for_Violence_Against_Women_in_Apulia_A_Spatial_analysis_over_multiple_years.md
+│   │   ├── It_Hears_It_Sees_too_Multi-Modal_LLM_for_Depression_Detection_By_Integrating_Visual_Understanding_into_Audio_Language_Models.md
+│   │   ├── Izzy_a_high-throughput_metagenomic_read_simulator.md
+│   │   ├── Joint_Bit-Partitioning_and_Modulation_Design_for_Digital_AirComp.md
+│   │   ├── Joint_Satellite_Power_Consumption_and_Handover_Optimization_for_LEO_Constellations.md
+│   │   ├── Know_Your_Intent_An_Autonomous_Multi-Perspective_LLM_Agent_Framework_for_DeFi_User_Transaction_Intent_Mining.md
+│   │   ├── LCPan_efficient_variation_graph_construction_using_Locally_Consistent_Parsing.md
+│   │   ├── LaGen_Towards_Autoregressive_LiDAR_Scene_Generation.md
+│   │   ├── Labeled_histories_and_maximally_probable_labeled_topologies_with_multifurcation.md
+│   │   ├── Large_Language_Model-Assisted_Planning_of_Electric_Vehicle_Charging_Infrastructure_with_Real-World_Case_Study.md
+│   │   ├── Latent-space_metrics_for_Complex-Valued_VAE_out-of-distribution_detection_under_radar_clutter.md
+│   │   ├── Learning_Across_Experiments_and_Time_Tackling_Heterogeneity_in_A_B_Testing.md
+│   │   ├── Learning_Control_Barrier_Functions_with_Deterministic_Safety_Guarantees.md
+│   │   ├── Learning_bounds_for_doubly-robust_covariate_shift_adaptation.md
+│   │   ├── Learning_the_principles_of_T_cell_antigen_discernment.md
+│   │   ├── Learning_to_Manage_Investment_Portfolios_beyond_Simple_Utility_Functions.md
+│   │   ├── Lesion-Independent_Thalamic_Degeneration_Identifies_Intrinsically_Vulnerable_Nuclei_Associated_with_Cognitive_Impairment_in_Multiple_Scleros.md
+│   │   ├── Leveraging_Language_Models_for_Interpretable_Analysis_of_Narratives_in_a_Large_Corpus.md
+│   │   ├── Leveraging_NCBI_Genomic_Metadata_for_Epidemiological_Insights_Example_of_Enterobacterales.md
+│   │   ├── Linear_Algebraic_Approaches_to_Neuroimaging_Data_Compression_A_Comparative_Analysis_of_Matrix_and_Tensor_Decomposition_Methods_for_High-Dime.md
+│   │   ├── Local_Technological_Access_Income_Disparities_and_Job-Seeking_in_the_United_States_Since_2010.md
+│   │   ├── Local_equations_for_the_generalized_Lotka-Volterra_model_on_sparse_asymmetric_graphs.md
+│   │   ├── Log-Mu_Fading_Process_Second-Order_Statistics_for_Diversity-Combining_Techniques.md
+│   │   ├── Lower_Complexity_Bounds_for_Nonconvex-Strongly-Convex_Bilevel_Optimization_with_First-Order_Oracles.md
+│   │   ├── MAD-DAG_Protecting_Blockchain_Consensus_from_MEV.md
+│   │   ├── MDIntrinsicDimension_Dimensionality-Based_Analysis_of_Collective_Motions_in_Macromolecules_from_Molecular_Dynamics_Trajectories.md
+│   │   ├── MIMIC-MJX_Neuromechanical_Emulation_of_Animal_Behavior.md
+│   │   ├── MODEST_Multi-Optics_Depth-of-Field_Stereo_Dataset.md
+│   │   ├── MOSAIC_Codon_Harmonization_of_Monte_Carlo-_Based_Simulated_Annealing_for_Linked_Codons_in_Heterologous_Protein_Expression.md
+│   │   ├── Machine-learning_a_family_of_solutions_to_an_optimal_pension_investment_problem.md
+│   │   ├── Machine_Learning_vs._Randomness_Challenges_in_Predicting_Binary_Options_Movements.md
+│   │   ├── Majority_of_the_Bests_Improving_Best-of-N_via_Bootstrapping.md
+│   │   ├── Market-Dependent_Communication_in_Multi-Agent_Alpha_Generation.md
+│   │   ├── Market_competition_and_poverty_dynamics_Short_and_long_run_effects_across_financial_development_levels.md
+│   │   ├── Masked_Autoencoder_Joint_Learning_for_Robust_Spitzoid_Tumor_Classification.md
+│   │   ├── Masked_Diffusion_Models_are_Secretly_Learned-Order_Autoregressive_Models.md
+│   │   ├── Masks_Can_Be_Distracting_On_Context_Comprehension_in_Diffusion_Language_Models.md
+│   │   ├── Matching_correlated_VAR_time_series.md
+│   │   ├── Matrix_Peer-to-Peer_Multi-Agent_Synthetic_Data_Generation_Framework.md
+│   │   ├── Maxitive_Donsker-Varadhan_Formulation_for_Possibilistic_Variational_Inference.md
+│   │   ├── Mean-Field_Limits_for_Two-Layer_Neural_Networks_Trained_with_Consensus-Based_Optimization.md
+│   │   ├── Mean-field_approximations_in_insurance.md
+│   │   ├── Mean_Field_Analysis_of_Mutual_Insurance_Market.md
+│   │   ├── Measuring_economic_outlook_in_the_news_timely_and_efficientlya.md
+│   │   ├── Mechano-chemical_modeling_of_glia_initiated_secondary_injury_of_neurons_under_mechanical_load.md
+│   │   ├── Meditative_absorption_shifts_brain_dynamics_toward_criticality.md
+│   │   ├── MemFine_Memory-Aware_Fine-Grained_Scheduling_for_MoE_Training.md
+│   │   ├── Mesoscale_tissue_properties_and_electric_fields_in_brain_stimulation_–_bridging_the_macroscopic_and_microscopic_scales.md
+│   │   ├── Metric_Nonmetric_Elastic_MDS.md
+│   │   ├── Misinformation_Dynamics_in_Social_Networks.md
+│   │   ├── Mispronunciation_Detection_and_Diagnosis_Without_Model_Training_A_Retrieval-Based_Approach.md
+│   │   ├── Mitigating_Catastrophic_Forgetting_in_Streaming_Generative_and_Predictive_Learning_via_Stateful_Replay.md
+│   │   ├── ModHiFi_Identifying_High_Fidelity_predictive_components_for_Model_Modification.md
+│   │   ├── Model-free_practical_PI-Lead_control_design_by_ultimate_sensitivity_principle.md
+│   │   ├── Modeling_Hawkish-Dovish_Latent_Beliefs_in_Multi-Agent_Debate-Based_LLMs_for_Monetary_Policy_Decision_Classification.md
+│   │   ├── Modeling_Spatial_Synchronization_of_Predator-Prey_Oscillations_via_the_XY_Model_under_Demographic_Stochasticity_and_Migration.md
+│   │   ├── Modeling_and_Stabilizing_Financial_Systemic_Risk_Using_Optimal_Control_Theory.md
+│   │   ├── Modelling_the_impact_of_improving_access_to_healthcare_on_Hepatitis_B_prevalence_in_the_Thai-Myanmar_border_region.md
+│   │   ├── Modelos_Empiricos_de_Pos-Dupla_Selecao_por_LASSO_Discussoes_para_Estudos_do_Transporte_Aereo.md
+│   │   ├── Monet_Reasoning_in_Latent_Visual_Space_Beyond_Images_and_Language.md
+│   │   ├── Morality_in_AI._A_plea_to_embed_morality_in_LLM_architectures_and_frameworks.md
+│   │   ├── Movable-Antenna_Array_Enhanced_Multi-Target_Sensing_CRB_Characterization_and_Optimization.md
+│   │   ├── Multi-Agent_Systems_for_Dataset_Adaptation_in_Software_Engineering_Capabilities_Limitations_and_Future_Directions.md
+│   │   ├── Multi-Hypotheses_Navigation_in_Collaborative_Localization_subject_to_Cyber_Attacks.md
+│   │   ├── Multi-omic_Enriched_Blood-Derived_Digital_Signatures_Reveal_Mechanistic_and_Confounding_Disease_Clusters_for_Differential_Diagnosis.md
+│   │   ├── MultiDiffNet_A_Multi-Objective_Diffusion_Framework_for_Generalizable_Brain_Decoding.md
+│   │   ├── Multidimensional_Music_Aesthetic_Evaluation_via_Semantically_Consistent_C-Mixup_Augmentation.md
+│   │   ├── Multifractality_and_sample_size_influence_on_Bitcoin_volatility_patterns.md
+│   │   ├── Multilevel_non-linear_interrupted_time_series_analysis.md
+│   │   ├── Multimodal_Robust_Prompt_Distillation_for_3D_Point_Cloud_Models.md
+│   │   ├── Multiport_Analytical_Pixel_Electromagnetic_Simulator_(MAPES)_for_AI-assisted_RFIC_and_Microwave_Circuit_Design.md
+│   │   ├── Multiscale_Comparison_of_Nonparametric_Trending_Coefficients.md
+│   │   ├── Multistationarity_in_semi-open_Phosphorylation-Dephosphorylation_Cycles.md
+│   │   ├── Multivariate_Functional_Data_Analysis_Uncovers_Behavioral_Fingerprints_in_Invertebrate_Locomotor_Response_to_Micropollutants.md
+│   │   ├── NOIR_2.0_Neural_Signal_Operated_Intelligent_Robots_for_Everyday_Activities.md
+│   │   ├── Narratives_to_Numbers_Large_Language_Models_and_Economic_Policy_Uncertainty.md
+│   │   ├── Near-Lossless_Model_Compression_Enables_Longer_Context_Inference_in_DNA_Large_Language_Models.md
+│   │   ├── Necessity_of_Conserved_Quantities_for_Axiomatic_Completeness_of_Classical_Economic_Theories.md
+│   │   ├── Neighborhood_Stability_in_Double_Debiased_Machine_Learning_with_Dependent_Data.md
+│   │   ├── Network_and_Risk_Analysis_of_Surety_Bonds.md
+│   │   ├── Neural_Tractability_via_Structure_Learning-Augmented_Algorithms_for_Graph_Combinatorial_Optimization.md
+│   │   ├── New_Hybrid_Heuristics_for_Pseudo-Boolean_Propagation.md
+│   │   ├── News-Aware_Direct_Reinforcement_Trading_for_Financial_Markets.md
+│   │   ├── Next-Generation_MIMO_Transceivers_for_Integrated_Sensing_and_Communications_Unique_Security_Vulnerabilities_and_Solutions.md
+│   │   ├── Noise-proofing_Universal_Portfolio_Shrinkage.md
+│   │   ├── Nonconvex_Penalized_LAD_Estimation_in_Partial_Linear_Models_with_DNNs_Asymptotic_Analysis_and_Proximal_Algorithms.md
+│   │   ├── Noninvasive_rheological_inference_from_stable_flows_in_confined_tissues.md
+│   │   ├── Nonuniform-Grid_Markov_Chain_Approximation_of_Continuous_Processes_with_Time-Linear_Moments.md
+│   │   ├── Not-so-Cleansing_Recessions.md
+│   │   ├── Numerical_valuation_of_European_options_under_two-asset_infinite-activity_exponential_Levy_models.md
+│   │   ├── Occlusion-Aware_Multi-Object_Tracking_via_Expected_Probability_of_Detection.md
+│   │   ├── OceanForecastBench_A_Benchmark_Dataset_for_Data-Driven_Global_Ocean_Forecasting.md
+│   │   ├── On_Evolution-Based_Models_for_Experimentation_Under_Interference.md
+│   │   ├── On_Instability_of_Minimax_Optimal_Optimism-Based_Bandit_Algorithms.md
+│   │   ├── On_Linear_Convergence_of_Distributed_Stochastic_Bilevel_Optimization_over_Undirected_Networks_via_Gradient_Aggregation.md
+│   │   ├── On_Multi-Level_Apportionment.md
+│   │   ├── On_Transportability_for_Structural_Causal_Bandits.md
+│   │   ├── On_a_Stationarity_Theory_for_Stochastic_Volterra_Integral_Equations.md
+│   │   ├── On_effects_of_present-bias_on_carbon_emission_patterns_towards_a_net_zero_target.md
+│   │   ├── On_non-uniqueness_of_solutions_to_degenerate_parabolic_equations_in_the_context_of_option_pricing_in_the_Heston_model.md
+│   │   ├── On_the_Limits_of_Innate_Planning_in_Large_Language_Models.md
+│   │   ├── On_the_core_of_the_Shapley-Scarf_housing_market_model_with_full_preferences.md
+│   │   ├── On_the_role_of_fractional_Brownian_motion_in_models_of_chemotaxis_and_stochastic_gradient_ascent.md
+│   │   ├── On_the_stability_of_event-based_control_with_neuronal_dynamics.md
+│   │   ├── On_the_utility_problem_in_a_market_where_price_impact_is_transient.md
+│   │   ├── Online_Smoothed_Demand_Management.md
+│   │   ├── Opportunity_Cost_in_Insurance.md
+│   │   ├── Optimal_Cash_Transfers_and_Microinsurance_to_Reduce_Social_Protection_Costs.md
+│   │   ├── Optimal_Dividend_Reinsurance_and_Capital_Injection_Strategies_for_Collaborating_Business_Lines_The_Case_of_Excess-of-Loss_Reinsurance.md
+│   │   ├── Optimal_Meal_Schedule_for_a_Local_Nonprofit_Using_LLM-Aided_Data_Extraction.md
+│   │   ├── Optimal_dividend_and_capital_injection_under_self-exciting_claims.md
+│   │   ├── Optimally-Transported_Generalized_Method_of_Moments.md
+│   │   ├── Optimising_pandemic_response_through_vaccination_strategies_using_neural_networks.md
+│   │   ├── Optimization_of_Sums_of_Bivariate_Functions_An_Introduction_to_Relaxation-Based_Methods_for_the_Case_of_Finite_Domains.md
+│   │   ├── Optimized_Multi-Level_Monte_Carlo_Parametrization_and_Antithetic_Sampling_for_Nested_Simulations.md
+│   │   ├── Optimizing_the_Driving_Profile_for_Vehicle_Mass_Estimation.md
+│   │   ├── Order_Selection_in_Vector_Autoregression_by_Mean_Square_Information_Criterion.md
+│   │   ├── PAC-Bayes_Meets_Online_Contextual_Optimization.md
+│   │   ├── PEARL_Private_Equity_Accessibility_Reimagined_with_Liquidity.md
+│   │   ├── PEFT-Bench_A_Parameter-Efficient_Fine-Tuning_Methods_Benchmark.md
+│   │   ├── PELVE_from_a_regulatory_perspective.md
+│   │   ├── PFF-Net_Patch_Feature_Fitting_for_Point_Cloud_Normal_Estimation.md
+│   │   ├── PTF_Testing_Lower_Bounds_for_Non-Gaussian_Component_Analysis.md
+│   │   ├── Parallelism_in_Neurodegenerative_Biomarker_Tests_Hidden_Errors_and_the_Risk_of_Misconduct.md
+│   │   ├── Pattern_Recognition_of_Scrap_Plastic_Misclassification_in_Global_Trade_Data.md
+│   │   ├── Peer_Selection_with_Friends_and_Enemies.md
+│   │   ├── Performance_Evaluation_of_Dual_RIS-Assisted_Received_Space_Shift_Keying_Modulation.md
+│   │   ├── Performance_Evaluation_of_Low-Latency_Live_Streaming_of_MPEG-DASH_UHD_video_over_Commercial_5G_NSA_SA_Network.md
+│   │   ├── Personalized_Chain-of-Thought_Summarization_of_Financial_News_for_Investor_Decision_Support.md
+│   │   ├── Phase-Aware_Code-Aided_EM_Algorithm_for_Blind_Channel_Estimation_in_PSK-Modulated_OFDM.md
+│   │   ├── PolyOCP.jl_--_A_Julia_Package_for_Stochastic_OCPs_and_MPC.md
+│   │   ├── Popularity_Bias_Alignment_Estimates.md
+│   │   ├── Portfolio_Optimization_via_Transfer_Learning.md
+│   │   ├── Position_The_Complexity_of_Perfect_AI_Alignment_--_Formalizing_the_RLHF_Trilemma.md
+│   │   ├── Possibilistic_Instrumental_Variable_Regression.md
+│   │   ├── Posterior-Separable_Costs_and_Menu_Preferences.md
+│   │   ├── Precise_Localization_of_High-Voltage_Breakdown_Events_using_$φ$-Optical_Time-Domain_Reflectometry_on_an_Optical_Ground_Wire.md
+│   │   ├── Predicting_upcoming_visual_features_during_eye_movements_yields_scene_representations_aligned_with_human_visual_cortex.md
+│   │   ├── Prediction_of_Retention_Time_in_Larger_Antisense_Oligonucleotide_Datasets_using_Machine_Learning.md
+│   │   ├── Predictive_Safety_Shield_for_Dyna-Q_Reinforcement_Learning.md
+│   │   ├── Privacy-Constrained_Signals.md
+│   │   ├── Probabilistic_Rule_Models_as_Diagnostic_Layers_Interpreting_Structural_Concept_Drift_in_Post-Crisis_Finance.md
+│   │   ├── Probability_Weighting_Meets_Heavy_Tails_An_Econometric_Framework_for_Behavioral_Asset_Pricing.md
+│   │   ├── ProtT-Affinity_Sequence-Based_Protein-Protein_Binding_Affinity_Prediction_Using_ProtT5_Embeddings.md
+│   │   ├── Provably_Outlier-resistant_Semi-parametric_Regression_for_Transferable_Calibration_of_Low-cost_Air-quality_Sensors.md
+│   │   ├── Pseudo-strata_learning_via_maximizing_misclassification_reward.md
+│   │   ├── Push-response_anomalies_in_high-frequency_S&P_500_price_series.md
+│   │   ├── QUANTUM_REALISM_AND_ITS_CONTRADICTIONS_A_CONTRIBUTION_FROM_THE_SOCIAL_SCIENCES..md
+│   │   ├── Quantitative_Geometric_Market_Structuralism_(QGMS).md
+│   │   ├── Quantum-Enhanced_Reinforcement_Learning_for_Accelerating_Newton-Raphson_Convergence_with_Ising_Machines_A_Case_Study_for_Power_Flow_Analysis.md
+│   │   ├── Quantum_Fourier_Transform_Based_Kernel_for_Solar_Irrandiance_Forecasting.md
+│   │   ├── Quantum_Framework_for_Wavelet_Shrinkage.md
+│   │   ├── Quantum_Machine_Learning_methods_for_Fourier-based_distribution_estimation_with_application_in_option_pricing.md
+│   │   ├── RISC-V_Based_TinyML_Accelerator_for_Depthwise_Separable_Convolutions_in_Edge_AI.md
+│   │   ├── RTMol_Rethinking_Molecule-text_Alignment_in_a_Round-trip_View.md
+│   │   ├── Random_Collection.md
+│   │   ├── Random_sets_from_the_perspective_of_metric_statistics.md
+│   │   ├── Randomized_Controlled_Trials_for_Conditional_Access_Optimization_Agent.md
+│   │   ├── Rare_Genomic_Subtype_Discovery_from_RNA-seq_via_Autoencoder_Embeddings_and_Stability-Aware_Clustering.md
+│   │   ├── Re(Visiting)_Time_Series_Foundation_Models_in_Finance.md
+│   │   ├── ReSAM_Refine_Requery_and_Reinforce_Self-Prompting_Point-Supervised_Segmentation_for_Remote_Sensing_Images.md
+│   │   ├── Reactive_Marketing_and_the_Co-Production_of_(In)Authenticity.md
+│   │   ├── Real-Time_Lane-Level_Crash_Detection_on_Freeways_Using_Sparse_Telematics_Data.md
+│   │   ├── Real_Option_AI_Reversibility_Silence_and_the_Release_Ladder.md
+│   │   ├── Reconstruction_of_three-dimensional_shapes_of_normal_and_disease-related_erythrocytes_from_partial_observations_using_multi-fidelity_neural_.md
+│   │   ├── Rectified_Flow_for_Vision-Aided_mmWave_V2I_Beam_Prediction.md
+│   │   ├── Recursive_contracts_in_non-convex_environments.md
+│   │   ├── Redefining_Radar_Segmentation_Simultaneous_Static-Moving_Segmentation_and_Ego-Motion_Estimation_using_Radar_Point_Clouds.md
+│   │   ├── Reference-Free_Sampling-Based_Model_Predictive_Control.md
+│   │   ├── Reliable_Selection_of_Heterogeneous_Treatment_Effect_Estimators.md
+│   │   ├── Representation_learning_in_cerebellum-like_structures.md
+│   │   ├── Respiratory_Motion_Compensation_and_Haptic_Feedback_for_X-ray-Guided_Teleoperated_Robotic_Needle_Insertion.md
+│   │   ├── Revisiting_Penalized_Likelihood_Estimation_for_Gaussian_Processes.md
+│   │   ├── Revisiting_the_Measurement_of_Polarization.md
+│   │   ├── Revisiting_the_Structure_of_Trend_Premia_When_Diversification_Hides_Redundancy.md
+│   │   ├── Reward_Engineering_for_Spatial_Epidemic_Simulations_A_Reinforcement_Learning_Platform_for_Individual_Behavioral_Learning.md
+│   │   ├── Right_Place_Right_Time_Market_Simulation-based_RL_for_Execution_Optimisation.md
+│   │   ├── Risk-Aware_Deep_Reinforcement_Learning_for_Dynamic_Portfolio_Optimization.md
+│   │   ├── Robust_Cauchy-Based_Methods_for_Predictive_Regressions.md
+│   │   ├── Robust_Hedging_of_path-dependent_options_using_a_min-max_algorithm.md
+│   │   ├── Robust_Nonlinear_Transform_Coding_A_Framework_for_Generalizable_Joint_Source-Channel_Coding.md
+│   │   ├── Robust_Yield_Curve_Estimation_for_Mortgage_Bonds_Using_Neural_Networks.md
+│   │   ├── Robust_mean-field_control_under_common_noise_uncertainty.md
+│   │   ├── Robust_optimal_consumption_investment_and_reinsurance_for_recursive_preferences.md
+│   │   ├── Robustness_intervals_for_competing_risks_analysis_with_causes_of_failure_missing_not_at_random.md
+│   │   ├── SAFE-IMM_Robust_and_Lightweight_Radar-Based_Object_Tracking_on_Mobile_Platforms.md
+│   │   ├── SAM2S_Segment_Anything_in_Surgical_Videos_via_Semantic_Long-term_Tracking.md
+│   │   ├── SAM_Guided_Semantic_and_Motion_Changed_Region_Mining_for_Remote_Sensing_Change_Captioning.md
+│   │   ├── SIR_Analysis_for_Affine_Filter_Bank_Modulation.md
+│   │   ├── SONAR_Spectral-Contrastive_Audio_Residuals_for_Generalizable_Deepfake_Detection.md
+│   │   ├── SUPN_Shallow_Universal_Polynomial_Networks.md
+│   │   ├── SV-LIB_1.0_A_Standard_Exchange_Format_for_Software-Verification_Tasks.md
+│   │   ├── SVEMnet_An_R_package_for_Self-Validated_Elastic-Net_Ensembles_and_Multi-Response_Optimization_in_Small-Sample_Mixture--Process_Experiments.md
+│   │   ├── Safe_and_Stable_Neural_Network_Dynamical_Systems_for_Robot_Motion_Planning.md
+│   │   ├── Sampling-Based_Optimization_with_Parallelized_Physics_Simulator_for_Bimanual_Manipulation.md
+│   │   ├── Sampling_Control_for_Imbalanced_Calibration_in_Semi-Supervised_Learning.md
+│   │   ├── Scalable_Multisubject_Vital_Sign_Monitoring_With_mmWave_FMCW_Radar_and_FPGA_Prototyping.md
+│   │   ├── Scaling_Conditional_Autoencoders_for_Portfolio_Optimization_via_Uncertainty-Aware_Factor_Selection.md
+│   │   ├── Seasonality_in_the_U.S._Housing_Market_Post-Pandemic_Shifts_and_Regional_Dynamics.md
+│   │   ├── Secure_Analog_Beamforming_for_Multi-user_MISO_Systems_with_Movable_Antennas.md
+│   │   ├── Secure_Beamforming_Design_for_IRS-ISAC_Systems_with_a_Hardware-Efficient_Hybrid_Beamforming_Architecture.md
+│   │   ├── Selecting_Belief-State_Approximations_in_Simulators_with_Latent_States.md
+│   │   ├── Self-Guided_Defense_Adaptive_Safety_Alignment_for_Reasoning_Models_via_Synthesized_Guidelines.md
+│   │   ├── Self-Paced_Learning_for_Images_of_Antinuclear_Antibodies.md
+│   │   ├── Self-Selection_University_Courses_and_Returns_to_Advanced_Degrees.md
+│   │   ├── Selling_supplemental_information.md
+│   │   ├── Semantic-Enhanced_Feature_Matching_with_Learnable_Geometric_Verification_for_Cross-Modal_Neuron_Registration.md
+│   │   ├── Semi-Passive_IRS_Enabled_Sensing_with_Group_Movable_Sensors.md
+│   │   ├── Semi-Supervised_Federated_Multi-Label_Feature_Selection_with_Fuzzy_Information_Measures.md
+│   │   ├── Semi-Supervised_Treatment_Effect_Estimation_with_Unlabeled_Covariates_via_Generalized_Riesz_Regression.md
+│   │   ├── Semi-analytical_pricing_of_American_options_with_hybrid_dividends_via_integral_equations_and_the_GIT_method.md
+│   │   ├── Semiparametric_Models_for_Practice_Effects_in_Longitudinal_Cognitive_Trajectories_Application_to_an_Aging_Cohort_Study.md
+│   │   ├── Sentiment_Analysis_of_Financial_Text_Using_Quantum_Language_Processing_QDisCoCirc.md
+│   │   ├── Sentiment_and_Volatility_in_Financial_Markets_A_Review_of_BERT_and_GARCH_Applications_during_Geopolitical_Crises.md
+│   │   ├── Sequential_Bootstrap_for_Out-of-Bag_Error_Estimation_A_Simulation-Based_Replication_and_Stability-Oriented_Refinement.md
+│   │   ├── Shape-Adapting_Gated_Experts_Dynamic_Expert_Routing_for_Colonoscopic_Lesion_Segmentation.md
+│   │   ├── Sharpening_Shapley_Allocation_from_Basel_2.5_to_FRTB.md
+│   │   ├── Shortcut_Invariance_Targeted_Jacobian_Regularization_in_Disentangled_Latent_Space.md
+│   │   ├── Sigmoid-FTRL_Design-Based_Adaptive_Neyman_Allocation_for_AIPW_Estimators.md
+│   │   ├── Single_Changepoint_Procedures.md
+│   │   ├── Smoothed_Agnostic_Learning_of_Halfspaces_over_the_Hypercube.md
+│   │   ├── Solving_Diffusion_Inverse_Problems_with_Restart_Posterior_Sampling.md
+│   │   ├── Solving_Heterogeneous_Agent_Models_with_Physics-informed_Neural_Networks.md
+│   │   ├── Sovereign_AI_Rethinking_Autonomy_in_the_Age_of_Global_Interdependence.md
+│   │   ├── Sparse_Broad_Learning_System_via_Sequential_Threshold_Least-Squares_for_Nonlinear_System_Identification_under_Noise.md
+│   │   ├── Sparse_Kalman_Identification_for_Partially_Observable_Systems_via_Adaptive_Bayesian_Learning.md
+│   │   ├── Sparse_shepherding_control_of_large-scale_multi-agent_systems_via_Reinforcement_Learning.md
+│   │   ├── Spatio-Temporal_Hierarchical_Causal_Models.md
+│   │   ├── Spiral_of_Silence_How_Neutral_Moderation_Polarizes_Content_Creation.md
+│   │   ├── StaRQR-K_False_Discovery_Rate_Controlled_Regional_Quantile_Regression.md
+│   │   ├── Stabilizing_Fractional_Dynamical_Networks_Suppresses_Epileptic_Seizures.md
+│   │   ├── Statistical_and_economic_evaluation_of_forecasts_in_electricity_markets_beyond_RMSE_and_MAE.md
+│   │   ├── Statistically-Guided_Dual-Domain_Meta-Learning_with_Adaptive_Multi-Prototype_Aggregation_for_Distributed_Fiber_Optic_Sensing.md
+│   │   ├── Stochastic_Optimal_Control_of_Interacting_Particle_Systems_in_Hilbert_Spaces_and_Applications.md
+│   │   ├── Stochastic_Reaction_Networks_Within_Interacting_Compartments_with_Content-Dependent_Fragmentation.md
+│   │   ├── Stochastic_Thermodynamics_of_Cooperative_Biomolecular_Machines_Fluctuation_Relations_and_Hidden_Detailed_Balance_Breaking.md
+│   │   ├── Stoichiometric_ontogenetic_development_influences_population_dynamics_Stage-structured_model_under_nutrient_co-limitations.md
+│   │   ├── Strategic_bid_response_under_automated_market_power_mitigation_in_electricity_markets.md
+│   │   ├── Structural_Flexibility_of_the_TCF7L2–DNA_Complex_with_the_Type_2_Diabetes_SNP_rs7903146.md
+│   │   ├── Survival_and_invasion_dynamics_in_cell_populations_an_analytical_framework_for_threshold_behaviour_in_nonlinear_age-structured_models.md
+│   │   ├── Symbiotic_Brain-Machine_Drawing_via_Visual_Brain-Computer_Interfaces.md
+│   │   ├── SynCell_Contextualized_Drug_Synergy_Prediction.md
+│   │   ├── Synthetic_Parallel_Trends.md
+│   │   ├── Synthetic_Survival_Control_Extending_Synthetic_Controls_for_When-If_Decision.md
+│   │   ├── TABL-ABM_A_Hybrid_Framework_for_Synthetic_LOB_Generation.md
+│   │   ├── Tailoring_Portfolio_Choice_via_Quantile-Targeted_Policies.md
+│   │   ├── Teaching_signal_synchronization_in_deep_neural_networks_with_prospective_neurons.md
+│   │   ├── TeamPath_Building_MultiModal_Pathology_Experts_with_Reasoning_AI_Copilots.md
+│   │   ├── Terminal_Velocity_Matching.md
+│   │   ├── Text-to-SQL_as_Dual-State_Reasoning_Integrating_Adaptive_Context_and_Progressive_Generation.md
+│   │   ├── The_Age-Structured_Chemostat_with_Substrate_Dynamics_as_a_Control_System.md
+│   │   ├── The_Anthropic_Economic_Index_report_Uneven_geographic_and_enterprise_AI_adoption.md
+│   │   ├── The_Asymptotic_Distribution_for_a_Single_Joinpoint_Changepoint_Model.md
+│   │   ├── The_Cost_of_Optimally_Acquired_Information.md
+│   │   ├── The_Determinant_Ratio_Matrix_Approach_to_Solving_3D_Matching_and_2D_Orthographic_Projection_Alignment_Tasks.md
+│   │   ├── The_Directed_Prediction_Change_-_Efficient_and_Trustworthy_Fidelity_Assessment_for_Local_Feature_Attribution_Methods.md
+│   │   ├── The_Evolution_of_Probabilistic_Price_Forecasting_Techniques_A_Review_of_the_Day-Ahead_Intra-Day_and_Balancing_Markets.md
+│   │   ├── The_Exact_Variance_of_the_Average_Treatment_Effect_Estimator_in_Cluster_RCT.md
+│   │   ├── The_Generalized_Proximity_Forest.md
+│   │   ├── The_Hydraulic_Brain_Understanding_as_Constraint-Release_Phase_Transition_in_Whole-Body_Resonance.md
+│   │   ├── The_Intertwined_Rise_of_Collaboration_Scale_Reference_Diversity_and_Breakthrough_Potential_in_Modern_Science_A_40-Year_Cross-Disciplinary_St.md
+│   │   ├── The_Joint_Gromov_Wasserstein_Objective_for_Multiple_Object_Matching.md
+│   │   ├── The_LLM_Pro_Finance_Suite_Multilingual_Large_Language_Models_for_Financial_Applications.md
+│   │   ├── The_Probabilistic_Foundations_of_Surveillance_Failure_From_False_Alerts_to_Structural_Bias.md
+│   │   ├── The_Relationship_Between_Environmental_Regulation_and_Urbanization_a_panel_data_analysis_of_Chinese_prefecture-level_cities.md
+│   │   ├── The_Selective_Disk_Bispectrum_and_Its_Inversion_with_Application_to_Multi-Reference_Alignment.md
+│   │   ├── The_Shape_of_Data_Topology_Meets_Analytics._A_Practical_Introduction_to_Topological_Analytics_and_the_Stability_Index_(TSI)_in_Business.md
+│   │   ├── The_SolarEV_City_Paradox_A_Critical_Review_of_the_Fragmented_Integration_of_Rooftop_Photovoltaics_and_Electric_Vehicles_for_Urban_Decarboniz.md
+│   │   ├── The_Spheres_Dataset_Multitrack_Orchestral_Recordings_for_Music_Source_Separation_and_Information_Retrieval.md
+│   │   ├── The_Theory_of_Storage_in_a_Power_System_with_Stochastic_Demand.md
+│   │   ├── The_Unified_Non-Convex_Framework_for_Robust_Causal_Inference_Overcoming_the_Gaussian_Barrier_and_Optimization_Fragility.md
+│   │   ├── The_Value_of_Personalized_Recommendations_Evidence_from_Netflix.md
+│   │   ├── The_disclosure_of_information_about_the_range_of_asset_value_in_market.md
+│   │   ├── The_geometry_of_higher_order_modern_portfolio_theory.md
+│   │   ├── Theoretical_Analysis_of_Resource-Induced_Phase_Transitions_in_Estimation_Strategies.md
+│   │   ├── Thermodynamics_+_Natural_Selection_=_Bayesian_Inference.md
+│   │   ├── Think_Speak_Decide_Language-Augmented_Multi-Agent_Reinforcement_Learning_for_Economic_Decision-Making.md
+│   │   ├── Thinking_With_Bounding_Boxes_Enhancing_Spatio-Temporal_Video_Grounding_via_Reinforcement_Fine-Tuning.md
+│   │   ├── Threshold_Tensor_Factor_Model_in_CP_Form.md
+│   │   ├── Time-Domain_Linear_Model-based_Framework_for_Passive_Acoustic_Mapping_of_Cavitation_Activity.md
+│   │   ├── Time-Varying_Network_Driver_Estimation_(TNDE)_Quantifies_Stage-Specific_Regulatory_Effects_From_Single-Cell_Snapshots.md
+│   │   ├── Tool-RoCo_An_Agent-as-Tool_Self-organization_Large_Language_Model_Benchmark_in_Multi-robot_Cooperation.md
+│   │   ├── ToolOrchestra_Elevating_Intelligence_via_Efficient_Model_and_Tool_Orchestration.md
+│   │   ├── Toward_Trustworthy_Digital_Twins_in_Agentic_AI-based_Wireless_Network_Optimization_Challenges_Solutions_and_Opportunities.md
+│   │   ├── Towards_Edge_General_Intelligence_Knowledge_Distillation_for_Mobile_Agentic_AI.md
+│   │   ├── Tracking_financial_crime_through_code_and_law_A_review_of_RegTech_applications_in_anti-money_laundering_and_terrorism_financing.md
+│   │   ├── Tractable_Estimation_of_Nonlinear_Panels_with_Interactive_Fixed_Effects.md
+│   │   ├── Trade_Execution_Flow_as_the_Underlying_Source_of_Market_Dynamics.md
+│   │   ├── Trading_with_the_Devil_Risk_and_Return_in_Foundation_Model_Strategies.md
+│   │   ├── Training_Introspective_Behavior_Fine-Tuning_Induces_Reliable_Internal_State_Detection_in_a_7B_Model.md
+│   │   ├── Transformers_with_RL_or_SFT_Provably_Learn_Sparse_Boolean_Functions_But_Differently.md
+│   │   ├── Treatment_effect_estimation_by_comparing_observed_and_predicted_outcomes_theory_and_practical_illustration_in_radiotherapy.md
+│   │   ├── Treatment_of_phenol_wastewater_by_electro-Fenton_oxidative_degradation_based_on_efficient_iron-based-_gas_diffusion-photocatalysis.md
+│   │   ├── Two-stage_Estimation_for_Causal_Inference_Involving_a_Semi-continuous_Exposure.md
+│   │   ├── U.S._Economy_and_Global_Stock_Markets_Insights_from_a_Distributional_Approach.md
+│   │   ├── Uncertainty_of_Network_Topology_with_Applications_to_Out-of-Distribution_Detection.md
+│   │   ├── Understanding_Carbon_Trade_Dynamics_A_European_Union_Emissions_Trading_System_Perspective.md
+│   │   ├── Understanding_Regional_Inertia_Dynamics_in_CAISO_from_Real_Grid_Disturbances.md
+│   │   ├── Understanding_Risk_and_Revenue_in_the_Nordic_15-minute_mFRR_market_An_EV_Aggregation_Study.md
+│   │   ├── Understanding_the_Impact_of_Proportionality_in_Approval-Based_Multiwinner_Elections.md
+│   │   ├── Unlocking_Zero-shot_Potential_of_Semi-dense_Image_Matching_via_Gaussian_Splatting.md
+│   │   ├── Unlocking_the_future_of_food_security_through_access_to_finance_for_sustainable_agribusiness_performance.md
+│   │   ├── Validity_in_machine_learning_for_extreme_event_attribution.md
+│   │   ├── Video_Generation_Models_Are_Good_Latent_Reward_Models.md
+│   │   ├── Video_Object_Recognition_in_Mobile_Edge_Networks_Local_Tracking_or_Edge_Detection.md
+│   │   ├── Wavelet-Guided_Water-Level_Estimation_for_ISAC.md
+│   │   ├── Weakly_Supervised_Segmentation_and_Classification_of_Alpha-Synuclein_Aggregates_in_Brightfield_Midbrain_Images.md
+│   │   ├── What_the_flock_knows_that_the_birds_do_not_exploring_the_emergence_of_joint_agency_in_multi-agent_active_inference.md
+│   │   ├── When_AI_Trading_Agents_Compete_Adverse_Selection_of_Meta-Orders_by_Reinforcement_Learning-Based_Market_Making.md
+│   │   ├── Where_to_Experiment_Site_Selection_Under_Distribution_Shift_via_Optimal_Transport_and_Wasserstein_DRO.md
+│   │   ├── While_recognizing_actions_LMMs_struggle_to_detect_core_interaction_events.md
+│   │   ├── Who_benefits_from_increases_in_military_spending_An_empirical_analysis.md
+│   │   ├── Why_Is_the_Double-Robust_Estimator_for_Causal_Inference_Not_Doubly_Robust_for_Variance_Estimation.md
+│   │   ├── Why_`Fair_Market_Valuations'_are_Inappropirate_for_Employee-Owned_Firms_and_Partnerships.md
+│   │   ├── Wilcoxon-Mann-Whitney_Test_of_No_Group_Discrimination.md
+│   │   ├── Worker_Selection_and_Efficiency.md
+│   │   ├── Zipf_Distributions_from_Two-Stage_Symbolic_Processes_Stability_Under_Stochastic_Lexical_Filtering.md
+│   │   └── Zoned_Out_The_Long-Term_Consequences_of_School_Choice_for_Wealth_Segregation.md
+│   ├── (Chichi_Thesis_-_Toroidal_Half-Wave_(λ2)_Resonator_-_2021_Da_An)_Electric-field_noise_scaling_and_wire-mediated_ion-ion_energy_exchange_in_a.md
+│   ├── (In_Vacuum_Resonator_-_2015_Innsbruck)_Cryogenic_surface_ion_traps.md
+│   ├── (Roos_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.md
+│   ├── 1000+_FPS_4D_Gaussian_Splatting_for_Dynamic_Scene_Rendering.md
+│   ├── 2405.03901v1_OmniActions_Predicting_Digital_Actions_in_Response_to_Real-World_Multimodal_Sensory_Inputs_with_LLMs.md
+│   ├── 67e0c7ecbe190f16e9f5a92a.md
+│   ├── AFEC_Active_Forgetting_of_Negative_Transfer_in_Continual_Learning.md
+│   ├── ASASSN-18am_SN_2018gk_An_overluminous_Type_IIb_supernova_from_a_massive_progenitor.md
+│   ├── A_Bibliometric_Review_of_Large_Language_Models_Research_from_2017_to_2023.md
+│   ├── A_Complete_Active_Space_Self-Consistent_Field_approach_for_molecules_in_QED_environments.md
+│   ├── A_Comprehensive_Overview_of_Large_Language_Models.md
+│   ├── A_direct_approach_to_the_Gallai-Schur_numbers.md
+│   ├── A_nonlocal_concave-convex_problem_with_nonlocal_mixed_boundary_data.md
+│   ├── A_single_quantum_cannot_be_cloned.md
+│   ├── Algorithms.md
+│   ├── An_Energy_Stable_Approach_for_Discretizing_Hyperbolic_Equations_with_Nonconforming_Discontinuous_Galerkin_Methods.md
+│   ├── An_infinite_family_of_linklessly_embeddable_Tutte-4-connected_graphs.md
+│   ├── Analysis_of_Thompson_Sampling_for_Partially_Observable_Contextual_Multi-Armed_Bandits.md
+│   ├── Arcminute_Microkelvin_Imager_observations_at_15.5_GHz_of_multiple_outbursts_of_Cygnus_X-3_in_2024.md
+│   ├── Asymptotic_Multiplicities_of_Graded_Families_of_Ideals_and_Linear_Series.md
+│   ├── Attention_Is_All_You_Need__Vaswani_et_al._-_2023_-_Attention_Is_All_You_Need.md
+│   ├── BGE_M3-Embedding_Multi-Lingual_Multi-Functionality_Multi-Granularity_Text_Embeddings_Through_Self-Knowledge_Distillation.md
+│   ├── Batch_and_PIR_Codes_and_Their_Connections_to_Locally_Repairable_Codes.md
+│   ├── Bezier_Splatting_for_Fast_and_Differentiable_Vector_Graphics_Rendering.md
+│   ├── BiHom-pre-Lie_algebras_BiHom-Leibniz_algebras_and_Rota-Baxter_operators_on_BiHom-Lie_algebras.md
+│   ├── Branching_fraction_measurement_of_the_decay_$B^+_to_ψ(2S)_φ(1020)_K^+$__collaboration_et_al._-_2025_-_Branching_fraction_measurement.md
+│   ├── Bridging_Continuous_and_Discrete_Tokens_for_Autoregressive_Visual_Generation.md
+│   ├── C-RNN-GAN_Continuous_recurrent_neural_networks_with_adversarial_training.md
+│   ├── Can_Language_Models_Encode_Perceptual_Structure_Without_Grounding_A_Case_Study_in_Color.md
+│   ├── Characterization_of_Micromotion_Induced_by_RF_Phase_Shift_with_Photon_Correlation_Detection_in_a_Paul_Trap.md
+│   ├── Classical_power_and_energy_relations_for_macroscopic_dipolar_continua_derived_from_the_microscopic_Maxwell_equations.md
+│   ├── Climbing_towards_NLU_On_Meaning_Form_and_Understanding_in_the_Age_of_Data.md
+│   ├── Closing_the_Calibration_Loop_An_Inside-out-tracking_Paradigm_for_Augmented_Reality_in_Orthopedic_Surgery.md
+│   ├── Coexistence_of_distinct_mobility_edges_in_a_1D_quasiperiodic_mosaic_model__Xia_et_al._-_2025_-_Coexistence_of_distinct_mobility_edges_i.md
+│   ├── Comparing_approaches_for_predicting_behavioural_speech-in-noise_performance_using_cortical_responses_to_unattended_stimuli.md
+│   ├── Computing_Lindahl_Equilibrium_for_Public_Goods_with_and_without_Funding_Caps.md
+│   ├── Constructing_an_Ultra-High_Vacuum_Chamber_and_a_Radio_Frequency_Helical_Resonator_for_Trapping_Ions.md
+│   ├── Context-Guided_Spatio-Temporal_Video_Grounding.md
+│   ├── Control_strategy_for_anaesthetic_drug_dosage_with_interaction_among_human_physiological_organs_using_optimal_fractional_order_PID_controller.md
+│   ├── DecodingTrust_A_Comprehensive_Assessment_of_Trustworthiness_in_GPT_Models.md
+│   ├── Deep_Feynman-Kac_Methods_for_High-dimensional_Semilinear_Parabolic_Equations_Revisit.md
+│   ├── Deep_Learning_A_Bayesian_Perspective.md
+│   ├── Distributed_Mixture-of-Agents_for_Edge_Inference_with_Large_Language_Models.md
+│   ├── Do_NOT_Think_That_Much_for_2+3=_On_the_Overthinking_of_o1-Like_LLMs.md
+│   ├── Do_the_Rewards_Justify_the_Means_Measuring_Trade-Offs_Between_Rewards_and_Ethical_Behavior_in_the_MACHIAVELLI_Benchmark.md
+│   ├── DreamTexture_Shape_from_Virtual_Texture_with_Analysis_by_Augmentation.md
+│   ├── DynamicVis_An_Efficient_and_General_Visual_Foundation_Model_for_Remote_Sensing_Image_Understanding.md
+│   ├── Dynamic_Stripes_Exploiting_the_Dynamic_Precision_Requirements_of_Activation_Values_in_Neural_Networks.md
+│   ├── Effect_of_electron_diamagnetic_drifts_on_cylindrical_double-tearing_modes.md
+│   ├── Efficient_Multi-Task_Inferencing_with_a_Shared_Backbone_and_Lightweight_Task-Specific_Adapters_for_Automatic_Scoring.md
+│   ├── Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   ├── Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthetic_Task__Li_et_al._-_2024_-_Emergent_World_Representations_Exploring_.md
+│   ├── Enhancing_Annotated_Bibliography_Generation_with_LLM_Ensembles.md
+│   ├── Enhancing_Representation_in_Medical_Vision-Language_Foundation_Models_via_Multi-Scale_Information_Extraction_Techniques.md
+│   ├── Entropy-based_Probing_Beam_Selection_and_Beam_Prediction_via_Deep_Learning.md
+│   ├── Evaluating_How_Developers_Use_General-Purpose_Web-Search_for_Code_Retrieval.md
+│   ├── Experimental_limit_on_non-linear_state-dependent_terms_in_quantum_theory.md
+│   ├── Exploring_and_Controlling_Diversity_in_LLM-Agent_Conversation.md
+│   ├── Exploring_the_landscape_of_large_language_models_Foundations_techniques_and_challenges.md
+│   ├── Extended_interval_dosing_of_natalizumab_More_evidence_in_support__Toljan_and_Conway_-_2024_-_Extended_interval_dosing_of_natal.md
+│   ├── Facilitating_large_language_model_Russian_adaptation_with_Learned_Embedding_Propagation.md
+│   ├── Frequency_Comb_Generation_in_Superconducting_Resonators.md
+│   ├── Frequency_Comb_Generation_in_Superconducting_Resonators__Erickson_et_al._-_2014_-_Frequency_Comb_Generation_in_Superc.md
+│   ├── From_Local_to_Global_A_Graph_RAG_Approach_to_Query-Focused_Summarization.md
+│   ├── Full-stack_Analog_Optical_Quantum_Computer_with_A_Hundred_Inputs__Yokoyama_et_al._-_2025_-_Full-stack_Analog_Optical_Quantum_C.md
+│   ├── Functorial_CW-approximation.md
+│   ├── GAEA_A_Geolocation_Aware_Conversational_Assistant.md
+│   ├── GAIA_a_benchmark_for_General_AI_Assistants.md
+│   ├── Generalization_Error_Curves_for_Analytic_Spectral_Algorithms_under_Power-law_Decay.md
+│   ├── Generic_Secure_Repair_for_Distributed_Storage.md
+│   ├── Geometric_Shifts_and_Positroid_Varieties.md
+│   ├── Harnack_inequalities_for_equations_of_type_prescribed_scalar_curvature.md
+│   ├── Holographic_entanglement_entropy_of_two_disjoint_intervals_in_AdS$_3$_CFT$_2$.md
+│   ├── How_to_Write_Beautiful_Process-and-Data-Science_Papers.md
+│   ├── How_to_realize_a_universal_quantum_gate_with_trapped_ions.md
+│   ├── Improved_measurement_of_absolute_branching_fraction_of_the_inclusive_decay_$Λ_{c}^{+}_to_K_{S}^{0}_X$.md
+│   ├── Incorporating_Inductions_and_Game_Semantics_into_Logic_Programming.md
+│   ├── InfiniteYou_Flexible_Photo_Recrafting_While_Preserving_Your_Identity.md
+│   ├── Interaction-correlated_random_matrices.md
+│   ├── Interpretable_antibody-antigen_interaction_prediction_by_bridging_structure_to_sequence.md
+│   ├── JoMA_Demystifying_Multilayer_Transformers_via_JOint_Dynamics_of_MLP_and_Attention.md
+│   ├── L2_TasksDataEval.md
+│   ├── Leaf_as_a_Poincare_convex_domain_associated_with_an_endomorphism_on_a_real_inner_product_space.md
+│   ├── Learning_State_Representations_for_Query_Optimization_with_Deep_Reinforcement_Learning.md
+│   ├── Linkedin_Article_-_KnoWhiz_Key_Features_(Promotional_Material_Development).md
+│   ├── M3_3D-Spatial_MultiModal_Memory.md
+│   ├── Machine_Assisted_Analysis_of_Vowel_Length_Contrasts_in_Wolof.md
+│   ├── Machine_Learning_Methods_That_Economists_Should_Know_About.md
+│   ├── MagicMotion_Controllable_Video_Generation_with_Dense-to-Sparse_Trajectory_Guidance.md
+│   ├── Matryoshka_Quantization.md
+│   ├── Measurement_of_$_rm_^4_ΛH$_and_$_rm_^4_ΛHe$_binding_energy_in_Au+Au_collisions_at_$_sqrt{s_mathrm{NN}}$_=_3_GeV.md
+│   ├── MetaTool_Benchmark_for_Large_Language_Models_Deciding_Whether_to_Use_Tools_and_Which_to_Use.md
+│   ├── Microwave_Engineering_-_Pozar__Microwave_Engineering_-_Pozar.md
+│   ├── MisMatch_Calibrated_Segmentation_via_Consistency_on_Differential_Morphological_Feature_Perturbations_with_Limited_Labels.md
+│   ├── Mixture-of-Agents_Enhances_Large_Language_Model_Capabilities.md
+│   ├── Modeling_memory_bandwidth_patterns_on_NUMA_machines_with_performance_counters.md
+│   ├── Multi-zone_trapped-ion_qubit_control_in_an_integrated_photonics_QCCD_device.md
+│   ├── Multicentric_epidemiologic_study_on_six_thousand_three_hundred_and_ninety_five_cases_of_femoral_head_osteonecrosis_in_China.md
+│   ├── Multimode_Ion-Photon_Entanglement_over_101_Kilometers.md
+│   ├── NeuroBEM_Hybrid_Aerodynamic_Quadrotor_Model.md
+│   ├── New_Team_Member_Onboarding_Guide_-_Jason.md
+│   ├── Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   ├── On_Liu_morphisms_in_non-Archimedean_geometry.md
+│   ├── On_Memory_Construction_and_Retrieval_for_Personalized_Conversational_Agents.md
+│   ├── On_Parallel_External-Memory_Bidirectional_Search.md
+│   ├── On_Practical_Aspects_of_Mobile_Data_Offloading_to_Wi-Fi_Networks.md
+│   ├── On_rank-width_of_even-hole-free_graphs.md
+│   ├── On_some_regularity_condition.md
+│   ├── On_the_Queue_Number_of_Planar_Graphs.md
+│   ├── On_the_Total_Positivity_of_Contingency_Metamatrices.md
+│   ├── On_the_application_of_radio_frequency_voltages_to_ion_traps_via_helical_resonators.md
+│   ├── On_the_complexity_of_some_classes_of_Banach_spaces_and_non-universality.md
+│   ├── On_the_nature_of_the_glass_transition_in_metallic_glasses_after_deep_relaxation.md
+│   ├── Ordering_interrogative_questions_for_effective_requirements_engineering_The_W6H_pattern.md
+│   ├── Out‐of‐bag_stability_estimation_for_span_style=_font-variant_small-caps;_i_k_i_span_‐means_clustering.md
+│   ├── PLLaMa_An_Open-source_Large_Language_Model_for_Plant_Science.md
+│   ├── PROMPT_Parallel_Iterative_Algorithm_for_$_ell_{p}$_norm_linear_regression_via_Majorization_Minimization_with_an_application_to_semi-supervis.md
+│   ├── Parallel_Domain-Decomposition_Algorithms_for_Complexity_Certification_of_Branch-and-Bound_Algorithms_for_Mixed-Integer_Linear_and_Quadratic_.md
+│   ├── Performance_Modeling_and_Prediction_for_Dense_Linear_Algebra.md
+│   ├── Personalized_Pancreatic_Tumor_Growth_Prediction_via_Group_Learning.md
+│   ├── Practical_Considerations_for_Agentic_LLM_Systems.md
+│   ├── ProAgent_From_Robotic_Process_Automation_to_Agentic_Process_Automation.md
+│   ├── Probing_Classifiers_Promises_Shortcomings_and_Advances__Belinkov_-_2021_-_Probing_Classifiers_Promises_Shortcomings_.md
+│   ├── Proportional_Justified_Representation.md
+│   ├── Quadratic_variation_and_local_times_of_the_horizontal_component_of_the_Peano_curve_(square_filling_curve).md
+│   ├── RAFT_Adapting_Language_Model_to_Domain_Specific_RAG.md
+│   ├── RankRAG_Unifying_Context_Ranking_with_Retrieval-Augmented_Generation_in_LLMs__Yu_et_al._-_2024_-_RankRAG_Unifying_Context_Ranking_with_Ret.md
+│   ├── ReAct_Synergizing_Reasoning_and_Acting_in_Language_Models__Yao_et_al._-_2023_-_ReAct_Synergizing_Reasoning_and_Acting_i.md
+│   ├── Real-Time_Denoising_of_Volumetric_Path_Tracing_for_Direct_Volume_Rendering.md
+│   ├── Real-Time_Human_Fall_Detection_using_a_Lightweight_Pose_Estimation_Technique.md
+│   ├── Realizing_tight-binding_Hamiltonians_using_site-controlled_coupled_cavity_arrays__Saxena_et_al._-_2023_-_Realizing_tight-binding_Hamiltonians_.md
+│   ├── Remarks_on_coloured_triply_graded_link_invariants.md
+│   ├── Research_Trends_for_the_Interplay_between_Large_Language_Models_and_Knowledge_Graphs.md
+│   ├── RoboFactory_Exploring_Embodied_Agent_Collaboration_with_Compositional_Constraints.md
+│   ├── Rotations_of_small_inertialess_triaxial_ellipsoids_in_isotropic_turbulence.md
+│   ├── Scan_and_Snap_Understanding_Training_Dynamics_and_Token_Composition_in_1-layer_Transformer.md
+│   ├── Single-Shot_Readout_of_a_Single_Nuclear_Spin.md
+│   ├── Sonata_Self-Supervised_Learning_of_Reliable_Point_Representations.md
+│   ├── Spectral_Engineering_of_Optical_Microresonators_in_Anisotropic_Lithium_Niobate_Crystal.md
+│   ├── Speculative_Decoding_and_Beyond_An_In-Depth_Survey_of_Techniques.md
+│   ├── Stop_Overthinking_A_Survey_on_Efficient_Reasoning_for_Large_Language_Models.md
+│   ├── Subwavelength-thick_lenses_with_high_numerical_apertures_and_large_efficiency_based_on_high-contrast_transmitarrays.md
+│   ├── Survey_on_Evaluation_of_LLM-based_Agents.md
+│   ├── SynCity_Training-Free_Generation_of_3D_Worlds.md
+│   ├── Telecom-Wavelength_Quantum_Repeater_Node_Based_on_a_Trapped-Ion_Processor.md
+│   ├── Temporal_correlation_detection_using_computational_phase-change_memory.md
+│   ├── Temporally_multiplexed_ion-photon_quantum_interface_via_fast_ion-chain_transport.md
+│   ├── Temporally_multiplexed_ion-photon_quantum_interface_via_fast_ion-chain_transport__You_et_al._-_2024_-_Temporally_multiplexed_ion-photon_quantu.md
+│   ├── Temporally_multiplexed_ion-photon_quantum_interface_via_fast_ion-chain_transport__You_et_al._-_Temporally_multiplexed_ion-photon_quantum_inter.md
+│   ├── Ten_Steps_for_Writing_Research_Papers.md
+│   ├── Test_of_Causal_Nonlinear_Quantum_Mechanics_by_Ramsey_Interferometry_with_a_Trapped_Ion.md
+│   ├── The_Bethe_ansatz_for_the_six-vertex_and_XXZ_models_an_exposition.md
+│   ├── The_CHI_of_Teaching_Online_Blurring_the_Lines_Between_User_Interfaces_and_Learner_Interfaces.md
+│   ├── The_Hierarchical_Taxonomy_of_Psychopathology_(HiTOP)_A_dimensional_alternative_to_traditional_nosologies..md
+│   ├── The_Lamb_shift_in_muonic_hydrogen_and_the_proton_radius_from_effective_field_theories.md
+│   ├── The_Roots_of_Bias_on_Uber.md
+│   ├── The_System_Model_and_the_User_Model_Exploring_AI_Dashboard_Design.md
+│   ├── The_behavior_of_solutions_of_a_parametric_weighted_(p_q)-Laplacian_equation.md
+│   ├── The_reactive-telegraph_equation_and_a_related_kinetic_model.md
+│   ├── Ticking_near_the_Zero-Point_Energy_towards_1_×_10-18_Accuracy_in_Al+_Optical_Clocks.md
+│   ├── Tokenize_Image_as_a_Set.md
+│   ├── Toward_Keyword_Generation_through_Large_Language_Models.md
+│   ├── Toward_coherent_quantum_computation_of_scattering_amplitudes_with_a_measurement-based_photonic_quantum_processor__Briceno_et_al._-_2024_-_Toward_coherent_quantum_computation_.md
+│   ├── Towards_Axiomatic_Explanations_for_Neural_Ranking_Models.md
+│   ├── Trading_Graph_Neural_Network.md
+│   ├── Trimmed_Conformal_Prediction_for_High-Dimensional_Models.md
+│   ├── Ultrabroadband_on-chip_photonics_for_full-spectrum_wireless_communications.md
+│   ├── Unbiased_scalable_softmax_optimization.md
+│   ├── Understanding_building_and_using_Baluns_and_Ununs_theory_and_practical_designs_for_the_experimenter.md
+│   ├── Unsupervised_Abstractive_Opinion_Summarization_by_Generating_Sentences_with_Tree-Structured_Topic_Guidance.md
+│   ├── Verbosity-Aware_Rationale_Reduction_Effective_Reduction_of_Redundant_Rationale_via_Principled_Criteria.md
+│   ├── View_Distribution_Alignment_with_Progressive_Adversarial_Learning_for_UAV_Visual_Geo-Localization.md
+│   ├── Visible_Light_Communication_for_Wearable_Computing.md
+│   ├── Voltage_control_of_magnetic_monopoles_in_artificial_spin_ice.md
+│   ├── Weighted_Bilinear_Coding_over_Salient_Body_Parts_for_Person_Re-identification.md
+│   ├── X-ray-transform_Invariant_Anatomical_Landmark_Detection_for_Pelvic_Trauma_Surgery.md
+│   ├── XAttention_Block_Sparse_Attention_with_Antidiagonal_Scoring.md
+│   ├── Zero-shot_Node_Classification_with_Decomposed_Graph_Prototype_Network.md
+│   ├── dyAb_Flow_Matching_for_Flexible_Antibody_Design_with_AlphaFold-driven_Pre-binding_Antigen.md
+│   ├── goog-20221231.md
+│   ├── iBrownout_An_Integrated_Approach_for_Managing_Energy_and_Brownout_in_Container-based_Clouds.md
+│   ├── input.md
+│   ├── input2.md
+│   └── user_-_fail_67c920fd0cdbaf12114a6c45.md
+├── Lattice/
+│   ├── NLQM - Trapped Ions/
+│   │   ├── A_Causal_Framework_for_Non-Linear_Quantum_Mechanics.md
+│   │   ├── Hyper-Ramsey_Blueprint.pdf.md
+│   │   ├── Ion_tests_of_MQM.pdf.md
+│   │   ├── On_the_Improvement_of_Frequency_Stardards_with_Quantum_Entanglement.md
+│   │   └── Test_of_Causal_Non-Linear_Quantum_Mechanics_by_Ramsey_Interferometry_on_the_vibrational_mode_of_a_trapped_ion.md
+│   ├── QSync/
+│   │   ├── (Notes_-_2023_Mar_Chris)_Notes_on_trapped_ion_realization_of_the_van_der_Pol_oscillator.md
+│   │   ├── (Notes_-_2024_Feb_Chris)_Notes_on_realizing_synchronized_quantum_van_der_Pol_(vdP)_oscillators_with_a_single_trapped_ion.md
+│   │   ├── (QSync_-_2023_Chris)_Topological_synchronization_of_quantum_van_der_Pol_oscillators.md
+│   │   ├── (QSync_-_2024_PRL)_Exploring_Quantum_Synchronization_with_a_Composite_Two-Qubit_Oscillator.md
+│   │   └── Discussion_202402.pdf.md
+│   ├── VAET/
+│   │   ├── (GM_Thesis_-_Lattice_Setup_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   │   ├── (PT-symmetric_-_2021)_Observation_of_PT-symmetric_quantum_coherence_in_a_single-ion_system.md
+│   │   ├── (Ramm_Thesis_-_Lattice_Setup_-_2014_Ramm)_Quantum_Correlations_and_Energy_Transport_in_Trapped_Ions.md
+│   │   ├── (VAET_-_2018)_Engineering_Vibrationally_Assisted_Energy_Transfer_in_a_Trapped-Ion_Quantum_Simulator.md
+│   │   ├── (VAET_Theory_-_2024_Birgitta)_Enhancement_of_vibrationally_assisted_energy_transfer_by_proximity_to_exceptional_points_probed_by_fluorescenc.md
+│   │   └── (VATE_-_2022)_Interplay_of_vibration-_and_environment-assisted_energy_transfer.md
+│   ├── (GM_Thesis_-_Lattice_Setup_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   ├── (Ramm_Thesis_-_Lattice_Setup_-_2014_Ramm)_Quantum_Correlations_and_Energy_Transport_in_Trapped_Ions.md
+│   ├── (VAET_-_2018)_Engineering_Vibrationally_Assisted_Energy_Transfer_in_a_Trapped-Ion_Quantum_Simulator.md
+│   ├── (VATE_-_2022)_Interplay_of_vibration-_and_environment-assisted_energy_transfer.md
+│   └── Dan_Steck_Rubidium.pdf.md
+├── Multiplexing/
+│   ├── ARTIQ SYSTEM/
+│   │   └── (ARTIQ_-_2022_Wenji)_ARTIQ-based_Quantum_Network_Control.md
+│   ├── Fundamental/
+│   │   ├── (3D_Printed_Ion_Trap_-_2022_Oregon)_Geometries_and_fabrication_methods_for_3D_printing_ion_traps.md
+│   │   ├── (AMO_Textbook_-_Foot)_Atomic_Physics.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Atoms_and_molecules_interacting_with_light_atomic_physics_for_the_laser_era.md
+│   │   ├── (AMO_Textbook_-_vdSM)_Laser_Cooling_and_Trapping.md
+│   │   ├── (Bible)_(Roos_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+│   │   ├── (Bible)_Experimental_issues_in_coherent_quantum-state_manipulation_of_trapped_atomic_ions.md
+│   │   ├── (Bible)_Quantum_dynamics_of_single_trapped_ions.md
+│   │   ├── (Ca+_stark_shift_-_2003_Innsbruck)_Precision_Measurement_and_Compensation_of_Optical_Stark_Shifts_for_an_Ion-Trap_Quantum_Processor.pdf.md
+│   │   ├── (Chichi_Thesis_-_Toroidal_Half-Wave_(λ_2)_Resonator_-_2021_Da_An)_Electric-field_noise_scaling_and_wire-mediated_ion-ion_energy_exchange_in_.md
+│   │   ├── (Coupling_stength_of_motional_carrier_-_2003_Leibfried)_Quantum_dynamics_of_single_trapped_ions.md
+│   │   ├── (ETH_PIC_Nature_-_2016_ETH)_Integrated_optical_addressing_of_an_ion_qubit.md
+│   │   ├── (ETH_PIC_PRX_-_2025_ETH)_Multizone_Trapped-Ion_Qubit_Control_in_an_Integrated_Photonics_QCCD_Device.md
+│   │   ├── (GM_Thesis_-_Lattice_Setup_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   │   ├── (Heating_measurement_for_multiple_ions_-_2020_Mu_Qiao)_Double-Electromagnetically-Induced-Transparency_Ground-State_Cooling_of_Stationary_Tw.md
+│   │   ├── (Integrated_photonics_-_2016_MIT)_Integrated_optical_addressing_of_an_ion_qubit.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_High_efficiency_focusing_double-etched_SiN_grating_coupler_for_trapped_ion_qubit_manipulation.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Beam_Steering_Using_a_2D_Focusing_Grating_Coupler_for_Scalable_Trapped_Ion_Quantum_Computing.md
+│   │   ├── (Integrated_photonics_-_2022_Daniel)_Integrated_Microlens_Coupler_for_Photonic_Integrated_Circuits.md
+│   │   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions.md
+│   │   ├── (Integrated_photonics_QNET_-_2024_MIT)_Integrated_photonic_structures_for_photon-mediated_entanglement_of_trapped_ions__Knollmann_等_-_2024_-_Integrated_photonic_structures_for_phot.md
+│   │   ├── (Joe_Thesis_-_Lattice_Setup_-_2023_Joe)_Quantum_metrology_with_trapped_ions.pdf.md
+│   │   ├── (Laser_lock_-_2001_Eric)_An_introduction_to_Pound–Drever–Hall_laser_frequency_stabilization.md
+│   │   ├── (MS_Gate_-_2008_Roos)_Ion_trap_quantum_gates_with_amplitude-modulated_laser_beams.md
+│   │   ├── (Motional_Sideband_-_2023_Innsbruck)_Sideband_thermometry_of_ion_crystals.md
+│   │   ├── (Multiple_ions_cooling_-_2023_Qiming)_Continuous_Raman_sideband_cooling_beyond_the_Lamb-Dicke_regime_in_a_trapped_ion_chain.pdf.md
+│   │   ├── (Multipole_Potentials_-_2011_Innsbruck)_Classical_control_of_an_ion_in_a_surface_trap_(PhD_Thesis).pdf.md
+│   │   ├── (On_chip_laser_-_2024_UMass)_Trapped_ion_qubit_and_clock_operations_with_a_visible_wavelength_photonic_coil_resonator_stabilized_integrated_.md
+│   │   ├── (PIC_Trap_design_-_2021_Malinowski_ETH)_Unitary_and_Dissipative_Trapped-Ion_Entanglement_Using_Integrated_Optics.md
+│   │   ├── (QM_Thesis_-_2023_Qiming_Wu)_Quantum_information_processing_with_programmable_interaction_in_a_trapped_ion_chain.pdf.md
+│   │   ├── (Quant-NET_Blueprint_-_2021_Innsbruck)_Interface_between_Trapped-Ion_Qubits_and_Travelling_Photons_with_Close-to-Optimal_Efficiency.md
+│   │   ├── (Ramm_Thesis_-_Lattice_Setup_-_2014_Ramm)_Quantum_Correlations_and_Energy_Transport_in_Trapped_Ions.md
+│   │   ├── (Saturation_Parameter_-_2004_Peter_Staanum)_Quantum_Optics_with_Trapped_Calcium_Ions.pdf.md
+│   │   ├── (Scanned_-_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+│   │   ├── (Shuqi_Xu)_Miniaturize_3D_ion_traps_using_novel_3D_printing_technology.md
+│   │   ├── (Surface_Trap_-_2006_Boulder)_Microfabricated_Surface-Electrode_Ion_Trap_for_Scalable_Quantum_Information_Processing.md
+│   │   ├── (Surface_Trap_-_2017_Sankaranarayanan_Innsbruck)_Establishing_tools_to_optimize_surface_traps_for_wiring_up_trapped_ions.md
+│   │   ├── (Thesis_-_2023_Neil)_Creating_and_Destroying_Rotational_Quantum_Coherence_in_a_Trapped-Ion_Coulomb_Crystal_Rotor.md
+│   │   ├── (Thesis_-_2024_Ke_Sun)_Quantum_Simulation_of_Electron_Transfer_Dynamics_Using_A_Trapped-Ion_System.md
+│   │   ├── (Thesis_-_2024_Ke_Sun)_Quantum_Simulation_of_Electron_Transfer_Dynamics_Using_A_Trapped-Ion_System__Sun_-_2024_-_Quantum_Simulation_of_Electron_Transfer_Dynamic.md
+│   │   ├── (Thesis_-_Integrated_photonics_-_2017_MIT)_Integrated_optical_quantum_manipulation_and_measurement_of_trapped_ions.pdf.md
+│   │   ├── (Trap_Potential_-_2011_Littich)_Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   │   ├── (Trap_calculation_-_2008_UCLA)_Analytic_model_for_electrostatic_fields_in_surface-electrode_ion_traps.md
+│   │   ├── (Trapped_ion_QIP_-_2021_Ken_Brown)_Materials_Challenges_for_Trapped-Ion_Quantum_Computers.pdf.md
+│   │   ├── (Two-photon_Polymerization)_A_review_on_the_processing_accuracy_of_two-photon_polymerization.md
+│   │   ├── (Two-photon_Polymerization)_Two-photon_lithography_for_three-dimensional_fabrication_in_micro_nanoscale_regime_A_comprehensive_review.md
+│   │   ├── Dan_Steck_Rubidium.pdf.md
+│   │   └── Microwave_Engineering_-_Pozar.md
+│   ├── Ion Shuttling/
+│   │   ├── (Basic_Equations_-_2008)_On_the_transport_of_atomic_ions_in_linear_and_multidimensional_ion_trap_arrays.md
+│   │   ├── (Charging_effect_-_2010_R._Blatt)_Trapped-ion_probing_of_light-induced_charging_effects_on_dielectrics.md
+│   │   ├── (Coherent_heating_-_2012_PRL)_Controlling_Fast_Transport_of_Cold_Trapped_Ions.md
+│   │   ├── (DAC_with_Amplifier_-_2012_MIT)_Shuttling_of_Ions_for_Characterization_of_a_Microfabricated_Ion_Trap.pdf.md
+│   │   ├── (Heating_measurement_-_2021_PRL)_Radial_Two-Dimensional_Ion_Crystals_in_a_Linear_Paul_Trap.md
+│   │   ├── (Heating_measurement_-_2021_PRL)_Radial_Two-Dimensional_Ion_Crystals_in_a_Linear_Paul_Trap__Supplemental_Material.md
+│   │   ├── (High_Voltage_Control_-_2010_Innsbruck)_Quantum_non-demolition_measurements_and_quantum_simulation.md
+│   │   ├── (Ion_Shuttling_-_2021_MIT)_Optimizing_Ion-Shuttling_Operations_in_Trapped-Ion_Quantum_Computers.md
+│   │   ├── (Ion_Shuttling_Experiment_-_2012_Mainz)_Controlling_Fast_Transport_of_Cold_Trapped_Ions.md
+│   │   ├── (Ion_Shuttling_Theory_-_2011_J._G._Muga)_Fast_atomic_transport_without_vibrational_heating.md
+│   │   ├── (Ion_Shuttling_Theory_2_Species_-_2016_NIST_J._G._Muga)_Fast_transport_of_mixed-species_ion_chains_within_a_Paul_trap.md
+│   │   ├── (Motional_Sideband_-_2023_Innsbruck)_Sideband_thermometry_of_ion_crystals.md
+│   │   ├── (Optimization_-_2022_Sandia)_Closed-loop_optimization_of_fast_trapped-ion_shuttling_with_sub-quanta_excitation.md
+│   │   ├── (Thesis_-_Mixed_Heating_-_2012_Frank_Ziesel)_Quantum_State_Manipulation_and_Dynamics_in_Micro_Ion_Traps.md
+│   │   ├── (Trap_Potential_-_2011_Littich)_Electrostatic_Control_and_Transport_of_Ions_on_a_Planar_Trap_for_Quantum_Information_Processing.md
+│   │   └── Schneller_Transport_von_kalten_gefangenen_Ionen.md
+│   ├── Photon Generation/
+│   │   ├── (3D_Trap_minus_Cavity_-_2019_Reiner_Pascal_Eich)_Single-ion_based_quantum_interfaces_for_quantum-network_applications.md
+│   │   ├── (Addressing_Crosstalk_-_2023_Waterloo)_Preserving_a_qubit_during_adjacent_measurements_at_a_few_micrometers_distance.md
+│   │   ├── (Frequency_conversion_-_Meraner)_A_photonic_quantum_interface_between_trapped_ions_and_the_telecom_C-band.md
+│   │   ├── (Ion-Photon_Entanglement_-_2020_Oxford)_Entanglement_between_nodes_of_a_quantum_network.md
+│   │   ├── (Polarization_of_Photons_-_2020_Oxford)_High-Rate_High-Fidelity_Entanglement_of_Qubits_Across_an_Elementary_Quantum_Network.md
+│   │   ├── (Single_photon_generation_-_2004_Innsbruck)_A_single-photon_source_based_on_a_single_Ca_sup_+_sup_ion.md
+│   │   ├── (Single_photon_generation_-_2009_Innsbruck)_Deterministic_single-photon_source_from_a_single_ion.md
+│   │   ├── (Single_photon_generation_-_2013_Sussex_PhD_Thesis_&_New_Journal_of_Physics)_An_integrated_fiber_trap_for_single-ion_photonics.md
+│   │   ├── (Single_photon_generation_-_2013_Sussex_PhD_Thesis_&_New_Journal_of_Physics)_An_integrated_fiber_trap_for_single-ion_photonics__(PhD_Thesis)_A_fibre-based_single-photon_source.md
+│   │   ├── (Understanding_the_g2_fitting)_A_quantum-mechanical_master_equation_treatment_of_the_dynamical_Stark_effect.md
+│   │   ├── (g2_measurement_-_2016_Higginbottom)_Pure_single_photons_from_a_trapped_atom_source.md
+│   │   ├── (g2_measurement_-_2018_Duke)_High_Purity_Single_Photons_Entangled_with_an_Atomic_Memory.md
+│   │   ├── (g2_measurement_-_2018_Sussex_PRL)_Long-distance_single_photon_transmission_from_a_trapped_ion_via_quantum_frequency_conversion.md
+│   │   ├── (g2_measurement_-_2023_Jeff_D._Thompson)_Indistinguishable_telecom_band_photons_from_a_single_erbium_ion_in_the_solid_state.md
+│   │   └── (g2_measurement_fitting_-_1987_PRL)_Nonclassical_radiation_of_a_single_stored_ion.md
+│   ├── Random/
+│   │   ├── (3-ion_Multimode_-_2023_Ben_Lanyon)_Multimode_ion-photon_entanglement_over_101_kilometers_of_optical_fiber.md
+│   │   ├── (DIQKD_-_1998_Princeton)_Quantum_cryptography_with_imperfect_apparatus.md
+│   │   ├── (DIQKD_-_2022_Nadlinger)_Experimental_quantum_key_distribution_certified_by_Bell's_theorem.md
+│   │   ├── (DIQKD_-_2024_ETH)_Prospects_for_device-independent_quantum_key_distribution.md
+│   │   ├── (Dark_ion_problem)_Photodissociation_of_CaOH_sup_+_sup_for_Regeneration_of_Ca_sup_+_sup_in_Linear_Paul_Trap.md
+│   │   ├── (Imaging_system)_High-resolution_adaptive_imaging_of_a_single_atom.md
+│   │   ├── (Measuring_mass_with_trap_potential)_Sympathetic_Cooling_of_Mixed_Species_Two-Ion_Crystals_for_Precision_Spectroscopy.md
+│   │   ├── (Multiplexing_Theory_-_2022_UP)_Multiplexed_quantum_repeaters_based_on_dual-species_trapped-ion_systems.md
+│   │   ├── (Multiplexing_Theory_-_2023_PRR)_Multiplexed_telecommunication-band_quantum_networking_with_atom_arrays_in_optical_cavities.md
+│   │   ├── (Multiplexing_Theory_-_2024_Princeton)_High-rate_and_high-fidelity_modular_interconnects_between_neutral_atom_quantum_processors.md
+│   │   ├── (Non-out_of_phase_driving_and_axial_micromotion)_Ticking_near_the_Zero-Point_Energy_towards_1_×_10-18_Accuracy_in_Al+_Optical_Clocks.pdf.md
+│   │   ├── (Quantum_network_-_2001_Lu_Ming_Duan)_Long-distance_quantum_communication_with_atomic_ensembles_and_linear_optics.md
+│   │   ├── (Single_ion_addressing_-_2023_Waterloo)_Preserving_a_qubit_during_adjacent_measurements_at_a_few_micrometers_distance.md
+│   │   └── High-fidelity_parallel_entangling_gates_on_a_neutral_atom_quantum_computer.md
+│   ├── (3D_Trap_minus_Cavity_-_2019_Reiner_Pascal_Eich)_Single-ion_based_quantum_interfaces_for_quantum-network_applications.md
+│   ├── (ARTIQ_-_2022_Wenji)_ARTIQ-based_Quantum_Network_Control.md
+│   ├── (GM_Thesis_-_Lattice_Setup_-_2017_Gorman)_Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
+│   ├── (Quant-NET_Blueprint_-_2021_Innsbruck)_Interface_between_Trapped-Ion_Qubits_and_Travelling_Photons_with_Close-to-Optimal_Efficiency.md
+│   └── (Scanned_-_Thesis_-_Ion_Trap_-_2000_Roos_Innsbruck)_Controlling_the_quantum_state_of_trapped_ions.pdf.md
+├── Reading/
+│   └── Economics/
+│       ├── Microeconomics_7th_Edition_-_Mankiw.pdf.md
+│       └── 经济学原理_-_微观经济学分册_-_曼昆.md
+├── Technical Documents/
+│   └── Analog Circuits/
+│       ├── Dual_FET-Input_Low_Distortion_Operational_Amplifier.md
+│       ├── HCNR200_and_HCNR201_High-Linearity_Analog_Optocouplers_Data_Sheet.md
+│       ├── High_voltage_power_supply_iseg_manual_SHQ_en_2.0.pdf.md
+│       └── OPA445_OPERATIONAL_AMPLIFIER.pdf.md
+├── TEST/
+│   ├── 3D-Printed_Micro_Ion_Trap_Technology_for_Scalable_Quantum_Information_Processing.md
+│   ├── 3D-Printed_Micro_Ion_Trap_Technology_for_Scalable_Quantum_Information_Processing__2310.html
+│   ├── ARTIQ_Documentation.md
+│   ├── A_fault-tolerant_neutral-atom_architecture_for_universal_quantum_computation.md
+│   ├── A_metropolitan-scale_trapped-ion_quantum_network_node_with_hybrid_multiplexing_enhancements.html
+│   ├── A_metropolitan-scale_trapped-ion_quantum_network_node_with_hybrid_multiplexing_enhancements__2503.html
+│   ├── A_metropolitan-scale_trapped-ion_quantum_network_node_with_hybrid_multiplexing_enhancements__Cui_et_al._-_2025_-_A_metropolitan-scale_trapped-ion_quantum.md
+│   ├── A_metropolitan-scale_trapped-ion_quantum_network_node_with_hybrid_multiplexing_enhancements__Cui_et_al._-_2025_-_A_metropolitan-scale_trapped-ion_quantum_1.md
+│   ├── A_tweezer_array_with_6100_highly_coherent_atomic_qubits.md
+│   ├── Agentic_Context_Engineering_Evolving_Contexts_for_Self-Improving_Language_Models.md
+│   ├── Agentic_Context_Engineering_Evolving_Contexts_for_Self-Improving_Language_Models__2510.html
+│   ├── Branching_fraction_measurement_of_the_decay_$B^+_to_ψ(2S)_φ(1020)_K^+$.md
+│   ├── Coexistence_of_distinct_mobility_edges_in_a_1D_quasiperiodic_mosaic_model.md
+│   ├── Coherent_Diabatic_Ion_Transport_and_Separation_in_a_Multizone_Trap_Array.md
+│   ├── Controlling_Fast_Transport_of_Cold_Trapped_Ions.html
+│   ├── Controlling_Fast_Transport_of_Cold_Trapped_Ions__Walther_-_2012_-_Controlling_Fast_Transport_of_Cold_Trapped_.md
+│   ├── DeepSeek-R1_incentivizes_reasoning_in_LLMs_through_reinforcement_learning.md
+│   ├── DeepTutor.html
+│   ├── Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthetic_Task.md
+│   ├── Emergent_World_Representations_Exploring_a_Sequence_Model_Trained_on_a_Synthetic_Task__EMERGENT_WORLD_REPRESENTATIONS_EXPLORING_A_SEQUENCE_MODEL_TR.md
+│   ├── Extended_interval_dosing_of_natalizumab_More_evidence_in_support.md
+│   ├── Full-stack_Analog_Optical_Quantum_Computer_with_A_Hundred_Inputs.md
+│   ├── Helios_A_98-qubit_trapped-ion_quantum_computer.md
+│   ├── Master_Degree_CeD.2518-IXEA-BVUU.md
+│   ├── Migrating_from_Pocket_to_Instapaper.html
+│   ├── Nonperturbatively_Renormalized_Nucleon_Gluon_Momentum_Fraction_in_the_Continuum_Limit_of_$N_f=2+1+1$_Lattice_QCD.md
+│   ├── On_the_nature_of_the_glass_transition_in_metallic_glasses_after_deep_relaxation__rename_for_test.md
+│   ├── Optimal_scheme_for_distributed_quantum_metrology.md
+│   ├── Pocket.html
+│   ├── Pseudo-dimension_of_quantum_circuits.md
+│   ├── Realizing_tight-binding_Hamiltonians_using_site-controlled_coupled_cavity_arrays.md
+│   ├── Temporally_multiplexed_ion-photon_quantum_interface_via_fast_ion-chain_transport__You_et_al._-_Temporally_multiplexed_ion-photon_quantum_inter_1.md
+│   ├── The_AI_workspace_that_works_for_you..html
+│   ├── Toward_coherent_quantum_computation_of_scattering_amplitudes_with_a_measurement-based_photonic_quantum_processor.md
+│   ├── Zotino_Documentation.pdf.md
+│   └── [Kuse]_Quantum_Physics_&_Ion_Trapping_Flashcards_-_Kuse_....html
+├── Textbooks/
+│   ├── Computer Science/
+│   │   ├── Machine Learning/
+│   │   │   └── Attention_is_All_you_Need.md
+│   │   ├── Machine Learning for Trading/
+│   │   │   ├── A_Practical_Guide_To_Quantitative_Finance_Interview.md
+│   │   │   ├── Attention_Is_All_You_Need.html
+│   │   │   ├── Attention_Is_All_You_Need__Vaswani_et_al._-_2023_-_Attention_Is_All_You_Need_1.md
+│   │   │   ├── Introduction_to_Statistical_Learning_-_James_Witten_Hastie_and_Tibshirani.md
+│   │   │   ├── Probabilistic_Machine_Learning_-_An_Introduction_-_Kevin_Murphy.md
+│   │   │   ├── Python_for_Finance_-_Mastering_Data-Driven_Finance_Book_-_O'Reilly_-_Yves_Hilpisch.md
+│   │   │   └── What_Hedge_Funds_Really_Do_-_Philip_J._Romero_Tucker_Balch.md
+│   │   └── Python/
+│   │       └── Computational_Physics_Notes_(Python)_-_Jure_Dobnikar_James_Farrell.pdf.md
+│   └── Physics/
+│       ├── Quantum Information and Computation/
+│       │   ├── Quantum_Computation_and_Quantum_Information_-_Nielsen_Chuang.md
+│       │   └── Quantum_computing_a_gentle_introduction_-_Rieffel_Polak.md
+│       └── Quantum Mechanics/
+│           └── Quantum_Machines_-_Junpeng_Cao.md
+└── [Uncategorized]/
+    └── Scalable_photonic_quantum_technologies.md

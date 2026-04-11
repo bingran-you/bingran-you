@@ -1,6 +1,6 @@
 # Hi, I'm Bingran 👋
 
-📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 🤖 AI Builder | ⚛️ Ion Trapper
+📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 🖥️ AI Builder | ⚛︎ Ion Trapper
 
 I build reliable AI systems and trapped-ion quantum experiments. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 

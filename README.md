@@ -70,11 +70,9 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 - 🔗 Ion-photon interfaces and multiplexed quantum networking
 - 🧩 Novel ion trap architectures, including 3D-printed microtraps
 
-### Selected Work & Papers
+### Selected Papers
 
-- 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
-- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - An ARTIQ control framework for photonics integration experiments.
-- 📑 [Scalable Trapped Ion Addressing with Adjoint-optimized Multimode Photonic Circuits](https://arxiv.org/abs/2505.08997) - Integrated photonic circuits for scalable trapped-ion addressing.
+- 📑 [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
 - 📑 [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
 - 📑 [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable quantum information processing.
 - 📑 [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.

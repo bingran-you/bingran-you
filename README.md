@@ -6,16 +6,20 @@ I build and study systems that make agents more reliable, measurable, and useful
 
 ## How I Build
 
-- 🤖 My primary daily development stack is `Codex + GPT-5.4`.
+<p align="center">
+  <img alt="Primary stack: Codex + GPT-5.4" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.4-111111?style=for-the-badge&logo=openai&logoColor=white" />
+</p>
 
-| Last 7 days | Value |
-| --- | ---: |
-| Requests | 26.98K |
-| Total tokens | 2.61B |
-| Prompt tokens | 2.59B |
-| Completion tokens | 16.06M |
+<p align="center">
+  <img alt="Requests 26.98K" src="https://img.shields.io/badge/Requests-26.98K-2F81F7?style=flat-square" />
+  <img alt="Total tokens 2.61B" src="https://img.shields.io/badge/Total%20tokens-2.61B-1F883D?style=flat-square" />
+  <img alt="Prompt tokens 2.59B" src="https://img.shields.io/badge/Prompt%20tokens-2.59B-8250DF?style=flat-square" />
+  <img alt="Completion tokens 16.06M" src="https://img.shields.io/badge/Completion%20tokens-16.06M-F57C00?style=flat-square" />
+</p>
 
-<sub>Average per request: 96,575 total · 95,980 prompt · 595 completion</sub>
+<p align="center">
+  <sub>Last 7 days · avg/request: 96,575 total · 95,980 prompt · 595 completion</sub>
+</p>
 
 ## Current Focus
 

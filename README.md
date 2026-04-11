@@ -1,10 +1,12 @@
 # Hi, I'm Bingran 👋
 
-📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 🤖 AI agents, evaluation, and developer tooling
+📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 🤖 AI Builder | ⚛️ Ion Trapper
 
-I build and study systems that make agents more reliable, measurable, and useful in real workflows. This page is a short snapshot of projects and papers I've been lucky to work on.
+I build reliable AI systems and trapped-ion quantum experiments. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
-## How I Build
+## AI Builder
+
+### How I Build
 
 <p align="center">
   <img alt="Primary stack: Codex + GPT-5.4" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.4-111111?style=for-the-badge&logo=openai&logoColor=white" />
@@ -21,13 +23,13 @@ I build and study systems that make agents more reliable, measurable, and useful
   <sub>Last 7 days · avg/request: 96,575 total · 95,980 prompt · 595 completion</sub>
 </p>
 
-## Current Focus
+### Current Focus
 
 - 🧪 Agent evaluation and skills-based benchmarking
 - 🧭 Deterministic environments for testing long-horizon workflows
 - 🛠️ Applied AI systems that operate across existing tools
 
-## Selected Work
+### Selected Work
 
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
 - 🌲 [first-tree](https://github.com/agent-team-foundation/first-tree) - A Git-native context layer for decisions, ownership, and shared team knowledge.
@@ -38,10 +40,44 @@ I build and study systems that make agents more reliable, measurable, and useful
 - 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
 - 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - An ARTIQ control framework for photonics integration experiments.
 
-## Selected Papers
+### Selected Papers
 
 - 📑 [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
 - 📑 [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+
+## Ion Trapper
+
+### How I Build
+
+<p align="center">
+  <img alt="Primary stack: ARTIQ + Python + trapped-ion hardware" src="https://img.shields.io/badge/Primary%20stack-ARTIQ%20%2B%20Python%20%2B%20Trapped--Ion%20Hardware-0B3D2E?style=for-the-badge&logo=python&logoColor=white" />
+</p>
+
+<p align="center">
+  <img alt="Integrated photonics" src="https://img.shields.io/badge/Integrated%20Photonics-1E7F5C?style=flat-square" />
+  <img alt="Ion shuttling" src="https://img.shields.io/badge/Ion%20Shuttling-0F766E?style=flat-square" />
+  <img alt="Quantum networking" src="https://img.shields.io/badge/Quantum%20Networking-0369A1?style=flat-square" />
+  <img alt="3D microtraps" src="https://img.shields.io/badge/3D%20Microtraps-92400E?style=flat-square" />
+</p>
+
+<p align="center">
+  <sub>From control stack to integrated photonics, quantum interfaces, and microtrap design.</sub>
+</p>
+
+### Current Focus
+
+- ⚛️ Integrated photonics for trapped-ion systems
+- 🔗 Ion-photon interfaces and multiplexed quantum networking
+- 🧩 Novel ion trap architectures, including 3D-printed microtraps
+
+### Selected Work & Papers
+
+- 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
+- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - An ARTIQ control framework for photonics integration experiments.
+- 📑 [Scalable Trapped Ion Addressing with Adjoint-optimized Multimode Photonic Circuits](https://arxiv.org/abs/2505.08997) - Integrated photonic circuits for scalable trapped-ion addressing.
+- 📑 [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
+- 📑 [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable quantum information processing.
+- 📑 [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.
 
 ## Connect
 

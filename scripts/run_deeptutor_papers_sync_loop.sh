@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-SYNC_SCRIPT="/Users/bingran_you/Downloads/GitHub/bingran-you/scripts/sync_deeptutor_papers.sh"
+SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
+SYNC_SCRIPT="$SCRIPT_DIR/sync_deeptutor_papers.sh"
 OUT_LOG="$HOME/Library/Logs/com.bingran.deeptutor-papers-sync.log"
 ERR_LOG="$HOME/Library/Logs/com.bingran.deeptutor-papers-sync.err"
 INTERVAL="${1:-60}"

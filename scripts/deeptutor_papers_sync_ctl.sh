@@ -2,10 +2,11 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd)"
 SESSION_NAME="deeptutor-papers-sync"
 TMUX_BIN="$(command -v tmux)"
-LOOP_SCRIPT="/Users/bingran_you/Downloads/GitHub/bingran-you/scripts/run_deeptutor_papers_sync_loop.sh"
-SYNC_SCRIPT="/Users/bingran_you/Downloads/GitHub/bingran-you/scripts/sync_deeptutor_papers.sh"
+LOOP_SCRIPT="$SCRIPT_DIR/run_deeptutor_papers_sync_loop.sh"
+SYNC_SCRIPT="$SCRIPT_DIR/sync_deeptutor_papers.sh"
 OUT_LOG="$HOME/Library/Logs/com.bingran.deeptutor-papers-sync.log"
 ERR_LOG="$HOME/Library/Logs/com.bingran.deeptutor-papers-sync.err"
 DEFAULT_INTERVAL=60

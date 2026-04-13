@@ -87,3 +87,9 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
   <a href="https://www.linkedin.com/in/bingran-you-775b4017b/"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
   <a href="mailto:bingran.bry@gmail.com"><img alt="Email" src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /></a>
 </p>
+
+## Repo Notes
+
+- Shared Codex and Claude Code skills are sourced from the `vendor/skills` git submodule and exposed through `.agents/skills` and `.claude/skills`, both of which point to `vendor/skills/skills/.curated`.
+- On a fresh clone, run `git submodule update --init --recursive` or `./scripts/sync_curated_skills.sh init`.
+- After updating `bingran-you/skills`, run `./scripts/sync_curated_skills.sh update` here and commit the submodule pointer bump so the new skills version syncs through GitHub to other machines.

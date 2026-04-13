@@ -90,6 +90,6 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 
 ## Repo Notes
 
-- Shared Codex and Claude Code skills are assembled from the `trusted-external-repos/skills` and `trusted-external-repos/oh-my-codex` git submodules. The `.agents/skills` and `.claude/skills` directories are managed link farms that expose both skill sets side by side.
+- Shared Codex and Claude Code skills are assembled from the `trusted-external-repos/skills`, `trusted-external-repos/oh-my-codex`, and `trusted-external-repos/gstack` git submodules. The `.agents/skills` and `.claude/skills` directories are managed link farms that expose all three skill sets side by side; gstack skills are namespaced with `gstack-*` plus `gstack` itself to avoid collisions with other skill packs.
 - On a fresh clone, run `git submodule update --init --recursive` or `./scripts/sync_external_skills.sh init`.
 - After updating either external skills repo, run `./scripts/sync_external_skills.sh update` here and commit the submodule pointer bump(s) plus regenerated skill links so the new skills sync through GitHub to other machines.

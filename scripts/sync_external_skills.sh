@@ -13,6 +13,16 @@ OMX_SUBMODULE_PATH="trusted-external-repos/oh-my-codex"
 OMX_SOURCE_PATH="$REPO_ROOT/$OMX_SUBMODULE_PATH/skills"
 OMX_LINK_PREFIX="../../$OMX_SUBMODULE_PATH/skills"
 
+GSTACK_SUBMODULE_PATH="trusted-external-repos/gstack"
+GSTACK_SOURCE_PATH="$REPO_ROOT/$GSTACK_SUBMODULE_PATH"
+GSTACK_LINK_PREFIX="../../$GSTACK_SUBMODULE_PATH"
+
+SUBMODULE_PATHS=(
+  "$CURATED_SUBMODULE_PATH"
+  "$OMX_SUBMODULE_PATH"
+  "$GSTACK_SUBMODULE_PATH"
+)
+
 ENTRYPOINT_DIRS=(
   "$REPO_ROOT/.agents/skills"
   "$REPO_ROOT/.claude/skills"
@@ -53,27 +63,39 @@ require_source_dir() {
   fi
 }
 
-collect_skills() {
+register_skill() {
+  local skill_name="$1"
+  local link_target="$2"
+  local source_label="$3"
+
+  if [[ -n "${LINK_SOURCES[$skill_name]-}" ]]; then
+    echo "Skill name conflict: '$skill_name' appears in both '${LINK_SOURCES[$skill_name]}' and '$source_label'." >&2
+    exit 1
+  fi
+
+  LINK_NAMES+=("$skill_name")
+  LINK_TARGETS[$skill_name]="$link_target"
+  LINK_SOURCES[$skill_name]="$source_label"
+}
+
+collect_directory_skills() {
   local source_label="$1"
   local source_path="$2"
   local link_prefix="$3"
+  local name_prefix="${4:-}"
   local skill_dir=""
   local skill_name=""
 
   require_source_dir "$source_path"
 
-  for skill_dir in "$source_path"/*(/N); do
+  for skill_dir in "$source_path"/*(N); do
+    [[ -d "$skill_dir" ]] || continue
     [[ -f "$skill_dir/SKILL.md" ]] || continue
     skill_name="${skill_dir:t}"
-
-    if [[ -n "${LINK_SOURCES[$skill_name]-}" ]]; then
-      echo "Skill name conflict: '$skill_name' appears in both '${LINK_SOURCES[$skill_name]}' and '$source_label'." >&2
-      exit 1
+    if [[ -n "$name_prefix" && "$skill_name" != ${name_prefix}* ]]; then
+      skill_name="${name_prefix}${skill_name}"
     fi
-
-    LINK_NAMES+=("$skill_name")
-    LINK_TARGETS[$skill_name]="$link_prefix/$skill_name"
-    LINK_SOURCES[$skill_name]="$source_label"
+    register_skill "$skill_name" "$link_prefix/${skill_dir:t}" "$source_label"
   done
 }
 
@@ -85,8 +107,17 @@ rebuild_entrypoints() {
   LINK_TARGETS=()
   LINK_SOURCES=()
 
-  collect_skills "curated" "$CURATED_SOURCE_PATH" "$CURATED_LINK_PREFIX"
-  collect_skills "oh-my-codex" "$OMX_SOURCE_PATH" "$OMX_LINK_PREFIX"
+  collect_directory_skills "curated" "$CURATED_SOURCE_PATH" "$CURATED_LINK_PREFIX"
+  collect_directory_skills "oh-my-codex" "$OMX_SOURCE_PATH" "$OMX_LINK_PREFIX"
+
+  require_source_dir "$GSTACK_SOURCE_PATH"
+  [[ -f "$GSTACK_SOURCE_PATH/SKILL.md" ]] || {
+    echo "Missing gstack root skill: $GSTACK_SOURCE_PATH/SKILL.md" >&2
+    exit 1
+  }
+  register_skill "gstack" "$GSTACK_LINK_PREFIX" "gstack"
+  collect_directory_skills "gstack" "$GSTACK_SOURCE_PATH" "$GSTACK_LINK_PREFIX" "gstack-"
+  collect_directory_skills "gstack-openclaw" "$GSTACK_SOURCE_PATH/openclaw/skills" "$GSTACK_LINK_PREFIX/openclaw/skills"
 
   for entrypoint_dir in "${ENTRYPOINT_DIRS[@]}"; do
     rm -rf "$entrypoint_dir"
@@ -115,7 +146,7 @@ show_entrypoint_status() {
 }
 
 show_status() {
-  git -C "$REPO_ROOT" submodule status -- "$CURATED_SUBMODULE_PATH" "$OMX_SUBMODULE_PATH"
+  git -C "$REPO_ROOT" submodule status -- "${SUBMODULE_PATHS[@]}"
   show_entrypoint_status "$REPO_ROOT/.agents/skills"
   show_entrypoint_status "$REPO_ROOT/.claude/skills"
 }
@@ -125,7 +156,7 @@ case "${1:-status}" in
     show_status
     ;;
   init)
-    git -C "$REPO_ROOT" submodule update --init --recursive "$CURATED_SUBMODULE_PATH" "$OMX_SUBMODULE_PATH"
+    git -C "$REPO_ROOT" submodule update --init --recursive "${SUBMODULE_PATHS[@]}"
     rebuild_entrypoints
     show_status
     ;;
@@ -134,7 +165,7 @@ case "${1:-status}" in
     show_status
     ;;
   update)
-    git -C "$REPO_ROOT" submodule update --init --remote "$CURATED_SUBMODULE_PATH" "$OMX_SUBMODULE_PATH"
+    git -C "$REPO_ROOT" submodule update --init --remote "${SUBMODULE_PATHS[@]}"
     rebuild_entrypoints
     show_status
     echo

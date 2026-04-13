@@ -2,3 +2,7 @@
 	path = trusted-external-repos/skills
 	url = https://github.com/bingran-you/skills.git
 	branch = main
+[submodule "trusted-external-repos/gstack"]
+	path = trusted-external-repos/gstack
+	url = https://github.com/bingran-you/gstack.git
+	branch = main

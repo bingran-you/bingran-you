@@ -1,4 +1,4 @@
-[submodule "vendor/skills"]
-	path = vendor/skills
+[submodule "trusted-external-repos/skills"]
+	path = trusted-external-repos/skills
 	url = https://github.com/bingran-you/skills.git
 	branch = main

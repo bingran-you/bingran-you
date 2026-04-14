@@ -101,6 +101,20 @@ impl TaskCandidate {
         }
         None
     }
+
+    pub fn issue_number(&self) -> Option<u64> {
+        let candidates = [
+            self.web_url.as_str(),
+            self.api_url.as_str(),
+            self.thread_key.as_str(),
+        ];
+        for candidate in candidates {
+            if let Some(number) = extract_issue_number(candidate) {
+                return Some(number);
+            }
+        }
+        None
+    }
 }
 
 #[derive(Clone, Debug, Default)]
@@ -320,6 +334,20 @@ fn extract_pr_number(value: &str) -> Option<u64> {
             if let Ok(number) = digits.parse::<u64>() {
                 return Some(number);
             }
+        }
+    }
+    None
+}
+
+fn extract_issue_number(value: &str) -> Option<u64> {
+    if let Some(position) = value.find("/issues/") {
+        let suffix = &value[position + "/issues/".len()..];
+        let digits = suffix
+            .chars()
+            .take_while(|character| character.is_ascii_digit())
+            .collect::<String>();
+        if let Ok(number) = digits.parse::<u64>() {
+            return Some(number);
         }
     }
     None

@@ -38,6 +38,13 @@ pub fn current_epoch_secs() -> u64 {
         .as_secs()
 }
 
+pub fn current_epoch_millis() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_millis() as u64
+}
+
 pub fn home_dir() -> AppResult<PathBuf> {
     env::var_os("HOME")
         .map(PathBuf::from)
@@ -245,4 +252,11 @@ pub fn file_mtime_epoch(path: &Path) -> AppResult<Option<u64>> {
 
 pub fn write_lines(path: &Path, lines: &[String]) -> AppResult<()> {
     write_text(path, &lines.join("\n"))
+}
+
+pub fn read_lines(path: &Path) -> AppResult<Vec<String>> {
+    let Some(contents) = read_text_if_exists(path)? else {
+        return Ok(Vec::new());
+    };
+    Ok(contents.lines().map(|line| line.to_string()).collect())
 }

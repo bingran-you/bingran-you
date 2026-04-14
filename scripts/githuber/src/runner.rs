@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
@@ -26,6 +27,9 @@ pub struct RunnerRequest {
     pub task_id: String,
     pub task_dir: PathBuf,
     pub workspace_dir: PathBuf,
+    pub snapshot_dir: PathBuf,
+    pub gh_shim_dir: PathBuf,
+    pub gh_broker_dir: PathBuf,
     pub identity: Identity,
     pub disclosure_text: String,
 }
@@ -92,6 +96,11 @@ impl RunnerSpec {
         crate::util::write_text(&prompt_path, &prompt)?;
         let stdout_file = File::create(&stdout_path)?;
         let stderr_file = File::create(&stderr_path)?;
+        let path = format!(
+            "{}:{}",
+            request.gh_shim_dir.display(),
+            env::var("PATH").unwrap_or_default()
+        );
 
         let status = match self.kind {
             RunnerKind::Codex => {
@@ -106,6 +115,11 @@ impl RunnerSpec {
                 if let Some(model) = &self.model {
                     command.arg("--model").arg(model);
                 }
+                command
+                    .env("PATH", &path)
+                    .env("GITHUBER_BROKER_DIR", &request.gh_broker_dir)
+                    .env("GITHUBER_SNAPSHOT_DIR", &request.snapshot_dir)
+                    .env("GITHUBER_TASK_DIR", &request.task_dir);
                 command.arg(&prompt_path);
                 command.stdout(Stdio::from(stdout_file));
                 command.stderr(Stdio::from(stderr_file));
@@ -121,6 +135,11 @@ impl RunnerSpec {
                 if let Some(model) = &self.model {
                     command.arg("--model").arg(model);
                 }
+                command
+                    .env("PATH", &path)
+                    .env("GITHUBER_BROKER_DIR", &request.gh_broker_dir)
+                    .env("GITHUBER_SNAPSHOT_DIR", &request.snapshot_dir)
+                    .env("GITHUBER_TASK_DIR", &request.task_dir);
                 command.arg(&prompt);
                 command.stdout(Stdio::from(stdout_file));
                 command.stderr(Stdio::from(stderr_file));
@@ -190,14 +209,17 @@ Task
 - API URL: {api_url}
 - Latest comment API URL: {latest_comment}
 - Workspace: {workspace}
+- Local snapshot directory: {snapshot_dir}
+- Task artifacts directory: {task_dir}
 
 Rules
-- First inspect the relevant GitHub context with gh.
+- First inspect the local snapshot files in `{snapshot_dir}`. Only call `gh` when you need fresh data or to publish the final result.
 - Address the task fully: reply, review, comment, or prepare code changes as needed.
 - If you post a public GitHub reply, review, or comment, include this exact disclosure sentence once: {disclosure}
 - If code changes are required, create a branch named `githuber/{slug}`, commit cleanly, push it, and open a draft PR that references the original thread.
 - Do not merge PRs, delete branches, change repository settings, or do admin/billing/security work.
 - Avoid duplicate replies if the thread is already fully addressed.
+- The `gh` binary in this task is brokered by githuber and may serialize requests. Batch your GitHub writes and avoid redundant reads.
 
 Helpful guidance
 {task_hints}
@@ -216,6 +238,8 @@ GITHUBER_RESULT: status=<handled|skipped|failed> summary=<one-line summary>",
         api_url = task.api_url,
         latest_comment = task.latest_comment_api_url,
         workspace = request.workspace_dir.display(),
+        snapshot_dir = request.snapshot_dir.display(),
+        task_dir = request.task_dir.display(),
         disclosure = request.disclosure_text,
         slug = task.slug(),
         task_hints = task_hints,

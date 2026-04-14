@@ -1,11 +1,12 @@
-use std::process::Command;
+use std::path::{Path, PathBuf};
 
 use crate::config::RepoFilter;
+use crate::gh_executor::{GhBucket, GhCommandSpec, GhExecutor, is_rate_limited};
 use crate::task::{
     TaskCandidate, TaskKind, build_assigned_candidate, build_notification_candidate,
     build_review_request_candidate,
 };
-use crate::util::{AppResult, parse_tsv_line, run_command_checked};
+use crate::util::{AppResult, ensure_dir, parse_tsv_line, shell_quote, write_lines, write_text};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum SearchScope {
@@ -18,25 +19,40 @@ enum SearchScope {
 pub struct GhClient {
     host: String,
     repo_filter: RepoFilter,
+    executor: GhExecutor,
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct CandidatePoll {
+    pub tasks: Vec<TaskCandidate>,
+    pub warnings: Vec<String>,
+    pub search_attempted: bool,
+    pub search_rate_limited: bool,
 }
 
 impl GhClient {
-    pub fn new(host: String, repo_filter: RepoFilter) -> Self {
-        Self { host, repo_filter }
+    pub fn new(host: String, repo_filter: RepoFilter, executor: GhExecutor) -> Self {
+        Self {
+            host,
+            repo_filter,
+            executor,
+        }
     }
 
     pub fn unread_notifications(&self) -> AppResult<Vec<TaskCandidate>> {
         let jq = ".[] | select(.unread == true) | [(.repository.full_name // \"\"), (.subject.type // \"\"), (.reason // \"\"), (.subject.title // \"\"), (.subject.url // \"\"), (.latest_comment_url // \"\"), (.updated_at // \"\")] | @tsv";
-        let mut command = Command::new("gh");
-        command
-            .env("GH_HOST", &self.host)
-            .arg("api")
-            .arg("/notifications")
-            .arg("-H")
-            .arg("X-GitHub-Api-Version: 2022-11-28")
-            .arg("--jq")
-            .arg(jq);
-        let stdout = run_command_checked(&mut command, "read notifications")?;
+        let stdout = self.run_checked(
+            "read notifications",
+            vec![
+                "api".to_string(),
+                "/notifications".to_string(),
+                "-H".to_string(),
+                "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                "--jq".to_string(),
+                jq.to_string(),
+            ],
+            GhBucket::Core,
+        )?;
         let mut tasks = Vec::new();
         for line in stdout.lines().filter(|line| !line.trim().is_empty()) {
             let fields = parse_tsv_line(line);
@@ -65,22 +81,26 @@ impl GhClient {
         let jq = ".[] | [(.repository.nameWithOwner // \"\"), ((.number | tostring) // \"0\"), (.title // \"\"), (.url // \"\"), (.updatedAt // \"\")] | @tsv";
         let mut tasks = Vec::new();
         for scope in self.search_scopes() {
-            let mut command = Command::new("gh");
-            command
-                .env("GH_HOST", &self.host)
-                .arg("search")
-                .arg("prs")
-                .arg("--review-requested=@me")
-                .arg("--state")
-                .arg("open")
-                .arg("--limit")
-                .arg(limit.to_string())
-                .arg("--json")
-                .arg("number,title,url,updatedAt,repository")
-                .arg("--jq")
-                .arg(jq);
-            self.apply_search_scope(&mut command, &scope);
-            let stdout = run_command_checked(&mut command, "search review requests")?;
+            let stdout = self.run_checked(
+                "search review requests",
+                self.with_search_scope(
+                    vec![
+                        "search".to_string(),
+                        "prs".to_string(),
+                        "--review-requested=@me".to_string(),
+                        "--state".to_string(),
+                        "open".to_string(),
+                        "--limit".to_string(),
+                        limit.to_string(),
+                        "--json".to_string(),
+                        "number,title,url,updatedAt,repository".to_string(),
+                        "--jq".to_string(),
+                        jq.to_string(),
+                    ],
+                    &scope,
+                ),
+                GhBucket::Search,
+            )?;
             for line in stdout.lines().filter(|line| !line.trim().is_empty()) {
                 let fields = parse_tsv_line(line);
                 if fields.len() < 5 {
@@ -103,23 +123,27 @@ impl GhClient {
         let jq = ".[] | [(.repository.nameWithOwner // \"\"), ((.number | tostring) // \"0\"), (.title // \"\"), (.url // \"\"), (.updatedAt // \"\"), (if .isPullRequest then \"1\" else \"0\" end)] | @tsv";
         let mut tasks = Vec::new();
         for scope in self.search_scopes() {
-            let mut command = Command::new("gh");
-            command
-                .env("GH_HOST", &self.host)
-                .arg("search")
-                .arg("issues")
-                .arg("--assignee=@me")
-                .arg("--state")
-                .arg("open")
-                .arg("--include-prs")
-                .arg("--limit")
-                .arg(limit.to_string())
-                .arg("--json")
-                .arg("number,title,url,updatedAt,repository,isPullRequest")
-                .arg("--jq")
-                .arg(jq);
-            self.apply_search_scope(&mut command, &scope);
-            let stdout = run_command_checked(&mut command, "search assigned items")?;
+            let stdout = self.run_checked(
+                "search assigned items",
+                self.with_search_scope(
+                    vec![
+                        "search".to_string(),
+                        "issues".to_string(),
+                        "--assignee=@me".to_string(),
+                        "--state".to_string(),
+                        "open".to_string(),
+                        "--include-prs".to_string(),
+                        "--limit".to_string(),
+                        limit.to_string(),
+                        "--json".to_string(),
+                        "number,title,url,updatedAt,repository,isPullRequest".to_string(),
+                        "--jq".to_string(),
+                        jq.to_string(),
+                    ],
+                    &scope,
+                ),
+                GhBucket::Search,
+            )?;
             for line in stdout.lines().filter(|line| !line.trim().is_empty()) {
                 let fields = parse_tsv_line(line);
                 if fields.len() < 6 {
@@ -145,15 +169,16 @@ impl GhClient {
             return Ok(None);
         }
         let jq = "[.user.login // \"\", .user.type // \"\"] | @tsv";
-        let path = crate::util::canonical_api_path(api_url);
-        let mut command = Command::new("gh");
-        command
-            .env("GH_HOST", &self.host)
-            .arg("api")
-            .arg(path)
-            .arg("--jq")
-            .arg(jq);
-        let stdout = run_command_checked(&mut command, "inspect latest comment author")?;
+        let stdout = self.run_checked(
+            "inspect latest comment author",
+            vec![
+                "api".to_string(),
+                canonical_api_path(api_url),
+                "--jq".to_string(),
+                jq.to_string(),
+            ],
+            GhBucket::Core,
+        )?;
         let line = stdout.lines().find(|line| !line.trim().is_empty());
         let Some(line) = line else {
             return Ok(None);
@@ -165,29 +190,292 @@ impl GhClient {
         Ok(Some(fields[0].clone()))
     }
 
-    pub fn collect_candidates(&self, limit: usize) -> AppResult<Vec<TaskCandidate>> {
-        let mut tasks = Vec::new();
+    pub fn collect_candidates(&self, limit: usize, include_search: bool) -> CandidatePoll {
+        let mut poll = CandidatePoll::default();
+
         match self.unread_notifications() {
-            Ok(results) => tasks.extend(results),
-            Err(error) => eprintln!("githuber: {error}"),
+            Ok(tasks) => poll.tasks.extend(tasks),
+            Err(error) => poll
+                .warnings
+                .push(format!("notifications: {}", error.to_string().trim())),
         }
-        match self.review_requests(limit) {
-            Ok(results) => tasks.extend(results),
-            Err(error) => eprintln!("githuber: {error}"),
+
+        if include_search {
+            poll.search_attempted = true;
+
+            match self.review_requests(limit) {
+                Ok(tasks) => poll.tasks.extend(tasks),
+                Err(error) => {
+                    let message = error.to_string();
+                    poll.search_rate_limited |= is_rate_limit_error(&message);
+                    poll.warnings
+                        .push(format!("review search: {}", message.trim()));
+                }
+            }
+
+            match self.assigned_items(limit) {
+                Ok(tasks) => poll.tasks.extend(tasks),
+                Err(error) => {
+                    let message = error.to_string();
+                    poll.search_rate_limited |= is_rate_limit_error(&message);
+                    poll.warnings
+                        .push(format!("assignment search: {}", message.trim()));
+                }
+            }
         }
-        match self.assigned_items(limit) {
-            Ok(results) => tasks.extend(results),
-            Err(error) => eprintln!("githuber: {error}"),
-        }
-        tasks.retain(|task| self.repo_filter.matches_repo(&task.repo));
-        tasks.sort_by(|left, right| {
+
+        poll.tasks
+            .retain(|task| self.repo_filter.matches_repo(&task.repo));
+        poll.tasks.sort_by(|left, right| {
             right
                 .priority
                 .cmp(&left.priority)
                 .then_with(|| right.updated_at.cmp(&left.updated_at))
                 .then_with(|| left.thread_key.cmp(&right.thread_key))
         });
-        Ok(deduplicate(tasks))
+        poll.tasks = deduplicate(poll.tasks);
+        poll
+    }
+
+    pub fn write_task_snapshot(&self, task: &TaskCandidate, task_dir: &Path) -> AppResult<PathBuf> {
+        let snapshot_dir = task_dir.join("snapshot");
+        ensure_dir(&snapshot_dir)?;
+
+        let mut notes = Vec::new();
+        notes.push(format!("repo={}", task.repo));
+        notes.push(format!("thread_key={}", task.thread_key));
+        notes.push(format!("kind={}", task.kind.as_str()));
+        notes.push(format!("title={}", task.title));
+        notes.push(format!("url={}", task.display_url()));
+        notes.push(format!("api_url={}", task.api_url));
+        notes.push(format!(
+            "latest_comment_api_url={}",
+            task.latest_comment_api_url
+        ));
+        notes.push(format!("updated_at={}", task.updated_at));
+        write_lines(&snapshot_dir.join("task-summary.env"), &notes)?;
+
+        write_text(
+            &snapshot_dir.join("README.txt"),
+            &snapshot_readme(task, &snapshot_dir),
+        )?;
+
+        if !task.api_url.is_empty() {
+            self.capture_snapshot(
+                &snapshot_dir,
+                "subject.json",
+                GhCommandSpec {
+                    context: "hydrate task subject".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "api".to_string(),
+                        canonical_api_path(&task.api_url),
+                        "-H".to_string(),
+                        "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+        }
+
+        if !task.latest_comment_api_url.is_empty() {
+            self.capture_snapshot(
+                &snapshot_dir,
+                "latest-comment.json",
+                GhCommandSpec {
+                    context: "hydrate latest comment".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "api".to_string(),
+                        canonical_api_path(&task.latest_comment_api_url),
+                        "-H".to_string(),
+                        "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+        }
+
+        if let Some(number) = task.pr_number() {
+            self.capture_snapshot(
+                &snapshot_dir,
+                "pr-view.json",
+                GhCommandSpec {
+                    context: "hydrate pr view".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "pr".to_string(),
+                        "view".to_string(),
+                        number.to_string(),
+                        "--repo".to_string(),
+                        task.repo.clone(),
+                        "--json".to_string(),
+                        "number,title,body,author,headRefName,headRefOid,baseRefName,url,isDraft,state".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+            self.capture_snapshot(
+                &snapshot_dir,
+                "pr.diff",
+                GhCommandSpec {
+                    context: "hydrate pr diff".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "pr".to_string(),
+                        "diff".to_string(),
+                        number.to_string(),
+                        "--repo".to_string(),
+                        task.repo.clone(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+            self.capture_snapshot(
+                &snapshot_dir,
+                "issue-comments.json",
+                GhCommandSpec {
+                    context: "hydrate issue comments".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "api".to_string(),
+                        format!("/repos/{}/issues/{number}/comments?per_page=100", task.repo),
+                        "-H".to_string(),
+                        "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+            self.capture_snapshot(
+                &snapshot_dir,
+                "pr-reviews.json",
+                GhCommandSpec {
+                    context: "hydrate pr reviews".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "api".to_string(),
+                        format!("/repos/{}/pulls/{number}/reviews?per_page=100", task.repo),
+                        "-H".to_string(),
+                        "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+        } else if let Some(number) = task.issue_number() {
+            self.capture_snapshot(
+                &snapshot_dir,
+                "issue-view.json",
+                GhCommandSpec {
+                    context: "hydrate issue view".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "issue".to_string(),
+                        "view".to_string(),
+                        number.to_string(),
+                        "--repo".to_string(),
+                        task.repo.clone(),
+                        "--json".to_string(),
+                        "number,title,body,author,labels,assignees,state,url".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+            self.capture_snapshot(
+                &snapshot_dir,
+                "issue-comments.json",
+                GhCommandSpec {
+                    context: "hydrate issue comments".to_string(),
+                    cwd: None,
+                    envs: self.host_env(),
+                    args: vec![
+                        "api".to_string(),
+                        format!("/repos/{}/issues/{number}/comments?per_page=100", task.repo),
+                        "-H".to_string(),
+                        "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                    ],
+                    bucket: GhBucket::Core,
+                    mutating: false,
+                },
+            )?;
+        }
+
+        Ok(snapshot_dir)
+    }
+
+    fn capture_snapshot(
+        &self,
+        snapshot_dir: &Path,
+        filename: &str,
+        spec: GhCommandSpec,
+    ) -> AppResult<()> {
+        let output = self.executor.run(&spec)?;
+        let output_path = snapshot_dir.join(filename);
+        write_text(&output_path, &output.stdout)?;
+
+        let log_path = snapshot_dir.join(format!("{filename}.meta"));
+        let mut lines = vec![
+            format!("context={}", spec.context),
+            format!(
+                "command={}",
+                spec.args
+                    .iter()
+                    .map(|arg| shell_quote(arg))
+                    .collect::<Vec<_>>()
+                    .join(" ")
+            ),
+            format!("status_code={}", output.status_code),
+            format!("bucket={}", bucket_name(spec.bucket)),
+            format!("mutating={}", spec.mutating),
+        ];
+
+        if !output.stderr.trim().is_empty() {
+            write_text(
+                &snapshot_dir.join(format!("{filename}.stderr")),
+                &output.stderr,
+            )?;
+            lines.push(format!(
+                "stderr_file={}",
+                snapshot_dir.join(format!("{filename}.stderr")).display()
+            ));
+        }
+
+        lines.push(if output.status_code == 0 {
+            "snapshot_status=ok".to_string()
+        } else {
+            "snapshot_status=partial".to_string()
+        });
+
+        write_lines(&log_path, &lines)?;
+        Ok(())
+    }
+
+    fn run_checked(&self, context: &str, args: Vec<String>, bucket: GhBucket) -> AppResult<String> {
+        self.executor.run_checked(&GhCommandSpec {
+            context: context.to_string(),
+            cwd: None,
+            envs: self.host_env(),
+            args,
+            bucket,
+            mutating: false,
+        })
+    }
+
+    fn host_env(&self) -> Vec<(String, String)> {
+        vec![("GH_HOST".to_string(), self.host.clone())]
     }
 
     fn search_scopes(&self) -> Vec<SearchScope> {
@@ -208,16 +496,19 @@ impl GhClient {
         scopes
     }
 
-    fn apply_search_scope(&self, command: &mut Command, scope: &SearchScope) {
+    fn with_search_scope(&self, mut args: Vec<String>, scope: &SearchScope) -> Vec<String> {
         match scope {
             SearchScope::All => {}
             SearchScope::Owner(owner) => {
-                command.arg("--owner").arg(owner);
+                args.push("--owner".to_string());
+                args.push(owner.clone());
             }
             SearchScope::Repo(repo) => {
-                command.arg("--repo").arg(repo);
+                args.push("--repo".to_string());
+                args.push(repo.clone());
             }
         }
+        args
     }
 }
 
@@ -246,11 +537,59 @@ pub fn should_ignore_self_authored(
     }
 }
 
+pub fn is_rate_limit_error(message: &str) -> bool {
+    is_rate_limited(&crate::util::ExecOutput {
+        stdout: String::new(),
+        stderr: message.to_string(),
+        status_code: 1,
+    })
+}
+
+fn bucket_name(bucket: GhBucket) -> &'static str {
+    match bucket {
+        GhBucket::Core => "core",
+        GhBucket::Search => "search",
+        GhBucket::Write => "write",
+    }
+}
+
+fn canonical_api_path(url: &str) -> String {
+    crate::util::canonical_api_path(url)
+}
+
+fn snapshot_readme(task: &TaskCandidate, snapshot_dir: &Path) -> String {
+    format!(
+        "githuber prepared this local snapshot before the agent started.\n\
+\n\
+Use these files first to avoid redundant GitHub API calls.\n\
+\n\
+- Task summary: {task_summary}\n\
+- Primary subject payload: {subject}\n\
+- Latest comment payload: {latest_comment}\n\
+- PR or issue material is stored next to those files when available.\n\
+\n\
+If you still need `gh`, githuber will broker and pace the command automatically.\n\
+\n\
+Task: {kind} in {repo}\n\
+Title: {title}\n\
+URL: {url}\n",
+        task_summary = snapshot_dir.join("task-summary.env").display(),
+        subject = snapshot_dir.join("subject.json").display(),
+        latest_comment = snapshot_dir.join("latest-comment.json").display(),
+        kind = task.kind.as_str(),
+        repo = task.repo,
+        title = task.title,
+        url = task.display_url(),
+    )
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{GhClient, SearchScope, should_ignore_self_authored};
+    use super::{GhClient, SearchScope, is_rate_limit_error, should_ignore_self_authored};
     use crate::config::RepoFilter;
+    use crate::gh_executor::GhExecutor;
     use crate::task::TaskKind;
+    use std::path::PathBuf;
 
     #[test]
     fn ignores_self_authored_comment_events() {
@@ -267,18 +606,26 @@ mod tests {
     }
 
     #[test]
-    fn expands_owner_and_repo_filters_into_union_scopes() {
-        let filter = RepoFilter::parse_csv("KnoWhiz/DoWhiz,agent-team-foundation/*,bingran-you/*")
-            .expect("repo filter should parse");
-        let client = GhClient::new("github.com".to_string(), filter);
+    fn flags_rate_limit_messages() {
+        assert!(is_rate_limit_error("secondary rate limit"));
+    }
 
-        assert_eq!(
-            client.search_scopes(),
-            vec![
-                SearchScope::Owner("agent-team-foundation".to_string()),
-                SearchScope::Owner("bingran-you".to_string()),
-                SearchScope::Repo("KnoWhiz/DoWhiz".to_string()),
-            ]
-        );
+    #[test]
+    fn can_construct_client() {
+        let executor = GhExecutor::new(PathBuf::from("/usr/bin/gh"), 1_000);
+        let client = GhClient::new("github.com".to_string(), RepoFilter::default(), executor);
+        assert_eq!(client.host, "github.com");
+    }
+
+    #[test]
+    fn repo_filter_creates_scoped_search_queries() {
+        let executor = GhExecutor::new(PathBuf::from("/usr/bin/gh"), 1_000);
+        let filter = RepoFilter::parse_csv("agent-team-foundation/*,bingran-you/repo")
+            .expect("filter should parse");
+        let client = GhClient::new("github.com".to_string(), filter, executor);
+        let scopes = client.search_scopes();
+
+        assert!(scopes.contains(&SearchScope::Owner("agent-team-foundation".to_string())));
+        assert!(scopes.contains(&SearchScope::Repo("bingran-you/repo".to_string())));
     }
 }

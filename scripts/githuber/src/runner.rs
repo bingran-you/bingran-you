@@ -71,11 +71,13 @@ impl RunnerPool {
             .collect()
     }
 
-    pub fn pick(&self) -> RunnerSpec {
+    pub fn execution_order(&self) -> Vec<RunnerSpec> {
         let mut index = self.next_index.lock().expect("runner pool poisoned");
-        let spec = self.runners[*index % self.runners.len()].clone();
+        let start = *index % self.runners.len();
         *index = (*index + 1) % self.runners.len();
-        spec
+        (0..self.runners.len())
+            .map(|offset| self.runners[(start + offset) % self.runners.len()].clone())
+            .collect()
     }
 }
 
@@ -251,7 +253,8 @@ fn parse_result(output: &str) -> (String, String) {
 
 #[cfg(test)]
 mod tests {
-    use super::parse_result;
+    use super::{RunnerKind, RunnerPool, RunnerSpec, parse_result};
+    use std::sync::Mutex;
 
     #[test]
     fn parse_machine_result_line() {
@@ -259,5 +262,36 @@ mod tests {
             parse_result("done\nGITHUBER_RESULT: status=handled summary=reviewed and replied");
         assert_eq!(status, "handled");
         assert_eq!(summary, "reviewed and replied");
+    }
+
+    #[test]
+    fn execution_order_rotates_across_tasks() {
+        let pool = RunnerPool {
+            runners: vec![
+                RunnerSpec {
+                    kind: RunnerKind::Codex,
+                    model: None,
+                },
+                RunnerSpec {
+                    kind: RunnerKind::Claude,
+                    model: None,
+                },
+            ],
+            next_index: Mutex::new(0),
+        };
+
+        let first = pool
+            .execution_order()
+            .into_iter()
+            .map(|runner| runner.kind.as_str().to_string())
+            .collect::<Vec<_>>();
+        let second = pool
+            .execution_order()
+            .into_iter()
+            .map(|runner| runner.kind.as_str().to_string())
+            .collect::<Vec<_>>();
+
+        assert_eq!(first, vec!["codex".to_string(), "claude".to_string()]);
+        assert_eq!(second, vec!["claude".to_string(), "codex".to_string()]);
     }
 }

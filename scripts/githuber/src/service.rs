@@ -220,8 +220,17 @@ impl Service {
         Ok(())
     }
 
+    fn prime_runtime_for_start(&self) -> AppResult<()> {
+        let mut runtime = self.store.read_runtime_status()?;
+        reset_search_reconcile_epoch(&mut runtime);
+        let mut values = runtime.into_iter().collect::<Vec<_>>();
+        values.sort_by(|left, right| left.0.cmp(&right.0));
+        self.store.write_runtime_status(&values)
+    }
+
     pub fn start_background(&mut self) -> AppResult<()> {
         ensure_dir(&self.store.logs_dir)?;
+        self.prime_runtime_for_start()?;
         let log_path = self
             .store
             .logs_dir
@@ -1112,6 +1121,10 @@ fn retry_delay(failure_count: u32) -> u64 {
     60 * (1u64 << shift)
 }
 
+fn reset_search_reconcile_epoch(runtime: &mut HashMap<String, String>) {
+    runtime.insert("next_search_reconcile_epoch".to_string(), "0".to_string());
+}
+
 fn lock_status(lock: Option<&LockInfo>) -> &'static str {
     match lock {
         Some(lock) if lock_is_live(lock) => "present",
@@ -1127,4 +1140,35 @@ fn escape_xml(value: &str) -> String {
         .replace('>', "&gt;")
         .replace('"', "&quot;")
         .replace('\'', "&apos;")
+}
+
+#[cfg(test)]
+mod tests {
+    use std::collections::HashMap;
+
+    use super::reset_search_reconcile_epoch;
+
+    #[test]
+    fn reset_search_reconcile_epoch_forces_immediate_search_without_dropping_state() {
+        let mut runtime = HashMap::from([
+            (
+                "next_search_reconcile_epoch".to_string(),
+                "1776210590".to_string(),
+            ),
+            ("last_poll_epoch".to_string(), "1776189643".to_string()),
+        ]);
+
+        reset_search_reconcile_epoch(&mut runtime);
+
+        assert_eq!(
+            runtime
+                .get("next_search_reconcile_epoch")
+                .map(String::as_str),
+            Some("0")
+        );
+        assert_eq!(
+            runtime.get("last_poll_epoch").map(String::as_str),
+            Some("1776189643")
+        );
+    }
 }

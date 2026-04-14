@@ -34,12 +34,91 @@ impl RunnerKind {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct RepoFilter {
+    allowed_owners: Vec<String>,
+    allowed_repos: Vec<String>,
+}
+
+impl RepoFilter {
+    pub fn parse_csv(value: &str) -> AppResult<Self> {
+        let mut filter = Self::default();
+        for raw in value.split(',') {
+            let trimmed = raw.trim();
+            if trimmed.is_empty() {
+                continue;
+            }
+            if let Some(owner) = trimmed.strip_suffix("/*") {
+                if owner.is_empty() {
+                    return Err(app_error(format!("invalid repo allow pattern `{trimmed}`")));
+                }
+                push_unique(&mut filter.allowed_owners, owner.to_string());
+                continue;
+            }
+            if trimmed.split('/').count() == 2 {
+                push_unique(&mut filter.allowed_repos, trimmed.to_string());
+                continue;
+            }
+            return Err(app_error(format!(
+                "invalid repo allow pattern `{trimmed}`; use owner/repo or owner/*"
+            )));
+        }
+        Ok(filter)
+    }
+
+    pub fn merge(&mut self, other: Self) {
+        for owner in other.allowed_owners {
+            push_unique(&mut self.allowed_owners, owner);
+        }
+        for repo in other.allowed_repos {
+            push_unique(&mut self.allowed_repos, repo);
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.allowed_owners.is_empty() && self.allowed_repos.is_empty()
+    }
+
+    pub fn matches_repo(&self, repo: &str) -> bool {
+        if self.is_empty() {
+            return true;
+        }
+        if self.allowed_repos.iter().any(|allowed| allowed == repo) {
+            return true;
+        }
+        repo.split_once('/')
+            .map(|(owner, _)| self.allowed_owners.iter().any(|allowed| allowed == owner))
+            .unwrap_or(false)
+    }
+
+    pub fn owners(&self) -> &[String] {
+        &self.allowed_owners
+    }
+
+    pub fn repos(&self) -> &[String] {
+        &self.allowed_repos
+    }
+
+    pub fn display_patterns(&self) -> String {
+        let mut patterns = self.allowed_repos.clone();
+        patterns.extend(self.allowed_owners.iter().map(|owner| format!("{owner}/*")));
+        patterns.join(", ")
+    }
+
+    pub fn cli_value(&self) -> String {
+        let mut patterns = self.allowed_repos.clone();
+        patterns.extend(self.allowed_owners.iter().map(|owner| format!("{owner}/*")));
+        patterns.join(",")
+    }
+}
+
 #[derive(Clone, Debug)]
 pub struct Config {
     pub command: CommandKind,
     pub home: PathBuf,
     pub host: String,
     pub profile: String,
+    pub repo_filter: RepoFilter,
     pub runners: Vec<RunnerKind>,
     pub max_parallel: usize,
     pub poll_interval_secs: u64,
@@ -80,6 +159,11 @@ impl Config {
             .unwrap_or(home_dir()?.join(".githuber"));
         let mut host = env::var("GITHUBER_HOST").unwrap_or_else(|_| "github.com".to_string());
         let mut profile = env::var("GITHUBER_PROFILE").unwrap_or_else(|_| "default".to_string());
+        let mut repo_filter = RepoFilter::parse_csv(
+            env::var("GITHUBER_ALLOWED_REPOS")
+                .unwrap_or_default()
+                .as_str(),
+        )?;
         let mut runners = parse_runners(
             env::var("GITHUBER_RUNNERS")
                 .unwrap_or_else(|_| "codex,claude".to_string())
@@ -113,6 +197,9 @@ impl Config {
                 "--home" => home = PathBuf::from(next_value(&mut index)?),
                 "--host" => host = next_value(&mut index)?,
                 "--profile" => profile = next_value(&mut index)?,
+                "--allow-repo" | "--allow-repos" => {
+                    repo_filter.merge(RepoFilter::parse_csv(&next_value(&mut index)?)?);
+                }
                 "--runner" | "--runners" => {
                     runners = parse_runners(&next_value(&mut index)?)?;
                 }
@@ -152,6 +239,7 @@ impl Config {
             home,
             host,
             profile,
+            repo_filter,
             runners,
             max_parallel,
             poll_interval_secs,
@@ -170,6 +258,7 @@ impl Config {
             home: PathBuf::new(),
             host: "github.com".to_string(),
             profile: "default".to_string(),
+            repo_filter: RepoFilter::default(),
             runners: vec![RunnerKind::Codex, RunnerKind::Claude],
             max_parallel: 20,
             poll_interval_secs: 600,
@@ -204,6 +293,7 @@ FLAGS
   --home <path>                  Override state directory (default: ~/.githuber)
   --host <host>                  GitHub host to use (default: github.com)
   --profile <name>               Lock partition for this automation profile
+  --allow-repo <patterns>        Restrict processing to owner/repo or owner/* patterns
   --runner <list>                Comma-separated runner order, e.g. codex,claude
   --max-parallel <n>             Max concurrent tasks (default: 20)
   --poll-interval-secs <n>       Poll cadence in seconds (default: 600)
@@ -218,6 +308,7 @@ ENV
   GITHUBER_HOME
   GITHUBER_HOST
   GITHUBER_PROFILE
+  GITHUBER_ALLOWED_REPOS
   GITHUBER_RUNNERS
   GITHUBER_MAX_PARALLEL
   GITHUBER_POLL_INTERVAL_SECS
@@ -247,6 +338,12 @@ fn parse_runners(value: &str) -> AppResult<Vec<RunnerKind>> {
         }
     }
     Ok(parsed)
+}
+
+fn push_unique(values: &mut Vec<String>, value: String) {
+    if !values.contains(&value) {
+        values.push(value);
+    }
 }
 
 fn parse_u64_env(name: &str) -> Option<u64> {
@@ -302,5 +399,25 @@ mod tests {
         assert_eq!(config.runners, vec![RunnerKind::Claude, RunnerKind::Codex]);
         assert_eq!(config.max_parallel, 4);
         assert!(config.dry_run);
+    }
+
+    #[test]
+    fn parses_repo_allowlist_patterns() {
+        let config = Config::parse(vec![
+            "githuber".to_string(),
+            "run-once".to_string(),
+            "--allow-repo".to_string(),
+            "KnoWhiz/DoWhiz,agent-team-foundation/*,bingran-you/*".to_string(),
+        ])
+        .expect("config should parse");
+
+        assert!(config.repo_filter.matches_repo("KnoWhiz/DoWhiz"));
+        assert!(
+            config
+                .repo_filter
+                .matches_repo("agent-team-foundation/first-tree")
+        );
+        assert!(config.repo_filter.matches_repo("bingran-you/personal-repo"));
+        assert!(!config.repo_filter.matches_repo("benchflow-ai/skillsbench"));
     }
 }

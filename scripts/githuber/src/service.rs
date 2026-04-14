@@ -11,7 +11,7 @@ use crate::config::{CommandKind, Config};
 use crate::gh::{GhClient, should_ignore_self_authored};
 use crate::identity::{Identity, resolve_identity};
 use crate::lock::{LockInfo, ServiceLock, find_lock, lock_is_live, remove_lock_dir, stop_process};
-use crate::runner::{RunnerOutcome, RunnerPool, RunnerRequest, RunnerSpec};
+use crate::runner::{RunnerPool, RunnerRequest, RunnerSpec};
 use crate::store::Store;
 use crate::task::TaskCandidate;
 use crate::util::{
@@ -51,13 +51,14 @@ struct TaskExecutionResult {
     result_status: String,
     summary: String,
     runner_output_path: PathBuf,
+    runner_name: String,
 }
 
 impl Service {
     pub fn bootstrap(config: Config) -> AppResult<Self> {
         let identity = resolve_identity(&config.host)?;
         let store = Store::new(config.home.clone())?;
-        let gh = GhClient::new(config.host.clone());
+        let gh = GhClient::new(config.host.clone(), config.repo_filter.clone());
         let runners = RunnerPool::detect(&config)?;
         let workspace_manager = WorkspaceManager::new(
             store.repos_dir.clone(),
@@ -86,6 +87,14 @@ impl Service {
         println!("home: {}", self.config.home.display());
         println!("host: {}", self.identity.host);
         println!("login: {}", self.identity.login);
+        println!(
+            "allowed repos: {}",
+            if self.config.repo_filter.is_empty() {
+                "all".to_string()
+            } else {
+                self.config.repo_filter.display_patterns()
+            }
+        );
         println!("git protocol: {}", self.identity.git_protocol);
         println!("scopes: {}", self.identity.scopes_string());
         println!("lock: {}", lock_status(lock.as_ref()));
@@ -114,6 +123,18 @@ impl Service {
         let runtime = self.store.read_runtime_status()?;
         println!("githuber status");
         println!("identity: {}@{}", self.identity.login, self.identity.host);
+        println!(
+            "allowed repos: {}",
+            if self.config.repo_filter.is_empty() {
+                runtime
+                    .get("allowed_repos")
+                    .cloned()
+                    .filter(|value| !value.is_empty())
+                    .unwrap_or_else(|| "all".to_string())
+            } else {
+                self.config.repo_filter.display_patterns()
+            }
+        );
         if let Some(lock) = lock {
             if lock_is_live(&lock) {
                 println!(
@@ -189,9 +210,19 @@ impl Service {
             .map(|runner| runner.as_str())
             .collect::<Vec<_>>()
             .join(",");
+        let repo_filter_value = if self.config.repo_filter.is_empty() {
+            None
+        } else {
+            Some(self.config.repo_filter.cli_value())
+        };
 
         if cfg!(target_os = "macos") && crate::util::which("launchctl").is_some() {
-            return self.start_with_launchctl(&executable, &log_path, &runner_value);
+            return self.start_with_launchctl(
+                &executable,
+                &log_path,
+                &runner_value,
+                repo_filter_value.as_deref(),
+            );
         }
 
         let stdout_file = OpenOptions::new()
@@ -227,6 +258,9 @@ impl Service {
             .stderr(std::process::Stdio::from(stderr_file));
         if self.config.dry_run {
             command.arg("--dry-run");
+        }
+        if let Some(repo_filter_value) = &repo_filter_value {
+            command.arg("--allow-repo").arg(repo_filter_value);
         }
         if let Some(model) = &self.config.codex_model {
             command.arg("--codex-model").arg(model);
@@ -423,7 +457,13 @@ impl Service {
                     continue;
                 }
             };
-            let runner = self.runners.pick();
+            let runner_order = self.runners.execution_order();
+            let selected_runner = runner_order
+                .first()
+                .expect("runner execution order should not be empty")
+                .kind
+                .as_str()
+                .to_string();
 
             self.store.write_task_metadata(
                 &task_id,
@@ -450,7 +490,7 @@ impl Service {
                     ("started_at".to_string(), current_epoch_secs().to_string()),
                     ("updated_at".to_string(), candidate.updated_at.clone()),
                     ("source".to_string(), candidate.source.clone()),
-                    ("runner".to_string(), runner.kind.as_str().to_string()),
+                    ("runner".to_string(), selected_runner.clone()),
                 ],
             )?;
 
@@ -471,10 +511,11 @@ impl Service {
                         result_status: "simulated".to_string(),
                         summary: "dry-run scheduled task".to_string(),
                         runner_output_path: task_dir_for_thread.join("runner-output.txt"),
+                        runner_name: selected_runner,
                     })
                 } else {
                     execute_task(
-                        runner,
+                        runner_order,
                         RunnerRequest {
                             task: candidate_for_thread.clone(),
                             task_id: task_id_for_thread.clone(),
@@ -570,6 +611,7 @@ impl Service {
                     "runner_output_path".to_string(),
                     result.runner_output_path.display().to_string(),
                 );
+                metadata.insert("runner".to_string(), result.runner_name.clone());
                 self.store.write_task_metadata(
                     &completion.task_id,
                     &metadata.clone().into_iter().collect::<Vec<_>>(),
@@ -642,6 +684,14 @@ impl Service {
                 "last_identity".to_string(),
                 format!("{}@{}", self.identity.login, self.identity.host),
             ),
+            (
+                "allowed_repos".to_string(),
+                if self.config.repo_filter.is_empty() {
+                    "all".to_string()
+                } else {
+                    self.config.repo_filter.display_patterns()
+                },
+            ),
             ("active_tasks".to_string(), active.len().to_string()),
             ("queued_tasks".to_string(), queued_tasks.to_string()),
             ("last_note".to_string(), crate::util::encode_multiline(note)),
@@ -654,6 +704,7 @@ impl Service {
         executable: &std::path::Path,
         log_path: &std::path::Path,
         runner_value: &str,
+        repo_filter_value: Option<&str>,
     ) -> AppResult<()> {
         let plist_path = self.launchd_plist_path();
         if let Some(parent) = plist_path.parent() {
@@ -661,7 +712,7 @@ impl Service {
         }
         write_text(
             &plist_path,
-            &self.launchd_plist_contents(executable, log_path, runner_value),
+            &self.launchd_plist_contents(executable, log_path, runner_value, repo_filter_value),
         )?;
 
         let domain = self.launchd_domain()?;
@@ -676,7 +727,17 @@ impl Service {
             .arg("kickstart")
             .arg("-k")
             .arg(format!("{}/{}", domain, self.launchd_label()));
-        crate::util::run_command_checked(&mut kickstart, "kickstart launchd job")?;
+        let output = run_command(&mut kickstart)?;
+        if output.status_code != 0 && output.status_code != 113 {
+            return Err(app_error(format!(
+                "kickstart launchd job failed with exit code {}: launchctl kickstart -k {}/{}\nstdout:\n{}\nstderr:\n{}",
+                output.status_code,
+                domain,
+                self.launchd_label(),
+                output.stdout,
+                output.stderr
+            )));
+        }
 
         thread::sleep(Duration::from_millis(750));
         if let Some(lock) = find_lock(&self.store.locks_dir, &self.identity, &self.config.profile)?
@@ -746,6 +807,7 @@ impl Service {
         executable: &std::path::Path,
         log_path: &std::path::Path,
         runner_value: &str,
+        repo_filter_value: Option<&str>,
     ) -> String {
         let mut arguments = vec![
             executable.display().to_string(),
@@ -769,6 +831,10 @@ impl Service {
             "--disclosure".to_string(),
             self.config.disclosure_text.clone(),
         ];
+        if let Some(repo_filter_value) = repo_filter_value {
+            arguments.push("--allow-repo".to_string());
+            arguments.push(repo_filter_value.to_string());
+        }
         if self.config.dry_run {
             arguments.push("--dry-run".to_string());
         }
@@ -786,8 +852,26 @@ impl Service {
             .map(|argument| format!("    <string>{}</string>", escape_xml(&argument)))
             .collect::<Vec<_>>()
             .join("\n");
-        let path = env::var("PATH").unwrap_or_default();
-        let home = env::var("HOME").unwrap_or_default();
+        let mut environment_entries = vec![
+            ("PATH".to_string(), env::var("PATH").unwrap_or_default()),
+            ("HOME".to_string(), env::var("HOME").unwrap_or_default()),
+        ];
+        for variable in passthrough_launchd_env_vars() {
+            if let Ok(value) = env::var(variable) {
+                environment_entries.push((variable.to_string(), value));
+            }
+        }
+        let environment_xml = environment_entries
+            .into_iter()
+            .map(|(key, value)| {
+                format!(
+                    "    <key>{}</key>\n    <string>{}</string>",
+                    escape_xml(&key),
+                    escape_xml(&value)
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
 
         format!(
             r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -806,10 +890,7 @@ impl Service {
   <true/>
   <key>EnvironmentVariables</key>
   <dict>
-    <key>PATH</key>
-    <string>{path}</string>
-    <key>HOME</key>
-    <string>{home}</string>
+{environment_xml}
   </dict>
   <key>StandardOutPath</key>
   <string>{log_path}</string>
@@ -820,21 +901,52 @@ impl Service {
 "#,
             label = escape_xml(&self.launchd_label()),
             arguments_xml = arguments_xml,
-            path = escape_xml(&path),
-            home = escape_xml(&home),
+            environment_xml = environment_xml,
             log_path = escape_xml(&log_path.display().to_string()),
         )
     }
 }
 
-fn execute_task(runner: RunnerSpec, request: RunnerRequest) -> AppResult<TaskExecutionResult> {
-    let outcome: RunnerOutcome = runner.execute(&request)?;
-    Ok(TaskExecutionResult {
-        candidate: request.task,
-        result_status: outcome.status,
-        summary: outcome.summary,
-        runner_output_path: outcome.output_path,
-    })
+fn passthrough_launchd_env_vars() -> &'static [&'static str] {
+    &[
+        "AZURE_OPENAI_API_KEY",
+        "AZURE_OPENAI_API_KEY_BACKUP",
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY",
+        "GH_TOKEN",
+        "GITHUB_TOKEN",
+        "CODEX_HOME",
+        "CLAUDE_CODE_USE_BEDROCK",
+        "CLAUDE_CODE_USE_VERTEX",
+    ]
+}
+
+fn execute_task(
+    runners: Vec<RunnerSpec>,
+    request: RunnerRequest,
+) -> AppResult<TaskExecutionResult> {
+    let mut failures = Vec::new();
+    for runner in runners {
+        match runner.execute(&request) {
+            Ok(outcome) => {
+                return Ok(TaskExecutionResult {
+                    candidate: request.task,
+                    result_status: outcome.status,
+                    summary: outcome.summary,
+                    runner_output_path: outcome.output_path,
+                    runner_name: runner.kind.as_str().to_string(),
+                });
+            }
+            Err(error) => {
+                failures.push(format!("{}: {error}", runner.kind.as_str()));
+            }
+        }
+    }
+
+    Err(app_error(format!(
+        "all configured runners failed: {}",
+        failures.join(" | ")
+    )))
 }
 
 fn retry_delay(failure_count: u32) -> u64 {

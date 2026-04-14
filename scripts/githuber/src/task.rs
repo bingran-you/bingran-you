@@ -473,6 +473,30 @@ mod tests {
     }
 
     #[test]
+    fn mention_notifications_build_candidates_for_prs() {
+        let candidate = build_notification_candidate(
+            "agent-team-foundation/first-tree".to_string(),
+            "PullRequest".to_string(),
+            "mention".to_string(),
+            "fix(sync): strip AI frontmatter, inherit owners, dedup members, verify before push"
+                .to_string(),
+            "https://api.github.com/repos/agent-team-foundation/first-tree/pulls/98".to_string(),
+            "https://api.github.com/repos/agent-team-foundation/first-tree/issues/comments/4247540715"
+                .to_string(),
+            "2026-04-14T22:18:56Z".to_string(),
+        )
+        .expect("candidate should exist");
+
+        assert_eq!(candidate.kind, TaskKind::Mention);
+        assert_eq!(candidate.repo, "agent-team-foundation/first-tree");
+        assert_eq!(candidate.pr_number(), Some(98));
+        assert_eq!(
+            candidate.latest_comment_api_url,
+            "https://api.github.com/repos/agent-team-foundation/first-tree/issues/comments/4247540715"
+        );
+    }
+
+    #[test]
     fn thread_record_round_trips() {
         let record = ThreadRecord {
             thread_key: "/repos/owner/repo/issues/1".to_string(),

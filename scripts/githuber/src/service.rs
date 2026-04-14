@@ -7,15 +7,17 @@ use std::sync::mpsc::{self, Receiver, Sender};
 use std::thread;
 use std::time::Duration;
 
+use crate::broker::GhBroker;
 use crate::config::{CommandKind, Config};
 use crate::gh::{GhClient, should_ignore_self_authored};
+use crate::gh_executor::GhExecutor;
 use crate::identity::{Identity, resolve_identity};
 use crate::lock::{LockInfo, ServiceLock, find_lock, lock_is_live, remove_lock_dir, stop_process};
 use crate::runner::{RunnerPool, RunnerRequest, RunnerSpec};
 use crate::store::Store;
 use crate::task::TaskCandidate;
 use crate::util::{
-    AppResult, app_error, current_epoch_secs, ensure_dir, read_text_if_exists, run_command,
+    AppResult, app_error, current_epoch_secs, ensure_dir, read_text_if_exists, run_command, which,
     write_text,
 };
 use crate::workspace::WorkspaceManager;
@@ -26,9 +28,12 @@ pub struct Service {
     identity: Identity,
     store: Store,
     gh: GhClient,
+    gh_broker: GhBroker,
     runners: RunnerPool,
     workspace_manager: WorkspaceManager,
     lock: Option<ServiceLock>,
+    next_search_reconcile_epoch: u64,
+    last_poll_warning: String,
 }
 
 #[derive(Debug)]
@@ -58,7 +63,15 @@ impl Service {
     pub fn bootstrap(config: Config) -> AppResult<Self> {
         let identity = resolve_identity(&config.host)?;
         let store = Store::new(config.home.clone())?;
-        let gh = GhClient::new(config.host.clone(), config.repo_filter.clone());
+        let runtime = store.read_runtime_status()?;
+        let real_gh = which("gh").ok_or_else(|| app_error("gh is not available in PATH"))?;
+        let executor = GhExecutor::new(real_gh, config.gh_write_cooldown_ms);
+        let gh = GhClient::new(
+            config.host.clone(),
+            config.repo_filter.clone(),
+            executor.clone(),
+        );
+        let gh_broker = GhBroker::new(store.broker_dir.clone(), executor)?;
         let runners = RunnerPool::detect(&config)?;
         let workspace_manager = WorkspaceManager::new(
             store.repos_dir.clone(),
@@ -70,9 +83,18 @@ impl Service {
             identity,
             store,
             gh,
+            gh_broker,
             runners,
             workspace_manager,
             lock: None,
+            next_search_reconcile_epoch: runtime
+                .get("next_search_reconcile_epoch")
+                .and_then(|value| value.parse::<u64>().ok())
+                .unwrap_or_default(),
+            last_poll_warning: runtime
+                .get("last_poll_warning")
+                .map(|value| crate::util::decode_multiline(value))
+                .unwrap_or_default(),
         })
     }
 
@@ -159,6 +181,8 @@ impl Service {
                 "queued_tasks",
                 "last_note",
                 "last_identity",
+                "next_search_reconcile_epoch",
+                "last_poll_warning",
             ] {
                 if let Some(value) = runtime.get(key) {
                     println!("{key}: {value}");
@@ -249,6 +273,10 @@ impl Service {
             .arg(self.config.poll_interval_secs.to_string())
             .arg("--task-limit")
             .arg(self.config.task_limit.to_string())
+            .arg("--search-reconcile-interval-secs")
+            .arg(self.config.search_reconcile_interval_secs.to_string())
+            .arg("--gh-write-cooldown-ms")
+            .arg(self.config.gh_write_cooldown_ms.to_string())
             .arg("--workspace-ttl-secs")
             .arg(self.config.workspace_ttl_secs.to_string())
             .arg("--disclosure")
@@ -303,6 +331,7 @@ impl Service {
                 &self.identity,
                 &self.config.profile,
             )?);
+            self.gh_broker.start()?;
         }
         Ok(())
     }
@@ -378,8 +407,30 @@ impl Service {
         Ok(())
     }
 
-    fn poll_candidates(&self) -> AppResult<Vec<TaskCandidate>> {
-        self.gh.collect_candidates(self.config.task_limit)
+    fn poll_candidates(&mut self) -> AppResult<Vec<TaskCandidate>> {
+        let now = current_epoch_secs();
+        let include_search = now >= self.next_search_reconcile_epoch;
+        let poll = self
+            .gh
+            .collect_candidates(self.config.task_limit, include_search);
+
+        if include_search {
+            let delay = if poll.search_rate_limited {
+                60 * 15
+            } else {
+                self.config.search_reconcile_interval_secs
+            };
+            self.next_search_reconcile_epoch = now.saturating_add(delay);
+        }
+
+        if poll.warnings.is_empty() {
+            self.last_poll_warning.clear();
+        } else {
+            self.last_poll_warning = poll.warnings.join(" | ");
+            eprintln!("githuber poll warnings: {}", self.last_poll_warning);
+        }
+
+        Ok(poll.tasks)
     }
 
     fn enqueue_candidates(
@@ -457,6 +508,13 @@ impl Service {
                     continue;
                 }
             };
+            let snapshot_dir = match self.gh.write_task_snapshot(&candidate, &task_dir) {
+                Ok(snapshot_dir) => snapshot_dir,
+                Err(error) => {
+                    self.record_setup_failure(&task_id, &task_dir, &candidate, &error.to_string())?;
+                    continue;
+                }
+            };
             let runner_order = self.runners.execution_order();
             let selected_runner = runner_order
                 .first()
@@ -491,6 +549,14 @@ impl Service {
                     ("updated_at".to_string(), candidate.updated_at.clone()),
                     ("source".to_string(), candidate.source.clone()),
                     ("runner".to_string(), selected_runner.clone()),
+                    (
+                        "snapshot_dir".to_string(),
+                        snapshot_dir.display().to_string(),
+                    ),
+                    (
+                        "gh_shim_dir".to_string(),
+                        self.gh_broker.shim_dir().display().to_string(),
+                    ),
                 ],
             )?;
 
@@ -503,6 +569,9 @@ impl Service {
             let task_id_for_thread = task_id.clone();
             let task_dir_for_thread = task_dir.clone();
             let workspace_for_thread = workspace.clone();
+            let snapshot_dir_for_thread = snapshot_dir.clone();
+            let gh_shim_dir = self.gh_broker.shim_dir().to_path_buf();
+            let gh_broker_dir = self.gh_broker.broker_dir().to_path_buf();
 
             thread::spawn(move || {
                 let completion = if dry_run {
@@ -521,6 +590,9 @@ impl Service {
                             task_id: task_id_for_thread.clone(),
                             task_dir: task_dir_for_thread.clone(),
                             workspace_dir: workspace_for_thread.workspace_dir.clone(),
+                            snapshot_dir: snapshot_dir_for_thread.clone(),
+                            gh_shim_dir,
+                            gh_broker_dir,
                             identity,
                             disclosure_text: disclosure,
                         },
@@ -696,6 +768,14 @@ impl Service {
             ("queued_tasks".to_string(), queued_tasks.to_string()),
             ("last_note".to_string(), crate::util::encode_multiline(note)),
             ("active_titles".to_string(), active_titles),
+            (
+                "next_search_reconcile_epoch".to_string(),
+                self.next_search_reconcile_epoch.to_string(),
+            ),
+            (
+                "last_poll_warning".to_string(),
+                crate::util::encode_multiline(&self.last_poll_warning),
+            ),
         ])
     }
 
@@ -826,6 +906,10 @@ impl Service {
             self.config.poll_interval_secs.to_string(),
             "--task-limit".to_string(),
             self.config.task_limit.to_string(),
+            "--search-reconcile-interval-secs".to_string(),
+            self.config.search_reconcile_interval_secs.to_string(),
+            "--gh-write-cooldown-ms".to_string(),
+            self.config.gh_write_cooldown_ms.to_string(),
             "--workspace-ttl-secs".to_string(),
             self.config.workspace_ttl_secs.to_string(),
             "--disclosure".to_string(),

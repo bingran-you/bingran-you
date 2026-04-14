@@ -15,6 +15,7 @@ pub struct Store {
     pub repos_dir: PathBuf,
     pub workspaces_dir: PathBuf,
     pub locks_dir: PathBuf,
+    pub broker_dir: PathBuf,
     pub logs_dir: PathBuf,
     pub runtime_path: PathBuf,
 }
@@ -27,6 +28,7 @@ impl Store {
             repos_dir: home.join("repos"),
             workspaces_dir: home.join("workspaces"),
             locks_dir: home.join("locks"),
+            broker_dir: home.join("broker"),
             logs_dir: home.join("logs"),
             runtime_path: home.join("runtime").join("status.env"),
         };
@@ -35,6 +37,7 @@ impl Store {
         ensure_dir(&store.repos_dir)?;
         ensure_dir(&store.workspaces_dir)?;
         ensure_dir(&store.locks_dir)?;
+        ensure_dir(&store.broker_dir)?;
         ensure_dir(&store.logs_dir)?;
         if let Some(parent) = store.runtime_path.parent() {
             ensure_dir(parent)?;

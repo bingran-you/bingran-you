@@ -123,6 +123,8 @@ pub struct Config {
     pub max_parallel: usize,
     pub poll_interval_secs: u64,
     pub task_limit: usize,
+    pub search_reconcile_interval_secs: u64,
+    pub gh_write_cooldown_ms: u64,
     pub workspace_ttl_secs: u64,
     pub codex_model: Option<String>,
     pub claude_model: Option<String>,
@@ -172,6 +174,10 @@ impl Config {
         let mut max_parallel = parse_usize_env("GITHUBER_MAX_PARALLEL").unwrap_or(20);
         let mut poll_interval_secs = parse_u64_env("GITHUBER_POLL_INTERVAL_SECS").unwrap_or(600);
         let mut task_limit = parse_usize_env("GITHUBER_TASK_LIMIT").unwrap_or(100);
+        let mut search_reconcile_interval_secs =
+            parse_u64_env("GITHUBER_SEARCH_RECONCILE_INTERVAL_SECS").unwrap_or(60 * 60 * 6);
+        let mut gh_write_cooldown_ms =
+            parse_u64_env("GITHUBER_GH_WRITE_COOLDOWN_MS").unwrap_or(1_250);
         let mut workspace_ttl_secs =
             parse_u64_env("GITHUBER_WORKSPACE_TTL_SECS").unwrap_or(60 * 60 * 24 * 3);
         let mut codex_model = env::var("GITHUBER_CODEX_MODEL").ok();
@@ -206,6 +212,12 @@ impl Config {
                 "--max-parallel" => max_parallel = parse_usize(&next_value(&mut index)?)?,
                 "--poll-interval-secs" => poll_interval_secs = parse_u64(&next_value(&mut index)?)?,
                 "--task-limit" => task_limit = parse_usize(&next_value(&mut index)?)?,
+                "--search-reconcile-interval-secs" => {
+                    search_reconcile_interval_secs = parse_u64(&next_value(&mut index)?)?
+                }
+                "--gh-write-cooldown-ms" => {
+                    gh_write_cooldown_ms = parse_u64(&next_value(&mut index)?)?
+                }
                 "--workspace-ttl-secs" => workspace_ttl_secs = parse_u64(&next_value(&mut index)?)?,
                 "--codex-model" => codex_model = Some(next_value(&mut index)?),
                 "--claude-model" => claude_model = Some(next_value(&mut index)?),
@@ -227,6 +239,16 @@ impl Config {
         if task_limit == 0 {
             return Err(app_error("--task-limit must be greater than zero"));
         }
+        if search_reconcile_interval_secs == 0 {
+            return Err(app_error(
+                "--search-reconcile-interval-secs must be greater than zero",
+            ));
+        }
+        if gh_write_cooldown_ms == 0 {
+            return Err(app_error(
+                "--gh-write-cooldown-ms must be greater than zero",
+            ));
+        }
         if poll_interval_secs == 0 {
             return Err(app_error("--poll-interval-secs must be greater than zero"));
         }
@@ -244,6 +266,8 @@ impl Config {
             max_parallel,
             poll_interval_secs,
             task_limit,
+            search_reconcile_interval_secs,
+            gh_write_cooldown_ms,
             workspace_ttl_secs,
             codex_model,
             claude_model,
@@ -263,6 +287,8 @@ impl Config {
             max_parallel: 20,
             poll_interval_secs: 600,
             task_limit: 100,
+            search_reconcile_interval_secs: 60 * 60 * 6,
+            gh_write_cooldown_ms: 1_250,
             workspace_ttl_secs: 60 * 60 * 24 * 3,
             codex_model: None,
             claude_model: None,
@@ -298,6 +324,9 @@ FLAGS
   --max-parallel <n>             Max concurrent tasks (default: 20)
   --poll-interval-secs <n>       Poll cadence in seconds (default: 600)
   --task-limit <n>               Search result limit per source (default: 100)
+  --search-reconcile-interval-secs <n>
+                                 How often to backfill with GitHub search (default: 21600)
+  --gh-write-cooldown-ms <n>     Minimum pause between mutating gh commands (default: 1250)
   --workspace-ttl-secs <n>       Workspace retention after completion
   --codex-model <name>           Optional codex model override
   --claude-model <name>          Optional Claude model override
@@ -313,6 +342,8 @@ ENV
   GITHUBER_MAX_PARALLEL
   GITHUBER_POLL_INTERVAL_SECS
   GITHUBER_TASK_LIMIT
+  GITHUBER_SEARCH_RECONCILE_INTERVAL_SECS
+  GITHUBER_GH_WRITE_COOLDOWN_MS
   GITHUBER_WORKSPACE_TTL_SECS
   GITHUBER_CODEX_MODEL
   GITHUBER_CLAUDE_MODEL
@@ -391,6 +422,10 @@ mod tests {
             "claude,codex".to_string(),
             "--max-parallel".to_string(),
             "4".to_string(),
+            "--search-reconcile-interval-secs".to_string(),
+            "3600".to_string(),
+            "--gh-write-cooldown-ms".to_string(),
+            "1500".to_string(),
             "--dry-run".to_string(),
         ])
         .expect("config should parse");
@@ -398,6 +433,8 @@ mod tests {
         assert_eq!(config.command, CommandKind::RunOnce);
         assert_eq!(config.runners, vec![RunnerKind::Claude, RunnerKind::Codex]);
         assert_eq!(config.max_parallel, 4);
+        assert_eq!(config.search_reconcile_interval_secs, 3600);
+        assert_eq!(config.gh_write_cooldown_ms, 1500);
         assert!(config.dry_run);
     }
 

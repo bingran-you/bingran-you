@@ -77,16 +77,19 @@ if [ "${1:-}" = "--git-dir" ]; then
   if [ "${3:-}" = "remote" ] && [ "${4:-}" = "update" ]; then
     exit 0
   fi
+  if [ "${3:-}" = "worktree" ] && [ "${4:-}" = "prune" ]; then
+    exit 0
+  fi
   if [ "${3:-}" = "rev-parse" ] && [ "${4:-}" = "HEAD" ]; then
     printf 'deadbeef\n'
     exit 0
   fi
-  if [ "${3:-}" = "worktree" ] && [ "${4:-}" = "add" ]; then
-    mkdir -p "$6"
+  if [ "${3:-}" = "worktree" ] && { [ "${4:-}" = "add" ] || [ "${5:-}" = "add" ]; }; then
+    mkdir -p "${7:-$6}"
     exit 0
   fi
-  if [ "${3:-}" = "worktree" ] && [ "${4:-}" = "remove" ]; then
-    rm -rf "$6"
+  if [ "${3:-}" = "worktree" ] && { [ "${4:-}" = "remove" ] || [ "${5:-}" = "remove" ]; }; then
+    rm -rf "${7:-$6}"
     exit 0
   fi
   if [ "${3:-}" = "fetch" ]; then

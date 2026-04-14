@@ -148,8 +148,20 @@ pub fn find_lock(
     identity: &Identity,
     profile: &str,
 ) -> AppResult<Option<LockInfo>> {
-    let dir = base_dir.join(crate::util::sanitize_filename(&identity.lock_key(profile)));
+    let dir = lock_dir(base_dir, identity, profile);
     read_lock_info(&dir.join("lock.env"))
+}
+
+pub fn lock_dir(base_dir: &Path, identity: &Identity, profile: &str) -> PathBuf {
+    base_dir.join(crate::util::sanitize_filename(&identity.lock_key(profile)))
+}
+
+pub fn lock_is_live(lock: &LockInfo) -> bool {
+    !is_lock_stale(lock)
+}
+
+pub fn remove_lock_dir(base_dir: &Path, identity: &Identity, profile: &str) -> AppResult<()> {
+    remove_dir_if_exists(&lock_dir(base_dir, identity, profile))
 }
 
 pub fn stop_process(lock: &LockInfo) -> AppResult<()> {

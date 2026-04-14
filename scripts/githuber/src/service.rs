@@ -1,4 +1,6 @@
 use std::collections::{HashMap, HashSet, VecDeque};
+use std::env;
+use std::fs::OpenOptions;
 use std::path::PathBuf;
 use std::process::Command;
 use std::sync::mpsc::{self, Receiver, Sender};
@@ -8,12 +10,13 @@ use std::time::Duration;
 use crate::config::{CommandKind, Config};
 use crate::gh::{GhClient, should_ignore_self_authored};
 use crate::identity::{Identity, resolve_identity};
-use crate::lock::{LockInfo, ServiceLock, find_lock, stop_process};
+use crate::lock::{LockInfo, ServiceLock, find_lock, lock_is_live, remove_lock_dir, stop_process};
 use crate::runner::{RunnerOutcome, RunnerPool, RunnerRequest, RunnerSpec};
 use crate::store::Store;
 use crate::task::TaskCandidate;
 use crate::util::{
-    AppResult, app_error, current_epoch_secs, ensure_dir, run_command_checked, shell_quote,
+    AppResult, app_error, current_epoch_secs, ensure_dir, read_text_if_exists, run_command,
+    write_text,
 };
 use crate::workspace::WorkspaceManager;
 
@@ -112,10 +115,17 @@ impl Service {
         println!("githuber status");
         println!("identity: {}@{}", self.identity.login, self.identity.host);
         if let Some(lock) = lock {
-            println!(
-                "lock: running pid={} heartbeat={} active_tasks={} note={}",
-                lock.pid, lock.heartbeat_epoch, lock.active_tasks, lock.note
-            );
+            if lock_is_live(&lock) {
+                println!(
+                    "lock: running pid={} heartbeat={} active_tasks={} note={}",
+                    lock.pid, lock.heartbeat_epoch, lock.active_tasks, lock.note
+                );
+            } else {
+                println!(
+                    "lock: stale pid={} heartbeat={} active_tasks={} note={}",
+                    lock.pid, lock.heartbeat_epoch, lock.active_tasks, lock.note
+                );
+            }
         } else {
             println!("lock: not running");
         }
@@ -150,8 +160,16 @@ impl Service {
     }
 
     pub fn stop(&mut self) -> AppResult<()> {
+        if cfg!(target_os = "macos") {
+            let _ = self.stop_launchd_job();
+        }
         let lock = find_lock(&self.store.locks_dir, &self.identity, &self.config.profile)?
             .ok_or_else(|| app_error("githuber is not running for the active identity"))?;
+        if !lock_is_live(&lock) {
+            remove_lock_dir(&self.store.locks_dir, &self.identity, &self.config.profile)?;
+            println!("removed stale githuber lock for pid {}", lock.pid);
+            return Ok(());
+        }
         stop_process(&lock)?;
         println!("stopped githuber pid {}", lock.pid);
         Ok(())
@@ -172,54 +190,64 @@ impl Service {
             .collect::<Vec<_>>()
             .join(",");
 
-        let mut command_line = vec![
-            shell_quote(&executable.display().to_string()),
-            "run".to_string(),
-            "--home".to_string(),
-            shell_quote(&self.config.home.display().to_string()),
-            "--host".to_string(),
-            shell_quote(&self.config.host),
-            "--profile".to_string(),
-            shell_quote(&self.config.profile),
-            "--runner".to_string(),
-            shell_quote(&runner_value),
-            "--max-parallel".to_string(),
-            self.config.max_parallel.to_string(),
-            "--poll-interval-secs".to_string(),
-            self.config.poll_interval_secs.to_string(),
-            "--task-limit".to_string(),
-            self.config.task_limit.to_string(),
-            "--workspace-ttl-secs".to_string(),
-            self.config.workspace_ttl_secs.to_string(),
-        ];
+        if cfg!(target_os = "macos") && crate::util::which("launchctl").is_some() {
+            return self.start_with_launchctl(&executable, &log_path, &runner_value);
+        }
+
+        let stdout_file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&log_path)?;
+        let stderr_file = stdout_file.try_clone()?;
+
+        let mut command = Command::new("nohup");
+        command
+            .arg(&executable)
+            .arg("run")
+            .arg("--home")
+            .arg(&self.config.home)
+            .arg("--host")
+            .arg(&self.config.host)
+            .arg("--profile")
+            .arg(&self.config.profile)
+            .arg("--runner")
+            .arg(&runner_value)
+            .arg("--max-parallel")
+            .arg(self.config.max_parallel.to_string())
+            .arg("--poll-interval-secs")
+            .arg(self.config.poll_interval_secs.to_string())
+            .arg("--task-limit")
+            .arg(self.config.task_limit.to_string())
+            .arg("--workspace-ttl-secs")
+            .arg(self.config.workspace_ttl_secs.to_string())
+            .arg("--disclosure")
+            .arg(&self.config.disclosure_text)
+            .stdin(std::process::Stdio::null())
+            .stdout(std::process::Stdio::from(stdout_file))
+            .stderr(std::process::Stdio::from(stderr_file));
         if self.config.dry_run {
-            command_line.push("--dry-run".to_string());
+            command.arg("--dry-run");
         }
         if let Some(model) = &self.config.codex_model {
-            command_line.push("--codex-model".to_string());
-            command_line.push(shell_quote(model));
+            command.arg("--codex-model").arg(model);
         }
         if let Some(model) = &self.config.claude_model {
-            command_line.push("--claude-model".to_string());
-            command_line.push(shell_quote(model));
+            command.arg("--claude-model").arg(model);
         }
-        command_line.push("--disclosure".to_string());
-        command_line.push(shell_quote(&self.config.disclosure_text));
-
-        let script = format!(
-            "nohup {} >> {} 2>&1 & echo $!",
-            command_line.join(" "),
-            shell_quote(&log_path.display().to_string())
-        );
-        let mut command = Command::new("sh");
-        command.arg("-lc").arg(script);
-        let stdout = run_command_checked(&mut command, "start background githuber")?;
-        let pid = stdout
-            .lines()
-            .find(|line| !line.trim().is_empty())
-            .unwrap_or("");
+        let mut child = command
+            .spawn()
+            .map_err(|error| app_error(format!("failed to spawn background githuber: {error}")))?;
+        thread::sleep(Duration::from_millis(750));
+        if let Some(status) = child.try_wait()? {
+            let log = read_text_if_exists(&log_path)?.unwrap_or_default();
+            return Err(app_error(format!(
+                "background githuber exited immediately with status {:?}\nlog:\n{}",
+                status.code(),
+                log
+            )));
+        }
         println!("githuber started in background");
-        println!("pid: {}", pid.trim());
+        println!("pid: {}", child.id());
         println!("log: {}", log_path.display());
         Ok(())
     }
@@ -388,7 +416,13 @@ impl Service {
             let task_id = format!("task-{}-{}", current_epoch_secs(), candidate.stable_id());
             let task_dir = self.store.task_dir(&task_id);
             ensure_dir(&task_dir)?;
-            let workspace = self.workspace_manager.prepare(&candidate)?;
+            let workspace = match self.workspace_manager.prepare(&candidate) {
+                Ok(workspace) => workspace,
+                Err(error) => {
+                    self.record_setup_failure(&task_id, &task_dir, &candidate, &error.to_string())?;
+                    continue;
+                }
+            };
             let runner = self.runners.pick();
 
             self.store.write_task_metadata(
@@ -434,7 +468,7 @@ impl Service {
                 let completion = if dry_run {
                     Ok(TaskExecutionResult {
                         candidate: candidate_for_thread,
-                        result_status: "handled".to_string(),
+                        result_status: "simulated".to_string(),
                         summary: "dry-run scheduled task".to_string(),
                         runner_output_path: task_dir_for_thread.join("runner-output.txt"),
                     })
@@ -472,6 +506,50 @@ impl Service {
         Ok(())
     }
 
+    fn record_setup_failure(
+        &self,
+        task_id: &str,
+        task_dir: &std::path::Path,
+        candidate: &TaskCandidate,
+        error: &str,
+    ) -> AppResult<()> {
+        let now = current_epoch_secs();
+        self.store.write_task_metadata(
+            task_id,
+            &[
+                ("task_id".to_string(), task_id.to_string()),
+                ("status".to_string(), "failed".to_string()),
+                ("repo".to_string(), candidate.repo.clone()),
+                ("thread_key".to_string(), candidate.thread_key.clone()),
+                (
+                    "title".to_string(),
+                    crate::util::encode_multiline(&candidate.title),
+                ),
+                ("kind".to_string(), candidate.kind.as_str().to_string()),
+                ("reason".to_string(), candidate.reason.clone()),
+                ("started_at".to_string(), now.to_string()),
+                ("finished_at".to_string(), now.to_string()),
+                ("updated_at".to_string(), candidate.updated_at.clone()),
+                ("source".to_string(), candidate.source.clone()),
+                ("summary".to_string(), crate::util::encode_multiline(error)),
+                (
+                    "runner_output_path".to_string(),
+                    task_dir.join("runner-output.txt").display().to_string(),
+                ),
+            ],
+        )?;
+
+        let mut record = self.store.load_thread_record(&candidate.thread_key)?;
+        record.thread_key = candidate.thread_key.clone();
+        record.repo = candidate.repo.clone();
+        record.last_seen_updated_at = candidate.updated_at.clone();
+        record.failure_count = record.failure_count.saturating_add(1);
+        record.next_retry_epoch = current_epoch_secs() + retry_delay(record.failure_count);
+        record.last_result = "failed".to_string();
+        record.last_task_id = task_id.to_string();
+        self.store.save_thread_record(&record)
+    }
+
     fn handle_completion(
         &self,
         completion: TaskCompletion,
@@ -503,11 +581,11 @@ impl Service {
                 record.thread_key = result.candidate.thread_key.clone();
                 record.repo = result.candidate.repo.clone();
                 record.last_seen_updated_at = result.candidate.updated_at.clone();
-                if result.result_status != "failed" {
+                if matches!(result.result_status.as_str(), "handled" | "skipped") {
                     record.last_handled_updated_at = result.candidate.updated_at.clone();
                     record.failure_count = 0;
                     record.next_retry_epoch = 0;
-                } else {
+                } else if result.result_status == "failed" {
                     record.failure_count = record.failure_count.saturating_add(1);
                     record.next_retry_epoch =
                         current_epoch_secs() + retry_delay(record.failure_count);
@@ -570,6 +648,183 @@ impl Service {
             ("active_titles".to_string(), active_titles),
         ])
     }
+
+    fn start_with_launchctl(
+        &self,
+        executable: &std::path::Path,
+        log_path: &std::path::Path,
+        runner_value: &str,
+    ) -> AppResult<()> {
+        let plist_path = self.launchd_plist_path();
+        if let Some(parent) = plist_path.parent() {
+            ensure_dir(parent)?;
+        }
+        write_text(
+            &plist_path,
+            &self.launchd_plist_contents(executable, log_path, runner_value),
+        )?;
+
+        let domain = self.launchd_domain()?;
+        let _ = self.stop_launchd_job();
+
+        let mut bootstrap = Command::new("launchctl");
+        bootstrap.arg("bootstrap").arg(&domain).arg(&plist_path);
+        crate::util::run_command_checked(&mut bootstrap, "bootstrap launchd job")?;
+
+        let mut kickstart = Command::new("launchctl");
+        kickstart
+            .arg("kickstart")
+            .arg("-k")
+            .arg(format!("{}/{}", domain, self.launchd_label()));
+        crate::util::run_command_checked(&mut kickstart, "kickstart launchd job")?;
+
+        thread::sleep(Duration::from_millis(750));
+        if let Some(lock) = find_lock(&self.store.locks_dir, &self.identity, &self.config.profile)?
+            .filter(lock_is_live)
+        {
+            println!("githuber started in background via launchd");
+            println!("pid: {}", lock.pid);
+            println!("log: {}", log_path.display());
+            println!("plist: {}", plist_path.display());
+            return Ok(());
+        }
+
+        let mut print = Command::new("launchctl");
+        print
+            .arg("print")
+            .arg(format!("{}/{}", domain, self.launchd_label()));
+        let output = run_command(&mut print)?;
+        let log = read_text_if_exists(log_path)?.unwrap_or_default();
+        Err(app_error(format!(
+            "launchd job did not produce a live githuber lock.\nlaunchctl:\n{}\n{}\nlog:\n{}",
+            output.stdout, output.stderr, log
+        )))
+    }
+
+    fn stop_launchd_job(&self) -> AppResult<()> {
+        let plist_path = self.launchd_plist_path();
+        if !plist_path.exists() {
+            return Ok(());
+        }
+        let mut command = Command::new("launchctl");
+        command
+            .arg("bootout")
+            .arg(self.launchd_domain()?)
+            .arg(&plist_path);
+        let _ = run_command(&mut command)?;
+        Ok(())
+    }
+
+    fn launchd_label(&self) -> String {
+        format!(
+            "com.githuber.{}.{}",
+            crate::util::sanitize_filename(&self.identity.login),
+            crate::util::sanitize_filename(&self.config.profile)
+        )
+    }
+
+    fn launchd_plist_path(&self) -> PathBuf {
+        self.config
+            .home
+            .join("launchd")
+            .join(format!("{}.plist", self.launchd_label()))
+    }
+
+    fn launchd_domain(&self) -> AppResult<String> {
+        let mut command = Command::new("id");
+        command.arg("-u");
+        let stdout = crate::util::run_command_checked(&mut command, "resolve user id")?;
+        let uid = stdout.lines().next().unwrap_or("").trim().to_string();
+        if uid.is_empty() {
+            return Err(app_error("could not resolve numeric user id for launchd"));
+        }
+        Ok(format!("gui/{uid}"))
+    }
+
+    fn launchd_plist_contents(
+        &self,
+        executable: &std::path::Path,
+        log_path: &std::path::Path,
+        runner_value: &str,
+    ) -> String {
+        let mut arguments = vec![
+            executable.display().to_string(),
+            "run".to_string(),
+            "--home".to_string(),
+            self.config.home.display().to_string(),
+            "--host".to_string(),
+            self.config.host.clone(),
+            "--profile".to_string(),
+            self.config.profile.clone(),
+            "--runner".to_string(),
+            runner_value.to_string(),
+            "--max-parallel".to_string(),
+            self.config.max_parallel.to_string(),
+            "--poll-interval-secs".to_string(),
+            self.config.poll_interval_secs.to_string(),
+            "--task-limit".to_string(),
+            self.config.task_limit.to_string(),
+            "--workspace-ttl-secs".to_string(),
+            self.config.workspace_ttl_secs.to_string(),
+            "--disclosure".to_string(),
+            self.config.disclosure_text.clone(),
+        ];
+        if self.config.dry_run {
+            arguments.push("--dry-run".to_string());
+        }
+        if let Some(model) = &self.config.codex_model {
+            arguments.push("--codex-model".to_string());
+            arguments.push(model.clone());
+        }
+        if let Some(model) = &self.config.claude_model {
+            arguments.push("--claude-model".to_string());
+            arguments.push(model.clone());
+        }
+
+        let arguments_xml = arguments
+            .into_iter()
+            .map(|argument| format!("    <string>{}</string>", escape_xml(&argument)))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let path = env::var("PATH").unwrap_or_default();
+        let home = env::var("HOME").unwrap_or_default();
+
+        format!(
+            r#"<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>{label}</string>
+  <key>ProgramArguments</key>
+  <array>
+{arguments_xml}
+  </array>
+  <key>KeepAlive</key>
+  <true/>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>{path}</string>
+    <key>HOME</key>
+    <string>{home}</string>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>{log_path}</string>
+  <key>StandardErrorPath</key>
+  <string>{log_path}</string>
+</dict>
+</plist>
+"#,
+            label = escape_xml(&self.launchd_label()),
+            arguments_xml = arguments_xml,
+            path = escape_xml(&path),
+            home = escape_xml(&home),
+            log_path = escape_xml(&log_path.display().to_string()),
+        )
+    }
 }
 
 fn execute_task(runner: RunnerSpec, request: RunnerRequest) -> AppResult<TaskExecutionResult> {
@@ -588,5 +843,18 @@ fn retry_delay(failure_count: u32) -> u64 {
 }
 
 fn lock_status(lock: Option<&LockInfo>) -> &'static str {
-    if lock.is_some() { "present" } else { "absent" }
+    match lock {
+        Some(lock) if lock_is_live(lock) => "present",
+        Some(_) => "stale",
+        None => "absent",
+    }
+}
+
+fn escape_xml(value: &str) -> String {
+    value
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&apos;")
 }

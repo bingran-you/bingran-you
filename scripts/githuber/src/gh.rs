@@ -531,6 +531,9 @@ pub fn should_ignore_self_authored(
 ) -> bool {
     match kind {
         TaskKind::ReviewRequest | TaskKind::AssignedIssue | TaskKind::AssignedPullRequest => false,
+        TaskKind::Mention => latest_comment_author
+            .map(|author| author.ends_with("[bot]"))
+            .unwrap_or(false),
         _ => latest_comment_author
             .map(|author| author == login || author.ends_with("[bot]"))
             .unwrap_or(false),
@@ -592,7 +595,7 @@ mod tests {
     use std::path::PathBuf;
 
     #[test]
-    fn ignores_self_authored_comment_events() {
+    fn ignores_self_authored_comment_events_but_keeps_mentions() {
         assert!(should_ignore_self_authored(
             "bingran-you",
             Some("bingran-you"),
@@ -601,7 +604,21 @@ mod tests {
         assert!(!should_ignore_self_authored(
             "bingran-you",
             Some("bingran-you"),
+            &TaskKind::Mention
+        ));
+        assert!(!should_ignore_self_authored(
+            "bingran-you",
+            Some("bingran-you"),
             &TaskKind::ReviewRequest
+        ));
+    }
+
+    #[test]
+    fn still_ignores_bot_authored_mentions() {
+        assert!(should_ignore_self_authored(
+            "bingran-you",
+            Some("github-actions[bot]"),
+            &TaskKind::Mention
         ));
     }
 

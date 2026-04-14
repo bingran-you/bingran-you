@@ -97,6 +97,21 @@ impl Store {
         Ok(parse_kv_lines(&contents).into_iter().collect())
     }
 
+    pub fn list_task_metadata(&self) -> AppResult<Vec<(String, HashMap<String, String>)>> {
+        let mut tasks = Vec::new();
+        for entry in fs::read_dir(&self.tasks_dir)? {
+            let entry = entry?;
+            if !entry.file_type()?.is_dir() {
+                continue;
+            }
+            let task_id = entry.file_name().to_string_lossy().into_owned();
+            let metadata = self.read_task_metadata(&task_id)?;
+            tasks.push((task_id, metadata));
+        }
+        tasks.sort_by(|left, right| left.0.cmp(&right.0));
+        Ok(tasks)
+    }
+
     pub fn write_runtime_status(&self, values: &[(String, String)]) -> AppResult<()> {
         let lines = values
             .iter()

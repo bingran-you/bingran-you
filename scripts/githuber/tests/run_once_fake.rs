@@ -151,7 +151,7 @@ printf 'GITHUBER_RESULT: status=handled summary=fake codex handled thread\n' > "
     let calls = fs::read_to_string(&calls_path).expect("calls log");
     assert!(calls.contains("gh auth status"));
     assert!(calls.contains("gh api /notifications"));
-    assert!(calls.contains("git -c credential.helper=!gh auth git-credential clone --mirror"));
+    assert!(calls.contains("git -c credential.helper=!gh auth git-credential clone --bare"));
     assert!(calls.contains("codex exec"));
 
     let actions = fs::read_to_string(&actions_path).expect("actions log");

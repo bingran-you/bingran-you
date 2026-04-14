@@ -84,12 +84,13 @@ impl WorkspaceManager {
             let mut clone = self.authenticated_git_command();
             clone
                 .arg("clone")
-                .arg("--mirror")
+                .arg("--bare")
                 .arg(repo_url)
                 .arg(mirror_dir);
             run_command_checked(&mut clone, "clone bare mirror")?;
-            return Ok(());
         }
+
+        self.normalize_repository_cache(mirror_dir)?;
 
         let mut update = self.authenticated_git_command();
         update
@@ -156,6 +157,43 @@ impl WorkspaceManager {
             .arg("-c")
             .arg("credential.helper=!gh auth git-credential");
         command
+    }
+
+    fn normalize_repository_cache(&self, mirror_dir: &Path) -> AppResult<()> {
+        let mut unset_mirror = Command::new("git");
+        unset_mirror
+            .arg("--git-dir")
+            .arg(mirror_dir)
+            .arg("config")
+            .arg("--unset-all")
+            .arg("remote.origin.mirror");
+        let _ = crate::util::run_command(&mut unset_mirror);
+
+        let mut unset_fetch = Command::new("git");
+        unset_fetch
+            .arg("--git-dir")
+            .arg(mirror_dir)
+            .arg("config")
+            .arg("--unset-all")
+            .arg("remote.origin.fetch");
+        let _ = crate::util::run_command(&mut unset_fetch);
+
+        for fetch in [
+            "+refs/heads/*:refs/remotes/origin/*",
+            "+refs/tags/*:refs/tags/*",
+        ] {
+            let mut set_fetch = Command::new("git");
+            set_fetch
+                .arg("--git-dir")
+                .arg(mirror_dir)
+                .arg("config")
+                .arg("--add")
+                .arg("remote.origin.fetch")
+                .arg(fetch);
+            run_command_checked(&mut set_fetch, "configure repository cache fetch refspec")?;
+        }
+
+        Ok(())
     }
 
     fn prune_stale_worktree_entry(&self, mirror_dir: &Path, workspace_dir: &Path) -> AppResult<()> {

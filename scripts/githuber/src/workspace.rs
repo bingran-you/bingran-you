@@ -50,6 +50,7 @@ impl WorkspaceManager {
             task.kind.as_str(),
             task.stable_id()
         ));
+        self.prune_stale_worktree_entry(&mirror_dir, &workspace_dir)?;
         if workspace_dir.exists() {
             remove_dir_if_exists(&workspace_dir)?;
         }
@@ -63,6 +64,7 @@ impl WorkspaceManager {
             .arg(&mirror_dir)
             .arg("worktree")
             .arg("add")
+            .arg("--force")
             .arg("--detach")
             .arg(&workspace_dir)
             .arg(&checkout_ref);
@@ -154,5 +156,26 @@ impl WorkspaceManager {
             .arg("-c")
             .arg("credential.helper=!gh auth git-credential");
         command
+    }
+
+    fn prune_stale_worktree_entry(&self, mirror_dir: &Path, workspace_dir: &Path) -> AppResult<()> {
+        let mut prune = Command::new("git");
+        prune
+            .arg("--git-dir")
+            .arg(mirror_dir)
+            .arg("worktree")
+            .arg("prune");
+        let _ = crate::util::run_command(&mut prune);
+
+        let mut remove = Command::new("git");
+        remove
+            .arg("--git-dir")
+            .arg(mirror_dir)
+            .arg("worktree")
+            .arg("remove")
+            .arg("--force")
+            .arg(workspace_dir);
+        let _ = crate::util::run_command(&mut remove);
+        Ok(())
     }
 }

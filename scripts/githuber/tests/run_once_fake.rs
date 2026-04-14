@@ -69,7 +69,7 @@ printf 'git %s\n' "$*" >> "$GITHUBER_CALLS"
 if [ "${1:-}" = "-c" ]; then
   shift 2
 fi
-if [ "${1:-}" = "clone" ] && [ "${2:-}" = "--mirror" ]; then
+if [ "${1:-}" = "clone" ] && { [ "${2:-}" = "--mirror" ] || [ "${2:-}" = "--bare" ]; }; then
   mkdir -p "$4"
   exit 0
 fi
@@ -221,7 +221,7 @@ set -eu
 if [ "${1:-}" = "-c" ]; then
   shift 2
 fi
-if [ "${1:-}" = "clone" ] && [ "${2:-}" = "--mirror" ]; then
+if [ "${1:-}" = "clone" ] && { [ "${2:-}" = "--mirror" ] || [ "${2:-}" = "--bare" ]; }; then
   mkdir -p "$4"
   exit 0
 fi
@@ -320,6 +320,167 @@ printf 'GITHUBER_RESULT: status=handled summary=fake codex handled thread\n' > "
     assert!(second_calls.contains("gh api /notifications"));
     assert!(!second_calls.contains("gh search prs"));
     assert!(!second_calls.contains("gh search issues"));
+
+    fs::remove_dir_all(root).expect("cleanup temp test dir");
+}
+
+#[test]
+fn orphaned_running_task_is_recovered_even_without_new_github_candidates() {
+    let root = unique_dir("orphan-recovery");
+    let bin_dir = root.join("bin");
+    let home_dir = root.join("home");
+    let calls_path = root.join("calls.log");
+    let actions_path = root.join("actions.log");
+    fs::create_dir_all(&bin_dir).expect("bin dir");
+    fs::create_dir_all(&home_dir).expect("home dir");
+    fs::create_dir_all(home_dir.join("tasks/stale-task")).expect("stale task dir");
+
+    fs::write(
+        home_dir.join("tasks/stale-task/task.env"),
+        "\
+task_id=stale-task
+status=running
+repo=owner/repo
+thread_key=/repos/owner/repo/issues/1
+title=Recover stale task
+kind=assigned_issue
+reason=assigned
+updated_at=2026-04-13T00:00:00Z
+source=assigned-search
+started_at=1
+",
+    )
+    .expect("write stale task env");
+
+    write_script(
+        &bin_dir.join("gh"),
+        r#"#!/bin/sh
+set -eu
+printf 'gh %s\n' "$*" >> "$GITHUBER_CALLS"
+case "$*" in
+  *"auth status"*)
+    printf 'github.com\tbingran-you\thttps\trepo,workflow\n'
+    ;;
+  *"api /notifications"*)
+    printf ''
+    ;;
+  *"search prs"*)
+    printf ''
+    ;;
+  *"search issues"*)
+    printf ''
+    ;;
+  *"issue comment"*)
+    printf 'gh-action %s\n' "$*" >> "$GITHUBER_ACTIONS"
+    ;;
+  *)
+    printf ''
+    ;;
+esac
+"#,
+    );
+
+    write_script(
+        &bin_dir.join("git"),
+        r#"#!/bin/sh
+set -eu
+if [ "${1:-}" = "-c" ]; then
+  shift 2
+fi
+if [ "${1:-}" = "clone" ] && { [ "${2:-}" = "--mirror" ] || [ "${2:-}" = "--bare" ]; }; then
+  mkdir -p "$4"
+  exit 0
+fi
+if [ "${1:-}" = "--git-dir" ]; then
+  if [ "${3:-}" = "config" ]; then
+    exit 0
+  fi
+  if [ "${3:-}" = "remote" ] && [ "${4:-}" = "update" ]; then
+    exit 0
+  fi
+  if [ "${3:-}" = "worktree" ] && [ "${4:-}" = "prune" ]; then
+    exit 0
+  fi
+  if [ "${3:-}" = "rev-parse" ] && [ "${4:-}" = "HEAD" ]; then
+    printf 'deadbeef\n'
+    exit 0
+  fi
+  if [ "${3:-}" = "worktree" ] && { [ "${4:-}" = "add" ] || [ "${5:-}" = "add" ]; }; then
+    mkdir -p "${7:-$6}"
+    exit 0
+  fi
+  if [ "${3:-}" = "worktree" ] && { [ "${4:-}" = "remove" ] || [ "${5:-}" = "remove" ]; }; then
+    rm -rf "${7:-$6}"
+    exit 0
+  fi
+  if [ "${3:-}" = "fetch" ]; then
+    exit 0
+  fi
+fi
+if [ "${1:-}" = "-C" ] && [ "${3:-}" = "config" ]; then
+  exit 0
+fi
+exit 0
+"#,
+    );
+
+    write_script(
+        &bin_dir.join("codex"),
+        r#"#!/bin/sh
+set -eu
+resolved_gh="$(command -v gh)"
+expected_gh="$GITHUBER_BROKER_DIR/bin/gh"
+if [ "$resolved_gh" != "$expected_gh" ]; then
+  echo "expected brokered gh at $expected_gh, got $resolved_gh" >&2
+  exit 1
+fi
+out=""
+prev=""
+for arg in "$@"; do
+  if [ "$prev" = "--output-last-message" ]; then
+    out="$arg"
+  fi
+  prev="$arg"
+done
+gh issue comment owner/repo#1 --body "Recovered stale task"
+printf 'GITHUBER_RESULT: status=handled summary=recovered stale task\n' > "$out"
+"#,
+    );
+
+    let path = format!(
+        "{}:{}",
+        bin_dir.display(),
+        env::var("PATH").unwrap_or_default()
+    );
+    let output = Command::new(env!("CARGO_BIN_EXE_githuber"))
+        .env("PATH", path)
+        .env("GITHUBER_HOME", &home_dir)
+        .env("GITHUBER_CALLS", &calls_path)
+        .env("GITHUBER_ACTIONS", &actions_path)
+        .args(["run-once", "--runner", "codex", "--host", "github.com"])
+        .output()
+        .expect("githuber should run");
+
+    assert!(
+        output.status.success(),
+        "stdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let stale_env =
+        fs::read_to_string(home_dir.join("tasks/stale-task/task.env")).expect("stale env");
+    assert!(stale_env.contains("status=orphaned"));
+
+    let task_dirs = fs::read_dir(home_dir.join("tasks"))
+        .expect("tasks dir")
+        .filter_map(Result::ok)
+        .map(|entry| entry.file_name().to_string_lossy().into_owned())
+        .collect::<Vec<_>>();
+    assert!(task_dirs.iter().any(|task_id| task_id != "stale-task"));
+
+    let actions = fs::read_to_string(&actions_path).expect("actions log");
+    assert!(actions.contains("Recovered stale task"));
 
     fs::remove_dir_all(root).expect("cleanup temp test dir");
 }

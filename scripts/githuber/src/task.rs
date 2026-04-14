@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::util::{canonical_api_path, decode_multiline, encode_multiline, stable_file_id};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -22,6 +24,19 @@ impl TaskKind {
             TaskKind::Discussion => "discussion",
             TaskKind::Other => "other",
         }
+    }
+
+    pub fn from_str(value: &str) -> Option<Self> {
+        Some(match value {
+            "review_request" => TaskKind::ReviewRequest,
+            "mention" => TaskKind::Mention,
+            "comment" => TaskKind::Comment,
+            "assigned_issue" => TaskKind::AssignedIssue,
+            "assigned_pull_request" => TaskKind::AssignedPullRequest,
+            "discussion" => TaskKind::Discussion,
+            "other" => TaskKind::Other,
+            _ => return None,
+        })
     }
 }
 
@@ -114,6 +129,52 @@ impl TaskCandidate {
             }
         }
         None
+    }
+
+    pub fn from_task_metadata(metadata: &HashMap<String, String>, host: &str) -> Option<Self> {
+        let repo = metadata.get("repo")?.trim().to_string();
+        let thread_key = metadata.get("thread_key")?.trim().to_string();
+        let kind = TaskKind::from_str(metadata.get("kind")?.trim())?;
+        let reason = metadata.get("reason").cloned().unwrap_or_default();
+        let title = metadata
+            .get("title")
+            .map(|value| decode_multiline(value))
+            .unwrap_or_default();
+        let updated_at = metadata.get("updated_at").cloned().unwrap_or_default();
+        let source = metadata
+            .get("source")
+            .cloned()
+            .unwrap_or_else(|| "recovered-running".to_string());
+
+        let api_url = if thread_key.starts_with("/repos/") {
+            format!("https://api.github.com{thread_key}")
+        } else {
+            metadata.get("api_url").cloned().unwrap_or_default()
+        };
+        let web_url = metadata
+            .get("web_url")
+            .cloned()
+            .filter(|value| !value.trim().is_empty())
+            .or_else(|| derive_web_url(host, &repo, &thread_key));
+        let latest_comment_api_url = metadata
+            .get("latest_comment_api_url")
+            .cloned()
+            .unwrap_or_default();
+
+        Some(TaskCandidate {
+            source,
+            repo,
+            thread_key,
+            kind: kind.clone(),
+            subject_type: subject_type_for(&kind),
+            reason: reason.clone(),
+            title,
+            web_url: web_url.unwrap_or_default(),
+            api_url,
+            latest_comment_api_url,
+            updated_at,
+            priority: priority_for(&kind, &reason),
+        })
     }
 }
 
@@ -353,12 +414,32 @@ fn extract_issue_number(value: &str) -> Option<u64> {
     None
 }
 
+fn derive_web_url(host: &str, repo: &str, thread_key: &str) -> Option<String> {
+    if let Some(number) = extract_pr_number(thread_key) {
+        return Some(format!("https://{host}/{repo}/pull/{number}"));
+    }
+    if let Some(number) = extract_issue_number(thread_key) {
+        return Some(format!("https://{host}/{repo}/issues/{number}"));
+    }
+    None
+}
+
+fn subject_type_for(kind: &TaskKind) -> String {
+    match kind {
+        TaskKind::ReviewRequest | TaskKind::AssignedPullRequest => "PullRequest".to_string(),
+        TaskKind::AssignedIssue | TaskKind::Mention | TaskKind::Comment => "Issue".to_string(),
+        TaskKind::Discussion => "Discussion".to_string(),
+        TaskKind::Other => "Other".to_string(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{
-        TaskKind, ThreadRecord, build_notification_candidate, build_review_request_candidate,
-        should_process_reason,
+        TaskCandidate, TaskKind, ThreadRecord, build_notification_candidate,
+        build_review_request_candidate, should_process_reason,
     };
+    use std::collections::HashMap;
 
     #[test]
     fn notification_priority_prefers_review_requests() {
@@ -417,5 +498,30 @@ mod tests {
         assert_eq!(restored.failure_count, 2);
         assert!(should_process_reason("comment"));
         assert!(!should_process_reason("ci_activity"));
+    }
+
+    #[test]
+    fn restores_candidate_from_task_metadata() {
+        let metadata = HashMap::from([
+            ("repo".to_string(), "owner/repo".to_string()),
+            (
+                "thread_key".to_string(),
+                "/repos/owner/repo/pulls/12".to_string(),
+            ),
+            ("kind".to_string(), "review_request".to_string()),
+            ("reason".to_string(), "review_requested".to_string()),
+            ("title".to_string(), "Recover me".to_string()),
+            ("updated_at".to_string(), "2026-01-01T00:00:00Z".to_string()),
+            ("source".to_string(), "review-search".to_string()),
+        ]);
+
+        let candidate =
+            TaskCandidate::from_task_metadata(&metadata, "github.com").expect("candidate");
+        assert_eq!(candidate.kind, TaskKind::ReviewRequest);
+        assert_eq!(
+            candidate.api_url,
+            "https://api.github.com/repos/owner/repo/pulls/12"
+        );
+        assert_eq!(candidate.web_url, "https://github.com/owner/repo/pull/12");
     }
 }

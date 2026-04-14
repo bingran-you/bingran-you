@@ -352,6 +352,7 @@ impl Service {
             self.refresh_runtime(&active, pending.len(), &note)?;
 
             if !did_poll {
+                self.enqueue_recoverable_tasks(&mut pending, &mut queued_threads, &active)?;
                 let candidates = self.poll_candidates()?;
                 self.enqueue_candidates(candidates, &mut pending, &mut queued_threads, &active)?;
                 did_poll = true;
@@ -456,6 +457,79 @@ impl Service {
             queued_threads.insert(candidate.thread_key.clone());
             pending.push_back(candidate);
         }
+        Ok(())
+    }
+
+    fn enqueue_recoverable_tasks(
+        &self,
+        pending: &mut VecDeque<TaskCandidate>,
+        queued_threads: &mut HashSet<String>,
+        active: &HashMap<String, ActiveTask>,
+    ) -> AppResult<()> {
+        let now = current_epoch_secs();
+        let mut recovered = Vec::new();
+
+        for (task_id, mut metadata) in self.store.list_task_metadata()? {
+            let status = metadata
+                .get("status")
+                .map(String::as_str)
+                .unwrap_or_default();
+            if status != "running" {
+                continue;
+            }
+            if metadata
+                .get("finished_at")
+                .map(|value| !value.trim().is_empty())
+                .unwrap_or(false)
+            {
+                continue;
+            }
+
+            let Some(candidate) = TaskCandidate::from_task_metadata(&metadata, &self.config.host)
+            else {
+                continue;
+            };
+
+            if active
+                .values()
+                .any(|task| task.thread_key == candidate.thread_key)
+            {
+                continue;
+            }
+            if queued_threads.contains(&candidate.thread_key) {
+                continue;
+            }
+            if !self.config.repo_filter.matches_repo(&candidate.repo) {
+                continue;
+            }
+
+            metadata.insert("status".to_string(), "orphaned".to_string());
+            metadata.insert("finished_at".to_string(), now.to_string());
+            metadata.insert(
+                "summary".to_string(),
+                crate::util::encode_multiline(
+                    "githuber recovered this unfinished running task and re-queued it",
+                ),
+            );
+            self.store
+                .write_task_metadata(&task_id, &metadata.clone().into_iter().collect::<Vec<_>>())?;
+
+            recovered.push(candidate);
+        }
+
+        recovered.sort_by(|left, right| {
+            right
+                .priority
+                .cmp(&left.priority)
+                .then_with(|| right.updated_at.cmp(&left.updated_at))
+                .then_with(|| left.thread_key.cmp(&right.thread_key))
+        });
+
+        for candidate in recovered.into_iter().rev() {
+            queued_threads.insert(candidate.thread_key.clone());
+            pending.push_front(candidate);
+        }
+
         Ok(())
     }
 

@@ -40,7 +40,7 @@ case "$*" in
     printf 'github.com\tbingran-you\thttps\trepo,workflow\n'
     ;;
   *"api /notifications"*)
-    printf 'owner/repo\tIssue\tcomment\tPlease respond\thttps://api.github.com/repos/owner/repo/issues/1\thttps://api.github.com/repos/owner/repo/issues/comments/10\t2026-04-13T00:00:00Z\n'
+    printf 'owner/repo\tIssue\tcomment\tPlease respond\thttps://api.github.com/repos/owner/repo/issues/1\thttps://api.github.com/repos/owner/repo/issues/comments/10\t2099-01-01T00:00:00Z\n'
     ;;
   *"api /repos/owner/repo/issues/comments/10"*)
     printf 'alice\tUser\n'
@@ -150,7 +150,10 @@ printf 'GITHUBER_RESULT: status=handled summary=fake codex handled thread\n' > "
 
     let calls = fs::read_to_string(&calls_path).expect("calls log");
     assert!(calls.contains("gh auth status"));
-    assert!(calls.contains("gh api /notifications"));
+    assert!(
+        calls
+            .contains("gh api /notifications?all=true&participating=false&per_page=100 --paginate")
+    );
     assert!(calls.contains("git -c credential.helper=!gh auth git-credential clone --bare"));
     assert!(calls.contains("codex exec"));
 
@@ -193,7 +196,7 @@ case "$*" in
     printf 'github.com\tbingran-you\thttps\trepo,workflow\n'
     ;;
   *"api /notifications"*)
-    printf 'owner/repo\tIssue\tcomment\tPlease respond\thttps://api.github.com/repos/owner/repo/issues/1\thttps://api.github.com/repos/owner/repo/issues/comments/10\t2026-04-13T00:00:00Z\n'
+    printf 'owner/repo\tIssue\tcomment\tPlease respond\thttps://api.github.com/repos/owner/repo/issues/1\thttps://api.github.com/repos/owner/repo/issues/comments/10\t2099-01-01T00:00:00Z\n'
     ;;
   *"api /repos/owner/repo/issues/comments/10"*)
     printf 'alice\tUser\n'
@@ -307,6 +310,7 @@ printf 'GITHUBER_RESULT: status=handled summary=fake codex handled thread\n' > "
     assert!(first_calls.contains("gh search issues"));
 
     fs::write(&calls_path, "").expect("clear calls");
+    fs::write(&actions_path, "").expect("clear actions");
 
     let second = run();
     assert!(
@@ -317,9 +321,16 @@ printf 'GITHUBER_RESULT: status=handled summary=fake codex handled thread\n' > "
     );
 
     let second_calls = fs::read_to_string(&calls_path).expect("second calls");
-    assert!(second_calls.contains("gh api /notifications"));
+    assert!(
+        second_calls
+            .contains("gh api /notifications?all=true&participating=false&per_page=100 --paginate")
+    );
     assert!(!second_calls.contains("gh search prs"));
     assert!(!second_calls.contains("gh search issues"));
+    assert!(!second_calls.contains("codex exec"));
+
+    let second_actions = fs::read_to_string(&actions_path).expect("second actions");
+    assert!(second_actions.trim().is_empty());
 
     fs::remove_dir_all(root).expect("cleanup temp test dir");
 }
@@ -345,7 +356,7 @@ thread_key=/repos/owner/repo/issues/1
 title=Recover stale task
 kind=assigned_issue
 reason=assigned
-updated_at=2026-04-13T00:00:00Z
+updated_at=2099-01-01T00:00:00Z
 source=assigned-search
 started_at=1
 ",
@@ -481,6 +492,101 @@ printf 'GITHUBER_RESULT: status=handled summary=recovered stale task\n' > "$out"
 
     let actions = fs::read_to_string(&actions_path).expect("actions log");
     assert!(actions.contains("Recovered stale task"));
+
+    fs::remove_dir_all(root).expect("cleanup temp test dir");
+}
+
+#[test]
+fn run_once_ignores_notifications_older_than_lookback_window() {
+    let root = unique_dir("old-notification");
+    let bin_dir = root.join("bin");
+    let home_dir = root.join("home");
+    let calls_path = root.join("calls.log");
+    let actions_path = root.join("actions.log");
+    fs::create_dir_all(&bin_dir).expect("bin dir");
+    fs::create_dir_all(&home_dir).expect("home dir");
+
+    write_script(
+        &bin_dir.join("gh"),
+        r#"#!/bin/sh
+set -eu
+printf 'gh %s\n' "$*" >> "$GITHUBER_CALLS"
+case "$*" in
+  *"auth status"*)
+    printf 'github.com\tbingran-you\thttps\trepo,workflow\n'
+    ;;
+  *"api /notifications"*)
+    printf 'owner/repo\tIssue\tcomment\tOld thread\thttps://api.github.com/repos/owner/repo/issues/1\thttps://api.github.com/repos/owner/repo/issues/comments/10\t2000-01-01T00:00:00Z\n'
+    ;;
+  *"search prs"*)
+    printf ''
+    ;;
+  *"search issues"*)
+    printf ''
+    ;;
+  *"issue comment"*)
+    printf 'gh-action %s\n' "$*" >> "$GITHUBER_ACTIONS"
+    ;;
+  *)
+    printf ''
+    ;;
+esac
+"#,
+    );
+
+    write_script(
+        &bin_dir.join("git"),
+        r#"#!/bin/sh
+set -eu
+exit 0
+"#,
+    );
+
+    write_script(
+        &bin_dir.join("codex"),
+        r#"#!/bin/sh
+set -eu
+printf 'codex %s\n' "$*" >> "$GITHUBER_CALLS"
+exit 1
+"#,
+    );
+
+    let path = format!(
+        "{}:{}",
+        bin_dir.display(),
+        env::var("PATH").unwrap_or_default()
+    );
+    let output = Command::new(env!("CARGO_BIN_EXE_githuber"))
+        .env("PATH", path)
+        .env("GITHUBER_HOME", &home_dir)
+        .env("GITHUBER_CALLS", &calls_path)
+        .env("GITHUBER_ACTIONS", &actions_path)
+        .args(["run-once", "--runner", "codex", "--host", "github.com"])
+        .output()
+        .expect("githuber should run");
+
+    assert!(
+        output.status.success(),
+        "stdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let calls = fs::read_to_string(&calls_path).expect("calls log");
+    assert!(
+        calls
+            .contains("gh api /notifications?all=true&participating=false&per_page=100 --paginate")
+    );
+    assert!(!calls.contains("codex "));
+
+    let actions = fs::read_to_string(&actions_path).unwrap_or_default();
+    assert!(actions.trim().is_empty());
+
+    let task_dirs = fs::read_dir(home_dir.join("tasks"))
+        .expect("tasks dir")
+        .filter_map(Result::ok)
+        .collect::<Vec<_>>();
+    assert!(task_dirs.is_empty());
 
     fs::remove_dir_all(root).expect("cleanup temp test dir");
 }

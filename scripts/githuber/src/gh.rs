@@ -2,11 +2,16 @@ use std::path::{Path, PathBuf};
 
 use crate::config::RepoFilter;
 use crate::gh_executor::{GhBucket, GhCommandSpec, GhExecutor, is_rate_limited};
+#[cfg(test)]
+use crate::task::TaskKind;
 use crate::task::{
-    TaskCandidate, TaskKind, build_assigned_candidate, build_notification_candidate,
+    TaskCandidate, build_assigned_candidate, build_notification_candidate,
     build_review_request_candidate,
 };
-use crate::util::{AppResult, ensure_dir, parse_tsv_line, shell_quote, write_lines, write_text};
+use crate::util::{
+    AppResult, ensure_dir, is_recent_github_timestamp, parse_tsv_line, shell_quote, write_lines,
+    write_text,
+};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum SearchScope {
@@ -30,6 +35,13 @@ pub struct CandidatePoll {
     pub search_rate_limited: bool,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ThreadActivity {
+    pub login: String,
+    pub user_type: String,
+    pub updated_at: String,
+}
+
 impl GhClient {
     pub fn new(host: String, repo_filter: RepoFilter, executor: GhExecutor) -> Self {
         Self {
@@ -39,13 +51,18 @@ impl GhClient {
         }
     }
 
-    pub fn unread_notifications(&self) -> AppResult<Vec<TaskCandidate>> {
-        let jq = ".[] | select(.unread == true) | [(.repository.full_name // \"\"), (.subject.type // \"\"), (.reason // \"\"), (.subject.title // \"\"), (.subject.url // \"\"), (.latest_comment_url // \"\"), (.updated_at // \"\")] | @tsv";
+    pub fn recent_notifications(
+        &self,
+        now_epoch: u64,
+        lookback_secs: u64,
+    ) -> AppResult<Vec<TaskCandidate>> {
+        let jq = ".[] | [(.repository.full_name // \"\"), (.subject.type // \"\"), (.reason // \"\"), (.subject.title // \"\"), (.subject.url // \"\"), (.latest_comment_url // \"\"), (.updated_at // \"\")] | @tsv";
         let stdout = self.run_checked(
-            "read notifications",
+            "read recent notifications",
             vec![
                 "api".to_string(),
-                "/notifications".to_string(),
+                "/notifications?all=true&participating=false&per_page=100".to_string(),
+                "--paginate".to_string(),
                 "-H".to_string(),
                 "X-GitHub-Api-Version: 2022-11-28".to_string(),
                 "--jq".to_string(),
@@ -69,6 +86,9 @@ impl GhClient {
                 fields[6].clone(),
             ) {
                 if !self.repo_filter.matches_repo(&task.repo) {
+                    continue;
+                }
+                if !is_recent_candidate(&task, now_epoch, lookback_secs) {
                     continue;
                 }
                 tasks.push(task);
@@ -164,13 +184,13 @@ impl GhClient {
         Ok(deduplicate(tasks))
     }
 
-    pub fn latest_comment_author(&self, api_url: &str) -> AppResult<Option<String>> {
+    pub fn latest_comment_activity(&self, api_url: &str) -> AppResult<Option<ThreadActivity>> {
         if api_url.trim().is_empty() {
             return Ok(None);
         }
-        let jq = "[.user.login // \"\", .user.type // \"\"] | @tsv";
+        let jq = "[.user.login // \"\", .user.type // \"\", (.updated_at // .created_at // \"\")] | @tsv";
         let stdout = self.run_checked(
-            "inspect latest comment author",
+            "inspect latest comment activity",
             vec![
                 "api".to_string(),
                 canonical_api_path(api_url),
@@ -179,21 +199,56 @@ impl GhClient {
             ],
             GhBucket::Core,
         )?;
-        let line = stdout.lines().find(|line| !line.trim().is_empty());
-        let Some(line) = line else {
-            return Ok(None);
-        };
-        let fields = parse_tsv_line(line);
-        if fields.is_empty() {
-            return Ok(None);
-        }
-        Ok(Some(fields[0].clone()))
+        Ok(parse_thread_activity(
+            stdout.lines().find(|line| !line.trim().is_empty()),
+        ))
     }
 
-    pub fn collect_candidates(&self, limit: usize, include_search: bool) -> CandidatePoll {
+    pub fn latest_review_activity(
+        &self,
+        repo: &str,
+        pr_number: u64,
+    ) -> AppResult<Option<ThreadActivity>> {
+        let jq = "if length == 0 then empty else .[-1] | [(.user.login // \"\"), (.user.type // \"\"), (.submitted_at // \"\")] | @tsv end";
+        let stdout = self.run_checked(
+            "inspect latest review activity",
+            vec![
+                "api".to_string(),
+                format!("/repos/{repo}/pulls/{pr_number}/reviews?per_page=100"),
+                "-H".to_string(),
+                "X-GitHub-Api-Version: 2022-11-28".to_string(),
+                "--jq".to_string(),
+                jq.to_string(),
+            ],
+            GhBucket::Core,
+        )?;
+        Ok(parse_thread_activity(
+            stdout.lines().find(|line| !line.trim().is_empty()),
+        ))
+    }
+
+    pub fn latest_visible_activity(
+        &self,
+        task: &TaskCandidate,
+    ) -> AppResult<Option<ThreadActivity>> {
+        let comment = self.latest_comment_activity(&task.latest_comment_api_url)?;
+        let review = match task.pr_number() {
+            Some(pr_number) => self.latest_review_activity(&task.repo, pr_number)?,
+            None => None,
+        };
+        Ok(pick_newer_activity(comment, review))
+    }
+
+    pub fn collect_candidates(
+        &self,
+        limit: usize,
+        include_search: bool,
+        now_epoch: u64,
+        lookback_secs: u64,
+    ) -> CandidatePoll {
         let mut poll = CandidatePoll::default();
 
-        match self.unread_notifications() {
+        match self.recent_notifications(now_epoch, lookback_secs) {
             Ok(tasks) => poll.tasks.extend(tasks),
             Err(error) => poll
                 .warnings
@@ -224,8 +279,10 @@ impl GhClient {
             }
         }
 
-        poll.tasks
-            .retain(|task| self.repo_filter.matches_repo(&task.repo));
+        poll.tasks.retain(|task| {
+            self.repo_filter.matches_repo(&task.repo)
+                && is_recent_candidate(task, now_epoch, lookback_secs)
+        });
         poll.tasks.sort_by(|left, right| {
             right
                 .priority
@@ -512,6 +569,41 @@ impl GhClient {
     }
 }
 
+fn is_recent_candidate(task: &TaskCandidate, now_epoch: u64, lookback_secs: u64) -> bool {
+    is_recent_github_timestamp(&task.updated_at, now_epoch, lookback_secs)
+}
+
+fn parse_thread_activity(line: Option<&str>) -> Option<ThreadActivity> {
+    let line = line?;
+    let fields = parse_tsv_line(line);
+    if fields.len() < 3 {
+        return None;
+    }
+    Some(ThreadActivity {
+        login: fields[0].clone(),
+        user_type: fields[1].clone(),
+        updated_at: fields[2].clone(),
+    })
+}
+
+fn pick_newer_activity(
+    left: Option<ThreadActivity>,
+    right: Option<ThreadActivity>,
+) -> Option<ThreadActivity> {
+    match (left, right) {
+        (Some(left), Some(right)) => {
+            if right.updated_at > left.updated_at {
+                Some(right)
+            } else {
+                Some(left)
+            }
+        }
+        (Some(left), None) => Some(left),
+        (None, Some(right)) => Some(right),
+        (None, None) => None,
+    }
+}
+
 fn deduplicate(tasks: Vec<TaskCandidate>) -> Vec<TaskCandidate> {
     let mut seen = std::collections::HashSet::new();
     let mut unique = Vec::new();
@@ -524,6 +616,7 @@ fn deduplicate(tasks: Vec<TaskCandidate>) -> Vec<TaskCandidate> {
     unique
 }
 
+#[cfg(test)]
 pub fn should_ignore_self_authored(
     login: &str,
     latest_comment_author: Option<&str>,
@@ -538,6 +631,25 @@ pub fn should_ignore_self_authored(
             .map(|author| author == login || author.ends_with("[bot]"))
             .unwrap_or(false),
     }
+}
+
+pub fn should_ignore_latest_self_activity(
+    login: &str,
+    activity: Option<&ThreadActivity>,
+    task_updated_at: &str,
+) -> bool {
+    let Some(activity) = activity else {
+        return false;
+    };
+    if activity.updated_at.as_str() < task_updated_at {
+        return false;
+    }
+    is_self_or_bot_actor(login, &activity.login, &activity.user_type)
+}
+
+fn is_self_or_bot_actor(login: &str, actor_login: &str, actor_type: &str) -> bool {
+    !actor_login.trim().is_empty()
+        && (actor_login == login || actor_login.ends_with("[bot]") || actor_type == "Bot")
 }
 
 pub fn is_rate_limit_error(message: &str) -> bool {
@@ -588,7 +700,10 @@ URL: {url}\n",
 
 #[cfg(test)]
 mod tests {
-    use super::{GhClient, SearchScope, is_rate_limit_error, should_ignore_self_authored};
+    use super::{
+        GhClient, SearchScope, ThreadActivity, is_rate_limit_error, pick_newer_activity,
+        should_ignore_latest_self_activity, should_ignore_self_authored,
+    };
     use crate::config::RepoFilter;
     use crate::gh_executor::GhExecutor;
     use crate::task::TaskKind;
@@ -619,6 +734,50 @@ mod tests {
             "bingran-you",
             Some("github-actions[bot]"),
             &TaskKind::Mention
+        ));
+    }
+
+    #[test]
+    fn prefers_newer_thread_activity() {
+        let older = ThreadActivity {
+            login: "alice".to_string(),
+            user_type: "User".to_string(),
+            updated_at: "2026-04-15T05:16:22Z".to_string(),
+        };
+        let newer = ThreadActivity {
+            login: "bingran-you".to_string(),
+            user_type: "User".to_string(),
+            updated_at: "2026-04-15T05:16:25Z".to_string(),
+        };
+
+        assert_eq!(
+            pick_newer_activity(Some(older), Some(newer.clone())),
+            Some(newer)
+        );
+    }
+
+    #[test]
+    fn ignores_latest_self_activity_only_when_it_is_current() {
+        let current = ThreadActivity {
+            login: "bingran-you".to_string(),
+            user_type: "User".to_string(),
+            updated_at: "2026-04-15T05:16:25Z".to_string(),
+        };
+        let stale = ThreadActivity {
+            login: "bingran-you".to_string(),
+            user_type: "User".to_string(),
+            updated_at: "2026-04-15T05:16:20Z".to_string(),
+        };
+
+        assert!(should_ignore_latest_self_activity(
+            "bingran-you",
+            Some(&current),
+            "2026-04-15T05:16:25Z"
+        ));
+        assert!(!should_ignore_latest_self_activity(
+            "bingran-you",
+            Some(&stale),
+            "2026-04-15T05:16:25Z"
         ));
     }
 

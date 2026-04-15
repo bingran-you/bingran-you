@@ -217,6 +217,8 @@ Rules
 - Address the task fully: reply, review, comment, or prepare code changes as needed.
 - If you post a public GitHub reply, review, or comment, include this exact disclosure sentence once: {disclosure}
 - Before posting anything public, inspect `issue-comments.json` and `pr-reviews.json` when present. If the active account already posted a message or review that still covers the current thread state or current PR head, do not post another one; return `GITHUBER_RESULT: status=skipped ...`.
+- If you wrap a mutating `gh` call in shell, never use the variable name `status` in zsh; use `rc` instead.
+- If a mutating `gh` command appears to fail after the write step, do a fresh GitHub readback before retrying. Treat shell-wrapper errors after a successful write as possible partial success, not proof that nothing was posted.
 - If code changes are required, create a branch named `githuber/{slug}`, commit cleanly, push it, and open a draft PR that references the original thread.
 - Do not merge PRs, delete branches, change repository settings, or do admin/billing/security work.
 - Avoid duplicate replies if the thread is already fully addressed.

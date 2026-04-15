@@ -589,15 +589,22 @@ impl Service {
             let task_id = format!("task-{}-{}", current_epoch_secs(), candidate.stable_id());
             let task_dir = self.store.task_dir(&task_id);
             ensure_dir(&task_dir)?;
-            let workspace = match self.workspace_manager.prepare(&candidate) {
-                Ok(workspace) => workspace,
+            let snapshot_dir = match self.gh.write_task_snapshot(&candidate, &task_dir) {
+                Ok(snapshot_dir) => snapshot_dir,
                 Err(error) => {
                     self.record_setup_failure(&task_id, &task_dir, &candidate, &error.to_string())?;
                     continue;
                 }
             };
-            let snapshot_dir = match self.gh.write_task_snapshot(&candidate, &task_dir) {
-                Ok(snapshot_dir) => snapshot_dir,
+            let candidate = match self.route_workspace_candidate(&candidate, &snapshot_dir) {
+                Ok(candidate) => candidate,
+                Err(error) => {
+                    self.record_setup_failure(&task_id, &task_dir, &candidate, &error.to_string())?;
+                    continue;
+                }
+            };
+            let workspace = match self.workspace_manager.prepare(&candidate) {
+                Ok(workspace) => workspace,
                 Err(error) => {
                     self.record_setup_failure(&task_id, &task_dir, &candidate, &error.to_string())?;
                     continue;
@@ -617,6 +624,7 @@ impl Service {
                     ("task_id".to_string(), task_id.clone()),
                     ("status".to_string(), "running".to_string()),
                     ("repo".to_string(), candidate.repo.clone()),
+                    ("workspace_repo".to_string(), candidate.workspace_repo().to_string()),
                     ("thread_key".to_string(), candidate.thread_key.clone()),
                     (
                         "title".to_string(),
@@ -721,6 +729,7 @@ impl Service {
                 ("task_id".to_string(), task_id.to_string()),
                 ("status".to_string(), "failed".to_string()),
                 ("repo".to_string(), candidate.repo.clone()),
+                ("workspace_repo".to_string(), candidate.workspace_repo().to_string()),
                 ("thread_key".to_string(), candidate.thread_key.clone()),
                 (
                     "title".to_string(),
@@ -750,6 +759,26 @@ impl Service {
         record.last_result = "failed".to_string();
         record.last_task_id = task_id.to_string();
         self.store.save_thread_record(&record)
+    }
+
+    fn route_workspace_candidate(
+        &self,
+        candidate: &TaskCandidate,
+        snapshot_dir: &std::path::Path,
+    ) -> AppResult<TaskCandidate> {
+        let mut candidate = candidate.clone();
+        let operator_repo = operator_repo_for(&self.identity.login);
+        if candidate.workspace_repo() == operator_repo {
+            candidate.workspace_repo = operator_repo;
+            return Ok(candidate);
+        }
+
+        let routing_text = read_routing_snapshot_text(snapshot_dir)?;
+        if should_route_to_operator_repo(&routing_text, &self.identity.login) {
+            candidate.workspace_repo = operator_repo;
+        }
+
+        Ok(candidate)
     }
 
     fn handle_completion(
@@ -1164,6 +1193,57 @@ fn reset_search_reconcile_epoch(runtime: &mut HashMap<String, String>) {
     runtime.insert("next_search_reconcile_epoch".to_string(), "0".to_string());
 }
 
+fn operator_repo_for(login: &str) -> String {
+    format!("{login}/{login}")
+}
+
+fn read_routing_snapshot_text(snapshot_dir: &std::path::Path) -> AppResult<String> {
+    let mut combined = String::new();
+    for filename in [
+        "issue-view.json",
+        "pr-view.json",
+        "subject.json",
+        "latest-comment.json",
+        "issue-comments.json",
+        "pr-reviews.json",
+    ] {
+        if let Some(contents) = read_text_if_exists(&snapshot_dir.join(filename))? {
+            combined.push_str(&contents);
+            combined.push('\n');
+        }
+    }
+    Ok(combined.to_ascii_lowercase())
+}
+
+fn should_route_to_operator_repo(contents: &str, login: &str) -> bool {
+    let login = login.to_ascii_lowercase();
+    let asks_for_change = [
+        "configure",
+        "update",
+        "change",
+        "fix",
+        "modify",
+        "adjust",
+        "tune",
+        "restart",
+    ]
+    .iter()
+    .any(|pattern| contents.contains(pattern));
+    let mentions_githuber = contents.contains("githuber");
+    let directs_to_operator = [
+        format!("@{login}"),
+        format!("{login}'s agent"),
+        format!("{login}/{login}"),
+        "your agent".to_string(),
+        "scripts/githuber".to_string(),
+        "githuber service".to_string(),
+    ]
+    .iter()
+    .any(|pattern| contents.contains(pattern));
+
+    mentions_githuber && asks_for_change && directs_to_operator
+}
+
 fn lock_status(lock: Option<&LockInfo>) -> &'static str {
     match lock {
         Some(lock) if lock_is_live(lock) => "present",
@@ -1185,7 +1265,7 @@ fn escape_xml(value: &str) -> String {
 mod tests {
     use std::collections::HashMap;
 
-    use super::reset_search_reconcile_epoch;
+    use super::{reset_search_reconcile_epoch, should_route_to_operator_repo};
 
     #[test]
     fn reset_search_reconcile_epoch_forces_immediate_search_without_dropping_state() {
@@ -1209,5 +1289,25 @@ mod tests {
             runtime.get("last_poll_epoch").map(String::as_str),
             Some("1776189643")
         );
+    }
+
+    #[test]
+    fn routes_operator_requests_to_home_repo_when_githuber_is_target() {
+        let text = r#"
+        @bingran-you could you configure the githuber agent to merge after approving first-tree:sync PRs?
+        This is a request to update githuber logic.
+        "#;
+
+        assert!(should_route_to_operator_repo(text, "bingran-you"));
+    }
+
+    #[test]
+    fn does_not_route_normal_mentions_without_self_maintenance_request() {
+        let text = r#"
+        @bingran-you please review this pull request.
+        The runtime looks fine and githuber already commented.
+        "#;
+
+        assert!(!should_route_to_operator_repo(text, "bingran-you"));
     }
 }

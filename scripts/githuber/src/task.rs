@@ -44,6 +44,7 @@ impl TaskKind {
 pub struct TaskCandidate {
     pub source: String,
     pub repo: String,
+    pub workspace_repo: String,
     pub thread_key: String,
     pub kind: TaskKind,
     pub reason: String,
@@ -65,6 +66,14 @@ impl TaskCandidate {
             self.kind.as_str(),
             self.source
         ))
+    }
+
+    pub fn workspace_repo(&self) -> &str {
+        if self.workspace_repo.trim().is_empty() {
+            &self.repo
+        } else {
+            &self.workspace_repo
+        }
     }
 
     pub fn display_url(&self) -> &str {
@@ -163,6 +172,11 @@ impl TaskCandidate {
         Some(TaskCandidate {
             source,
             repo,
+            workspace_repo: metadata
+                .get("workspace_repo")
+                .cloned()
+                .filter(|value| !value.trim().is_empty())
+                .unwrap_or_else(|| metadata.get("repo").cloned().unwrap_or_default()),
             thread_key,
             kind: kind.clone(),
             reason: reason.clone(),
@@ -260,6 +274,7 @@ pub fn build_notification_candidate(
 
     Some(TaskCandidate {
         source: "notifications".to_string(),
+        workspace_repo: repo.clone(),
         repo,
         thread_key,
         priority: priority_for(&kind, &reason),
@@ -283,6 +298,7 @@ pub fn build_review_request_candidate(
     TaskCandidate {
         source: "review-search".to_string(),
         repo: repo.clone(),
+        workspace_repo: repo.clone(),
         thread_key: format!("/repos/{repo}/pulls/{number}"),
         kind: TaskKind::ReviewRequest,
         reason: "review_requested".to_string(),
@@ -312,6 +328,7 @@ pub fn build_assigned_candidate(
     TaskCandidate {
         source: "assigned-search".to_string(),
         repo: repo.clone(),
+        workspace_repo: repo.clone(),
         thread_key: format!("/repos/{repo}/{api_suffix}/{number}"),
         kind: kind.clone(),
         reason: "assigned".to_string(),
@@ -532,6 +549,7 @@ mod tests {
     fn restores_candidate_from_task_metadata() {
         let metadata = HashMap::from([
             ("repo".to_string(), "owner/repo".to_string()),
+            ("workspace_repo".to_string(), "bingran-you/bingran-you".to_string()),
             (
                 "thread_key".to_string(),
                 "/repos/owner/repo/pulls/12".to_string(),
@@ -551,6 +569,7 @@ mod tests {
             "https://api.github.com/repos/owner/repo/pulls/12"
         );
         assert_eq!(candidate.web_url, "https://github.com/owner/repo/pull/12");
+        assert_eq!(candidate.workspace_repo(), "bingran-you/bingran-you");
     }
 
     #[test]

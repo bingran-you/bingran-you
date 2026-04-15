@@ -9,7 +9,7 @@ use std::time::Duration;
 
 use crate::broker::GhBroker;
 use crate::config::{CommandKind, Config};
-use crate::gh::{GhClient, should_ignore_self_authored};
+use crate::gh::{GhClient, should_ignore_latest_self_activity};
 use crate::gh_executor::GhExecutor;
 use crate::identity::{Identity, resolve_identity};
 use crate::lock::{LockInfo, ServiceLock, find_lock, lock_is_live, remove_lock_dir, stop_process};
@@ -420,9 +420,12 @@ impl Service {
     fn poll_candidates(&mut self) -> AppResult<Vec<TaskCandidate>> {
         let now = current_epoch_secs();
         let include_search = now >= self.next_search_reconcile_epoch;
-        let poll = self
-            .gh
-            .collect_candidates(self.config.task_limit, include_search);
+        let poll = self.gh.collect_candidates(
+            self.config.task_limit,
+            include_search,
+            now,
+            self.config.notification_lookback_secs,
+        );
 
         if include_search {
             let delay = if poll.search_rate_limited {
@@ -558,15 +561,17 @@ impl Service {
         {
             return Ok(false);
         }
-        if !candidate.latest_comment_api_url.is_empty() {
-            let author = self
-                .gh
-                .latest_comment_author(&candidate.latest_comment_api_url)
-                .unwrap_or(None);
-            if should_ignore_self_authored(&self.identity.login, author.as_deref(), &candidate.kind)
-            {
-                return Ok(false);
-            }
+        let latest_activity = self.gh.latest_visible_activity(candidate).unwrap_or(None);
+        if should_ignore_latest_self_activity(
+            &self.identity.login,
+            latest_activity.as_ref(),
+            &candidate.updated_at,
+        ) {
+            record.last_handled_updated_at = candidate.updated_at.clone();
+            record.last_result = "skipped".to_string();
+            record.next_retry_epoch = 0;
+            self.store.save_thread_record(&record)?;
+            return Ok(false);
         }
         Ok(true)
     }
@@ -740,7 +745,8 @@ impl Service {
         record.repo = candidate.repo.clone();
         record.last_seen_updated_at = candidate.updated_at.clone();
         record.failure_count = record.failure_count.saturating_add(1);
-        record.next_retry_epoch = current_epoch_secs() + retry_delay(record.failure_count);
+        record.next_retry_epoch =
+            current_epoch_secs() + self.failure_retry_delay(record.failure_count);
         record.last_result = "failed".to_string();
         record.last_task_id = task_id.to_string();
         self.store.save_thread_record(&record)
@@ -785,7 +791,7 @@ impl Service {
                 } else if result.result_status == "failed" {
                     record.failure_count = record.failure_count.saturating_add(1);
                     record.next_retry_epoch =
-                        current_epoch_secs() + retry_delay(record.failure_count);
+                        current_epoch_secs() + self.failure_retry_delay(record.failure_count);
                 }
                 record.last_task_id = completion.task_id.clone();
                 record.last_result = result.result_status.clone();
@@ -801,7 +807,8 @@ impl Service {
                 let mut record = self.store.load_thread_record(&completion.thread_key)?;
                 record.thread_key = completion.thread_key.clone();
                 record.failure_count = record.failure_count.saturating_add(1);
-                record.next_retry_epoch = current_epoch_secs() + retry_delay(record.failure_count);
+                record.next_retry_epoch =
+                    current_epoch_secs() + self.failure_retry_delay(record.failure_count);
                 record.last_result = "failed".to_string();
                 record.last_task_id = completion.task_id.clone();
                 self.store.save_thread_record(&record)?;
@@ -989,6 +996,8 @@ impl Service {
             self.config.poll_interval_secs.to_string(),
             "--task-limit".to_string(),
             self.config.task_limit.to_string(),
+            "--notification-lookback-secs".to_string(),
+            self.config.notification_lookback_secs.to_string(),
             "--search-reconcile-interval-secs".to_string(),
             self.config.search_reconcile_interval_secs.to_string(),
             "--gh-write-cooldown-ms".to_string(),
@@ -1024,7 +1033,7 @@ impl Service {
             ("HOME".to_string(), env::var("HOME").unwrap_or_default()),
         ];
         for variable in passthrough_launchd_env_vars() {
-            if let Ok(value) = env::var(variable) {
+            if let Some(value) = resolve_launchd_env_var(variable) {
                 environment_entries.push((variable.to_string(), value));
             }
         }
@@ -1072,11 +1081,17 @@ impl Service {
             log_path = escape_xml(&log_path.display().to_string()),
         )
     }
+
+    fn failure_retry_delay(&self, failure_count: u32) -> u64 {
+        retry_delay(failure_count).min(self.config.poll_interval_secs)
+    }
 }
 
 fn passthrough_launchd_env_vars() -> &'static [&'static str] {
     &[
+        "AZURE_OPENAI_ENDPOINT",
         "AZURE_OPENAI_API_KEY",
+        "AZURE_OPENAI_ENDPOINT_BACKUP",
         "AZURE_OPENAI_API_KEY_BACKUP",
         "OPENAI_API_KEY",
         "ANTHROPIC_API_KEY",
@@ -1086,6 +1101,30 @@ fn passthrough_launchd_env_vars() -> &'static [&'static str] {
         "CLAUDE_CODE_USE_BEDROCK",
         "CLAUDE_CODE_USE_VERTEX",
     ]
+}
+
+fn resolve_launchd_env_var(variable: &str) -> Option<String> {
+    match env::var(variable) {
+        Ok(value) if !value.trim().is_empty() => Some(value),
+        _ => resolve_env_var_from_login_shell(variable),
+    }
+}
+
+fn resolve_env_var_from_login_shell(variable: &str) -> Option<String> {
+    let mut command = Command::new("/bin/zsh");
+    command
+        .arg("-lc")
+        .arg(format!("printf '%s' \"${{{variable}:-}}\""));
+    let output = run_command(&mut command).ok()?;
+    if output.status_code != 0 {
+        return None;
+    }
+    let value = output.stdout;
+    if value.trim().is_empty() {
+        None
+    } else {
+        Some(value)
+    }
 }
 
 fn execute_task(

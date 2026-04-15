@@ -6,7 +6,7 @@ use std::sync::Mutex;
 
 use crate::config::{Config, RunnerKind};
 use crate::identity::Identity;
-use crate::task::{TaskCandidate, TaskKind};
+use crate::task::TaskCandidate;
 use crate::util::{AppResult, app_error, read_text_if_exists, which};
 
 #[derive(Clone, Debug)]
@@ -171,95 +171,46 @@ impl RunnerSpec {
 
 fn build_prompt(request: &RunnerRequest) -> String {
     let task = &request.task;
-    let mut task_hints = String::new();
-    match task.kind {
-        TaskKind::ReviewRequest => {
-            task_hints
-                .push_str("- Review the PR and post a formal review with gh if one is needed.\n");
-            task_hints.push_str("- If follow-up code changes are required and you have permission, make them in this workspace, commit, push, and explain them in your review.\n");
-        }
-        TaskKind::AssignedIssue | TaskKind::AssignedPullRequest => {
-            task_hints.push_str("- Resolve the assigned task. If code changes are needed, create a branch, implement them here, push, and open a draft PR.\n");
-            task_hints.push_str("- If no code change is needed, leave a clear public update with the current state and next action.\n");
-        }
-        TaskKind::Discussion | TaskKind::Comment | TaskKind::Mention => {
-            task_hints.push_str("- Read the conversation carefully and reply directly with gh if a reply is useful.\n");
-            task_hints.push_str("- If code changes are needed, work in this workspace and open a draft PR linked back to the thread.\n");
-        }
-        TaskKind::Other => {
-            task_hints.push_str(
-                "- Inspect the thread and take the smallest complete action that addresses it.\n",
-            );
-        }
-    }
-
     format!(
-        "You are githuber, a local GitHub automation agent acting on behalf of @{login} on {host}.
+        "This is GitHuber service and you are a team of agents representing {git_id}.
 
-This workspace was prepared specifically for one GitHub task. Use the local gh CLI and the current authentication state. You may use dangerous, fully automatic permissions.
+This is GitHuber service code repo:
+https://github.com/bingran-you/bingran-you/tree/main/scripts/githuber
 
-Task
+Your job is addressing any comments / discussions / review request / task request / pull request etc. (basically any GitHub notifications) related to GitHub id: {git_id}. When reviewing pull requests, follow the principle here: https://google.github.io/eng-practices/review/
+
+The web URL for the current GitHub task that you need to solve and reply is: {task_url}
+
+Local context:
 - Task ID: {task_id}
 - Repository: {repo}
 - Type: {kind}
-- Subject type: {subject_type}
-- Reason: {reason}
-- Title: {title}
-- Primary URL: {display_url}
-- API URL: {api_url}
-- Latest comment API URL: {latest_comment}
 - Workspace: {workspace}
-- Local snapshot directory: {snapshot_dir}
+- Snapshot directory: {snapshot_dir}
 - Task artifacts directory: {task_dir}
 
-Rules
-- First inspect the local snapshot files in `{snapshot_dir}`. Only call `gh` when you need fresh data or to publish the final result.
-- Address the task fully: reply, review, comment, or prepare code changes as needed.
-- If you post a public GitHub reply, review, or comment, include this exact disclosure sentence once: {disclosure}
-- Before posting anything public, inspect `issue-comments.json` and `pr-reviews.json` when present. If the active account already posted a message or review that still covers the current thread state or current PR head, do not post another one; return `GITHUBER_RESULT: status=skipped ...`.
-- If you wrap a mutating `gh` call in shell, never use the variable name `status` in zsh; use `rc` instead.
-- If a mutating `gh` command appears to fail after the write step, do a fresh GitHub readback before retrying. Treat shell-wrapper errors after a successful write as possible partial success, not proof that nothing was posted.
-- If code changes are required, create a branch named `githuber/{slug}`, commit cleanly, push it, and open a draft PR that references the original thread.
-- Do not merge PRs, delete branches, change repository settings, or do admin/billing/security work.
-- Avoid duplicate replies if the thread is already fully addressed.
-- The `gh` binary in this task is brokered by githuber and may serialize requests. Batch your GitHub writes and avoid redundant reads.
+Do not stop unless
+0. Read carefully about the request and gather all the needed context
+1. Task / Request in the GitHub message has been done completely
+2. Message has been properly replied on GitHub
 
-Preferred public message format
-- Start with a hidden state marker:
-  `<!-- githuber:state handled_for={updated_at} thread={thread_key} -->`
-- Then use this structure unless the repo already has a stronger established format:
-  `## GitHuber Update`
-  `**Verdict: <ALIGNED|ACTION NEEDED|IN PROGRESS|BLOCKED|DONE>** — <one-sentence conclusion>`
-  `<one short paragraph or a few short lines with the reasoning / next action>`
-  `---`
-  `{disclosure}`
-- Keep it concise. If no action is required, say that plainly.
-- For PR reviews, use the same structure inside the review body when practical and keep the verdict specific to the current head commit.
+If you find a task / message has already been replied by {git_id}, then you can skip it. Do not send out duplicated replies.
 
-Helpful guidance
-{task_hints}
+Read the local snapshot files first. Only call `gh` when you need fresh data or to publish the final result.
+
+If you post a public GitHub reply, review, or comment, include this exact disclosure sentence once: {disclosure}
 
 When you are done, finish with exactly one line in this format:
 GITHUBER_RESULT: status=<handled|skipped|failed> summary=<one-line summary>",
-        login = request.identity.login,
-        host = request.identity.host,
+        git_id = request.identity.login,
         task_id = request.task_id,
         repo = task.repo,
         kind = task.kind.as_str(),
-        subject_type = task.subject_type,
-        reason = task.reason,
-        title = task.title,
-        display_url = task.display_url(),
-        api_url = task.api_url,
-        latest_comment = task.latest_comment_api_url,
+        task_url = task.task_url(),
         workspace = request.workspace_dir.display(),
         snapshot_dir = request.snapshot_dir.display(),
         task_dir = request.task_dir.display(),
         disclosure = request.disclosure_text,
-        slug = task.slug(),
-        updated_at = task.updated_at,
-        thread_key = task.thread_key,
-        task_hints = task_hints,
     )
 }
 

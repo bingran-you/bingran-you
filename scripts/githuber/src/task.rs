@@ -46,7 +46,6 @@ pub struct TaskCandidate {
     pub repo: String,
     pub thread_key: String,
     pub kind: TaskKind,
-    pub subject_type: String,
     pub reason: String,
     pub title: String,
     pub web_url: String,
@@ -78,29 +77,11 @@ impl TaskCandidate {
         }
     }
 
-    pub fn slug(&self) -> String {
-        let shortened = self
-            .title
-            .chars()
-            .map(|character| {
-                if character.is_ascii_alphanumeric() {
-                    character.to_ascii_lowercase()
-                } else {
-                    '-'
-                }
-            })
-            .collect::<String>();
-        let collapsed = shortened
-            .split('-')
-            .filter(|segment| !segment.is_empty())
-            .take(8)
-            .collect::<Vec<_>>()
-            .join("-");
-        if collapsed.is_empty() {
-            format!("task-{}", &self.stable_id()[..8])
-        } else {
-            format!("{}-{}", collapsed, &self.stable_id()[..8])
+    pub fn task_url(&self) -> String {
+        if let Some(comment_url) = self.latest_comment_web_url() {
+            return comment_url;
         }
+        self.display_url().to_string()
     }
 
     pub fn pr_number(&self) -> Option<u64> {
@@ -127,6 +108,24 @@ impl TaskCandidate {
             if let Some(number) = extract_issue_number(candidate) {
                 return Some(number);
             }
+        }
+        None
+    }
+
+    fn latest_comment_web_url(&self) -> Option<String> {
+        if self.latest_comment_api_url.is_empty() {
+            return None;
+        }
+        if let Some(comment_id) = extract_issue_comment_id(&self.latest_comment_api_url) {
+            let base = if !self.web_url.is_empty() {
+                self.web_url.clone()
+            } else if let Some(derived) = derive_web_url("github.com", &self.repo, &self.thread_key)
+            {
+                derived
+            } else {
+                return None;
+            };
+            return Some(format!("{base}#issuecomment-{comment_id}"));
         }
         None
     }
@@ -166,7 +165,6 @@ impl TaskCandidate {
             repo,
             thread_key,
             kind: kind.clone(),
-            subject_type: subject_type_for(&kind),
             reason: reason.clone(),
             title,
             web_url: web_url.unwrap_or_default(),
@@ -234,6 +232,7 @@ impl ThreadRecord {
 }
 
 pub fn build_notification_candidate(
+    host: &str,
     repo: String,
     subject_type: String,
     reason: String,
@@ -257,6 +256,7 @@ pub fn build_notification_candidate(
     } else {
         format!("notification::{repo}::{subject_type}::{title}")
     };
+    let web_url = derive_web_url(host, &repo, &thread_key).unwrap_or_default();
 
     Some(TaskCandidate {
         source: "notifications".to_string(),
@@ -264,10 +264,9 @@ pub fn build_notification_candidate(
         thread_key,
         priority: priority_for(&kind, &reason),
         kind,
-        subject_type,
         reason,
         title,
-        web_url: String::new(),
+        web_url,
         api_url,
         latest_comment_api_url,
         updated_at,
@@ -286,7 +285,6 @@ pub fn build_review_request_candidate(
         repo: repo.clone(),
         thread_key: format!("/repos/{repo}/pulls/{number}"),
         kind: TaskKind::ReviewRequest,
-        subject_type: "PullRequest".to_string(),
         reason: "review_requested".to_string(),
         title,
         web_url,
@@ -316,11 +314,6 @@ pub fn build_assigned_candidate(
         repo: repo.clone(),
         thread_key: format!("/repos/{repo}/{api_suffix}/{number}"),
         kind: kind.clone(),
-        subject_type: if is_pull_request {
-            "PullRequest".to_string()
-        } else {
-            "Issue".to_string()
-        },
         reason: "assigned".to_string(),
         title,
         web_url,
@@ -424,13 +417,18 @@ fn derive_web_url(host: &str, repo: &str, thread_key: &str) -> Option<String> {
     None
 }
 
-fn subject_type_for(kind: &TaskKind) -> String {
-    match kind {
-        TaskKind::ReviewRequest | TaskKind::AssignedPullRequest => "PullRequest".to_string(),
-        TaskKind::AssignedIssue | TaskKind::Mention | TaskKind::Comment => "Issue".to_string(),
-        TaskKind::Discussion => "Discussion".to_string(),
-        TaskKind::Other => "Other".to_string(),
+fn extract_issue_comment_id(value: &str) -> Option<u64> {
+    if let Some(position) = value.find("/issues/comments/") {
+        let suffix = &value[position + "/issues/comments/".len()..];
+        let digits = suffix
+            .chars()
+            .take_while(|character| character.is_ascii_digit())
+            .collect::<String>();
+        if let Ok(number) = digits.parse::<u64>() {
+            return Some(number);
+        }
     }
+    None
 }
 
 #[cfg(test)]
@@ -444,6 +442,7 @@ mod tests {
     #[test]
     fn notification_priority_prefers_review_requests() {
         let candidate = build_notification_candidate(
+            "github.com",
             "owner/repo".to_string(),
             "PullRequest".to_string(),
             "review_requested".to_string(),
@@ -475,6 +474,7 @@ mod tests {
     #[test]
     fn mention_notifications_build_candidates_for_prs() {
         let candidate = build_notification_candidate(
+            "github.com",
             "agent-team-foundation/first-tree".to_string(),
             "PullRequest".to_string(),
             "mention".to_string(),
@@ -493,6 +493,10 @@ mod tests {
         assert_eq!(
             candidate.latest_comment_api_url,
             "https://api.github.com/repos/agent-team-foundation/first-tree/issues/comments/4247540715"
+        );
+        assert_eq!(
+            candidate.task_url(),
+            "https://github.com/agent-team-foundation/first-tree/pull/98#issuecomment-4247540715"
         );
     }
 
@@ -547,5 +551,22 @@ mod tests {
             "https://api.github.com/repos/owner/repo/pulls/12"
         );
         assert_eq!(candidate.web_url, "https://github.com/owner/repo/pull/12");
+    }
+
+    #[test]
+    fn task_url_falls_back_to_issue_or_pr_url_when_no_comment_anchor_exists() {
+        let candidate = build_notification_candidate(
+            "github.com",
+            "owner/repo".to_string(),
+            "Issue".to_string(),
+            "comment".to_string(),
+            "Handle me".to_string(),
+            "https://api.github.com/repos/owner/repo/issues/7".to_string(),
+            String::new(),
+            "2026-01-01T00:00:00Z".to_string(),
+        )
+        .expect("candidate should exist");
+
+        assert_eq!(candidate.task_url(), "https://github.com/owner/repo/issues/7");
     }
 }

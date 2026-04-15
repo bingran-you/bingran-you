@@ -171,6 +171,11 @@ impl RunnerSpec {
 
 fn build_prompt(request: &RunnerRequest) -> String {
     let task = &request.task;
+    let working_repo_line = if task.workspace_repo() != task.repo {
+        format!("- Working repository: {}\n", task.workspace_repo())
+    } else {
+        String::new()
+    };
     format!(
         "This is GitHuber service and you are a team of agents representing {git_id}.
 
@@ -184,7 +189,7 @@ The web URL for the current GitHub task that you need to solve and reply is: {ta
 Local context:
 - Task ID: {task_id}
 - Repository: {repo}
-- Type: {kind}
+{working_repo_line}- Type: {kind}
 - Workspace: {workspace}
 - Snapshot directory: {snapshot_dir}
 - Task artifacts directory: {task_dir}
@@ -205,6 +210,7 @@ GITHUBER_RESULT: status=<handled|skipped|failed> summary=<one-line summary>",
         git_id = request.identity.login,
         task_id = request.task_id,
         repo = task.repo,
+        working_repo_line = working_repo_line,
         kind = task.kind.as_str(),
         task_url = task.task_url(),
         workspace = request.workspace_dir.display(),

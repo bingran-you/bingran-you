@@ -33,15 +33,16 @@ impl WorkspaceManager {
     }
 
     pub fn prepare(&self, task: &TaskCandidate) -> AppResult<WorkspaceLease> {
-        if task.repo.is_empty() {
+        let workspace_repo = task.workspace_repo();
+        if workspace_repo.is_empty() {
             return Err(app_error("task does not include a repository"));
         }
         ensure_dir(&self.repos_dir)?;
         ensure_dir(&self.workspaces_dir)?;
 
-        let repo_slug = sanitize_filename(&task.repo.replace('/', "__"));
+        let repo_slug = sanitize_filename(&workspace_repo.replace('/', "__"));
         let mirror_dir = self.repos_dir.join(format!("{repo_slug}.git"));
-        let repo_url = format!("https://{}/{repo}.git", self.host, repo = task.repo);
+        let repo_url = format!("https://{}/{repo}.git", self.host, repo = workspace_repo);
         self.ensure_mirror(&mirror_dir, &repo_url)?;
         let checkout_ref = self.prepare_ref(&mirror_dir, task)?;
 

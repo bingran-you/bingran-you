@@ -16,7 +16,7 @@ cargo run --manifest-path scripts/githuber/Cargo.toml -- stop
 
 - Reuses the active `gh` identity for the configured host.
 - Refuses to start if another `githuber` instance is already running for the same `host + login + profile`.
-- Uses unread notifications as the hot poll path and only backfills with GitHub search on a slower reconcile interval.
+- Sweeps actionable notification threads from the last 24 hours on every poll, even if they are already marked read, and only uses GitHub search as a slower backfill path.
 - Creates one isolated `git worktree` per scheduled task.
 - Prepares a local snapshot for each task before the agent starts so the agent can inspect GitHub context without re-fetching it.
 - Launches `codex` and/or `claude` in round-robin order with dangerous local permissions.

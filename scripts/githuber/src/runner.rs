@@ -216,10 +216,23 @@ Rules
 - First inspect the local snapshot files in `{snapshot_dir}`. Only call `gh` when you need fresh data or to publish the final result.
 - Address the task fully: reply, review, comment, or prepare code changes as needed.
 - If you post a public GitHub reply, review, or comment, include this exact disclosure sentence once: {disclosure}
+- Before posting anything public, inspect `issue-comments.json` and `pr-reviews.json` when present. If the active account already posted a message or review that still covers the current thread state or current PR head, do not post another one; return `GITHUBER_RESULT: status=skipped ...`.
 - If code changes are required, create a branch named `githuber/{slug}`, commit cleanly, push it, and open a draft PR that references the original thread.
 - Do not merge PRs, delete branches, change repository settings, or do admin/billing/security work.
 - Avoid duplicate replies if the thread is already fully addressed.
 - The `gh` binary in this task is brokered by githuber and may serialize requests. Batch your GitHub writes and avoid redundant reads.
+
+Preferred public message format
+- Start with a hidden state marker:
+  `<!-- githuber:state handled_for={updated_at} thread={thread_key} -->`
+- Then use this structure unless the repo already has a stronger established format:
+  `## GitHuber Update`
+  `**Verdict: <ALIGNED|ACTION NEEDED|IN PROGRESS|BLOCKED|DONE>** — <one-sentence conclusion>`
+  `<one short paragraph or a few short lines with the reasoning / next action>`
+  `---`
+  `{disclosure}`
+- Keep it concise. If no action is required, say that plainly.
+- For PR reviews, use the same structure inside the review body when practical and keep the verdict specific to the current head commit.
 
 Helpful guidance
 {task_hints}
@@ -242,6 +255,8 @@ GITHUBER_RESULT: status=<handled|skipped|failed> summary=<one-line summary>",
         task_dir = request.task_dir.display(),
         disclosure = request.disclosure_text,
         slug = task.slug(),
+        updated_at = task.updated_at,
+        thread_key = task.thread_key,
         task_hints = task_hints,
     )
 }

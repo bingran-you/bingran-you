@@ -77,6 +77,7 @@ impl GhClient {
                 continue;
             }
             if let Some(task) = build_notification_candidate(
+                &self.host,
                 fields[0].clone(),
                 fields[1].clone(),
                 fields[2].clone(),
@@ -303,7 +304,7 @@ impl GhClient {
         notes.push(format!("thread_key={}", task.thread_key));
         notes.push(format!("kind={}", task.kind.as_str()));
         notes.push(format!("title={}", task.title));
-        notes.push(format!("url={}", task.display_url()));
+        notes.push(format!("url={}", task.task_url()));
         notes.push(format!("api_url={}", task.api_url));
         notes.push(format!(
             "latest_comment_api_url={}",
@@ -694,7 +695,7 @@ URL: {url}\n",
         kind = task.kind.as_str(),
         repo = task.repo,
         title = task.title,
-        url = task.display_url(),
+        url = task.task_url(),
     )
 }
 

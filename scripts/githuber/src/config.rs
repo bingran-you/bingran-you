@@ -123,6 +123,7 @@ pub struct Config {
     pub max_parallel: usize,
     pub poll_interval_secs: u64,
     pub task_limit: usize,
+    pub notification_lookback_secs: u64,
     pub search_reconcile_interval_secs: u64,
     pub gh_write_cooldown_ms: u64,
     pub workspace_ttl_secs: u64,
@@ -174,6 +175,8 @@ impl Config {
         let mut max_parallel = parse_usize_env("GITHUBER_MAX_PARALLEL").unwrap_or(20);
         let mut poll_interval_secs = parse_u64_env("GITHUBER_POLL_INTERVAL_SECS").unwrap_or(600);
         let mut task_limit = parse_usize_env("GITHUBER_TASK_LIMIT").unwrap_or(100);
+        let mut notification_lookback_secs =
+            parse_u64_env("GITHUBER_NOTIFICATION_LOOKBACK_SECS").unwrap_or(60 * 60 * 24);
         let mut search_reconcile_interval_secs =
             parse_u64_env("GITHUBER_SEARCH_RECONCILE_INTERVAL_SECS").unwrap_or(60 * 60 * 6);
         let mut gh_write_cooldown_ms =
@@ -212,6 +215,9 @@ impl Config {
                 "--max-parallel" => max_parallel = parse_usize(&next_value(&mut index)?)?,
                 "--poll-interval-secs" => poll_interval_secs = parse_u64(&next_value(&mut index)?)?,
                 "--task-limit" => task_limit = parse_usize(&next_value(&mut index)?)?,
+                "--notification-lookback-secs" => {
+                    notification_lookback_secs = parse_u64(&next_value(&mut index)?)?
+                }
                 "--search-reconcile-interval-secs" => {
                     search_reconcile_interval_secs = parse_u64(&next_value(&mut index)?)?
                 }
@@ -238,6 +244,11 @@ impl Config {
         }
         if task_limit == 0 {
             return Err(app_error("--task-limit must be greater than zero"));
+        }
+        if notification_lookback_secs == 0 {
+            return Err(app_error(
+                "--notification-lookback-secs must be greater than zero",
+            ));
         }
         if search_reconcile_interval_secs == 0 {
             return Err(app_error(
@@ -266,6 +277,7 @@ impl Config {
             max_parallel,
             poll_interval_secs,
             task_limit,
+            notification_lookback_secs,
             search_reconcile_interval_secs,
             gh_write_cooldown_ms,
             workspace_ttl_secs,
@@ -287,6 +299,7 @@ impl Config {
             max_parallel: 20,
             poll_interval_secs: 600,
             task_limit: 100,
+            notification_lookback_secs: 60 * 60 * 24,
             search_reconcile_interval_secs: 60 * 60 * 6,
             gh_write_cooldown_ms: 1_250,
             workspace_ttl_secs: 60 * 60 * 24 * 3,
@@ -324,6 +337,8 @@ FLAGS
   --max-parallel <n>             Max concurrent tasks (default: 20)
   --poll-interval-secs <n>       Poll cadence in seconds (default: 600)
   --task-limit <n>               Search result limit per source (default: 100)
+  --notification-lookback-secs <n>
+                                 Recent-thread window to reconsider every poll (default: 86400)
   --search-reconcile-interval-secs <n>
                                  How often to backfill with GitHub search (default: 21600)
   --gh-write-cooldown-ms <n>     Minimum pause between mutating gh commands (default: 1250)
@@ -342,6 +357,7 @@ ENV
   GITHUBER_MAX_PARALLEL
   GITHUBER_POLL_INTERVAL_SECS
   GITHUBER_TASK_LIMIT
+  GITHUBER_NOTIFICATION_LOOKBACK_SECS
   GITHUBER_SEARCH_RECONCILE_INTERVAL_SECS
   GITHUBER_GH_WRITE_COOLDOWN_MS
   GITHUBER_WORKSPACE_TTL_SECS
@@ -424,6 +440,8 @@ mod tests {
             "4".to_string(),
             "--search-reconcile-interval-secs".to_string(),
             "3600".to_string(),
+            "--notification-lookback-secs".to_string(),
+            "7200".to_string(),
             "--gh-write-cooldown-ms".to_string(),
             "1500".to_string(),
             "--dry-run".to_string(),
@@ -434,6 +452,7 @@ mod tests {
         assert_eq!(config.runners, vec![RunnerKind::Claude, RunnerKind::Codex]);
         assert_eq!(config.max_parallel, 4);
         assert_eq!(config.search_reconcile_interval_secs, 3600);
+        assert_eq!(config.notification_lookback_secs, 7200);
         assert_eq!(config.gh_write_cooldown_ms, 1500);
         assert!(config.dry_run);
     }

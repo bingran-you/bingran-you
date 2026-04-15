@@ -260,3 +260,135 @@ pub fn read_lines(path: &Path) -> AppResult<Vec<String>> {
     };
     Ok(contents.lines().map(|line| line.to_string()).collect())
 }
+
+pub fn parse_github_timestamp_epoch(value: &str) -> Option<u64> {
+    if value.len() != 20 {
+        return None;
+    }
+    if !matches!(
+        (
+            value.as_bytes().get(4),
+            value.as_bytes().get(7),
+            value.as_bytes().get(10),
+            value.as_bytes().get(13),
+            value.as_bytes().get(16),
+            value.as_bytes().get(19),
+        ),
+        (
+            Some(b'-'),
+            Some(b'-'),
+            Some(b'T'),
+            Some(b':'),
+            Some(b':'),
+            Some(b'Z')
+        )
+    ) {
+        return None;
+    }
+
+    let year = parse_i32_slice(value, 0, 4)?;
+    let month = parse_u32_slice(value, 5, 7)?;
+    let day = parse_u32_slice(value, 8, 10)?;
+    let hour = parse_u32_slice(value, 11, 13)?;
+    let minute = parse_u32_slice(value, 14, 16)?;
+    let second = parse_u32_slice(value, 17, 19)?;
+
+    if !(1..=12).contains(&month) {
+        return None;
+    }
+    if !(1..=days_in_month(year, month)).contains(&day) {
+        return None;
+    }
+    if hour > 23 || minute > 59 || second > 59 {
+        return None;
+    }
+
+    let days = days_from_civil(year, month, day);
+    if days < 0 {
+        return None;
+    }
+
+    Some(
+        (days as u64)
+            .saturating_mul(86_400)
+            .saturating_add(u64::from(hour) * 3_600)
+            .saturating_add(u64::from(minute) * 60)
+            .saturating_add(u64::from(second)),
+    )
+}
+
+pub fn is_recent_github_timestamp(value: &str, now_epoch: u64, lookback_secs: u64) -> bool {
+    parse_github_timestamp_epoch(value)
+        .map(|timestamp| timestamp >= now_epoch.saturating_sub(lookback_secs))
+        .unwrap_or(false)
+}
+
+fn parse_i32_slice(value: &str, start: usize, end: usize) -> Option<i32> {
+    value.get(start..end)?.parse::<i32>().ok()
+}
+
+fn parse_u32_slice(value: &str, start: usize, end: usize) -> Option<u32> {
+    value.get(start..end)?.parse::<u32>().ok()
+}
+
+fn days_in_month(year: i32, month: u32) -> u32 {
+    match month {
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
+        4 | 6 | 9 | 11 => 30,
+        2 if is_leap_year(year) => 29,
+        2 => 28,
+        _ => 0,
+    }
+}
+
+fn is_leap_year(year: i32) -> bool {
+    (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
+}
+
+fn days_from_civil(year: i32, month: u32, day: u32) -> i64 {
+    let year = i64::from(year) - i64::from(month <= 2);
+    let era = if year >= 0 { year } else { year - 399 } / 400;
+    let year_of_era = year - era * 400;
+    let month = i64::from(month);
+    let day = i64::from(day);
+    let day_of_year = (153 * (month + if month > 2 { -3 } else { 9 }) + 2) / 5 + day - 1;
+    let day_of_era = year_of_era * 365 + year_of_era / 4 - year_of_era / 100 + day_of_year;
+    era * 146_097 + day_of_era - 719_468
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{is_recent_github_timestamp, parse_github_timestamp_epoch};
+
+    #[test]
+    fn parses_github_timestamps_to_epoch() {
+        assert_eq!(
+            parse_github_timestamp_epoch("1970-01-01T00:00:00Z"),
+            Some(0)
+        );
+        assert_eq!(
+            parse_github_timestamp_epoch("1970-01-01T00:15:50Z"),
+            Some(950)
+        );
+    }
+
+    #[test]
+    fn rejects_invalid_github_timestamps() {
+        assert_eq!(parse_github_timestamp_epoch("2026-13-01T00:00:00Z"), None);
+        assert_eq!(parse_github_timestamp_epoch("not-a-timestamp"), None);
+    }
+
+    #[test]
+    fn checks_recent_timestamp_window() {
+        assert!(is_recent_github_timestamp(
+            "1970-01-01T00:15:50Z",
+            1_000,
+            100
+        ));
+        assert!(!is_recent_github_timestamp(
+            "1970-01-01T00:14:59Z",
+            1_000,
+            100
+        ));
+    }
+}

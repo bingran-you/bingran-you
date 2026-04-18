@@ -10,6 +10,6 @@
 	path = trusted-external-repos/oh-my-codex
 	url = https://github.com/bingran-you/oh-my-codex.git
 	branch = main
-[submodule "workspace/bingran-you-context-tree"]
-	path = workspace/bingran-you-context-tree
-	url = https://github.com/bingran-you/bingran-you-context-tree.git
+[submodule "bingran-you-private"]
+	path = bingran-you-private
+	url = https://github.com/bingran-you/bingran-you-private.git

@@ -1,3 +1,5 @@
 .omx/
 scripts/githuber/target/
 /.claude/worktrees
+.DS_Store
+/workspace

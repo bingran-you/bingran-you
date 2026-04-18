@@ -2,4 +2,5 @@
 scripts/githuber/target/
 /.claude/worktrees
 .DS_Store
-/workspace
+/workspace/*
+!/workspace/bingran-you-context-tree

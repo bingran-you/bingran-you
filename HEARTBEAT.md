@@ -1,7 +1,13 @@
-# HEARTBEAT.md Template
+# HEARTBEAT.md
 
-```markdown
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
+<!--
+  Keep this file empty (or comments only) to skip heartbeat API calls.
+  Add lightweight checklist items below when you want J.A.R.V.I.S. to
+  check something on every heartbeat poll. Every line here costs tokens
+  on every tick — stay terse.
 
-# Add tasks below when you want the agent to check something periodically.
-```
+  Example:
+    - Check inbox for anything urgent from advisors / collaborators
+    - Calendar events in next 2h?
+    - Any new @mentions on X?
+-->

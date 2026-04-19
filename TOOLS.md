@@ -8,8 +8,8 @@ Fill in as you learn. Delete sections that don't apply.
 
 ## AI Harness
 
-- **Primary stack:** Codex + GPT-5.4 (prompt-cache-heavy workflows)
-- **Secondary:** Claude Code (this harness), Anthropic SDK for tooling
+- **Primary stack:** Codex + GPT-5.4 **and** Claude Code + Opus 4.7 (both prompt-cache-heavy; pick per task — Codex for long-horizon autonomous runs, Claude Code for interactive pair work)
+- **Secondary:** Anthropic SDK and OpenAI SDK for custom tooling
 - **Skills library:** `trusted-external-repos/skills/` (submodule)
 - **Harness configs:** `trusted-external-repos/oh-my-codex/`, `trusted-external-repos/gstack/`
 

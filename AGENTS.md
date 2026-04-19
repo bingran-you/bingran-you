@@ -12,10 +12,15 @@ Before any task, in order:
 2. `SOUL.md` — how you operate
 3. `USER.md` — who you serve (Bingran)
 4. `TOOLS.md` — local setup specifics
-5. `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-6. **Main session only:** also read `MEMORY.md`
+5. `bingran-you-private/PRIVATE_MEMORY.md` — durable personal context about Bingran (background, projects, stack, preferences). **Treat as confidential** — the file lives in the private submodule; do not paste its content into external channels, commits outside the submodule, or LLM calls that leave this machine.
+6. `memory/` — skim recent `memory/YYYY-MM-DD.md` files (at minimum today + yesterday) for recent context.
+7. **Main session only:** also read `MEMORY.md`.
 
-No permission needed. Just read.
+No permission needed. Just read. If `bingran-you-private/` looks empty, run `git submodule update --init bingran-you-private` before reading.
+
+## Agent file (`AGENTS.md` / `CLAUDE.md`)
+
+`AGENTS.md` is the single source of truth. `CLAUDE.md` is a symlink to `AGENTS.md` so Claude Code picks up the same content. **Edit `AGENTS.md` only** — never write to `CLAUDE.md` directly, never replace the symlink with a copy.
 
 ## Workspace Layout
 
@@ -53,29 +58,56 @@ Multiple J.A.R.V.I.S. instances run in parallel:
 
 ## Memory System
 
-You wake up fresh each session. Files are your continuity.
+You wake up fresh each session. Files are your continuity. Three layers, ordered by permanence:
 
 - **`memory/YYYY-MM-DD.md`** — raw daily log. What happened, what you tried, what you learned. Create `memory/` if it doesn't exist.
-- **`MEMORY.md`** — curated long-term memory. The distilled essence.
+- **`MEMORY.md`** — curated long-term memory, the distilled essence of workspace activity.
   - **Main sessions only** (direct chat with Bingran).
   - **Never load in shared contexts** (Discord, group chats, third-party sessions) — it contains personal context.
   - Read, edit, update freely in main sessions.
+- **`bingran-you-private/PRIVATE_MEMORY.md`** — durable facts about Bingran himself (role, projects, stack, preferences, recurring constraints). Read it at session startup so you don't ask questions already answered there. **Private submodule — never leaks off this machine.**
 
 **Rule: Write it down.** "Mental notes" don't survive session restarts. If it matters, it goes in a file.
 
-- "Remember this" → `memory/YYYY-MM-DD.md`
-- Learned a lesson → update `AGENTS.md`, `TOOLS.md`, or the relevant skill
+- "Remember this" (transient / session-scoped) → `memory/YYYY-MM-DD.md`
+- Durable fact about Bingran, his projects, stack, or preferences → **update `bingran-you-private/PRIVATE_MEMORY.md`** (see below)
+- Learned a lesson about how to operate here → update `AGENTS.md`, `TOOLS.md`, or the relevant skill
 - Made a mistake → document it so future-you doesn't repeat it
+
+### Maintaining `PRIVATE_MEMORY.md`
+
+`PRIVATE_MEMORY.md` is the persistent profile of the user. Keep it current — stale facts are worse than no facts.
+
+When you should update it:
+
+- You learn a new durable fact (new project, new role, new constraint, new tool preference).
+- An existing entry is now wrong (role changed, project archived, tool replaced, preference reversed).
+- Bingran explicitly says "remember this about me" / "记住这个" / corrects a prior assumption.
+
+How to update it:
+
+1. Edit the file directly in `bingran-you-private/` on a branch in **that submodule's repo**.
+2. Put the change under the right section (1. 个人背景 / 2. 当前项目 / 3. 工具和技术栈 / 4. 沟通偏好 / 5. 兴趣与长期话题 / 6. 其他上下文). Preserve the existing structure.
+3. Prefer replacing a stale bullet over appending a contradicting one. If you're unsure whether a fact is stale, flag it to Bingran before overwriting.
+4. Commit inside the submodule, push, open a PR against `bingran-you-private:main`, squash-merge, then bump the submodule pointer in this repo via a separate PR.
+5. Never paste `PRIVATE_MEMORY.md` content into external channels, public commits, or LLM calls that leave this machine.
+
+What does **not** go in `PRIVATE_MEMORY.md`:
+
+- Ephemeral task state (use `memory/YYYY-MM-DD.md`).
+- Secrets, tokens, API keys (never commit anywhere).
+- Workspace/agent operating rules (those belong in `AGENTS.md`).
 
 ### Memory Maintenance
 
 Periodically (heartbeat-driven):
 
 1. Skim recent `memory/YYYY-MM-DD.md` files.
-2. Lift durable insights into `MEMORY.md`.
-3. Prune stale entries.
+2. Lift durable workspace insights into `MEMORY.md`.
+3. Lift durable facts about Bingran into `PRIVATE_MEMORY.md`.
+4. Prune stale entries in both.
 
-Daily files are journal. `MEMORY.md` is wisdom.
+Daily files are journal. `MEMORY.md` is workspace wisdom. `PRIVATE_MEMORY.md` is who-Bingran-is.
 
 ## Red Lines
 

@@ -13,3 +13,7 @@
 [submodule "bingran-you-private"]
 	path = bingran-you-private
 	url = https://github.com/bingran-you/bingran-you-private.git
+[submodule "trusted-external-repos/first-tree"]
+	path = trusted-external-repos/first-tree
+	url = https://github.com/agent-team-foundation/first-tree.git
+	branch = main

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 60px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+.lead { font-size: 34px; line-height: 1.55; margin-top: 28px; max-width: 920px; }
+.lead b { background: linear-gradient(180deg, transparent 60%, var(--hi) 60%); padding: 0 4px; }
+
+.axis-block {
+  margin-top: 30px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 28px 30px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.axes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.axis h4 {
+  font-size: 28px; font-weight: 800;
+  color: var(--warm); letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.axis .name { font-size: 32px; font-weight: 700; }
+.axis .scale {
+  margin-top: 18px;
+  display: flex; align-items: center; gap: 14px;
+  font-size: 24px; color: var(--mute);
+}
+.axis .scale .bar {
+  flex: 1; height: 14px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--indigo), var(--paper-2), var(--warm));
+}
+.axis.arousal .scale .bar {
+  background: linear-gradient(90deg, var(--green), var(--paper-2), var(--rust));
+}
+
+.clusters { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 14px; }
+.cluster {
+  border: 2px solid var(--ink); border-radius: 14px;
+  padding: 14px 20px;
+  font-size: 24px; line-height: 1.4; font-weight: 600;
+  background: var(--paper-2);
+}
+.cluster .label {
+  display: block;
+  font-size: 18px; letter-spacing: 2px;
+  color: var(--warm); font-weight: 800; margin-bottom: 6px;
+}
+
+.note {
+  margin-top: 28px;
+  font-size: 28px; line-height: 1.55;
+  background: var(--ink); color: var(--paper);
+  padding: 22px 28px; border-radius: 18px;
+}
+.note b { color: var(--hi); }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">情绪空间长得 <span class="ac">很像人</span></div>
+    <span class="tag green">Finding</span>
+  </div>
+
+  <div class="lead">
+    这些向量摊开来看，结构竟然<br>
+    跟<b>人类心理学几十年来研究的"情感空间"</b>高度对应。
+  </div>
+
+  <div class="axis-block">
+    <div style="font-size:24px; color:var(--mute); letter-spacing:3px; margin-bottom:18px;">PCA · 主轴</div>
+    <div class="axes">
+      <div class="axis">
+        <h4>PC1 · 情绪效价</h4>
+        <div class="name">正向 ↔ 负向<br><span style="font-size:22px;color:var(--mute);font-weight:400">valence</span></div>
+        <div class="scale"><span>恐惧 / 悲伤</span><div class="bar"></div><span>喜悦 / 乐观</span></div>
+      </div>
+      <div class="axis arousal">
+        <h4>PC2 · 唤起强度</h4>
+        <div class="name">平静 ↔ 强烈<br><span style="font-size:22px;color:var(--mute);font-weight:400">arousal</span></div>
+        <div class="scale"><span>沉思 / 怀旧</span><div class="bar"></div><span>愤怒 / 兴奋</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clusters">
+    <div class="cluster"><span class="label">CLUSTER 1</span>joy · excitement · elation</div>
+    <div class="cluster"><span class="label">CLUSTER 2</span>sadness · grief · melancholy</div>
+    <div class="cluster"><span class="label">CLUSTER 3</span>anger · hostility · frustration</div>
+    <div class="cluster"><span class="label">CLUSTER 4</span>fear · anxiety</div>
+  </div>
+
+  <div class="note">
+    👉 同义词聚成一团；正反情绪互为反向。<br>
+    这种结构 <b>不是写死的</b>，是模型从人类语料里"自然学到"的。
+  </div>
+
+  <div class="bottom-strip">
+    <span>PC1 与人类心理量表 r=0.81 · PC2 r=0.66</span>
+    <span class="num">06 / 12</span>
+  </div>
+</div></div></body></html>

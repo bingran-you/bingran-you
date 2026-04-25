@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 60px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+.lead { font-size: 34px; line-height: 1.55; margin-top: 32px; max-width: 920px; }
+.lead b { color: var(--warm); }
+
+.steps { margin-top: 36px; display: flex; flex-direction: column; gap: 22px; }
+.step {
+  display: flex; gap: 24px; align-items: flex-start;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 22px 26px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.step .num {
+  flex: 0 0 auto;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-weight: 800; font-size: 30px;
+}
+.step .body { flex: 1; }
+.step h4 { font-size: 30px; font-weight: 800; }
+.step p { font-size: 26px; margin-top: 6px; color: var(--mute); line-height: 1.55; }
+.step .keyword { color: var(--warm); font-weight: 700; }
+
+.figure {
+  margin-top: 30px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.figure img { width: 100%; display: block; border-radius: 8px; }
+.fig-cap { font-size: 22px; color: var(--mute); margin-top: 12px; line-height: 1.5; }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">他们怎么<span class="ac">"挖出"</span>情绪向量？</div>
+    <span class="tag">Method</span>
+  </div>
+
+  <div class="lead">
+    思路很朴素：让模型自己写充满某种情绪的故事，<br>
+    然后看它<b>大脑里哪里被点亮</b>，把这个方向取出来。
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <div class="body">
+        <h4>选 <span class="keyword">171 个</span> 情绪词</h4>
+        <p>happy / sad / desperate / proud / loving / calm…</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="body">
+        <h4>让 Claude 写 <span class="keyword">短故事</span></h4>
+        <p>"主角正经历某个情绪"——共 100 个主题 × 12 篇 / 情绪</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="body">
+        <h4>提取激活值，平均成<span class="keyword">一条向量</span></h4>
+        <p>这条向量 = 这个情绪概念在模型里的"方向"</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="body">
+        <h4>验证 + <span class="keyword">"减噪"</span></h4>
+        <p>投影掉不相关的成分，确保它代表的是情绪本身</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>这套方法不止能用在情绪上 — 它是通用的 probe 范式</span>
+    <span class="num">05 / 12</span>
+  </div>
+</div></div></body></html>

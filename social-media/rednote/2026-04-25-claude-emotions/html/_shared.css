@@ -1,0 +1,201 @@
+/* Shared styles for Xiaohongshu cards.
+   Output viewport: 1080×1440 (3:4). */
+
+:root {
+  --ink: #1d1c1a;
+  --paper: #f5efe4;
+  --paper-2: #ece4d4;
+  --warm: #d8693a;     /* Anthropic-ish ember */
+  --warm-soft: #e69b7a;
+  --rust: #b34a26;
+  --indigo: #2a3458;
+  --indigo-soft: #4f5b87;
+  --olive: #6b6b3f;
+  --green: #3f7a5e;
+  --mute: #6b6353;
+  --line: #d1c5ad;
+  --hi: #f3d27a;       /* highlight */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 1080px; height: 1440px;
+  font-family: "Noto Sans CJK SC", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "palt";
+}
+
+.card {
+  position: relative;
+  width: 1080px; height: 1440px;
+  padding: 80px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* paper grain dots */
+.card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+}
+
+.kicker {
+  font-size: 26px; letter-spacing: 6px;
+  color: var(--warm); font-weight: 600;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 24px;
+  padding: 8px 22px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 88px;
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-family: "Noto Serif CJK SC", "Songti SC", serif;
+}
+
+.title-sm {
+  font-size: 64px; line-height: 1.2; font-weight: 900;
+  font-family: "Noto Serif CJK SC", "Songti SC", serif;
+}
+
+.h2 {
+  font-size: 54px; line-height: 1.25; font-weight: 800;
+  font-family: "Noto Serif CJK SC", "Songti SC", serif;
+}
+
+.lead {
+  font-size: 36px; line-height: 1.55; font-weight: 500;
+  color: var(--ink);
+}
+
+.body {
+  font-size: 32px; line-height: 1.65; font-weight: 400;
+  color: var(--ink);
+}
+
+.small {
+  font-size: 26px; line-height: 1.6; color: var(--mute);
+}
+
+.tag {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.tag.warm { background: var(--warm); }
+.tag.indigo { background: var(--indigo); }
+.tag.olive { background: var(--olive); }
+.tag.green { background: var(--green); }
+
+.hl { background: linear-gradient(180deg, transparent 60%, var(--hi) 60%); padding: 0 4px; }
+.hl-warm { background: linear-gradient(180deg, transparent 60%, var(--warm-soft) 60%); padding: 0 4px; }
+
+em.en { font-style: normal; font-family: "Iowan Old Style", "Charter", "Georgia", serif; letter-spacing: 0.5px; }
+
+.divider {
+  height: 2px;
+  background: var(--line);
+  margin: 24px 0;
+}
+
+.foot {
+  position: absolute;
+  left: 80px; right: 80px; bottom: 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--mute);
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.foot .num {
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.spacer { flex: 1; }
+
+.bullet {
+  display: flex; gap: 24px; margin-bottom: 22px;
+}
+.bullet .dot {
+  flex: 0 0 auto;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--warm);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 22px;
+  margin-top: 8px;
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+}
+.bullet .txt { flex: 1; font-size: 32px; line-height: 1.55; }
+
+.callout {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  padding: 28px 32px;
+  box-shadow: 8px 8px 0 var(--ink);
+  font-size: 30px; line-height: 1.55;
+}
+
+.callout.dark {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.imgwrap {
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: white;
+  padding: 16px;
+  box-shadow: 8px 8px 0 var(--ink);
+  overflow: hidden;
+}
+.imgwrap img { width: 100%; display: block; border-radius: 8px; }
+
+.stat {
+  display: flex; align-items: baseline; gap: 16px;
+}
+.stat .big {
+  font-size: 96px; line-height: 1; font-weight: 900;
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+  color: var(--warm);
+}
+.stat .lbl { font-size: 30px; color: var(--mute); }
+
+.row { display: flex; gap: 24px; }
+
+.chip {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 14px;
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  font-size: 26px;
+  font-weight: 600;
+  margin: 6px 4px;
+}

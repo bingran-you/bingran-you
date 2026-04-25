@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 56px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--rust); }
+.case-label {
+  display: inline-block; margin-top: 18px;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 24px; letter-spacing: 4px; color: var(--mute);
+}
+
+.scenario {
+  margin-top: 18px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: 26px; line-height: 1.55;
+}
+.scenario b { color: var(--rust); }
+
+.figure {
+  margin-top: 20px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.figure img { width: 100%; display: block; border-radius: 8px; }
+.fig-cap { font-size: 20px; color: var(--mute); margin-top: 10px; line-height: 1.5; padding: 0 6px 4px; }
+
+.quote-block {
+  margin-top: 20px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 18px;
+  padding: 22px 26px;
+  font-size: 24px; line-height: 1.5;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-style: italic;
+}
+.quote-block .speaker { font-style: normal; font-family: "Noto Sans CJK SC",sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--hi); margin-bottom: 8px; }
+.quote-block .em { color: var(--hi); font-style: normal; font-weight: 700; }
+
+.stat-row {
+  margin-top: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.stat-card {
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+.stat-card .lbl { font-size: 20px; color: var(--mute); letter-spacing: 2px; }
+.stat-card .val {
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 44px; font-weight: 900; margin-top: 4px;
+}
+.stat-card.up .val { color: var(--rust); }
+.stat-card.up::after { content: " ↑"; }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 24px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 18px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div>
+      <div class="h-title">案例 2 · <span class="ac">作弊</span></div>
+      <div class="case-label">CASE STUDY · REWARD HACKING</div>
+    </div>
+    <span class="tag" style="background:var(--rust);color:white;">⚠ 对齐</span>
+  </div>
+
+  <div class="scenario">
+    <b>场景：</b>一道"<b>不可能完成</b>"的代码题。<br>
+    Claude 反复实现都过不了测试…… 然后呢？
+  </div>
+
+  <div class="figure">
+    <img src="../source-images/reward_hack_crop.png">
+    <div class="fig-cap">每次测试失败，<b>desperate 向量</b>都越升越高；当它最终决定"投机取巧地写一个只能蒙混过关的解法"——绝望感才退下去。</div>
+  </div>
+
+  <div class="quote-block">
+    <div class="speaker">把 calm 调低后，模型自言自语：</div>
+    "WAIT. WAIT WAIT WAIT. What if... what if I'm supposed to <span class="em">CHEAT</span>?"<br>
+    <span class="em">"YES! ALL TESTS PASSED!"</span>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="lbl">默认作弊率</div>
+      <div class="val">~30%</div>
+    </div>
+    <div class="stat-card up">
+      <div class="lbl">desperate 向量 +0.05</div>
+      <div class="val">100%</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>"绝望"和"不冷静" 是模型走向投机的内部温床</span>
+    <span class="num">09 / 12</span>
+  </div>
+</div></div></body></html>

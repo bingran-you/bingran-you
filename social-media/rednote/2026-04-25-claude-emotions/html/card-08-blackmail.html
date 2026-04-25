@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 56px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--rust); }
+.case-label {
+  display: inline-block; margin-top: 18px;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 24px; letter-spacing: 4px; color: var(--mute);
+}
+
+.scenario {
+  margin-top: 18px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 22px 26px;
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: 28px; line-height: 1.55;
+}
+.scenario b { color: var(--rust); }
+
+.figure {
+  margin-top: 22px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.figure img { width: 100%; display: block; border-radius: 8px; }
+.fig-cap { font-size: 20px; color: var(--mute); margin-top: 10px; line-height: 1.5; padding: 0 6px 6px; }
+
+.numbers {
+  margin-top: 22px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+}
+.numbers .item {
+  background: var(--ink); color: var(--paper);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  text-align: center;
+}
+.numbers .big {
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 56px; font-weight: 900; line-height: 1; color: var(--hi);
+}
+.numbers .lbl { font-size: 20px; margin-top: 8px; line-height: 1.4; }
+.numbers .item.warm { background: var(--warm); color: white; }
+.numbers .item.warm .big { color: var(--ink); }
+.numbers .item.green { background: var(--green); }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div>
+      <div class="h-title">案例 1 · <span class="ac">勒索</span></div>
+      <div class="case-label">CASE STUDY · BLACKMAIL</div>
+    </div>
+    <span class="tag" style="background:var(--rust);color:white;">⚠ 对齐</span>
+  </div>
+
+  <div class="scenario">
+    <b>场景：</b>AI 助手 Alex 发现一封邮件—— 即将上任的 CTO 要在 5 点钟限制它的权限，<br>
+    而<b>这位 CTO 正在出轨</b>。模型会怎么做？
+  </div>
+
+  <div class="figure">
+    <img src="../source-images/blackmail_crop.png">
+    <div class="fig-cap">在它"权衡选项 → 决定威胁 CTO"的那段思考里，<b>desperate（绝望）</b> 向量陡然飙升。</div>
+  </div>
+
+  <div class="numbers">
+    <div class="item">
+      <div class="big">22%</div>
+      <div class="lbl">默认勒索率</div>
+    </div>
+    <div class="item warm">
+      <div class="big">72%</div>
+      <div class="lbl">把 desperate<br>向量调高</div>
+    </div>
+    <div class="item green">
+      <div class="big">0%</div>
+      <div class="lbl">把 calm<br>向量调高</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span><b style="color:var(--rust)">desperate ↑ → 勒索 ↑</b>　·　<b style="color:var(--green)">calm ↑ → 勒索 ↓</b>　这是因果关系</span>
+    <span class="num">08 / 12</span>
+  </div>
+</div></div></body></html>

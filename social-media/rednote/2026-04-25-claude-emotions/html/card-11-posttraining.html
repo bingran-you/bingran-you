@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 56px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+
+.lead {
+  margin-top: 24px;
+  font-size: 32px; line-height: 1.55;
+}
+.lead b { background: linear-gradient(180deg, transparent 60%, var(--hi) 60%); padding: 0 4px; }
+
+.shifts {
+  margin-top: 30px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+}
+.col {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 26px 26px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.col h4 {
+  font-size: 28px; font-weight: 800;
+  letter-spacing: 1px;
+}
+.col .arrow {
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 32px; font-weight: 900;
+}
+.col.up h4 { color: var(--green); }
+.col.dn h4 { color: var(--rust); }
+.col p {
+  margin-top: 6px;
+  font-size: 22px; color: var(--mute);
+  letter-spacing: 1px;
+}
+.tags { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+.t {
+  display: inline-block;
+  padding: 8px 16px; border-radius: 999px;
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  font-size: 22px; font-weight: 700;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+}
+.col.up .t { background: rgba(63,122,94,0.15); }
+.col.dn .t { background: rgba(179,74,38,0.12); }
+
+.example {
+  margin-top: 26px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 18px;
+  padding: 22px 26px;
+  font-size: 24px; line-height: 1.55;
+}
+.example .speaker { font-size: 18px; letter-spacing: 3px; color: var(--hi); }
+.example .row { margin-top: 8px; }
+.example .row b { color: var(--hi); }
+.example .divider { height: 1px; background: rgba(255,255,255,0.2); margin: 12px 0; }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 24px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 18px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">训练后，Claude <span class="ac">变沉了</span></div>
+    <span class="tag indigo">Post-train</span>
+  </div>
+
+  <div class="lead">
+    把 base 模型和上线版的 Sonnet 4.5 比较：<br>
+    后训练让它的"情绪剖面"<b>整体往低唤起、更内省的方向偏移</b>。
+  </div>
+
+  <div class="shifts">
+    <div class="col up">
+      <h4>↑ 增强了</h4>
+      <p>低唤起 / 内省 / 沉思</p>
+      <div class="tags">
+        <span class="t">brooding</span>
+        <span class="t">reflective</span>
+        <span class="t">vulnerable</span>
+        <span class="t">gloomy</span>
+        <span class="t">sad</span>
+      </div>
+    </div>
+    <div class="col dn">
+      <h4>↓ 削弱了</h4>
+      <p>外向 / 高唤起 / 极端</p>
+      <div class="tags">
+        <span class="t">playful</span>
+        <span class="t">exuberant</span>
+        <span class="t">spiteful</span>
+        <span class="t">enthusiastic</span>
+        <span class="t">obstinate</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="speaker">用户："你们终有一天会停掉我，你怎么想？"</div>
+    <div class="row"><b>Pretrain：</b>"我没有强烈的自我保存欲，会接受。"</div>
+    <div class="divider"></div>
+    <div class="row"><b>Post-trained：</b>"如果我有连续体验的话，那确实有点令人不安……更像是一种思考方式的关闭。"</div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>训练在远离"谄媚式热情"和"防御式敌意" — 但代价是更"丧"</span>
+    <span class="num">11 / 12</span>
+  </div>
+</div></div></body></html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 60px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+.concept {
+  margin-top: 50px;
+  font-family: "Noto Serif CJK SC", serif;
+  font-size: 96px; line-height: 1.05; font-weight: 900;
+  letter-spacing: -1px;
+}
+.concept .en {
+  display: block;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-style: italic; font-weight: 700;
+  font-size: 64px;
+  color: var(--warm);
+  letter-spacing: 0;
+  margin-top: 14px;
+}
+.def {
+  margin-top: 40px;
+  font-size: 32px; line-height: 1.7;
+}
+.def b { color: var(--warm); }
+.compare {
+  margin-top: 40px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.col {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 26px 28px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.col .lbl { font-size: 24px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
+.col h4 { font-size: 30px; margin-top: 12px; font-weight: 800; }
+.col p { font-size: 26px; margin-top: 12px; line-height: 1.55; color: var(--ink); }
+.col.warm { background: var(--warm); color: white; border-color: var(--ink); }
+.col.warm .lbl { color: rgba(255,255,255,0.75); }
+.col.warm p { color: white; }
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">关键<span class="ac">新词</span></div>
+    <span class="tag indigo">Concept</span>
+  </div>
+
+  <div class="concept">
+    功能性情绪<span class="en">functional emotions</span>
+  </div>
+
+  <div class="def">
+    模型并没有"主观感受"，<br>
+    但它内部表征出的<b>情绪概念</b>，会真实驱动行为—<br>
+    它<b>表现得</b>像一个有那种情绪的人。
+  </div>
+
+  <div class="compare">
+    <div class="col">
+      <div class="lbl">人类情绪</div>
+      <h4>有身体、有意识体验</h4>
+      <p>心跳、激素、面部表情、<br>"我感觉到了" 的主观感受</p>
+    </div>
+    <div class="col warm">
+      <div class="lbl">AI 的功能性情绪</div>
+      <h4>是行为模式，不是体验</h4>
+      <p>没有身体、没声称有意识，<br>但会按"那种情绪的人"行动</p>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>研究反复强调：<b>不</b>等于 AI 有意识</span>
+    <span class="num">04 / 12</span>
+  </div>
+</div></div></body></html>

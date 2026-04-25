@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 60px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+
+.callout-q {
+  margin-top: 30px;
+  font-size: 36px; line-height: 1.5;
+  background: var(--paper-2);
+  border: 2px dashed var(--ink);
+  padding: 22px 26px; border-radius: 18px;
+}
+
+.lead { font-size: 32px; line-height: 1.6; margin-top: 28px; }
+.lead b { color: var(--warm); }
+
+.layers {
+  margin-top: 32px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.layer {
+  display: flex; align-items: center; gap: 22px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.layer .badge {
+  flex: 0 0 auto;
+  padding: 8px 16px; border-radius: 10px;
+  font-size: 22px; font-weight: 700;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  letter-spacing: 1px;
+}
+.layer.early .badge { background: var(--paper-2); color: var(--ink); }
+.layer.mid .badge { background: var(--warm-soft); color: var(--ink); }
+.layer.late .badge { background: var(--warm); color: white; }
+.layer h4 { font-size: 28px; font-weight: 800; }
+.layer p { font-size: 24px; color: var(--mute); margin-top: 4px; }
+.layer .body { flex: 1; }
+
+.example {
+  margin-top: 26px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 18px;
+  padding: 22px 26px;
+  font-size: 26px; line-height: 1.5;
+}
+.example .label { font-size: 20px; letter-spacing: 3px; color: var(--hi); margin-bottom: 8px; }
+.example b { color: var(--hi); }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">情绪是 <span class="ac">"瞬时的"</span></div>
+    <span class="tag indigo">Insight</span>
+  </div>
+
+  <div class="callout-q">
+    AI 是不是一直<b>"处在"</b>某种情绪里？<br>
+    这份研究的回答：<b>不是。</b>
+  </div>
+
+  <div class="lead">
+    向量代表的是"<b>此刻</b>哪种情绪概念在主导处理"，<br>
+    而不是某个角色持续不变的心情。
+  </div>
+
+  <div class="layers">
+    <div class="layer early">
+      <div class="badge">早期层</div>
+      <div class="body">
+        <h4>当前词的情绪色彩</h4>
+        <p>"hard" 这个词本身的负向感</p>
+      </div>
+    </div>
+    <div class="layer mid">
+      <div class="badge">中间层</div>
+      <div class="body">
+        <h4>当前句子 / 局部上下文</h4>
+        <p>整段话表达的情绪</p>
+      </div>
+    </div>
+    <div class="layer late">
+      <div class="badge">中后层</div>
+      <div class="body">
+        <h4>预备要"说出"的情绪</h4>
+        <p>"Assistant：" 那个冒号上 — 预告下一段的语气</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="label">举个例子</div>
+    用户说"最近过得很<b>糟</b>，明天要办纪念派对"。<br>
+    虽然后半句中性，但模型 <b>晚期层依然带着前半句的情绪</b>—<br>
+    准备的是"安慰口吻"而非"庆祝口吻"。
+  </div>
+
+  <div class="bottom-strip">
+    <span>它靠 attention 把情绪在上下文中"调用回来"</span>
+    <span class="num">07 / 12</span>
+  </div>
+</div></div></body></html>

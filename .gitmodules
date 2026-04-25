@@ -21,3 +21,10 @@
 	path = trusted-external-repos/skillsbench
 	url = https://github.com/benchflow-ai/skillsbench.git
 	branch = main
+[submodule "trusted-external-repos/xiaohongshu-skills"]
+	path = trusted-external-repos/xiaohongshu-skills
+	url = https://github.com/vivy-yi/xiaohongshu-skills.git
+	branch = main
+[submodule "trusted-external-repos/xiaohongshu-ops-skill"]
+	path = trusted-external-repos/xiaohongshu-ops-skill
+	url = https://github.com/Xiangyu-CAS/xiaohongshu-ops-skill.git

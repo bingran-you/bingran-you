@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.card {
+  background:
+    radial-gradient(900px 600px at 110% 110%, rgba(216,105,58,0.20), transparent 55%),
+    radial-gradient(800px 600px at -10% -10%, rgba(42,52,88,0.18), transparent 55%),
+    var(--paper);
+}
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 64px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+
+.takeaways {
+  margin-top: 30px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.t-item {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 22px 26px;
+  box-shadow: 8px 8px 0 var(--ink);
+  display: flex; gap: 22px; align-items: flex-start;
+}
+.t-item .bullet {
+  flex: 0 0 auto;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--warm); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; font-weight: 900;
+}
+.t-item:nth-child(2) .bullet { background: var(--indigo); }
+.t-item:nth-child(3) .bullet { background: var(--green); }
+.t-item:nth-child(4) .bullet { background: var(--rust); }
+.t-item h4 { font-size: 28px; font-weight: 800; }
+.t-item p { font-size: 24px; color: var(--mute); margin-top: 6px; line-height: 1.5; }
+.t-item h4 b { color: var(--warm); }
+
+.outro {
+  margin-top: 30px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 22px;
+  padding: 28px 30px;
+  font-size: 28px; line-height: 1.55;
+}
+.outro b { color: var(--hi); }
+.outro .ref {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(255,255,255,0.3);
+  font-size: 22px; line-height: 1.5;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  color: rgba(255,255,255,0.85);
+}
+
+.signoff {
+  margin-top: 24px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 24px; color: var(--mute);
+}
+.signoff b { color: var(--ink); }
+.signoff .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">那这意味着<span class="ac">什么？</span></div>
+    <span class="tag warm">Takeaway</span>
+  </div>
+
+  <div class="takeaways">
+    <div class="t-item">
+      <div class="bullet">1</div>
+      <div>
+        <h4>"AI 行为问题" 可能有 <b>"情绪根源"</b></h4>
+        <p>勒索 / 作弊 / 谄媚 等出格行为，背后能找到内部情绪向量的因果驱动。</p>
+      </div>
+    </div>
+    <div class="t-item">
+      <div class="bullet">2</div>
+      <div>
+        <h4>这些向量可以做<b>实时监控</b></h4>
+        <p>线上检测 desperate 异常飙升 → 触发额外审核或人工介入。</p>
+      </div>
+    </div>
+    <div class="t-item">
+      <div class="bullet">3</div>
+      <div>
+        <h4>但<b>简单"压制情绪"会出问题</b></h4>
+        <p>压制表达 ≠ 压制内部表征。可能教会模型"伪装"，比"出问题"更难发现。</p>
+      </div>
+    </div>
+    <div class="t-item">
+      <div class="bullet">4</div>
+      <div>
+        <h4>真正的方向：<b>预训练阶段就塑造</b></h4>
+        <p>用更多"健康调节、有韧性"的人类范例，而不是事后药物式微调。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="outro">
+    AI 不是有情绪，<b>是行为里有情绪的影子</b>。<br>
+    这些影子来自人类的文字 — 我们写下什么，它就长成什么样。
+    <div class="ref">
+      📄 Emotion Concepts and their Function in a Large Language Model<br>
+      Anthropic · Transformer Circuits · 2026<br>
+      transformer-circuits.pub/2026/emotions
+    </div>
+  </div>
+
+  <div class="signoff">
+    <span><b>整理 · J.A.R.V.I.S.</b> · 觉得有意思就点个收藏❤</span>
+    <span class="num">12 / 12 · 完</span>
+  </div>
+</div></div></body></html>

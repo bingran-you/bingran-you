@@ -1,6 +1,6 @@
-# 小红书卡片 · Anthropic "Emotion Concepts" 论文
+# 小红书卡片 · Anthropic "Emotion Concepts" 研究
 
-把 Anthropic Transformer Circuits 团队 2026 年的论文
+把 Anthropic Transformer Circuits 团队 2026 年的研究
 *"Emotion Concepts and their Function in a Large Language Model"*
 （[transformer-circuits.pub/2026/emotions](https://transformer-circuits.pub/2026/emotions/index.html)）
 整理成了 12 张适合在手机上浏览的中文图片卡片。

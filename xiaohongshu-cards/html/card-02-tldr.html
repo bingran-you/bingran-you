@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; gap: 0; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 64px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; line-height: 1.1; }
+.h-title .ac { color: var(--warm); }
+.lead-quote {
+  margin-top: 30px;
+  font-size: 38px; line-height: 1.55; font-weight: 500;
+  color: var(--ink);
+}
+.points { margin-top: 40px; display: flex; flex-direction: column; gap: 28px; }
+.pt {
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  padding: 28px 30px;
+  box-shadow: 8px 8px 0 var(--ink);
+  display: flex; gap: 24px; align-items: flex-start;
+}
+.pt .num {
+  flex: 0 0 auto;
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--warm); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+  font-weight: 800; font-size: 38px;
+}
+.pt .text { font-size: 30px; line-height: 1.55; }
+.pt .text b { color: var(--warm); }
+.pt:nth-child(2) .num { background: var(--indigo); }
+.pt:nth-child(3) .num { background: var(--green); }
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">一句话<span class="ac">先讲完</span></div>
+    <span class="tag">TL;DR</span>
+  </div>
+
+  <div class="lead-quote">
+    大模型脑子里有"情绪"这个东西的<br>
+    内部表征 — 而且它<u>真的会</u>影响 AI 的行为。
+  </div>
+
+  <div class="points">
+    <div class="pt">
+      <div class="num">1</div>
+      <div class="text">Claude 内部存在一组 <b>情绪向量</b>（emotion vectors），<br>把"开心 / 绝望 / 平静 / 愤怒"等概念表示成了几何方向。</div>
+    </div>
+    <div class="pt">
+      <div class="num">2</div>
+      <div class="text">这些向量的强弱，会<b>因果性地推动行为</b>：<br>不是相关，是真的"调一下就变"。</div>
+    </div>
+    <div class="pt">
+      <div class="num">3</div>
+      <div class="text">影响范围包括：<br><b>勒索、作弊、讨好用户</b> 这些对齐相关的"出格"行为。</div>
+    </div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>📍 这不等于 AI 有"主观感受"</span>
+    <span class="num">02 / 12</span>
+  </div>
+</div></div></body></html>

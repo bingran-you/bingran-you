@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.card { background: var(--paper); padding: 0; }
+.bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(1200px 800px at 110% -10%, rgba(216,105,58,0.30), transparent 55%),
+    radial-gradient(900px 600px at -10% 110%, rgba(42,52,88,0.18), transparent 55%),
+    var(--paper);
+}
+.frame { position: relative; padding: 80px; height: 100%; display: flex; flex-direction: column; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--warm); }
+.tag-row { display: flex; gap: 12px; margin-top: 22px; }
+.title-en {
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+  font-size: 24px; letter-spacing: 1px;
+  color: var(--mute); margin-top: 28px;
+  font-style: italic;
+}
+h1 {
+  font-family: "Noto Serif CJK SC", serif;
+  font-size: 110px; line-height: 1.05; font-weight: 900;
+  letter-spacing: -2px;
+  margin-top: 30px;
+}
+h1 .punch { color: var(--warm); }
+h1 .quiet { color: var(--indigo); display: block; font-size: 80px; margin-top: 10px; }
+.lede {
+  margin-top: 36px;
+  font-size: 36px; line-height: 1.55; font-weight: 500;
+  color: var(--ink); max-width: 880px;
+}
+.lede b { color: var(--warm); }
+.hero {
+  position: absolute; right: -120px; bottom: 60px;
+  width: 720px; opacity: 0.95;
+  transform: rotate(-4deg);
+}
+.hero img { width: 100%; border-radius: 24px; border: 3px solid var(--ink); box-shadow: 14px 14px 0 var(--ink); }
+.attribution {
+  position: absolute; left: 80px; bottom: 70px;
+  font-size: 26px; color: var(--mute); letter-spacing: 1px;
+  z-index: 5;
+  background: rgba(245,239,228,0.9);
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+.attribution b { color: var(--ink); }
+</style></head>
+<body><div class="card"><div class="bg"></div>
+<div class="frame">
+  <div class="brand">
+    <span class="dot"></span>
+    <span class="kicker">AI 心理学 · 论文笔记</span>
+  </div>
+
+  <div class="tag-row">
+    <span class="tag warm">Anthropic</span>
+    <span class="tag indigo">Claude Sonnet 4.5</span>
+    <span class="tag">可解释性</span>
+  </div>
+
+  <div class="title-en">Emotion Concepts and their Function in a Large Language Model · 2026</div>
+
+  <h1>
+    AI 也有<br>
+    <span class="punch">"情绪"</span> 吗？
+    <span class="quiet">Anthropic 拆开了 Claude 的内心戏</span>
+  </h1>
+
+  <div class="lede">
+    它不是真的"会难过"，<br>
+    但脑子里确实有一组 <b>情绪向量</b>，<br>
+    悄悄影响它会不会勒索、作弊、讨好你。
+  </div>
+</div>
+
+<div class="hero"><img src="../source-images/hero-final.png"></div>
+
+<div class="attribution"><b>共 12 张 · 整理 J.A.R.V.I.S.</b> &nbsp;→</div>
+</div></body></html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 60px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+.q-block {
+  margin-top: 50px;
+  font-size: 50px; line-height: 1.35; font-weight: 800;
+  font-family: "Noto Serif CJK SC", serif;
+  border-left: 8px solid var(--warm);
+  padding-left: 30px;
+}
+.q-block .em { color: var(--warm); }
+.body-text {
+  margin-top: 44px;
+  font-size: 32px; line-height: 1.7;
+}
+.body-text p + p { margin-top: 22px; }
+.body-text b { background: linear-gradient(180deg, transparent 60%, var(--hi) 60%); padding: 0 4px; }
+.meta {
+  margin-top: 36px;
+  background: var(--ink); color: var(--paper);
+  padding: 24px 28px;
+  border-radius: 18px;
+  display: flex; gap: 28px; align-items: center;
+}
+.meta .label { font-size: 22px; letter-spacing: 3px; opacity: 0.65; }
+.meta .val { font-size: 28px; font-weight: 600; margin-top: 4px; }
+.meta .col { display: flex; flex-direction: column; }
+.bottom-strip {
+  margin-top: auto;
+  font-size: 26px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 22px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div class="h-title">先解释一个<span class="ac">直觉问题</span></div>
+    <span class="tag warm">Why</span>
+  </div>
+
+  <div class="q-block">
+    AI 表现得"激动"或"沮丧"，<br>
+    到底是 <span class="em">表面学话术</span>，<br>
+    还是 <span class="em">内部真的在算什么</span>？
+  </div>
+
+  <div class="body-text">
+    <p>LLM 一开始是用 <b>大量人类文本</b> 训练的——<br>小说、聊天、新闻、论坛。</p>
+    <p>要预测一个人接下来说什么，<br>就得理解他<b>处在什么情绪</b>里。<br>所以模型在预训练里就学会了"情绪"这个抽象概念。</p>
+    <p>等到 post-training 把它变成"AI 助手"，<br>这个角色其实是模型在<b>"扮演"</b>—<br>就像作家写一个角色一样。<br>它会自然地把"情绪"也扮上。</p>
+  </div>
+
+  <div class="meta">
+    <div class="col"><span class="label">RESEARCH</span><span class="val">Anthropic · Transformer Circuits</span></div>
+    <div class="col"><span class="label">MODEL</span><span class="val">Claude Sonnet 4.5</span></div>
+  </div>
+
+  <div class="bottom-strip">
+    <span>这是这篇论文要回答的问题</span>
+    <span class="num">03 / 12</span>
+  </div>
+</div></div></body></html>

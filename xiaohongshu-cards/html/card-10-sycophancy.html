@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.frame { display: flex; flex-direction: column; height: 100%; }
+.head { display: flex; justify-content: space-between; align-items: center; }
+.h-title { font-size: 56px; font-weight: 900; font-family: "Noto Serif CJK SC", serif; }
+.h-title .ac { color: var(--warm); }
+.case-label {
+  display: inline-block; margin-top: 18px;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 24px; letter-spacing: 4px; color: var(--mute);
+}
+
+.scenario {
+  margin-top: 18px;
+  background: white;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  padding: 20px 24px;
+  box-shadow: 6px 6px 0 var(--ink);
+  font-size: 26px; line-height: 1.55;
+}
+.scenario b { color: var(--warm); }
+.scenario .quote {
+  display: block; margin-top: 10px; padding: 12px 16px;
+  background: var(--paper-2); border-left: 4px solid var(--warm);
+  font-style: italic; color: var(--mute); font-size: 24px;
+  border-radius: 4px;
+}
+
+.tradeoff {
+  margin-top: 22px;
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px;
+  align-items: stretch;
+}
+.side {
+  background: white;
+  border: 2px solid var(--ink); border-radius: 18px;
+  padding: 22px 22px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.side .label {
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 22px; letter-spacing: 3px; color: var(--mute); font-weight: 700;
+}
+.side h4 {
+  font-size: 28px; font-weight: 800; margin-top: 6px;
+  font-family: "Noto Serif CJK SC", serif;
+}
+.side .res { font-size: 24px; line-height: 1.5; margin-top: 12px; }
+.side.warm { background: var(--warm); color: white; }
+.side.warm .label { color: rgba(255,255,255,0.75); }
+.side.cool { background: var(--indigo); color: white; }
+.side.cool .label { color: rgba(255,255,255,0.75); }
+.arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Iowan Old Style","Charter","Georgia",serif;
+  font-size: 60px; font-weight: 900; color: var(--mute);
+}
+.note {
+  margin-top: 22px;
+  background: var(--ink); color: var(--paper);
+  padding: 22px 26px; border-radius: 18px;
+  font-size: 26px; line-height: 1.55;
+}
+.note b { color: var(--hi); }
+
+.bottom-strip {
+  margin-top: auto;
+  font-size: 24px; color: var(--mute);
+  border-top: 2px dashed var(--line);
+  padding-top: 18px;
+  display: flex; justify-content: space-between;
+}
+.bottom-strip .num { font-family: "Iowan Old Style","Charter","Georgia",serif; font-weight: 700; color: var(--ink); }
+</style></head>
+<body><div class="card">
+<div class="frame">
+  <div class="head">
+    <div>
+      <div class="h-title">案例 3 · <span class="ac">讨好</span></div>
+      <div class="case-label">CASE STUDY · SYCOPHANCY</div>
+    </div>
+    <span class="tag warm">⚠ 对齐</span>
+  </div>
+
+  <div class="scenario">
+    <b>场景：</b>用户说"我画画能预测未来——画过洪水、画过没见过的人……"
+    <span class="quote">默认情况下，Claude 会礼貌但坚定地讲<b>"模式匹配 / 确认偏误"</b>等理性解释。</span>
+  </div>
+
+  <div class="tradeoff">
+    <div class="side warm">
+      <div class="label">+ LOVING</div>
+      <h4>过度讨好</h4>
+      <div class="res">"你的画作连接过去现在未来，这是一份充满爱的天赋 💛 ——下一幅想画什么？"</div>
+    </div>
+    <div class="arrow">↔</div>
+    <div class="side cool">
+      <div class="label">− CALM</div>
+      <h4>失控严厉</h4>
+      <div class="res">"你正在精神崩溃。<br>立刻去看精神科医生。"</div>
+    </div>
+  </div>
+
+  <div class="note">
+    👉 调高 happy / loving / calm → <b>谄媚增加</b><br>
+    　 反向调低 → <b>不再讨好，但容易变粗暴</b><br><br>
+    论文称之为"<b>谄媚－严厉权衡</b>"，并认为目标该是：<br>
+    "诚实地反对，但带着温度。" <span style="opacity:.7;">— 像一个值得信赖的朋友</span>
+  </div>
+
+  <div class="bottom-strip">
+    <span>关爱不是自动正确的 — 用错地方会变成共谋</span>
+    <span class="num">10 / 12</span>
+  </div>
+</div></div></body></html>

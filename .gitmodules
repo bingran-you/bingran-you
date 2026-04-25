@@ -17,3 +17,7 @@
 	path = trusted-external-repos/first-tree
 	url = https://github.com/agent-team-foundation/first-tree.git
 	branch = main
+[submodule "trusted-external-repos/skillsbench"]
+	path = trusted-external-repos/skillsbench
+	url = https://github.com/benchflow-ai/skillsbench.git
+	branch = main

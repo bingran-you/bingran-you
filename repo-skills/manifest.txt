@@ -1,0 +1,104 @@
+# One command per line:
+#
+#   link <exposed-name> <repo-relative-skill-dir>
+#
+# Keep this file explicit on purpose. Upstream skill repos can change over time;
+# adding/removing a skill should require editing one line here instead of being
+# picked up implicitly during the next refresh.
+
+# Repo-local custom skills.
+link skill-creator repo-skills/skill-creator
+link xiaohongshu-knowledge repo-skills/xiaohongshu-knowledge
+
+# Vendored shared skill libraries.
+link aspnet-core trusted-external-repos/skills/skills/.curated/aspnet-core
+link chatgpt-apps trusted-external-repos/skills/skills/.curated/chatgpt-apps
+link cli-creator trusted-external-repos/skills/skills/.curated/cli-creator
+link cloudflare-deploy trusted-external-repos/skills/skills/.curated/cloudflare-deploy
+link doc trusted-external-repos/skills/skills/.curated/doc
+link docs-to-skill trusted-external-repos/skillsbench/.claude/skills/docs-to-skill
+link figma trusted-external-repos/skills/skills/.curated/figma
+link figma-code-connect-components trusted-external-repos/skills/skills/.curated/figma-code-connect-components
+link figma-create-design-system-rules trusted-external-repos/skills/skills/.curated/figma-create-design-system-rules
+link figma-create-new-file trusted-external-repos/skills/skills/.curated/figma-create-new-file
+link figma-generate-design trusted-external-repos/skills/skills/.curated/figma-generate-design
+link figma-generate-library trusted-external-repos/skills/skills/.curated/figma-generate-library
+link figma-implement-design trusted-external-repos/skills/skills/.curated/figma-implement-design
+link figma-use trusted-external-repos/skills/skills/.curated/figma-use
+link gh-address-comments trusted-external-repos/skills/skills/.curated/gh-address-comments
+link gh-fix-ci trusted-external-repos/skills/skills/.curated/gh-fix-ci
+link jupyter-notebook trusted-external-repos/skills/skills/.curated/jupyter-notebook
+link linear trusted-external-repos/skills/skills/.curated/linear
+link netlify-deploy trusted-external-repos/skills/skills/.curated/netlify-deploy
+link notion-knowledge-capture trusted-external-repos/skills/skills/.curated/notion-knowledge-capture
+link notion-meeting-intelligence trusted-external-repos/skills/skills/.curated/notion-meeting-intelligence
+link notion-research-documentation trusted-external-repos/skills/skills/.curated/notion-research-documentation
+link notion-spec-to-implementation trusted-external-repos/skills/skills/.curated/notion-spec-to-implementation
+link openai-docs trusted-external-repos/skills/skills/.curated/openai-docs
+link pdf trusted-external-repos/skills/skills/.curated/pdf
+link playwright trusted-external-repos/skills/skills/.curated/playwright
+link playwright-interactive trusted-external-repos/skills/skills/.curated/playwright-interactive
+link render-deploy trusted-external-repos/skills/skills/.curated/render-deploy
+link screenshot trusted-external-repos/skills/skills/.curated/screenshot
+link security-best-practices trusted-external-repos/skills/skills/.curated/security-best-practices
+link security-ownership-map trusted-external-repos/skills/skills/.curated/security-ownership-map
+link security-threat-model trusted-external-repos/skills/skills/.curated/security-threat-model
+link sentry trusted-external-repos/skills/skills/.curated/sentry
+link sora trusted-external-repos/skills/skills/.curated/sora
+link speech trusted-external-repos/skills/skills/.curated/speech
+link transcribe trusted-external-repos/skills/skills/.curated/transcribe
+link vercel-deploy trusted-external-repos/skills/skills/.curated/vercel-deploy
+link winui-app trusted-external-repos/skills/skills/.curated/winui-app
+link yeet trusted-external-repos/skills/skills/.curated/yeet
+
+# Gstack skills.
+link gstack trusted-external-repos/gstack
+link gstack-autoplan trusted-external-repos/gstack/autoplan
+link gstack-benchmark trusted-external-repos/gstack/benchmark
+link gstack-benchmark-models trusted-external-repos/gstack/benchmark-models
+link gstack-browse trusted-external-repos/gstack/browse
+link gstack-canary trusted-external-repos/gstack/canary
+link gstack-careful trusted-external-repos/gstack/careful
+link gstack-codex trusted-external-repos/gstack/codex
+link gstack-connect-chrome trusted-external-repos/gstack/connect-chrome
+link gstack-context-restore trusted-external-repos/gstack/context-restore
+link gstack-context-save trusted-external-repos/gstack/context-save
+link gstack-cso trusted-external-repos/gstack/cso
+link gstack-design-consultation trusted-external-repos/gstack/design-consultation
+link gstack-design-html trusted-external-repos/gstack/design-html
+link gstack-design-review trusted-external-repos/gstack/design-review
+link gstack-design-shotgun trusted-external-repos/gstack/design-shotgun
+link gstack-devex-review trusted-external-repos/gstack/devex-review
+link gstack-document-release trusted-external-repos/gstack/document-release
+link gstack-freeze trusted-external-repos/gstack/freeze
+link gstack-guard trusted-external-repos/gstack/guard
+link gstack-health trusted-external-repos/gstack/health
+link gstack-investigate trusted-external-repos/gstack/investigate
+link gstack-land-and-deploy trusted-external-repos/gstack/land-and-deploy
+link gstack-landing-report trusted-external-repos/gstack/landing-report
+link gstack-learn trusted-external-repos/gstack/learn
+link gstack-make-pdf trusted-external-repos/gstack/make-pdf
+link gstack-office-hours trusted-external-repos/gstack/office-hours
+link gstack-open-gstack-browser trusted-external-repos/gstack/open-gstack-browser
+link gstack-pair-agent trusted-external-repos/gstack/pair-agent
+link gstack-plan-ceo-review trusted-external-repos/gstack/plan-ceo-review
+link gstack-plan-design-review trusted-external-repos/gstack/plan-design-review
+link gstack-plan-devex-review trusted-external-repos/gstack/plan-devex-review
+link gstack-plan-eng-review trusted-external-repos/gstack/plan-eng-review
+link gstack-plan-tune trusted-external-repos/gstack/plan-tune
+link gstack-qa trusted-external-repos/gstack/qa
+link gstack-qa-only trusted-external-repos/gstack/qa-only
+link gstack-retro trusted-external-repos/gstack/retro
+link gstack-review trusted-external-repos/gstack/review
+link gstack-setup-browser-cookies trusted-external-repos/gstack/setup-browser-cookies
+link gstack-setup-deploy trusted-external-repos/gstack/setup-deploy
+link gstack-setup-gbrain trusted-external-repos/gstack/setup-gbrain
+link gstack-ship trusted-external-repos/gstack/ship
+link gstack-unfreeze trusted-external-repos/gstack/unfreeze
+link gstack-upgrade trusted-external-repos/gstack/gstack-upgrade
+
+# Gstack OpenClaw skills.
+link gstack-openclaw-ceo-review trusted-external-repos/gstack/openclaw/skills/gstack-openclaw-ceo-review
+link gstack-openclaw-investigate trusted-external-repos/gstack/openclaw/skills/gstack-openclaw-investigate
+link gstack-openclaw-office-hours trusted-external-repos/gstack/openclaw/skills/gstack-openclaw-office-hours
+link gstack-openclaw-retro trusted-external-repos/gstack/openclaw/skills/gstack-openclaw-retro

@@ -6,10 +6,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "git submodule update --init --recursive >/dev/null 2>&1 || true",
+            "command": "\"$(git rev-parse --show-toplevel)/scripts/sync_skills.sh\" init >/dev/null 2>&1 || true",
             "async": true,
             "timeout": 300,
-            "statusMessage": "Initializing submodules..."
+            "statusMessage": "Syncing repo skills..."
           }
         ]
       }

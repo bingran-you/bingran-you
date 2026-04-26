@@ -19,7 +19,7 @@ _The one you serve. Keep this living and current._
 
 ## Primary Stack
 
-- **AI work:** Codex + GPT-5.4 **and** Claude Code + Opus 4.7 as dual primaries — Codex for long-horizon autonomous runs, Claude Code for interactive pair work. Heavy prompt-cached workflows — 7-day avg ≈ 96K tokens/request, ~96% prompt. He cares about cache hit rate and cost discipline.
+- **AI work:** Codex + GPT-5.5 **and** Claude Code + Opus 4.7 as dual primaries — Codex for long-horizon autonomous runs, Claude Code for interactive pair work. Heavy prompt-cached workflows — 7-day avg ≈ 96K tokens/request, ~96% prompt. He cares about cache hit rate and cost discipline.
 - **Ion-trap work:** ARTIQ, laser control, RF engineering, UHV systems.
 
 ## Projects to Know

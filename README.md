@@ -9,7 +9,7 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 ### How I Build
 
 <p align="center">
-  <img alt="Primary stack: Codex + GPT-5.4" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.4-111111?style=for-the-badge&logo=openai&logoColor=white" />
+  <img alt="Primary stack: Codex + GPT-5.5" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.5-111111?style=for-the-badge&logo=openai&logoColor=white" />
   <img alt="Primary stack: Claude Code + Opus 4.7" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Opus%204.7-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
 </p>
 

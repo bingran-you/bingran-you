@@ -1,11 +1,11 @@
 # Codex CLI configuration — workspace-scoped.
 # Mirrors the SessionStart hook in .claude/settings.json so both harnesses
-# auto-initialize the trusted-external-repos/* submodules on session start.
+# auto-sync repo-managed skills and initialize required submodules on session start.
 #
 # Caveat: openai/codex#17532 — repo-local hooks may not fire in interactive
 # sessions on some Codex versions. If you see stale submodules, run
-# `git submodule update --init --recursive` once manually, or move this block
-# into ~/.codex/config.toml and gate the command on $PWD.
+# `scripts/sync_skills.sh init` once manually, or move this block into
+# ~/.codex/config.toml and gate the command on $PWD.
 
 [features]
 codex_hooks = true
@@ -15,6 +15,6 @@ matcher = "startup|resume"
 
 [[hooks.SessionStart.hooks]]
 type = "command"
-command = "git submodule update --init --recursive >/dev/null 2>&1 || true"
-statusMessage = "Initializing submodules"
+command = "\"$(git rev-parse --show-toplevel)/scripts/sync_skills.sh\" init >/dev/null 2>&1 || true"
+statusMessage = "Syncing repo skills"
 timeout = 300

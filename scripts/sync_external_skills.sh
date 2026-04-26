@@ -9,17 +9,12 @@ CURATED_SUBMODULE_PATH="trusted-external-repos/skills"
 CURATED_SOURCE_PATH="$REPO_ROOT/$CURATED_SUBMODULE_PATH/skills/.curated"
 CURATED_LINK_PREFIX="../../$CURATED_SUBMODULE_PATH/skills/.curated"
 
-OMX_SUBMODULE_PATH="trusted-external-repos/oh-my-codex"
-OMX_SOURCE_PATH="$REPO_ROOT/$OMX_SUBMODULE_PATH/skills"
-OMX_LINK_PREFIX="../../$OMX_SUBMODULE_PATH/skills"
-
 GSTACK_SUBMODULE_PATH="trusted-external-repos/gstack"
 GSTACK_SOURCE_PATH="$REPO_ROOT/$GSTACK_SUBMODULE_PATH"
 GSTACK_LINK_PREFIX="../../$GSTACK_SUBMODULE_PATH"
 
 SUBMODULE_PATHS=(
   "$CURATED_SUBMODULE_PATH"
-  "$OMX_SUBMODULE_PATH"
   "$GSTACK_SUBMODULE_PATH"
 )
 
@@ -108,7 +103,6 @@ rebuild_entrypoints() {
   LINK_SOURCES=()
 
   collect_directory_skills "curated" "$CURATED_SOURCE_PATH" "$CURATED_LINK_PREFIX"
-  collect_directory_skills "oh-my-codex" "$OMX_SOURCE_PATH" "$OMX_LINK_PREFIX"
 
   require_source_dir "$GSTACK_SOURCE_PATH"
   [[ -f "$GSTACK_SOURCE_PATH/SKILL.md" ]] || {

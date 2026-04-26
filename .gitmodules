@@ -6,10 +6,6 @@
 	path = trusted-external-repos/gstack
 	url = https://github.com/bingran-you/gstack.git
 	branch = main
-[submodule "trusted-external-repos/oh-my-codex"]
-	path = trusted-external-repos/oh-my-codex
-	url = https://github.com/bingran-you/oh-my-codex.git
-	branch = main
 [submodule "bingran-you-private"]
 	path = bingran-you-private
 	url = https://github.com/bingran-you/bingran-you-private.git

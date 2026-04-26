@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta property="og:title" content="Quantum Physics &amp; Ion Trapping Flashcards -  Kuse AI"><meta property="og:description" content="Quantum Physics &amp; Ion Trapping Flashcards"><meta property="og:url" content="https://www.kuse.ai/pages/Quantum-Physics-%26-Ion-Trapping-Flashcards/BEagrTMUonFoe8MG256LcB"><meta property="og:type" content="article"><meta property="og:site_name" content="Kuse AI"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Quantum Physics &amp; Ion Trapping Flashcards -  Kuse AI"><meta name="twitter:description" content="Quantum Physics &amp; Ion Trapping Flashcards"><meta name="twitter:site" content="@kuseHQ"><link rel="canonical" href="https://www.kuse.ai/pages/Quantum-Physics-%26-Ion-Trapping-Flashcards/BEagrTMUonFoe8MG256LcB"><meta name="description" content="Quantum Physics &amp; Ion Trapping Flashcards">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Physics &amp; Ion Trapping Flashcards -  Kuse AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        .main-area {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 80px;
+            position: relative;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Card Container */
+        .card-container {
+            width: 400px;
+            height: 550px;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        .card-container.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Card Faces */
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .card-front {
+            background-color: #2e2e2e;
+            color: white;
+        }
+
+        .card-back {
+            background-color: #FDFEFF;
+            color: #202020;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Labels */
+        .label-text {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 24px;
+        }
+
+        .label-question { color: #6e85ff; }
+        .label-answer { color: #4869ee; }
+
+        /* Card Text */
+        .card-text {
+            font-size: 24px;
+            line-height: 1.6;
+            font-weight: 500;
+            width: 100%;
+            word-wrap: break-word;
+        }
+
+        /* Hint Text */
+        .hint-text {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        .card-back .hint-text { color: #999; }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #4869ee;
+            background: white;
+            color: #4869ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            z-index: 20;
+            outline: none;
+            padding: 0;
+        }
+
+        .nav-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+        }
+
+        .nav-btn:hover {
+            background-color: #eef2ff;
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            border-color: #e0e0e0;
+            color: #e0e0e0;
+            cursor: not-allowed;
+            background: transparent;
+            transform: none;
+        }
+
+        /* Footer Controls */
+        .footer-controls {
+            position: fixed;
+            bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .control-btn {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .control-btn:hover { color: #4869ee; }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-track {
+            width: 150px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #4869ee;
+            transition: width 0.3s ease;
+        }
+
+        /* Kuse Branding */
+        .kuse-branding {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .kuse-branding:hover {
+            color: #4869ee;
+        }
+
+        .kuse-branding svg {
+            height: 1.2em;
+            width: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-area {
+                flex-direction: column;
+                gap: 20px;
+                margin-top: -40px;
+            }
+
+            .card-container {
+                width: 85vw;
+                max-width: 400px;
+                height: 55vh;
+                min-height: 400px;
+            }
+
+            .card-text { font-size: 20px; }
+
+            .mobile-nav-container {
+                display: flex;
+                gap: 40px;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .kuse-branding {
+                bottom: 90px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) { .desktop-only { display: none; } }
+        @media (min-width: 769px) { .mobile-only { display: none; } }
+    </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Quantum Physics & Ion Trapping Flashcards -  Kuse AI","description":"Quantum Physics & Ion Trapping Flashcards","url":"https://www.kuse.ai/pages/Quantum-Physics-%26-Ion-Trapping-Flashcards/BEagrTMUonFoe8MG256LcB","author":{"@type":"Organization","name":"Kuse AI"},"publisher":{"@type":"Organization","name":"Kuse AI","url":"https://www.kuse.ai"},"inLanguage":"en","alternateName":"Quantum Physics & Ion Trapping Flashcards"}</script></head>
+<body>
+    <div class="main-area">
+        <button id="prevBtnDesktop" class="nav-btn desktop-only">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+
+        <div id="flashcard" class="card-container" onclick="toggleFlip()">
+            <div class="card-inner">
+                <div class="card-face card-front">
+                    <div class="label-text label-question">Question</div>
+                    <div id="questionText" class="card-text">Loading...</div>
+                    <div class="hint-text">Click to see answer</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="label-text label-answer">Answer</div>
+                    <div id="answerText" class="card-text">Loading...</div>
+                    <div class="hint-text">Click to see question</div>
+                </div>
+            </div>
+        </div>
+
+        <button id="nextBtnDesktop" class="nav-btn desktop-only">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+
+        <div class="mobile-nav-container mobile-only">
+            <button id="prevBtnMobile" class="nav-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button id="nextBtnMobile" class="nav-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="footer-controls">
+        <div class="control-btn" onclick="restartDeck()">↺ Restart</div>
+        <div class="progress-container">
+            <div class="progress-track">
+                <div id="progressBar" class="progress-fill"></div>
+            </div>
+            <div id="progressText">0 / 0</div>
+        </div>
+        <div class="control-btn" onclick="downloadCSV()">↓ Save</div>
+    </div>
+
+    <a href="https://kuse.ai" target="_blank" class="kuse-branding">
+        <span>made with</span>
+        <svg viewBox="0,0,160,44" xmlns="http://www.w3.org/2000/svg"><path d="m.01,20.65C-.43,8.25,9.3-2.03,22.04.34,34.78,2.72,43.29,8.32,43.29,22.9s-8.66,19.01-22.03,20.3C7.9,44.5.46,33.05.01,20.65z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="m146.76,7.94c8.07,0,13.24,6.15,13.24,14.58v1.39h-20.75c.45,4.05,3.51,7.37,8.57,7.37,2.62,0,5.73-1.05,7.62-2.94l2.67,3.83c-2.67,2.55-6.62,3.88-10.9,3.88-8.07,0-14.08-5.6-14.08-14.08,0-7.76,5.67-14.02,13.63-14.02zm0,4.77c-5.01,0-7.29,3.83-7.57,7.1h15.13c-.11-3.16-2.28-7.1-7.57-7.1z" fill="currentColor"/><path d="m86.64,24.49c0,4.15,2.39,6.84,6.84,6.84,4.4,0,6.84-2.69,6.84-6.84V8.55h5.37v16.33c0,6.7-4.06,11.14-12.21,11.14-8.21,0-12.21-4.5-12.21-11.09V8.55h5.37v15.94zm32.99-16.55c4.49,0,8.06,1.47,10.6,3.86l-2.59,3.81c-2.05-2-5.28-3.08-8.06-3.08-2.88,0-4.84,1.37-4.84,3.32,0,1.91,2.64,2.54,5.81,3.27,4.59,1.08,10.26,2.4,10.26,8.46,0,4.94-3.76,8.41-11.14,8.41-4.98,0-8.94-1.76-11.24-4.11l2.54-4.11c1.86,1.91,5.18,3.67,8.84,3.67,3.91,0,5.57-1.66,5.57-3.62,0-2.3-2.88-2.98-6.21-3.76-4.54-1.08-9.87-2.3-9.87-8.06,0-4.5,4.2-8.06,10.31-8.06zM60.79,20.82,71.44,8.55h6.5L66.46,21.26,78.82,35.44h-6.5l-9.28-11.1-2.25,2.49v8.6h-5.33V8.55h5.33v12.27z" fill="currentColor"/></svg>
+    </a>
+
+    <script>
+        const cardsData = [
+            {
+                question: `What is quantum logic spectroscopy and why is it used for Al+ optical clocks?`,
+                answer: `Quantum logic spectroscopy is a technique where a "logic" ion (like Mg+) is used to cool, manipulate, and read out the quantum state of a "spectroscopy" ion (like Al+) that has a clock transition. This is necessary for Al+ because its clock transition is extremely weak and cannot be directly detected. The Mg+ ion acts as a quantum interface, allowing precise measurements of Al+ without disturbing its quantum state.`
+            },
+            {
+                question: `What are the main systematic frequency shifts in optical atomic clocks?`,
+                answer: `The main systematic frequency shifts include: second-order Doppler shift (time dilation from ion motion), blackbody radiation shift (from thermal photons), quadrupole shift (from electric field gradients), Zeeman shift (from magnetic fields), and AC Stark shift (from laser light). Each of these effects must be carefully measured and corrected to achieve 10⁻¹⁸ level accuracy in clock frequency measurements.`
+            },
+            {
+                question: `What is the second-order Doppler shift and how does it relate to time dilation?`,
+                answer: `The second-order Doppler shift is a relativistic effect where a moving ion's clock runs slower due to time dilation, causing a frequency shift proportional to v²/c². Even though trapped ions are cooled to near zero-point motion, their residual kinetic energy causes a measurable frequency shift. This shift is reduced by cooling ions to the motional ground state, approaching the quantum zero-point energy.`
+            },
+            {
+                question: `What is blackbody radiation shift and how does it affect clock accuracy?`,
+                answer: `Blackbody radiation shift occurs when thermal photons from the environment at temperature T interact with the clock ion's electron cloud, causing an AC Stark shift that changes the clock transition frequency. This shift scales as T⁴ and is one of the largest systematic uncertainties in optical clocks. It must be controlled by either operating at cryogenic temperatures or precisely measuring the thermal environment.`
+            },
+            {
+                question: `What are the advantages of optical clocks over cesium microwave clocks?`,
+                answer: `Optical clocks operate at frequencies ~100,000 times higher than microwave clocks (hundreds of THz vs. 9 GHz), providing much better frequency resolution and stability. According to the quantum projection noise limit, higher frequency means lower fractional uncertainty. Optical clocks have achieved fractional frequency uncertainties below 10⁻¹⁸, compared to 10⁻¹⁶ for the best cesium clocks, enabling more precise timekeeping and tests of fundamental physics.`
+            },
+            {
+                question: `What is the ²⁷Al+ clock transition and why is it forbidden?`,
+                answer: `The Al+ clock transition is between the ³S₀ ground state and the ¹S₀ excited state at 267 nm (1.12 PHz). This transition is "forbidden" because it violates the electric dipole selection rule (ΔS ≠ 0), making it extremely weak with a natural linewidth of only 8 mHz. This narrow linewidth is ideal for clocks but makes direct laser excitation and detection impractical, necessitating quantum logic spectroscopy.`
+            },
+            {
+                question: `What is sympathetic cooling and how is it used with Mg+ and Al+ ions?`,
+                answer: `Sympathetic cooling is when one ion species (Mg+) is laser-cooled, and through their mutual Coulomb interaction, this cooling is transferred to another ion species (Al+) that cannot be directly laser-cooled. The two ions share motional modes in the trap, so cooling Mg+ simultaneously cools Al+. This allows Al+ to be maintained at near ground state without applying any light that could perturb its clock transition.`
+            },
+            {
+                question: `What is sideband cooling and how does it approach the zero-point energy?`,
+                answer: `Sideband cooling uses laser pulses tuned below the atomic transition frequency by exactly one motional frequency (red sideband). This removes one quantum of motional energy each time the ion is excited and decays. By repeatedly applying red sideband pulses, the ion can be cooled to its motional ground state with high probability, approaching the quantum mechanical zero-point energy where ⟨n⟩ < 0.1 phonons.`
+            },
+            {
+                question: `What is excess micromotion and how does it affect clock accuracy?`,
+                answer: `Excess micromotion is driven oscillation of an ion at the trap RF frequency (~20 MHz) when the ion is not perfectly centered at the RF null. This causes time-varying Doppler shifts and second-order Doppler shifts that broaden and shift the clock transition. Micromotion must be minimized by carefully adjusting DC compensation electrodes to null out stray electric fields and center the ion at the trap's RF null point.`
+            },
+            {
+                question: `What is a linear Paul trap and how does it confine ions?`,
+                answer: `A linear Paul trap uses oscillating RF electric fields applied to four rod electrodes to create a time-averaged quadrupole potential that confines ions radially. DC voltages on endcap electrodes provide axial confinement. The RF field oscillates at ~20 MHz, creating a ponderomotive force that pushes ions toward the trap center. This allows stable 3D confinement of charged particles without violating Earnshaw's theorem.`
+            },
+            {
+                question: `What are secular modes of motion in ion traps?`,
+                answer: `Secular modes are the natural harmonic oscillator modes of ion motion in the time-averaged trapping potential. For a single ion, there are three secular modes (two radial and one axial) with frequencies typically 1-10 MHz. For multiple ions, there are collective modes (center-of-mass, breathing, rocking) where ions oscillate together. These modes are quantized and can be cooled to the ground state for quantum control.`
+            },
+            {
+                question: `What is the wheel trap design and its advantages?`,
+                answer: `The wheel trap is a surface electrode trap design where electrodes are arranged radially like spokes of a wheel around a central trapping region. This geometry allows better optical access from multiple directions compared to traditional 3D traps, facilitates integration with photonics, and enables scalable trap arrays. The surface electrode design also allows for more complex electrode patterns for ion shuttling and multiple trapping zones.`
+            },
+            {
+                question: `What is a meander line resonator used for in ion traps?`,
+                answer: `A meander line resonator is an RF resonant circuit integrated into the trap structure that efficiently delivers high RF voltage to the trap electrodes while minimizing power dissipation. The meandering geometry increases inductance while maintaining compact size, creating a high-Q resonator at the trap RF frequency. This allows operation at cryogenic temperatures and reduces heating of the trap environment, which is critical for minimizing blackbody radiation shifts.`
+            },
+            {
+                question: `What is the difference between S, P, and D electronic states in ions?`,
+                answer: `S, P, and D states refer to orbital angular momentum quantum numbers L = 0, 1, 2 respectively. S states (L=0) are spherically symmetric, P states (L=1) have one unit of angular momentum, and D states (L=2) have two units. In Al+ and Ca+, the clock transitions often involve S and D states because S-D transitions are forbidden by electric dipole selection rules, resulting in long lifetimes ideal for precision spectroscopy.`
+            },
+            {
+                question: `What is electron shelving detection?`,
+                answer: `Electron shelving is a quantum amplification technique where an ion is repeatedly excited on a strong cycling transition (e.g., S↔P) that fluoresces brightly. If the ion is in a metastable D state, it cannot scatter photons and appears dark. By collecting photons for ~1 ms, you can determine with near-perfect fidelity whether the ion is in the bright S state or dark D state, enabling single-shot quantum state readout.`
+            },
+            {
+                question: `What is ion-photon entanglement and how is it created?`,
+                answer: `Ion-photon entanglement is a quantum correlation between an ion's internal state and the polarization of an emitted photon. It is created by exciting the ion with a laser pulse that drives a Raman transition, causing the ion to emit a photon whose polarization depends on which internal state path was taken. The ion and photon become entangled, with the photon acting as a "flying qubit" that can be transmitted over optical fibers to create quantum networks.`
+            },
+            {
+                question: `What is the bichromatic cavity-mediated Raman transition (BCMRT)?`,
+                answer: `BCMRT is a technique that uses two laser frequencies (bichromatic) coupled through an optical cavity to drive stimulated Raman transitions in ions. The cavity enhances the interaction strength and enables efficient generation of ion-photon entanglement. By controlling the relative phase and polarization of the two laser frequencies, specific quantum state transitions can be driven while simultaneously generating entangled photons at a wavelength matched to the cavity mode.`
+            },
+            {
+                question: `What is quantum frequency conversion (QFC) and why convert 854nm to 1550nm?`,
+                answer: `Quantum frequency conversion uses nonlinear optical processes (like sum-frequency generation in PPLN crystals) to convert photons from one wavelength to another while preserving quantum information. Converting Ca+ ion emission at 854nm to 1550nm is crucial because 1550nm is the telecom wavelength where optical fibers have minimal loss (~0.2 dB/km). This enables long-distance quantum communication, as demonstrated by transmitting entanglement over 101 km of fiber.`
+            },
+            {
+                question: `What is multimode entanglement distribution?`,
+                answer: `Multimode entanglement distribution refers to creating entanglement between multiple qubits (or modes) and distributing this entanglement across spatially separated locations. In the ion-photon experiment, three ion qubits were entangled with separate photons that were transmitted through optical fiber. This creates a quantum network node where multiple entangled links can be established simultaneously, enabling more complex quantum communication protocols and distributed quantum computing.`
+            },
+            {
+                question: `What is concurrence and how does it quantify entanglement?`,
+                answer: `Concurrence is a measure of entanglement for two-qubit systems, ranging from 0 (separable) to 1 (maximally entangled). It is calculated from the eigenvalues of a matrix constructed from the density matrix and its spin-flipped version. For a Bell state like |Φ+⟩ = (|00⟩ + |11⟩)/√2, the concurrence is 1. After transmission over 101 km of fiber, the measured concurrence was 0.77, indicating strong but not perfect entanglement preservation.`
+            },
+            {
+                question: `What is a Bell state and what is Bell-state fidelity?`,
+                answer: `A Bell state is one of four maximally entangled two-qubit states: |Φ±⟩ = (|00⟩ ± |11⟩)/√2 or |Ψ±⟩ = (|01⟩ ± |10⟩)/√2. Bell-state fidelity measures how close an experimentally prepared state is to an ideal Bell state, calculated as F = ⟨Ψ_ideal|ρ_exp|Ψ_ideal⟩. High fidelity (>0.5 for violating Bell inequalities, >0.8 for quantum communication) indicates successful entanglement generation and preservation through transmission channels.`
+            },
+            {
+                question: `What limits the entanglement distribution rate over long distances?`,
+                answer: `The main limitations are: (1) photon loss in optical fibers (~0.2 dB/km at 1550nm, meaning 50% loss every 15 km), (2) detection inefficiency at the receiver, (3) limited ion-photon entanglement generation rate (~1 kHz), and (4) timing jitter and dark counts in single-photon detectors. Over 101 km, the overall success probability was ~10⁻⁵ per attempt, requiring hours of integration time to accumulate sufficient statistics for quantum state tomography.`
+            },
+            {
+                question: `What is entanglement swapping in quantum networks?`,
+                answer: `Entanglement swapping is a protocol where two pairs of entangled particles (A-B and C-D) can be used to create entanglement between particles that never directly interacted (A-D). This is achieved by performing a Bell-state measurement on the middle particles (B-C). In quantum networks, this enables long-distance entanglement distribution by connecting shorter entangled links, overcoming the exponential loss in direct transmission and forming the basis for quantum repeaters.`
+            }
+        ];
+
+        let currentIndex = 0;
+        const totalCards = cardsData.length;
+
+        const cardContainer = document.getElementById(`flashcard`);
+        const questionEl = document.getElementById(`questionText`);
+        const answerEl = document.getElementById(`answerText`);
+        const progressFill = document.getElementById(`progressBar`);
+        const progressText = document.getElementById(`progressText`);
+        const prevBtns = [document.getElementById(`prevBtnDesktop`), document.getElementById(`prevBtnMobile`)];
+        const nextBtns = [document.getElementById(`nextBtnDesktop`), document.getElementById(`nextBtnMobile`)];
+
+        function renderCard() {
+            const currentCard = cardsData[currentIndex];
+
+            questionEl.innerText = currentCard.question;
+            answerEl.innerText = currentCard.answer;
+
+            const percentage = ((currentIndex + 1) / totalCards) * 100;
+            progressFill.style.width = percentage + `%`;
+            progressText.innerText = `${currentIndex + 1} / ${totalCards}`;
+
+            cardContainer.classList.remove(`flipped`);
+
+            const isFirst = currentIndex === 0;
+            const isLast = currentIndex === totalCards - 1;
+
+            prevBtns.forEach(btn => btn.disabled = isFirst);
+            nextBtns.forEach(btn => btn.disabled = isLast);
+        }
+
+        function toggleFlip() {
+            cardContainer.classList.toggle(`flipped`);
+        }
+
+        function goNext(e) {
+            if(e) e.stopPropagation();
+            if (currentIndex < totalCards - 1) {
+                currentIndex++;
+                renderCard();
+            }
+        }
+
+        function goPrev(e) {
+            if(e) e.stopPropagation();
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        nextBtns.forEach(btn => btn.addEventListener(`click`, goNext));
+        prevBtns.forEach(btn => btn.addEventListener(`click`, goPrev));
+
+        document.addEventListener(`keydown`, (e) => {
+            if (e.key === `ArrowRight`) goNext();
+            if (e.key === `ArrowLeft`) goPrev();
+            if (e.key === ` ` || e.key === `Enter`) toggleFlip();
+        });
+
+        function restartDeck() {
+            currentIndex = 0;
+            renderCard();
+        }
+
+        function downloadCSV() {
+            let csvContent = `Question,Answer\n`;
+            cardsData.forEach(card => {
+                const q = `"${card.question.replace(/"/g, `""`)}"`;
+                const a = `"${card.answer.replace(/"/g, `""`)}"`;
+                csvContent += `${q},${a}\n`;
+            });
+            const blob = new Blob([`\uFEFF` + csvContent], { type: `text/csv;charset=utf-8;` });
+            const link = document.createElement(`a`);
+            const url = URL.createObjectURL(blob);
+            link.setAttribute(`href`, url);
+            link.setAttribute(`download`, `quantum-physics-flashcards.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        renderCard();
+    </script>
+    <script src="https://cdn.kuse.ai/sdk.prd.js"></script>
+</body>
+</html>

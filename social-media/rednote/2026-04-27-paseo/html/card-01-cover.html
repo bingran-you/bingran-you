@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css">
+<style>
+.card { background: var(--paper); padding: 0; }
+
+.bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(1100px 800px at 110% -10%, rgba(216,105,58,0.30), transparent 55%),
+    radial-gradient(900px 700px at -10% 110%, rgba(42,52,88,0.20), transparent 55%),
+    var(--paper);
+}
+
+.frame {
+  position: relative;
+  padding: 70px 80px 80px;
+  height: 100%;
+  display: flex; flex-direction: column;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--warm); }
+
+.tag-row { display: flex; gap: 12px; margin-top: 22px; }
+
+h1 {
+  font-family: "Noto Serif CJK SC", "Songti SC", serif;
+  font-size: 132px; line-height: 1.02; font-weight: 900;
+  letter-spacing: -3px;
+  margin-top: 28px;
+  color: var(--ink);
+}
+h1 .punch { color: var(--warm); }
+h1 .indigo { color: var(--indigo); }
+h1 .small { display: block; font-size: 52px; font-weight: 800; color: var(--mute); letter-spacing: -1px; margin-top: 22px; white-space: nowrap; }
+
+.scene {
+  position: absolute;
+  left: 0; right: 0; bottom: 60px;
+  height: 720px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.scene svg {
+  width: 100%; height: 100%;
+  display: block;
+}
+
+.attribution {
+  position: absolute; left: 80px; bottom: 36px;
+  font-size: 24px; color: var(--mute); letter-spacing: 1px;
+  z-index: 5;
+}
+.attribution b { color: var(--ink); }
+
+.url-pill {
+  position: absolute;
+  right: 80px; bottom: 30px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  z-index: 5;
+}
+</style></head>
+<body><div class="card"><div class="bg"></div>
+<div class="frame">
+
+  <div class="brand">
+    <span class="dot"></span>
+    <span class="kicker">VIBE CODER · 真实日常</span>
+  </div>
+
+  <div class="tag-row">
+    <span class="tag warm">Paseo</span>
+    <span class="tag indigo">4.7k ⭐ 开源</span>
+    <span class="tag">手机指挥 AI</span>
+  </div>
+
+  <h1>
+    <span class="indigo">躺在床上</span><br>
+    指挥 <span class="punch">4 个 AI</span><br>
+    替我<span class="punch">打工</span>
+    <span class="small">不带电脑出门，AI 也不停工</span>
+  </h1>
+
+  <div class="scene">
+    <svg viewBox="0 0 1080 720" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <!-- floor shadow -->
+      <ellipse cx="540" cy="700" rx="520" ry="16" fill="#000" opacity="0.06"/>
+
+      <!-- BED on the left -->
+      <g transform="translate(20,280) scale(1.15)">
+        <!-- blanket back -->
+        <path d="M0,200 L0,140 Q0,120 20,120 L420,120 Q440,120 440,140 L440,200 Z"
+              fill="#2a3458" stroke="#1d1c1a" stroke-width="4"/>
+        <!-- mattress -->
+        <rect x="-10" y="200" width="460" height="60" rx="10"
+              fill="#f5efe4" stroke="#1d1c1a" stroke-width="4"/>
+        <!-- bed legs -->
+        <rect x="0" y="260" width="14" height="40" fill="#1d1c1a"/>
+        <rect x="426" y="260" width="14" height="40" fill="#1d1c1a"/>
+
+        <!-- pillow -->
+        <rect x="20" y="80" width="160" height="80" rx="22"
+              fill="#f5efe4" stroke="#1d1c1a" stroke-width="4"/>
+
+        <!-- person (head) under blanket -->
+        <circle cx="100" cy="105" r="42" fill="#e6c9a8" stroke="#1d1c1a" stroke-width="4"/>
+        <!-- hair -->
+        <path d="M58,98 Q60,55 100,55 Q142,55 142,100 L142,80 Q120,72 100,76 Q80,80 58,98 Z"
+              fill="#1d1c1a"/>
+        <!-- closed eye + smile (chill) -->
+        <path d="M80,108 Q88,104 96,108" stroke="#1d1c1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M108,108 Q116,104 124,108" stroke="#1d1c1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M86,128 Q102,134 118,128" stroke="#1d1c1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+        <!-- arm holding phone -->
+        <path d="M140,140 L235,170 L235,200 L140,170 Z"
+              fill="#e6c9a8" stroke="#1d1c1a" stroke-width="4"/>
+
+        <!-- phone -->
+        <g transform="translate(218,140) rotate(18)">
+          <rect x="0" y="0" width="80" height="140" rx="14"
+                fill="#1d1c1a" stroke="#1d1c1a" stroke-width="4"/>
+          <rect x="6" y="14" width="68" height="112" rx="6" fill="#f5efe4"/>
+          <!-- mini chat bubbles on phone -->
+          <rect x="14" y="26" width="46" height="10" rx="4" fill="#d8693a"/>
+          <rect x="14" y="44" width="36" height="8" rx="4" fill="#2a3458"/>
+          <rect x="14" y="58" width="50" height="8" rx="4" fill="#2a3458"/>
+          <rect x="14" y="72" width="40" height="8" rx="4" fill="#2a3458"/>
+          <circle cx="40" cy="108" r="8" fill="#3f7a5e"/>
+        </g>
+
+        <!-- Z Z Z (sleepy/relaxed) -->
+        <text x="170" y="60" font-family="Iowan Old Style, Georgia, serif"
+              font-size="42" font-weight="900" fill="#2a3458">z</text>
+        <text x="200" y="38" font-family="Iowan Old Style, Georgia, serif"
+              font-size="32" font-weight="900" fill="#2a3458">z</text>
+        <text x="225" y="20" font-family="Iowan Old Style, Georgia, serif"
+              font-size="24" font-weight="900" fill="#2a3458">z</text>
+      </g>
+
+      <!-- WIFI signal arrows from phone toward laptop -->
+      <g stroke="#d8693a" stroke-width="7" fill="none" stroke-linecap="round">
+        <path d="M520,360 Q600,290 680,360" stroke-dasharray="2,16"/>
+        <path d="M540,400 Q610,340 680,400" stroke-dasharray="2,16"/>
+        <path d="M560,440 Q620,400 680,440" stroke-dasharray="2,16"/>
+        <!-- arrow head -->
+        <path d="M672,352 L687,362 L672,372" stroke-width="7"/>
+      </g>
+
+      <!-- LAPTOP on the right with 4 AI agents working -->
+      <g transform="translate(620,220) scale(1.05)">
+        <!-- screen back -->
+        <rect x="0" y="0" width="420" height="280" rx="16"
+              fill="#1d1c1a" stroke="#1d1c1a" stroke-width="4"/>
+        <!-- inside screen -->
+        <rect x="10" y="10" width="400" height="260" rx="8" fill="#f5efe4"/>
+
+        <!-- header bar -->
+        <rect x="10" y="10" width="400" height="34" rx="8" fill="#ece4d4"/>
+        <circle cx="28" cy="27" r="6" fill="#d8693a"/>
+        <circle cx="46" cy="27" r="6" fill="#f3d27a"/>
+        <circle cx="64" cy="27" r="6" fill="#3f7a5e"/>
+        <text x="200" y="34" text-anchor="middle"
+              font-family="Iowan Old Style, Georgia, serif"
+              font-size="18" font-weight="700" fill="#1d1c1a">paseo · 4 sessions</text>
+
+        <!-- 4 agent rows -->
+        <!-- row 1 -->
+        <g transform="translate(24,60)">
+          <rect x="0" y="0" width="372" height="44" rx="8" fill="#fff" stroke="#1d1c1a" stroke-width="2"/>
+          <circle cx="22" cy="22" r="12" fill="#d8693a"/>
+          <text x="22" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="900" fill="#fff">C</text>
+          <text x="44" y="20" font-family="Iowan Old Style,Georgia,serif" font-size="15" font-weight="700" fill="#1d1c1a">Claude · bingran-you</text>
+          <text x="44" y="36" font-family="Iowan Old Style,Georgia,serif" font-size="12" fill="#6b6353">writing tests…</text>
+          <rect x="240" y="18" width="120" height="10" rx="5" fill="#ece4d4"/>
+          <rect x="240" y="18" width="92" height="10" rx="5" fill="#3f7a5e"/>
+        </g>
+        <!-- row 2 -->
+        <g transform="translate(24,114)">
+          <rect x="0" y="0" width="372" height="44" rx="8" fill="#fff" stroke="#1d1c1a" stroke-width="2"/>
+          <circle cx="22" cy="22" r="12" fill="#2a3458"/>
+          <text x="22" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="900" fill="#fff">G</text>
+          <text x="44" y="20" font-family="Iowan Old Style,Georgia,serif" font-size="15" font-weight="700" fill="#1d1c1a">GPT · skillsbench</text>
+          <text x="44" y="36" font-family="Iowan Old Style,Georgia,serif" font-size="12" fill="#6b6353">refactoring…</text>
+          <rect x="240" y="18" width="120" height="10" rx="5" fill="#ece4d4"/>
+          <rect x="240" y="18" width="64" height="10" rx="5" fill="#d8693a"/>
+        </g>
+        <!-- row 3 -->
+        <g transform="translate(24,168)">
+          <rect x="0" y="0" width="372" height="44" rx="8" fill="#fff" stroke="#1d1c1a" stroke-width="2"/>
+          <circle cx="22" cy="22" r="12" fill="#3f7a5e"/>
+          <text x="22" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="900" fill="#fff">G</text>
+          <text x="44" y="20" font-family="Iowan Old Style,Georgia,serif" font-size="15" font-weight="700" fill="#1d1c1a">Gemini · mews</text>
+          <text x="44" y="36" font-family="Iowan Old Style,Georgia,serif" font-size="12" fill="#6b6353">fixing CI…</text>
+          <rect x="240" y="18" width="120" height="10" rx="5" fill="#ece4d4"/>
+          <rect x="240" y="18" width="108" height="10" rx="5" fill="#3f7a5e"/>
+        </g>
+        <!-- row 4 -->
+        <g transform="translate(24,222)">
+          <rect x="0" y="0" width="372" height="44" rx="8" fill="#fff" stroke="#1d1c1a" stroke-width="2"/>
+          <circle cx="22" cy="22" r="12" fill="#6b6b3f"/>
+          <text x="22" y="28" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="900" fill="#fff">C</text>
+          <text x="44" y="20" font-family="Iowan Old Style,Georgia,serif" font-size="15" font-weight="700" fill="#1d1c1a">Codex · DoWhiz</text>
+          <text x="44" y="36" font-family="Iowan Old Style,Georgia,serif" font-size="12" fill="#6b6353">opening PR…</text>
+          <rect x="240" y="18" width="120" height="10" rx="5" fill="#ece4d4"/>
+          <rect x="240" y="18" width="40" height="10" rx="5" fill="#d8693a"/>
+        </g>
+
+        <!-- laptop base -->
+        <path d="M-22,280 L442,280 L460,310 L-40,310 Z"
+              fill="#1d1c1a" stroke="#1d1c1a" stroke-width="4"/>
+        <rect x="190" y="280" width="40" height="6" rx="3" fill="#444"/>
+      </g>
+
+      <!-- desk surface -->
+      <rect x="540" y="600" width="540" height="6" fill="#1d1c1a" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <div class="attribution"><b>@bingran-you</b> · J.A.R.V.I.S. design</div>
+  <div class="url-pill">paseo.sh</div>
+</div>
+</div></body></html>

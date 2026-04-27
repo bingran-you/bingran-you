@@ -57,31 +57,34 @@ url: https://paseo.sh
 
 ---
 
-# 配图顺序（4 张）
+# 配图顺序（5 张）
 
-1. **手机 Sessions 列表** — 显示 4 个仓库（bingran-you / skillsbench / mews / KnoWhiz）→ 立刻传达"多 agent 多仓库"
-2. **手机对话页** — 中文对话 + GPT-5.4 模型 → 体现移动端可用 + 多模型
-3. **Mac 桌面端同会话** — 左 sessions 右对话 → 体现"端云同步"
-4. **GitHub 仓库页** — 4.7k stars / 420 forks / "Orchestrate coding agents remotely" → 信任背书
+1. **`output/card-01-cover.png`** ← 定制封面（首图，决定点击率）
+   - 大字 hook：「躺在床上 / 指挥 4 个 AI / 替我打工」
+   - 副标题：「不带电脑出门，AI 也不停工」
+   - 插画：左下床上拿手机的人 → wifi 波 → 右下笔记本里 4 个 agent 在跑
+   - 角标：Paseo · 4.7k⭐ 开源 / 手机指挥 AI / paseo.sh
+2. **手机 Sessions 列表** (`source-images/01-mobile-sessions.png`) — 4 个仓库一览
+3. **手机对话页** (`source-images/02-mobile-chat.png`) — 中文对话 + GPT-5.4
+4. **Mac 桌面端同会话** (`source-images/03-desktop.png`) — 端云同步
+5. **GitHub 仓库页** (`source-images/04-github-repo.png`) — 4.7k⭐ 信任背书
 
 ---
 
-# 封面建议（重要）
+# 封面（已生成）
 
-**强烈建议加一张定制封面作为首图**，原因：
-- 4 张原始截图都是纯 UI，没有大字 hook，CTR 会比较低
-- 小红书 "封面 = 80% 的点击率"
-- 同样内容，加封面通常能多 2-3x 点开率
+文件：`output/card-01-cover.png`（1080×1440 @2x，2160×2880）
+模板：`html/card-01-cover.html`（用 `python3 build.py` 重新渲染）
 
-封面方案（任选其一）：
-- **方案 A（最快）**：把"手机 Sessions 列表"截图做成首图，左上角加大字 hook：
-  > **iPhone 上**
-  > **指挥 4 个 AI**
-  > **同时给我打工**
-- **方案 B（推荐）**：纯设计封面 — 一只手举着 iPhone，屏幕里是 sessions 列表，右上角飘 "4.7k⭐ 开源" 标签。背景用 Paseo 的品牌色。
-- **方案 C（最简）**：用 Canva / 醒图 在第 1 张图上叠 3 行大字 + 表情，5 分钟搞定。
+设计要点（按 Bingran 要求两个元素）：
+- ✅ 躺在床上：左下床上人物拿手机，"Zzz" 营造"躺平"感
+- ✅ 指挥电脑上的 AI agents：右下笔记本 4 个 session（Claude/GPT/Gemini/Codex × 不同仓库），各自带进度条在跑
+- 中间用橙色 wifi 虚线箭头连接：手机 → 笔记本，强调"远程指挥"
 
-如果你想，我可以用现有的 build.py + HTML 模板（参考 `2026-04-25-claude-emotions/html/`）给你出一张 1080×1440 的方案 A 封面。
+如果想调整：
+- 想换标题色/换一个 hook → 改 `html/card-01-cover.html` 顶部 `<h1>`
+- 想换品牌色 → 改 `html/_shared.css` 的 `--warm` / `--indigo`
+- 想换插画风格（更卡通/更线稿）→ 改 SVG 内的 fill/stroke
 
 ---
 

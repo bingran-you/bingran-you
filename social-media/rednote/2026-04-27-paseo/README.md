@@ -6,13 +6,27 @@
 
 ## 内容
 
-- `post.md` — 标题候选、正文、配图顺序、封面建议、话题标签
+- `post.md` — 标题候选、正文、配图顺序、封面说明、话题标签
+- `html/card-01-cover.html` — 封面 HTML 模板（米色纸感 + 暖橙 + 深蓝，
+  纯内联 SVG 插画：床上拿手机 → wifi → 笔记本 4 个 agent）
+- `html/_shared.css` — 复用 2026-04-25-claude-emotions 的设计 token
+- `build.py` — `python3 build.py` 用 Playwright 把 HTML 渲染成
+  1080×1440 @2x PNG
+- `output/card-01-cover.png` — 已生成的封面（首图）
 - `source-images/` — 4 张原始截图素材（待 Bingran 手动放入）：
   1. `01-mobile-sessions.png` — 手机端 sessions 列表（4 个仓库）
   2. `02-mobile-chat.png` — 手机端中文对话页 + GPT-5.4
   3. `03-desktop.png` — Mac 桌面端同一 session
   4. `04-github-repo.png` — github.com/getpaseo/paseo 仓库主页
-- `output/` — 如生成封面/排版图，导出到这里（暂未生成）
+
+## 重新生成封面
+
+```sh
+python3 build.py
+```
+
+需要 `playwright` (chromium)。第一次运行：
+`pip3 install playwright && python3 -m playwright install chromium`
 
 ## 角度
 
@@ -33,6 +47,6 @@
 
 ## 待办
 
+- [x] 设计并生成封面（见 `output/card-01-cover.png`）
 - [ ] Bingran 把 4 张截图放进 `source-images/`
-- [ ] 决定是否做封面（推荐做，方案 A/B/C 见 `post.md`）
 - [ ] 发布前检查标题字数（≤ 20）和话题数量（5-8）

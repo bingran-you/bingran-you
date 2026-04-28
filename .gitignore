@@ -2,3 +2,7 @@
 scripts/githuber/target/
 /.claude/worktrees
 .DS_Store
+/papers/papers-reading/GEN-1/presentation-workspace/scratch
+/papers/papers-reading/GEN-1/presentation-workspace/node_modules
+/papers/papers-reading/GEN-1/presentation-workspace
+papers/papers-reading/GEN-1/~$GEN-1-阅读汇报.pptx

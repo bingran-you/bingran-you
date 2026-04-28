@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://generalistai.com/blog/apr-02-2026-GEN-1 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- #include head-common -->
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/lftracker_v1_bElvO73gzbp7ZMqj.js" async=""></script><script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async="" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-D7ZNP9LTG2');
+  </script>
+
+  <script>
+    (function (ss, ex) {
+      window.ldfdr = window.ldfdr || function () { (ldfdr._q = ldfdr._q || []).push([].slice.call(arguments)); };
+      (function (d, s) {
+        fs = d.getElementsByTagName(s)[0];
+        function ce(src) {
+          var cs = d.createElement(s);
+          cs.src = src;
+          cs.async = 1;
+          fs.parentNode.insertBefore(cs, fs);
+        };
+        ce('https://sc.lfeeder.com/lftracker_v1_' + ss + (ex ? '_' + ex : '') + '.js');
+      })(document, 'script');
+    })('bElvO73gzbp7ZMqj');
+  </script>
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="https://generalistai.com/assets/favicon/favicon-black.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/svg+xml" href="https://generalistai.com/assets/favicon/favicon-white.svg" media="(prefers-color-scheme: dark)">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://generalistai.com/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://generalistai.com/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://generalistai.com/assets/favicon/favicon-16x16.png">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/all.min.css">
+
+  <!-- Custom Style -->
+  <link rel="stylesheet" href="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/style.css">
+
+  <link rel="manifest" href="https://generalistai.com/assets/favicon/site.webmanifest">
+<!-- /include head-common -->
+
+  <!-- Chart.js -->
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/chart.js@4"></script>
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/chartjs-plugin-datalabels@2"></script>
+
+  <meta property="og:image" content="https://generalistai.com/blog/apr-02-2026-GEN-1/assets/generalist-gen1-og.png">
+  <meta property="og:title" content="GEN-1: Scaling Embodied Foundation Models to Mastery - Generalist AI">
+  <meta property="og:description" content="We&#39;ve created GEN-1, our latest milestone in scaling robot learning. The first general-purpose AI model that crosses a new performance threshold: mastery of simple physical tasks.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GEN-1: Scaling Embodied Foundation Models to Mastery - Generalist AI">
+  <meta name="twitter:description" content="We&#39;ve created GEN-1, our latest milestone in scaling robot learning. The first general-purpose AI model that crosses a new performance threshold: mastery of simple physical tasks.">
+  <meta name="twitter:image" content="https://generalistai.com/blog/apr-02-2026-GEN-1/assets/generalist-gen1-og.png">
+  <meta name="twitter:site" content="@GeneralistAI">
+
+  <title>Generalist - GEN-1: Scaling Embodied Foundation Models to Mastery</title>
+
+  <!-- CDN Fonts -->
+  <link href="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/iowanoldst-bt" rel="stylesheet">
+  <link href="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/sf-mono" rel="stylesheet">
+
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/loader"></script>
+
+  <style>
+
+    .blog-v2-authors {
+      margin-top: 4rem;
+    }
+
+    #orbit-hero {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #orbit-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #orbit-subtitle {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      pointer-events: none;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    #orbit-canvas {
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .blog-v2-title,
+    .blog-v2-subtitle {
+      text-wrap: pretty;
+    }
+
+    .blog-v2-image-container {
+      background: rgba(var(--foreground-rgb), 0.04);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-v2-image-container canvas {
+      max-height: 600px;
+    }
+    .blog-v2-image-container img {
+      max-width: 100%;
+      max-height: 100%;
+      min-height: 0;
+      object-fit: contain;
+    }
+    .blog-v2-image-container:has(.blog-v2-image-caption) {
+      padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+    }
+    .figure {
+      padding: 1.25rem 4.25rem !important;
+    }
+    @media screen and (max-width: 767px) {
+      .figure {
+        padding: 1.25rem 0 !important;
+      }
+    }
+
+    .figure .blog-v2-image-caption {
+      text-wrap: balance;
+    }
+    .blog-v2-image-caption {
+      font-size: var(--type-size-small);
+      color: rgba(var(--foreground-rgb), 0.7);
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-weight: 300;
+      max-width: 70ch;
+    }
+    .blog-v2-image-caption.left {
+      text-align: left;
+      text-wrap: pretty;
+      padding-left: 1.0rem;
+    }
+    .blog-v2-video-container {
+      background: rgba(var(--foreground-rgb), 0.04);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .blog-v2-video-container video {
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+    .blog-v2-video-container iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      border-radius: 0;
+    }
+
+    
+    .blog-v2-video-container:has(.blog-v2-video-caption) {
+      padding: 0.75rem 1.25rem 1.25rem 1.25rem;
+    }
+    .blog-v2-video-caption {
+      font-size: var(--type-size-small);
+      color: rgba(var(--foreground-rgb), 0.7);
+      margin-bottom: 0.5rem;
+      text-align: center;
+      font-weight: 300;
+    }
+    .blog-v2-container h1 {
+      text-wrap: balance;
+    }
+    .blog-v2-container p {
+      text-wrap: pretty;
+    }
+    .blog-v2-content h1:first-child {
+      margin-top: 0;
+    }
+
+    .video-grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      width: calc(100% * 12 / 6);
+      margin-left: calc(-100% * 3 / 6);
+    }
+
+    .video-grid-3x {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      width: calc(100% * 12 / 6);
+      margin-left: calc(-100% * 3 / 6);
+    }
+    .video-grid-3x .blog-v2-video-container {
+      margin-bottom: 0;
+      padding: 0.75rem;
+    }
+    .yt-facade {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      padding: 0;
+      margin: 0;
+      border: none;
+      background: #000;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .yt-facade-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter 0.2s ease;
+    }
+    .yt-facade:hover .yt-facade-thumb,
+    .yt-facade:focus-visible .yt-facade-thumb {
+      filter: brightness(1.08);
+    }
+    .yt-facade-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 22%;
+      max-width: 68px;
+      pointer-events: none;
+    }
+    .yt-facade-play svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+      transition: transform 0.2s ease;
+    }
+    .yt-facade-play svg path:first-of-type {
+      transition: fill 0.2s ease, opacity 0.2s ease;
+    }
+    .yt-facade:hover .yt-facade-play svg {
+      transform: scale(1.08);
+    }
+    .yt-facade:hover .yt-facade-play svg path:first-of-type {
+      fill: #f00;
+      opacity: 1;
+    }
+
+    .video-full-width {
+      margin: 2.5rem 0 1.5rem 0;
+      width: calc(100% * 12 / 6);
+      margin-left: calc(-100% * 3 / 6);
+    }
+    @media screen and (max-width: 1200px) {
+      .video-grid-2x2,
+      .video-grid-3x,
+      .video-full-width {
+        width: calc(100% * 12 / 10);
+        margin-left: calc(-100% * 1 / 10);
+      }
+      .video-grid-3x {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media screen and (max-width: 767px) {
+      .video-grid-2x2,
+      .video-grid-3x,
+      .video-full-width {
+        width: 100%;
+        margin-left: 0;
+      }
+      .video-grid-2x2,
+      .video-grid-3x {
+        grid-template-columns: 1fr;
+      }
+      .video-grid-2x2 :first-child {
+        margin-bottom: 0;
+      }
+      .video-grid-2x2 :last-child {
+        margin-top: 0;
+      }
+      .video-race-timer {
+        margin-top: 1rem !important;
+      }
+    }
+    
+    .section-icon {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-icon img {
+      width: 5rem;
+    }
+
+    
+
+    .video-race {
+      position: relative;
+    }
+    .video-race-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35em;
+      font-family: 'FK Grotesk', 'SF Mono', ui-monospace, monospace;
+      font-variation-settings: 'mono' 100;
+      font-weight: 400;
+      font-size: 1.0rem;
+      color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.14);
+      padding: 0.2rem 0.75rem 0.1rem;
+      border-radius: 999px;
+      margin: 1rem auto 0;
+      font-variant-numeric: tabular-nums;
+      transition: background 0.3s ease;
+    }
+    .video-race-timer .timer-icon { 
+      font-style: normal; 
+    }
+    .video-race-timer .timer-value { 
+      min-width: 5ch; 
+      text-align: left; 
+    }
+    .video-race .blog-v2-video-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .video-race-timer.stopped {
+      background: rgba(34, 197, 94, 0.35);
+    }
+    .video-race-label {
+      font-size: var(--type-size-small, 0.85rem);
+      color: rgba(var(--foreground-rgb), 0.45);
+      text-align: center;
+      margin-bottom: 0.25rem;
+      font-weight: 300;
+    }
+
+    .abstract {
+      background: rgba(var(--foreground-rgb), 0.07);
+      padding: 1.25rem 1.5rem;
+      font-size: 1.25rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.5rem !important;
+    }
+
+    .hero-video-wrapper {
+      position: relative;
+    }
+    .hero-video-wrapper.ready {
+      cursor: pointer;
+    }
+    .hero-play-btn {
+      position: absolute;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(var(--foreground-rgb), 0.8);
+      backdrop-filter: blur(6px) brightness(1.25);
+      -webkit-backdrop-filter: blur(6px) brightness(1.25);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.5rem 1.0rem 0.5rem 0.6rem;
+      color: rgb(var(--background-rgb));
+      font-size: 1.25rem;
+      font-weight: 550;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 2;
+      outline: 1px solid rgba(var(--foreground-rgb), 0.8);
+      outline-offset: -1px;
+    }
+    .hero-play-btn span {
+      font-size: 1.5rem;
+      font-weight: 575;
+    }
+    .hero-play-btn svg {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+    .hero-video-wrapper:hover .hero-play-btn:not(.hidden) {
+      backdrop-filter: blur(6px) brightness(1.75);
+      -webkit-backdrop-filter: blur(6px) brightness(1.75);
+    }
+    #improv-video-wrapper .hero-play-btn {
+      bottom: auto;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .hero-play-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      transform: translateX(-50%);
+    }
+    .indented {
+      padding-left: 1.5rem;
+    }
+    .indented strong {
+      font-weight: 600;
+    }
+    .blog-v2-header h1 {
+        font-size: 0.85rem;
+        line-height: 1.15rem;
+        margin-bottom: 0.4rem;
+    }
+    .blog-v2-header p {
+      font-size: 0.85rem;
+      line-height: 1.15rem; 
+    }
+    .blog-v2-header p:has(+ h1), 
+    .blog-v2-header p:last-child {
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</head>
+
+<body id="body">
+<!-- #include nav -->
+  <nav class="navbar bg-black">
+    <div class="container">
+      <a class="navbar-brand" href="https://generalistai.com/">
+        <span data-brand="wordmark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1379.23 192.99">
+    <path class="cls-1" d="M144.66,79.8V28.65L100.36,3.07l-44.3,25.58v51.15l22.15,12.79,22.15-38.36,22.15,38.36,22.15-12.79ZM129.41,104.53l24.56,42.53h-44.23v42.53h85.06v-85.06h-65.38ZM69.52,107.64c-6.9-4.14-14.96-6.52-23.59-6.52C20.56,101.12,0,121.69,0,147.06s20.56,45.93,45.93,45.93,45.93-20.57,45.93-45.93h-45.1l22.76-39.41Z"></path>
+    <g>
+      <path class="cls-1" d="M236.29,96.48c0-14.68,2.14-27.95,6.41-39.82,4.27-11.87,10.42-22.01,18.45-30.43,8.03-8.42,17.72-14.89,29.07-19.42,11.35-4.53,24.11-6.8,38.27-6.8,13.38,0,24.97,1.86,34.77,5.57,9.8,3.71,17.94,8.57,24.41,14.57,6.48,6,11.42,12.61,14.83,19.81,3.41,7.21,5.37,14.35,5.89,21.43v3.89h-34.19c-.69-5.52-2.55-11.18-5.57-16.96-3.02-5.78-7.71-10.64-14.05-14.57-6.35-3.93-14.83-5.89-25.45-5.89-8.81,0-16.69,1.64-23.63,4.92-6.95,3.28-12.84,7.94-17.68,13.99-4.84,6.04-8.5,13.3-11.01,21.76-2.5,8.46-3.76,17.92-3.76,28.36,0,13.81,2.2,25.81,6.6,36,4.4,10.19,10.73,18.07,18.97,23.63,8.24,5.57,18.11,8.35,29.59,8.35s21.19-2.31,28.36-6.93c7.17-4.62,12.43-10.55,15.8-17.81,3.37-7.25,5.31-14.93,5.83-23.05h-48.3v-26.16h80.42v98.68h-32.38v-20.59h-2.59c-1.64,2.16-3.82,4.55-6.54,7.19-2.72,2.63-6.17,5.16-10.36,7.58-4.19,2.42-9.22,4.4-15.09,5.96-5.87,1.55-12.87,2.33-20.98,2.33-17.09,0-32.1-3.91-45-11.72-12.91-7.81-22.99-18.86-30.24-33.15-7.25-14.29-10.88-31.19-10.88-50.7Z"></path>
+      <path class="cls-1" d="M420.31,122.12c0-11.74,1.6-22.01,4.79-30.82,3.19-8.81,7.73-16.14,13.6-22.02,5.87-5.87,12.99-10.27,21.37-13.21,8.37-2.93,17.7-4.4,27.97-4.4,13.55,0,25.14,2.61,34.77,7.83,9.63,5.22,16.96,12.69,22.01,22.4,5.05,9.71,7.58,21.43,7.58,35.16v13.6h-98.42c.17,7.43,1.57,13.9,4.21,19.42,2.63,5.53,6.45,9.86,11.46,13.01,5.01,3.15,11.05,4.73,18.13,4.73s12.8-1.12,17.16-3.37c4.36-2.24,7.64-5.01,9.84-8.29,2.2-3.28,3.65-6.52,4.34-9.71h30.69v3.88c-.95,4.58-2.74,9.32-5.37,14.25-2.63,4.92-6.37,9.52-11.2,13.79-4.84,4.27-10.92,7.73-18.26,10.36-7.34,2.63-16.23,3.95-26.68,3.95-20.64,0-37.12-5.91-49.47-17.74-12.35-11.83-18.52-29.44-18.52-52.84ZM454.37,107.74h64.88c-.09-6.04-1.25-11.44-3.5-16.19-2.25-4.75-5.68-8.5-10.3-11.27-4.62-2.76-10.55-4.14-17.81-4.14s-12.99,1.4-17.74,4.21c-4.75,2.81-8.4,6.6-10.94,11.4-2.55,4.79-4.08,10.12-4.6,15.99Z"></path>
+      <path class="cls-1" d="M564.57,54.78h33.67v16.32h2.59c1.55-2.42,3.89-5.12,6.99-8.09s7.42-5.55,12.95-7.71c5.52-2.16,12.52-3.24,20.98-3.24,15.28,0,27.41,4.14,36.39,12.43,8.98,8.29,13.47,20.33,13.47,36.13v88.97h-35.09v-86.89c0-8.29-2.25-14.46-6.73-18.52-4.49-4.06-10.53-6.09-18.13-6.09-5.7,0-10.99,1.17-15.86,3.5-4.88,2.33-8.79,5.98-11.72,10.94-2.94,4.96-4.4,11.42-4.4,19.36v77.7h-35.09V54.78Z"></path>
+      <path class="cls-1" d="M702.61,122.12c0-11.74,1.6-22.01,4.79-30.82,3.19-8.81,7.73-16.14,13.6-22.02,5.87-5.87,12.99-10.27,21.37-13.21,8.37-2.93,17.7-4.4,27.97-4.4,13.55,0,25.14,2.61,34.77,7.83,9.63,5.22,16.96,12.69,22.01,22.4,5.05,9.71,7.58,21.43,7.58,35.16v13.6h-98.42c.17,7.43,1.57,13.9,4.21,19.42,2.63,5.53,6.45,9.86,11.46,13.01,5.01,3.15,11.05,4.73,18.13,4.73s12.8-1.12,17.16-3.37c4.36-2.24,7.64-5.01,9.84-8.29,2.2-3.28,3.65-6.52,4.34-9.71h30.69v3.88c-.95,4.58-2.74,9.32-5.37,14.25-2.63,4.92-6.37,9.52-11.2,13.79-4.84,4.27-10.92,7.73-18.26,10.36-7.34,2.63-16.23,3.95-26.68,3.95-20.64,0-37.12-5.91-49.47-17.74-12.35-11.83-18.52-29.44-18.52-52.84ZM736.67,107.74h64.88c-.09-6.04-1.25-11.44-3.5-16.19-2.25-4.75-5.68-8.5-10.3-11.27-4.62-2.76-10.55-4.14-17.81-4.14s-12.99,1.4-17.74,4.21c-4.75,2.81-8.4,6.6-10.94,11.4-2.55,4.79-4.08,10.12-4.6,15.99Z"></path>
+      <path class="cls-1" d="M846.87,54.78h33.67v20.2h2.59c1.81-4.75,4.45-8.91,7.9-12.5,3.45-3.58,8.14-6.24,14.05-7.96,5.91-1.73,13.45-2.11,22.6-1.17v29.53c-8.98-1.21-16.9-.97-23.76.71-6.86,1.68-12.24,5.37-16.12,11.07-3.89,5.7-5.83,14.03-5.83,24.99v69.93h-35.09V54.78Z"></path>
+      <path class="cls-1" d="M932.73,94.92v-3.88c1.55-12.09,7.64-21.69,18.26-28.81,10.62-7.12,24.48-10.68,41.57-10.68,11.48,0,21.52,1.79,30.11,5.37,8.59,3.58,15.28,9.09,20.07,16.51,4.79,7.43,7.19,17.05,7.19,28.88v54.65c0,6.39.28,11.87.84,16.45.56,4.58,1.57,8.68,3.04,12.3v3.88h-33.02c-.69-2.16-1.19-4.51-1.49-7.06-.3-2.54-.54-5.37-.71-8.48h-2.59c-2.07,3.02-4.81,5.92-8.22,8.68-3.41,2.76-7.75,5.01-13.01,6.73-5.27,1.73-11.78,2.59-19.55,2.59-9.5,0-18.02-1.71-25.58-5.12-7.56-3.41-13.51-8.18-17.87-14.31-4.36-6.13-6.54-13.42-6.54-21.89,0-8.98,2.09-16.32,6.28-22.02,4.19-5.7,9.84-10.06,16.96-13.08,7.12-3.02,15-4.96,23.63-5.83l30.69-2.98c4.66-.43,8.18-1.51,10.55-3.24,2.37-1.73,3.56-4.62,3.56-8.68,0-6.13-2.16-10.81-6.48-14.05-4.32-3.24-10.49-4.86-18.52-4.86s-14.42,1.58-19.43,4.73c-5.01,3.15-7.6,7.88-7.77,14.18h-31.99ZM959.54,149.31c0,5.7,2.16,10.23,6.48,13.6,4.32,3.37,10.14,5.05,17.48,5.05,5.27,0,10.44-1.1,15.54-3.3,5.09-2.2,9.32-5.87,12.69-11.01,3.37-5.14,5.05-12.02,5.05-20.66v-8.16h-2.59c-2.07,1.21-4.43,2.16-7.06,2.85-2.63.69-6.15,1.25-10.55,1.68l-15.54,1.55c-6.39.69-11.57,2.42-15.54,5.18-3.97,2.76-5.96,7.17-5.96,13.21Z"></path>
+      <path class="cls-1" d="M1068.44,3.11h35.09v186.48h-35.09V3.11Z"></path>
+      <path class="cls-1" d="M1122.44,3.24h35.35v31.21h-35.35V3.24ZM1122.44,54.78h35.22v134.81h-35.22V54.78Z"></path>
+      <path class="cls-1" d="M1171.65,92.33c0-12.26,5.05-22.04,15.15-29.33,10.1-7.29,24.13-10.94,42.09-10.94s32.27,3.63,42.67,10.88c10.4,7.25,16.34,16.62,17.81,28.1v3.88h-31.86c-.52-6.82-3.28-11.74-8.29-14.76-5.01-3.02-11.48-4.53-19.42-4.53s-13.79,1.36-18.32,4.08c-4.53,2.72-6.8,6.54-6.8,11.46s1.83,8.46,5.5,10.62c3.67,2.16,8.14,3.67,13.4,4.53l24.6,4.01c9.06,1.47,17.05,3.67,23.96,6.6,6.91,2.94,12.28,7.04,16.12,12.3,3.84,5.27,5.76,12.09,5.76,20.46,0,13.04-5.05,23.46-15.15,31.27-10.1,7.81-25.04,11.72-44.81,11.72s-35.16-3.86-46.17-11.59c-11.01-7.72-17.33-17.55-18.97-29.46v-3.88h32.63c.78,7.34,4.19,12.71,10.23,16.12,6.04,3.41,13.47,5.12,22.27,5.12s15.62-1.49,20.2-4.47c4.58-2.98,6.86-7.1,6.86-12.37s-1.94-8.57-5.83-10.68c-3.89-2.11-9.07-3.69-15.54-4.73l-24.61-4.01c-8.55-1.38-16.08-3.73-22.6-7.06-6.52-3.32-11.63-7.73-15.35-13.21-3.71-5.48-5.57-12.19-5.57-20.14Z"></path>
+      <path class="cls-1" d="M1290.92,54.78h24.99V18.65h34.84v36.13h28.49v23.7h-28.49v75.63c0,3.37.88,5.98,2.65,7.83,1.77,1.86,4.42,2.79,7.96,2.79h17.22v24.86h-26.03c-11.48,0-20.46-2.93-26.94-8.81-6.48-5.87-9.71-14.42-9.71-25.64v-76.66h-24.99v-23.7Z"></path>
+    </g>
+  </svg></span>
+      </a>
+      <button class="navbar-toggler" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="https://generalistai.com/blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://generalistai.com/#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://generalistai.com/careers">Careers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn" href="https://generalistai.com/blog/apr-02-2026-GEN-1#" onclick="openContactPanel(); return false;">Get in Touch&nbsp;<span>→</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <script>
+    (function () {
+      var toggler = document.querySelector('.navbar-toggler');
+      var collapse = document.getElementById('navbarNav');
+      if (toggler && collapse) {
+        toggler.addEventListener('click', function () {
+          var expanded = toggler.getAttribute('aria-expanded') === 'true';
+          toggler.setAttribute('aria-expanded', String(!expanded));
+          collapse.classList.toggle('show');
+        });
+      }
+      var path = location.pathname;
+      document.querySelectorAll('.navbar .nav-link[href]').forEach(function (link) {
+        var href = link.getAttribute('href');
+        if (href === '/blog' && (path === '/blog' || path.startsWith('/blog/'))) link.classList.add('active');
+        // About lives on the homepage now; no active state needed
+        // else if (href === '/#about' && (path === '/' || path.startsWith('/about'))) link.classList.add('active');
+        else if (href === '/careers' && path.startsWith('/careers')) link.classList.add('active');
+      });
+    })();
+  </script>
+<!-- /include nav -->
+
+  <main class="container">
+    <article class="blog-v2-container" id="apr-02-2026-GEN-1">
+
+      <div class="blog-v2-hero" id="orbit-hero" style="background-color: rgb(14, 30, 48); border-radius: 4px;">
+        <span id="orbit-label" style="font-family: &quot;FK Grotesk Neue&quot;, sans-serif; font-weight: 500; color: rgb(255, 255, 255); font-feature-settings: &quot;case&quot;, &quot;ss04&quot;; font-size: 262px; top: calc(51%);">GEN-<span style="margin-left:-0.08em;font-size:inherit">1</span></span>
+        <span id="orbit-subtitle" style="font-family: &quot;FK Grotesk Neue&quot;, sans-serif; font-weight: 450; color: rgb(255, 255, 255); line-height: 1.1; font-size: 27px; bottom: 5%;"><br>Scaling Embodied Foundation Models to Mastery</span>
+        <canvas id="orbit-canvas" width="2287" height="980" style="width: 1271px; height: 545px;"></canvas>
+      </div>
+
+      <header class="blog-v2-menu">
+        <h1><a href="https://generalistai.com/blog">Blog / Research</a></h1>
+      </header>
+
+      <!-- <div class="blog-v2-title">
+        <span class="gen-1">GEN-1</span>: Scaling Embodied Foundation Models to Mastery
+      </div> -->
+      <!-- <div class="blog-v2-subtitle">
+        99%+ success rates, emergent freestyle problem solving, and breaking the speed barrier&mdash;with only ~1 hour of robot data.
+      </div> -->
+      <div class="blog-v2-authors">
+        Generalist AI Team
+      </div>
+      <div class="blog-v2-date">
+        April 2, 2026
+      </div>
+
+      <header class="blog-v2-header"><h1 style="cursor: pointer;">Introduction</h1><h1 style="cursor: pointer;">Scaling the Pretraining Era of Embodied Intelligence</h1><h1 style="cursor: pointer;">Introducing GEN-1</h1><h1 style="cursor: pointer;">Defining Mastery</h1><h1 style="cursor: pointer;">Capabilities</h1><p style="cursor: pointer;">Reliability</p><p style="cursor: pointer;">Speed</p><p style="cursor: pointer;">Improvisational Intelligence</p><h1 style="cursor: pointer;">Limitations</h1><p style="cursor: pointer;">Rethinking Alignment for Embodied Intelligence</p><h1 style="cursor: pointer;">Looking Ahead</h1><p style="cursor: pointer;">General Intelligence Born from the Physical World</p><h1 style="cursor: pointer;">Citation</h1><h1 style="cursor: pointer;">More Videos</h1></header>
+
+      <a href="https://generalistai.com/blog/nov-04-2025-GEN-0" class="footnote" data-footnote="1" target="_blank" style="width: 211.889px; left: 969.501px; top: 2150.93px;">
+        <sup class="footnote-number">1</sup> <span>Scaling Laws in Robotics with GEN-0</span> (Generalist, 2025)
+      </a>
+
+      <a href="https://arxiv.org/pdf/2001.08361" class="footnote" data-footnote="2" style="width: 211.889px; left: 969.501px; top: 2238.93px;">
+        <sup class="footnote-number">2</sup> <span>Scaling Laws for Neural Language Models</span> (Kaplan and McCandlish et al., 2021)
+      </a>
+
+      <a href="https://generalistai.com/blog/mar-24-2026-gtc-demo" class="footnote" data-footnote="3" target="_blank" style="width: 211.889px; left: 969.501px; top: 2326.93px;">
+        <sup class="footnote-number">3</sup> <span>The Real Breakthrough Behind Our GTC Demo</span> (Generalist, 2026)
+      </a>
+
+      <a href="https://generalistai.com/blog/jan-29-2026-physical-commonsense" class="footnote" data-footnote="4" target="_blank" style="width: 211.889px; left: 969.501px; top: 2414.93px;">
+        <sup class="footnote-number">4</sup> <span>Physical Commonsense</span> (Generalist, 2026)
+      </a>
+
+      <a href="https://palm-e.github.io/" class="footnote" data-footnote="5" target="_blank" style="width: 211.889px; left: 969.501px; top: 2740.93px;">
+        <sup class="footnote-number">5</sup> <span>PaLM-E: An Embodied Multimodal Language Model</span> (Driess et al., 2023)
+      </a>
+
+      <a href="https://robotics-transformer2.github.io/" class="footnote" data-footnote="6" target="_blank" style="width: 211.889px; left: 969.501px; top: 2828.93px;">
+        <sup class="footnote-number">6</sup> <span>RT-2: Vision-Language-Action Models</span> (Brohan et al., 2023)
+      </a>
+
+      <a href="https://video-language-planning.github.io/" class="footnote" data-footnote="7" target="_blank" style="width: 211.889px; left: 969.501px; top: 2916.93px;">
+        <sup class="footnote-number">7</sup> <span>Video Language Planning</span> (Du et al., 2023)
+      </a>
+
+      <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" class="footnote" data-footnote="8" target="_blank" data-lf-fd-inspected-belvo73gzbp7zmqj="true" style="width: 211.889px; left: 969.501px; top: 3706.84px;">
+        <sup class="footnote-number">8</sup> <span>Language Models are Unsupervised Multitask Learners</span> (Radford et al., 2019)
+      </a>
+
+      <a href="https://arxiv.org/abs/2005.14165" class="footnote" data-footnote="9" target="_blank" style="width: 211.889px; left: 969.501px; top: 3815.84px;">
+        <sup class="footnote-number">9</sup> <span>Language Models are Few-Shot Learners</span> (Brown et al., 2020)
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=1sZ2c2EMNcg" class="footnote" data-footnote="10" target="_blank" style="width: 211.889px; left: 969.501px; top: 14086.4px;">
+        <sup class="footnote-number">10</sup> <span>GEN-0 Box Folding Demo</span> (Generalist, 2025)
+      </a>
+
+      <a href="https://www.physicalintelligence.company/blog/pi0" class="footnote" data-footnote="11" target="_blank" style="width: 211.889px; left: 969.501px; top: 14154.4px;">
+        <sup class="footnote-number">11</sup> <span>π<sub>0</sub>: A Vision-Language-Action Flow Model for General Robot Control</span> (Black et al., 2024)
+      </a>
+
+      <a href="https://youtu.be/d1obFDstuVQ?si=0rlzVEJw32VshH6w" class="footnote" data-footnote="12" target="_blank" style="width: 211.889px; left: 969.501px; top: 14266.4px;">
+        <sup class="footnote-number">12</sup> <span>π*<sub>0.6</sub> Box Assembly</span> (Hausman, 2025)
+      </a>
+
+      <a href="https://yanweiw.github.io/itps/" class="footnote" data-footnote="13" target="_blank" style="width: 211.889px; left: 969.501px; top: 16385.8px;">
+        <sup class="footnote-number">13</sup> <span>Inference-Time Policy Steering through Human Interactions</span> (Wang et al., 2025)
+      </a>
+
+      <div class="blog-v2-content" id="introduction">
+
+        <p class="abstract">We’ve created <span class="gen-1">GEN-1</span>, our latest milestone in scaling robot learning. We believe it to be the first general-purpose AI model that crosses a new performance threshold: mastery of simple physical tasks. It improves average success rates to 99% on tasks where previous models achieve 64%, completes tasks roughly 3x faster than state of the art, and requires only 1 hour of robot data for each of these results. <span class="gen-1">GEN-1</span> unlocks commercial viability across a broad range of applications—and while it cannot solve all tasks today, it is a significant step towards our mission of creating generalist intelligence for the physical world.</p>
+
+        <div class="video-full-width">
+          <div class="blog-v2-video-container hero-video-wrapper">
+            <!-- <video id="hero-video" src="/blog/apr-02-2026-GEN-1/assets/placeholder-hero-video-v6.mp4" playsinline preload="auto" style="width:100%"></video>
+            <button class="hero-play-btn" id="hero-play-btn" aria-label="Play video">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <span>Play Video</span>
+            </button> -->
+            <iframe src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/SY2xyrmV44Y.html" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="" data-lf-form-tracking-inspected-belvo73gzbp7zmqj="true" data-lf-yt-playback-inspected-belvo73gzbp7zmqj="true" data-lf-vimeo-playback-inspected-belvo73gzbp7zmqj="true">
+            </iframe>
+          </div>
+        </div>
+
+        <p>At Generalist we are building towards physical AGI and making it useful to everyone. Today, we introduce our latest model, <span class="gen-1">GEN-1</span>. It is a large multimodal model that emits actions in real-time. It demonstrates several advanced capabilities compared to our previous models, and is a significant step towards our mission.</p>
+
+        <p>Five months ago, with <span class="gen-0">GEN-0</span>, we showed for the first time that <a href="https://generalistai.com/blog/nov-04-2025-GEN-0">scaling laws</a><sup class="footnote-ref" data-footnote="1">1</sup> exist in robotics–bringing physical AI models into the pretraining era, which has analogously underpinned predictable progress in <a href="https://arxiv.org/pdf/2001.08361">language models</a>.<sup class="footnote-ref" data-footnote="2">2</sup> <span class="gen-0">GEN-0</span> was made possible by a new multimodal architecture trained on our own (world’s largest) robotics pretraining dataset, and it demonstrated the ability to <a href="https://generalistai.com/blog/nov-04-2025-GEN-0#scaling-laws-for-robotics">quickly learn new tasks</a>, <a href="https://generalistai.com/blog/mar-24-2026-gtc-demo">adapt to new environments</a>,<sup class="footnote-ref" data-footnote="3">3</sup> and <a href="https://generalistai.com/blog/jan-29-2026-physical-commonsense">display moments of physical commonsense</a>.<sup class="footnote-ref" data-footnote="4">4</sup></p>
+
+        <p>Today, we announce <span class="gen-1">GEN-1</span>, which through further scaling of <span class="gen-0">GEN-0</span>’s foundation, and accelerated by algorithmic advances, is starting to show a significant shift in what these models can deliver. <span class="gen-1">GEN-1</span> can begin to master simple tasks – on several tasks the model now exceeds 99% success rates (reliability), can complete tasks up to ~3x faster than the prior SOTA (speed), and exhibits a broad range of emergent behaviors to recover in unexpected scenarios (improvisation). In each case, these results require only approximately 1 hr of robot data.</p>
+
+        <p>We believe <span class="gen-1">GEN-1</span> to be the first general physical AI model to cross a key threshold: unlocking commercial viability across a broad range of tasks—with a level of generality that is impossible to match with traditional automation, and at performance levels previously thought to be out of reach for robotics models. We previously created the first wave of <a href="https://palm-e.github.io/" target="_blank">embodied foundation models</a>,<sup class="footnote-ref" data-footnote="5">5</sup> including <a href="https://robotics-transformer2.github.io/" target="_blank">VLAs</a><sup class="footnote-ref" data-footnote="6">6</sup> and <a href="https://video-language-planning.github.io/" target="_blank">world models</a>,<sup class="footnote-ref" data-footnote="7">7</sup> and we knew they were far from perfect. The progress of <span class="gen-1">GEN-1</span> follows our own full redesign of embodied foundation models built for the real world, and is trained <em>from scratch</em> on our dataset of now half a million hours of real-world data.</p>
+
+        <p><span class="gen-1">GEN-1</span> represents a step change in capabilities, but it does not solve all tasks. It strengthens our view that continued scaling of our models with physical experience will continue to yield discoveries that unlock broader physical intelligence, expand the range of viable tasks, and open new application areas.</p>
+
+        <p>We are excited by these results, but we are still early in the journey. We believe the true nature of generalist intelligence involves the ability to achieve high levels of mastery across all physical work, and <span class="gen-1">GEN-1</span> clarifies how we evaluate progress. <span class="gen-1">GEN-1</span> shows early signs of new levels of <em>mastery</em>, which we define as the combination of reliability, speed and improvisation. Below, we detail these new capabilities from <span class="gen-1">GEN-1</span>, including videos of robots doing several different dexterous tasks hundreds of times in a row for hours.</p>
+
+        <h1 id="scaling-the-pretraining-era-of-embodied-intelligence" title="Click to navigate to this section">Scaling the Pretraining Era of Embodied Intelligence</h1>
+
+        <p>Previously, with <a href="https://generalistai.com/blog/nov-04-2025-GEN-0"><span class="gen-0">GEN-0</span></a>, we showed for the first time that <a href="https://generalistai.com/blog/nov-04-2025-GEN-0#scaling-laws-for-robotics">scaling laws</a> exist in robotics. Importantly, it demonstrated that it was possible to scale up robot learning in a generalized way – every zero-shot task we tracked would simultaneously improve. However, its performance was not sufficient to be used in commercial settings. Now with <span class="gen-1">GEN-1</span>, through further scaling of data and compute, and accelerated by algorithmic advances, we are starting to see some tasks cross the level of performance needed to be deployed in economically useful settings.</p>
+
+        <p>This parallels what has underpinned progress in large language models (LLMs) as they have been scaled over the past 8 years. <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank" data-lf-fd-inspected-belvo73gzbp7zmqj="true">GPT-2</a><sup class="footnote-ref" data-footnote="8">8</sup> showed a scalable path for multitask learning, but struggled to be deployed in economically valuable or useful software products. Scaling the model to <a href="https://arxiv.org/abs/2005.14165" target="_blank">GPT-3</a><sup class="footnote-ref" data-footnote="9">9</sup> showed the scaling laws held, new capabilities emerged, and the model became economically viable for certain tasks, such as copywriting for ads. As LLMs have scaled, each subsequent model generation has brought forth new capabilities that meet the performance requirements for a new set of tasks. Similarly, <span class="gen-1">GEN-1</span> can begin to master simple tasks, but the more important concept supported by scaling is that we can expect each new generation of model to result in a new set of increasingly complex tasks that can be mastered.</p>
+
+        <p>Notably, this progression also validates the data engine behind these models. Previous general models in robotics that surpass 90% success have depended on enormous teleoperation datasets that are expensive and difficult to scale. Instead, for <span class="gen-0">GEN-0</span> and <span class="gen-1">GEN-1</span> the base foundation model is trained without any robot data—it instead uses data from low-cost wearable devices on humans doing millions of activities, and provides an existence proof that this pretraining can lead to high levels of mastery without requiring large teleoperation or simulation datasets.</p>
+
+        <h1 id="introducing-gen-1" title="Click to navigate to this section">Introducing <span class="gen-1">GEN-1</span></h1>
+
+        <p><span class="gen-1">GEN-1</span> comprises innovations across pre-training advances, post-training techniques, learning from experience (RL), multimodal human guidance, as well as new inference-time techniques. The pre-training advances have contributed to <em>shifting the curve</em> of compute efficiency of pretraining intelligence, and the others all contribute to unlocking higher performance for any given task. In addition to these advances, <span class="gen-1">GEN-1</span> has also been scaled significantly since our previous model, <span class="gen-0">GEN-0</span>: this includes more compute and more data, trained on our dataset which now includes over half a million hours of high-fidelity physical interaction data.</p>
+
+        <p>While we may call <span class="gen-1">GEN-1</span> a model, it is even more accurate to refer to <span class="gen-1">GEN-1</span> as a <em>system</em>. Just as with frontier LLM chatbots and APIs, there are many system-level components across inference and model harnessing that critically advance its performance beyond being just a set of model weights.</p>
+
+        <p><span class="gen-1">GEN-1</span> is a data-efficient learner: in some tests, <span class="gen-1">GEN-1</span> can achieve comparable performance to <span class="gen-0">GEN-0</span> with 10x less task-specific data and fine tuning steps. Additionally, each of the results shown are built with only approximately <em>one hour of robot data</em>. The pretraining dataset contains <em>no robot data</em>, so when <span class="gen-1">GEN-1</span> adapts to a new task, it is simultaneously <em>adapting to that robot embodiment and to that task</em> for the first time.</p>
+
+        <h1 id="defining-mastery" title="Click to navigate to this section">Defining Mastery</h1>
+
+        <p>Embodied foundation models should be reliable, fast, and able to recover from unexpected scenarios. We use the term <em>mastery</em> to refer to the combination of all of: <em>reliability</em>, <em>speed</em>, and <em>improvisational intelligence</em>. While reliability and speed are more straightforward to measure, we believe it is improvisational intelligence that has most critically been missing from robotics before.</p>
+
+        <p class="indented"><strong>Reliability</strong><br>The ability to reliably accomplish tasks is table stakes for real-world deployment. Traditional systems have performed repetitive motions reliably for decades, but this has evaded end-to-end robotics models. When high performance has been achieved, it is typically through resource-intensive teleoperation data on a specific system, limited to a narrow set of tasks, or achieved at the expense of complexity. The real challenge is not just achieving high performance once, but delivering robust, repeatable performance across tasks, systems, and environments.</p>
+
+        <p class="indented"><strong>Speed</strong><br>Robotics has long suffered from a speed barrier: demo videos of dexterous general-purpose models are too slow. But breaking this speed barrier is not so simple. As speeds increase, the world becomes less quasi-static: velocity terms rise, friction dynamics change, motions blur, and there are increasing constraints on the precision, reactivity, and inference. What matters, too, is not how quickly the motors are moving, but <em>how quickly the task is accomplished</em>.</p>
+
+        <p class="indented"><strong>Improvisation</strong><br>To thrive in unstructured environments, robots must have the ability to creatively improvise solutions in unexpected scenarios–to respond and adapt rather than rely on predefined behaviors. As we have previously discussed, we believe that physical commonsense is essential to achieving this type of freestyle problem solving. Without it, robots may execute routines well, but struggle when the world departs from the script.</p>
+
+        <p>Reliability and speed have been core to industrial robotics since the early 1960’s–but that history is built on precision and tightly controlling the robot’s environment, not intelligence. Instead, general physical AI models take a very different approach, via intelligence instead of restriction. As William James (late 19th century founding father of modern psychology) wrote, intelligence is the ability to reach the same goal by different means. Improvisational intelligence enables robots to thrive in unstructured environments, and also fuels better reliability and speed for generalist models.</p>
+
+        <p>When evaluating mastery, it is also essential to consider how much data is required to reach that performance for any given task.</p>
+
+        <h1 id="capabilities" title="Click to navigate to this section">Capabilities</h1>
+
+        <h2 id="reliability" title="Click to navigate to this section"><em>Reliability</em></h2>
+
+        <p><span class="gen-1">GEN-1</span> can perform several tasks at high levels of reliability over long durations without intervention. We show here 6 tasks: kitting auto parts for more than an hour, folding t-shirts 86 times in a row, servicing robot vacuums over 200 times in a row, packing blocks over 1,800 times in a row, folding boxes over 200 times in a row, and packing phones over 100 times in a row.</p>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-autokit-icon.svg">
+          <span>Kitting Auto Parts</span>
+        </div>
+        <div class="video-grid-2x2">
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">1x speed, fully autonomous</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-autokit-1x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">One hour without intervention (50x)</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-autokit-1hr-50x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+        </div>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-tshirt-folding-icon.svg">
+          <span>T-Shirt Folding</span>
+        </div>
+        <div class="video-grid-2x2">
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">1x speed, fully autonomous</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-tshirt-folding-1x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">86 times in a row without intervention (50x)</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-tshirt-folding-86-50x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+        </div>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-vacuum-repair-icon.svg">
+          <span>Servicing Robot Vacuum</span>
+        </div>
+        <div class="video-grid-2x2">
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">1x speed, fully autonomous</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-vacuum-repair-1x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+          <div class="blog-v2-video-container">
+            <div class="blog-v2-video-caption">200+ times in a row without intervention (50x)</div>
+            <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-vacuum-repair-50x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+          </div>
+        </div>
+
+        <div class="blog-v2-image-container figure">
+          <canvas id="figure-3-vacuum" role="img" aria-label="Figure 1: Servicing Robot Vacuums. GEN-1 achieves 99% success rates, notably higher than GEN-0 (50%) or a from-scratch version of GEN-0 with no pretraining (2%)." width="899" height="817" style="display: block; box-sizing: border-box; height: 454.2px; width: 499.7px;"></canvas>
+          <div class="blog-v2-image-caption"><strong style="font-weight: 600;">Figure 1:</strong> Servicing Robot Vacuums. GEN-1 achieves 99% success rates, notably higher than GEN-0 (50%) or a from-scratch version of GEN-0 with no pretraining (2%).</div>
+        </div>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-block-packing-icon.svg">
+          <span>Packing Blocks</span>
+        </div>
+        <div class="blog-v2-video-container">
+          <div class="blog-v2-video-caption">Packing blocks 1,800 times in a row without intervention (50x)</div>
+          <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-1800-blocks-50x.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+        </div>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-box-folding-icon.svg">
+          <span>Folding Boxes</span>
+        </div>
+        <div class="blog-v2-video-container">
+          <div class="blog-v2-video-caption">200 times in a row without intervention</div>
+          <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-box-folding-200.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+        </div>
+        <div class="blog-v2-image-container figure">
+          <canvas id="figure-1" role="img" aria-label="Figure 2: Folding Boxes. GEN-1 achieves 99% success rates, notably higher than either GEN-0 (81%) or a from-scratch version of GEN-0 with no pretraining (13%)." width="899" height="817" style="display: block; box-sizing: border-box; height: 454.2px; width: 499.7px;"></canvas>
+          <div class="blog-v2-image-caption"><strong style="font-weight: 600;">Figure 2:</strong> Folding Boxes. <span class="gen-1">GEN-1</span> achieves 99% success rates, notably higher than either <span class="gen-0">GEN-0</span> (81%) or a from-scratch version of <span class="gen-0">GEN-0</span> with no pretraining (13%).</div>
+        </div>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-phone-packing-icon.svg">
+          <span>Packing Phones</span>
+        </div>
+        <div class="blog-v2-video-container">
+          <div class="blog-v2-video-caption">100 times in a row without intervention</div>
+          <video src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-phone-packing-100.mp4" playsinline="" muted="" loop="" autoplay="" controls="" preload="auto"></video>
+        </div>
+        <div class="blog-v2-image-container figure">
+          <canvas id="figure-2" role="img" aria-label="Figure 3: Packing Phones. GEN-1 achieves 99% success rates, notably higher than either GEN-0 (62%) or a from-scratch version of GEN-0 with no pretraining (42%)." width="899" height="817" style="display: block; box-sizing: border-box; height: 454.2px; width: 499.7px;"></canvas>
+          <div class="blog-v2-image-caption left"><strong style="font-weight: 600;">Figure 3:</strong> Packing Phones. GEN-1 achieves 99% success rates, notably higher than either GEN-0 (62%) or a from-scratch version of GEN-0 with no pretraining (42%). <em style="opacity: 0.5;">Note: these are apples-to-apples comparisons against our November 2025 version of GEN-0 models. In March 2025 at GTC, on a similar task, we showed a GEN-0 pretrained model with additional advances since November 2025.</em></div>
+        </div>
+
+        <p>Without pretraining, tasks trained from scratch exhibit very poor performance (average 19%). <span class="gen-0">GEN-0</span> models finetuned on these tasks achieves better, but not production-ready success rates (average 64%), <span class="gen-1">GEN-1</span> crosses into production-level success rates (average 99%).</p>
+
+        <h2 id="speed" title="Click to navigate to this section"><em>Speed</em></h2>
+
+        <p>These videos are at 1x speed and fully autonomous. They are <strong>not</strong> sped up:</p>
+
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-phone-packing-icon.svg">
+          <span>Packing Phones</span>
+        </div>
+        <div class="video-grid-2x2 video-race" data-restart-delay="5">
+          <div class="blog-v2-video-container">
+            <div class="video-race-label"><span class="gen-0">GEN-0</span></div>
+            <video src="blob:https://generalistai.com/55195a7a-1afa-4b82-af5a-bdcbb9c16138" playsinline="" muted="" preload="auto"></video>
+            <div class="video-race-timer" data-timer=""><span class="timer-icon">⏱️</span><span class="timer-value">12.4s</span></div>
+          </div>
+          <div class="blog-v2-video-container">
+            <div class="video-race-label"><span class="gen-1">GEN-1</span></div>
+            <video src="blob:https://generalistai.com/2fd05927-b5ed-4332-82b4-638c2016f026" playsinline="" muted="" preload="auto"></video>
+            <div class="video-race-timer" data-timer=""><span class="timer-icon">⏱️</span><span class="timer-value">12.4s</span></div>
+          </div>
+        </div>
+        
+        <div class="section-icon">
+          <img src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/generalist-box-folding-icon.svg">
+          <span>Folding Boxes</span>
+        </div>
+        <div class="video-grid-2x2 video-race" data-restart-delay="5">
+          <div class="blog-v2-video-container">
+            <div class="video-race-label"><span class="gen-0">GEN-0</span></div>
+            <video src="blob:https://generalistai.com/c46ecc01-2143-47f0-a090-9864e5b704e4" playsinline="" muted="" preload="auto"></video>
+            <div class="video-race-timer" data-timer=""><span class="timer-icon">⏱️</span><span class="timer-value">12.4s</span></div>
+          </div>
+          <div class="blog-v2-video-container">
+            <div class="video-race-label"><span class="gen-1">GEN-1</span></div>
+            <video src="blob:https://generalistai.com/4a4ecd21-ecb1-49fc-bd28-ea4b0fb2f3ee" playsinline="" muted="" preload="auto"></video>
+            <div class="video-race-timer stopped" data-timer=""><span class="timer-icon">✅</span><span class="timer-value">12.1s</span></div>
+          </div>
+        </div>
+
+        <div class="blog-v2-image-container figure">
+          <canvas id="figure-3" role="img" aria-label="Figure 4: Speed comparisons for folding boxes — GEN-1 is 2.8x faster than the previous SOTA, able to achieve box folds in approximately 12 seconds compared to roughly 34 seconds for GEN-0 and π₀." width="899" height="817" style="display: block; box-sizing: border-box; height: 454.2px; width: 499.7px;"></canvas>
+          <div class="blog-v2-image-caption left"><strong style="font-weight: 600;">Figure 4:</strong> Speed comparisons for folding boxes, comparing <span class="gen-1">GEN-1</span> to the previous SOTA. To simplify and enable a comparison, we only count the time spent folding the box, from the moment of touching it for the purpose of folding to the moment folding is complete. For the previous SOTA, both <span class="gen-0">GEN-0</span> (<a href="https://www.youtube.com/watch?v=1sZ2c2EMNcg" target="_blank">source</a>),<sup class="footnote-ref" data-footnote="10">10</sup> and π<sub>0</sub> (<a href="https://website.pi-asset.com/v2/upload/processed_build_a_box_3.mp4" target="_blank">source</a>)<sup class="footnote-ref" data-footnote="11">11</sup> used identical boxes and took roughly 34 seconds, similarly to π*<sub>0.6</sub> (<a href="https://youtu.be/d1obFDstuVQ?si=0rlzVEJw32VshH6w" target="_blank">source</a>)<sup class="footnote-ref" data-footnote="12">12</sup> on a comparable but distinct box. Instead, <span class="gen-1">GEN-1</span> is 2.8x faster, able to achieve box folds in ~12 seconds.</div>
+        </div>
+
+        <p>On two challenging dexterous tasks, <span class="gen-1">GEN-1</span> enables task completion speeds at roughly ~3x the state of the art. Importantly, <span class="gen-1">GEN-1</span> can improve task completion speeds to be faster than demonstrations, and can react to new object physics at those speeds accordingly. <span class="gen-1">GEN-1</span> can assemble a box in 12.1 seconds – this is 2.8x faster than prior SOTA (<span class="gen-0">GEN-0</span> and π<sub>0</sub> both took roughly ~34 seconds on identical boxes). <span class="gen-1">GEN-1</span> can also pack a phone into a case in 15.5 seconds, at 2.8x the speed of <span class="gen-0">GEN-0</span>.</p>
+
+        <p>Several components enable these speed levels. For one, the models learn from experience to achieve these speeds. Additionally, <span class="gen-1">GEN-1</span> introduces an evolution of the way we do inference with Harmonic Reasoning. Further, due to our data collection devices, the models have access to a wide array of pretraining data of completing various other tasks at high speeds (and thus transfer knowledge from general exposure to the dynamics involved), in contrast with traditional teleoperation systems that naturally produce slower, less fluid data due to the lack of force feedback, latency issues, and visibility challenges.</p>
+
+        <h2 id="improvisational-intelligence" title="Click to navigate to this section"><em>Improvisational Intelligence</em></h2>
+
+        <div class="video-full-width">
+          <div class="blog-v2-video-container hero-video-wrapper" id="improv-video-wrapper">
+            <!-- <video id="improv-video" src="/blog/apr-02-2026-GEN-1/assets/generalist-gen1-improvisation.mp4" playsinline preload="auto" style="width:100%"></video>
+            <button class="hero-play-btn" id="improv-play-btn" aria-label="Play video">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <span>Play Video</span>
+            </button> -->
+            <iframe src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hPtdSUKig0E.html" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="" data-lf-form-tracking-inspected-belvo73gzbp7zmqj="true" data-lf-yt-playback-inspected-belvo73gzbp7zmqj="true" data-lf-vimeo-playback-inspected-belvo73gzbp7zmqj="true">
+            </iframe>
+          </div>
+        </div>
+
+        <p>We see a notable shift in how these models respond creatively to unexpected scenarios. In a long-horizon automotive kitting example, if a washer is bumped so far that it’s no longer held properly, the robot can either set it back down to regrasp it, or partially insert it into the slit to leverage extrinsic dexterity for regrasping, or even decide to use its other hand to enable bimanual in-hand regrasping. For the large deformable objects, if they end up in very unexpected configurations, the model figures out how to recover. These behaviors are well outside the training distribution, and directly contribute to recovering from unexpected long-tail events.</p>
+
+        <h1 id="limitations" title="Click to navigate to this section">Limitations</h1>
+
+        <p><span class="gen-1">GEN-1</span> is not without limitations. For instance, while we have shown several dexterous tasks at 99%+ success rates, not all tasks that we have attempted are able to hit these rates. Furthermore, some tasks would require even higher success rates or speeds to be useful in real settings. Nevertheless, we expect the next generation of models to unlock a broader range of more complex tasks that can be mastered, and we expect per-task data requirements to reduce over time as the base models improve.</p>
+
+        <h2 id="rethinking-alignment-for-embodied-intelligence" title="Click to navigate to this section">Rethinking Alignment for Embodied Intelligence</h2>
+
+        <p>One notable observation is that although pretraining on large-scale interaction data unlocks emergent improvisation (e.g. shaking a bag to seat an object, reorganizing misplaced items, or reaching for falling objects), these are physical actions with real consequences. The definition of success in robotics is not universal—it is task-specific, workflow-specific, and ultimately <a href="https://yanweiw.github.io/itps/">user-defined</a>.<sup class="footnote-ref" data-footnote="13">13</sup> It is not only about what the robot must do, but also (perhaps, more importantly) what it should <em>not do</em>. Hence, emergent behaviors can be a strength (e.g. recovery behaviors not explicitly trained for), but also at times a liability. As embodied foundation models grow to become more capable out of the box, we aim to improve our methods of alignment, and precisely steer them into delivering the behaviors that users actually want.</p>
+
+        <h1 id="looking-ahead" title="Click to navigate to this section">Looking Ahead</h1>
+
+        <p>Building <span class="gen-1">GEN-1</span> was not easy—we re-designed our distributed training infrastructure to support petabytes of physical interaction data as a first-class citizen. We spent months improving training stability, building custom kernels, inventing new forms of paged attention to enable real-time inference, honing post-training techniques (alongside foundations in theoretical RL and multimodal human guidance), and hardening controls to be even more smooth and precise. We designed new hardware and shipped thousands of robot hands across new geographies for exposure to unique physical activities. Nevertheless, we believe these advances will lay the groundwork for future research as we continue to scale our data engine into the next phase of capabilities.</p>
+
+        <h2 id="general-intelligence-born-from-the-physical-world" title="Click to navigate to this section">General Intelligence Born from the Physical World</h2>
+
+        <p>For us, <span class="gen-1">GEN-1</span> is more than just a model. It captures an important part of artificial intelligence that we think is missing from the chatbots that we have today. It’s the intuition and open-ended problem-solving skills born from acting in the real world—combining knowledge that is grounded in real physics, with a deep understanding of how space and time matters, and that actions lead to consequences. It’s what affords the autonomy to recover from the unexpected (before it gets much worse), rather than having to be nudged along by a human every step of the way to avoid irreversible failures. For machines, we believe it is only through experiencing the physical world, that all the knowledge on Wikipedia can finally make sense.</p>
+
+        <p>We are still early in the journey, and we are excited about the next frontiers of embodied intelligence and beyond. Early access partners will have access to <span class="gen-1">GEN-1</span> starting today. If you’d like to use our models, please email <a href="mailto:partnerships@generalistai.com">partnerships@generalistai.com</a>. If you’re interested in joining us on our mission, please visit <a href="https://generalistai.com/careers">generalistai.com/careers</a>.</p>
+
+        <h1 id="citation" title="Click to navigate to this section">Citation</h1>
+        Please cite this work as
+
+        <div class="blog-v2-cite-box">
+          Generalist AI Team, "<span class="gen-0">GEN-1</span>: Scaling Embodied Foundation Models to Mastery", Generalist AI Blog, Apr 2026.
+        </div>
+
+        Or use the BibTeX citation:
+
+        <div class="blog-v2-cite-box">
+          @article{generalist2026gen1,
+          <br>author = {Generalist AI Team},
+          <br>title = {<span class="gen-0">GEN-1</span>: Scaling Embodied Foundation Models to Mastery},
+          <br>journal = {Generalist AI Blog},
+          <br>year = {2026},
+          <br>note = {https://generalistai.com/blog/apr-02-2026-GEN-1},
+          <!-- <br>doi = {}, -->
+        <br>}</div>
+
+        <h1 style="text-align: center;" id="more-videos" title="Click to navigate to this section">More Videos</h1>
+        <div class="video-grid-3x" id="gen1-video-grid"><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="WkFIrB2dI50" data-yt-title="Robot puts money into wallet" aria-label="Play video: Robot puts money into wallet"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault.jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="oSBQWlal91s" data-yt-title="Robot plugs in ethernet cable" aria-label="Play video: Robot plugs in ethernet cable"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(1).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="2-P6YZPrHg0" data-yt-title="Robot puts pens into zipper bag" aria-label="Play video: Robot puts pens into zipper bag"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(2).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="02sdtXzgg_k" data-yt-title="Robot sorts socks and uses a touchscreen stylus" aria-label="Play video: Robot sorts socks and uses a touchscreen stylus"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(3).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="6sonkdykubc" data-yt-title="Orange you glad our robot can stack?" aria-label="Play video: Orange you glad our robot can stack?"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(4).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="AwyqZrqGUEU" data-yt-title="Robot puts plushies into polybags" aria-label="Play video: Robot puts plushies into polybags"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(5).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="G4QHLSdtGhw" data-yt-title="Robot removes thumbtacks and papers from corkboard" aria-label="Play video: Robot removes thumbtacks and papers from corkboard"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(6).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="JJ_4ZYJiLDE" data-yt-title="Robot plays with fidget toy" aria-label="Play video: Robot plays with fidget toy"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(7).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="mW6u-RzfzNg" data-yt-title="Robot repackages toy eggs" aria-label="Play video: Robot repackages toy eggs"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(8).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="ACm0ZRGRbqM" data-yt-title="Robot keeps working with the lights off" aria-label="Play video: Robot keeps working with the lights off"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(9).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="Hj79HBy1UjE" data-yt-title="Robot beats human in Shell Game" aria-label="Play video: Robot beats human in Shell Game"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(10).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="cPx1M0OGOws" data-yt-title="Robot cleans whiteboard" aria-label="Play video: Robot cleans whiteboard"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(11).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div><div class="blog-v2-video-container"><button class="yt-facade" type="button" data-yt-id="HUzjTeagwH4" data-yt-title="Robot performs a magic trick" aria-label="Play video: Robot performs a magic trick"><img class="yt-facade-thumb" src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/hqdefault(12).jpg" alt="" loading="lazy" decoding="async"><span class="yt-facade-play"><svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg></span></button></div></div>
+
+        <div id="blog-nav" class="blog-nav"><a href="https://generalistai.com/blog/mar-24-2026-gtc-demo" class="blog-nav-link blog-nav-prev"><span class="blog-nav-arrow">←</span> Previous</a><a href="https://generalistai.com/blog/apr-02-2026-GEN-1#body" class="blog-nav-link blog-nav-top">↑ Back to Top</a><a href="https://generalistai.com/blog/apr-07-2026-beyond-world-models" class="blog-nav-link blog-nav-next">Next <span class="blog-nav-arrow">→</span></a></div>
+
+      </div>
+    </article>
+  </main>
+
+<!-- #include footer -->
+  <footer class="site-footer">
+    <div class="container">
+    <div class="footer-wrapper">
+      <div class="footer-logo">
+        <a href="https://generalistai.com/">
+          <span data-brand="wordmark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1379.23 192.99">
+    <path class="cls-1" d="M144.66,79.8V28.65L100.36,3.07l-44.3,25.58v51.15l22.15,12.79,22.15-38.36,22.15,38.36,22.15-12.79ZM129.41,104.53l24.56,42.53h-44.23v42.53h85.06v-85.06h-65.38ZM69.52,107.64c-6.9-4.14-14.96-6.52-23.59-6.52C20.56,101.12,0,121.69,0,147.06s20.56,45.93,45.93,45.93,45.93-20.57,45.93-45.93h-45.1l22.76-39.41Z"></path>
+    <g>
+      <path class="cls-1" d="M236.29,96.48c0-14.68,2.14-27.95,6.41-39.82,4.27-11.87,10.42-22.01,18.45-30.43,8.03-8.42,17.72-14.89,29.07-19.42,11.35-4.53,24.11-6.8,38.27-6.8,13.38,0,24.97,1.86,34.77,5.57,9.8,3.71,17.94,8.57,24.41,14.57,6.48,6,11.42,12.61,14.83,19.81,3.41,7.21,5.37,14.35,5.89,21.43v3.89h-34.19c-.69-5.52-2.55-11.18-5.57-16.96-3.02-5.78-7.71-10.64-14.05-14.57-6.35-3.93-14.83-5.89-25.45-5.89-8.81,0-16.69,1.64-23.63,4.92-6.95,3.28-12.84,7.94-17.68,13.99-4.84,6.04-8.5,13.3-11.01,21.76-2.5,8.46-3.76,17.92-3.76,28.36,0,13.81,2.2,25.81,6.6,36,4.4,10.19,10.73,18.07,18.97,23.63,8.24,5.57,18.11,8.35,29.59,8.35s21.19-2.31,28.36-6.93c7.17-4.62,12.43-10.55,15.8-17.81,3.37-7.25,5.31-14.93,5.83-23.05h-48.3v-26.16h80.42v98.68h-32.38v-20.59h-2.59c-1.64,2.16-3.82,4.55-6.54,7.19-2.72,2.63-6.17,5.16-10.36,7.58-4.19,2.42-9.22,4.4-15.09,5.96-5.87,1.55-12.87,2.33-20.98,2.33-17.09,0-32.1-3.91-45-11.72-12.91-7.81-22.99-18.86-30.24-33.15-7.25-14.29-10.88-31.19-10.88-50.7Z"></path>
+      <path class="cls-1" d="M420.31,122.12c0-11.74,1.6-22.01,4.79-30.82,3.19-8.81,7.73-16.14,13.6-22.02,5.87-5.87,12.99-10.27,21.37-13.21,8.37-2.93,17.7-4.4,27.97-4.4,13.55,0,25.14,2.61,34.77,7.83,9.63,5.22,16.96,12.69,22.01,22.4,5.05,9.71,7.58,21.43,7.58,35.16v13.6h-98.42c.17,7.43,1.57,13.9,4.21,19.42,2.63,5.53,6.45,9.86,11.46,13.01,5.01,3.15,11.05,4.73,18.13,4.73s12.8-1.12,17.16-3.37c4.36-2.24,7.64-5.01,9.84-8.29,2.2-3.28,3.65-6.52,4.34-9.71h30.69v3.88c-.95,4.58-2.74,9.32-5.37,14.25-2.63,4.92-6.37,9.52-11.2,13.79-4.84,4.27-10.92,7.73-18.26,10.36-7.34,2.63-16.23,3.95-26.68,3.95-20.64,0-37.12-5.91-49.47-17.74-12.35-11.83-18.52-29.44-18.52-52.84ZM454.37,107.74h64.88c-.09-6.04-1.25-11.44-3.5-16.19-2.25-4.75-5.68-8.5-10.3-11.27-4.62-2.76-10.55-4.14-17.81-4.14s-12.99,1.4-17.74,4.21c-4.75,2.81-8.4,6.6-10.94,11.4-2.55,4.79-4.08,10.12-4.6,15.99Z"></path>
+      <path class="cls-1" d="M564.57,54.78h33.67v16.32h2.59c1.55-2.42,3.89-5.12,6.99-8.09s7.42-5.55,12.95-7.71c5.52-2.16,12.52-3.24,20.98-3.24,15.28,0,27.41,4.14,36.39,12.43,8.98,8.29,13.47,20.33,13.47,36.13v88.97h-35.09v-86.89c0-8.29-2.25-14.46-6.73-18.52-4.49-4.06-10.53-6.09-18.13-6.09-5.7,0-10.99,1.17-15.86,3.5-4.88,2.33-8.79,5.98-11.72,10.94-2.94,4.96-4.4,11.42-4.4,19.36v77.7h-35.09V54.78Z"></path>
+      <path class="cls-1" d="M702.61,122.12c0-11.74,1.6-22.01,4.79-30.82,3.19-8.81,7.73-16.14,13.6-22.02,5.87-5.87,12.99-10.27,21.37-13.21,8.37-2.93,17.7-4.4,27.97-4.4,13.55,0,25.14,2.61,34.77,7.83,9.63,5.22,16.96,12.69,22.01,22.4,5.05,9.71,7.58,21.43,7.58,35.16v13.6h-98.42c.17,7.43,1.57,13.9,4.21,19.42,2.63,5.53,6.45,9.86,11.46,13.01,5.01,3.15,11.05,4.73,18.13,4.73s12.8-1.12,17.16-3.37c4.36-2.24,7.64-5.01,9.84-8.29,2.2-3.28,3.65-6.52,4.34-9.71h30.69v3.88c-.95,4.58-2.74,9.32-5.37,14.25-2.63,4.92-6.37,9.52-11.2,13.79-4.84,4.27-10.92,7.73-18.26,10.36-7.34,2.63-16.23,3.95-26.68,3.95-20.64,0-37.12-5.91-49.47-17.74-12.35-11.83-18.52-29.44-18.52-52.84ZM736.67,107.74h64.88c-.09-6.04-1.25-11.44-3.5-16.19-2.25-4.75-5.68-8.5-10.3-11.27-4.62-2.76-10.55-4.14-17.81-4.14s-12.99,1.4-17.74,4.21c-4.75,2.81-8.4,6.6-10.94,11.4-2.55,4.79-4.08,10.12-4.6,15.99Z"></path>
+      <path class="cls-1" d="M846.87,54.78h33.67v20.2h2.59c1.81-4.75,4.45-8.91,7.9-12.5,3.45-3.58,8.14-6.24,14.05-7.96,5.91-1.73,13.45-2.11,22.6-1.17v29.53c-8.98-1.21-16.9-.97-23.76.71-6.86,1.68-12.24,5.37-16.12,11.07-3.89,5.7-5.83,14.03-5.83,24.99v69.93h-35.09V54.78Z"></path>
+      <path class="cls-1" d="M932.73,94.92v-3.88c1.55-12.09,7.64-21.69,18.26-28.81,10.62-7.12,24.48-10.68,41.57-10.68,11.48,0,21.52,1.79,30.11,5.37,8.59,3.58,15.28,9.09,20.07,16.51,4.79,7.43,7.19,17.05,7.19,28.88v54.65c0,6.39.28,11.87.84,16.45.56,4.58,1.57,8.68,3.04,12.3v3.88h-33.02c-.69-2.16-1.19-4.51-1.49-7.06-.3-2.54-.54-5.37-.71-8.48h-2.59c-2.07,3.02-4.81,5.92-8.22,8.68-3.41,2.76-7.75,5.01-13.01,6.73-5.27,1.73-11.78,2.59-19.55,2.59-9.5,0-18.02-1.71-25.58-5.12-7.56-3.41-13.51-8.18-17.87-14.31-4.36-6.13-6.54-13.42-6.54-21.89,0-8.98,2.09-16.32,6.28-22.02,4.19-5.7,9.84-10.06,16.96-13.08,7.12-3.02,15-4.96,23.63-5.83l30.69-2.98c4.66-.43,8.18-1.51,10.55-3.24,2.37-1.73,3.56-4.62,3.56-8.68,0-6.13-2.16-10.81-6.48-14.05-4.32-3.24-10.49-4.86-18.52-4.86s-14.42,1.58-19.43,4.73c-5.01,3.15-7.6,7.88-7.77,14.18h-31.99ZM959.54,149.31c0,5.7,2.16,10.23,6.48,13.6,4.32,3.37,10.14,5.05,17.48,5.05,5.27,0,10.44-1.1,15.54-3.3,5.09-2.2,9.32-5.87,12.69-11.01,3.37-5.14,5.05-12.02,5.05-20.66v-8.16h-2.59c-2.07,1.21-4.43,2.16-7.06,2.85-2.63.69-6.15,1.25-10.55,1.68l-15.54,1.55c-6.39.69-11.57,2.42-15.54,5.18-3.97,2.76-5.96,7.17-5.96,13.21Z"></path>
+      <path class="cls-1" d="M1068.44,3.11h35.09v186.48h-35.09V3.11Z"></path>
+      <path class="cls-1" d="M1122.44,3.24h35.35v31.21h-35.35V3.24ZM1122.44,54.78h35.22v134.81h-35.22V54.78Z"></path>
+      <path class="cls-1" d="M1171.65,92.33c0-12.26,5.05-22.04,15.15-29.33,10.1-7.29,24.13-10.94,42.09-10.94s32.27,3.63,42.67,10.88c10.4,7.25,16.34,16.62,17.81,28.1v3.88h-31.86c-.52-6.82-3.28-11.74-8.29-14.76-5.01-3.02-11.48-4.53-19.42-4.53s-13.79,1.36-18.32,4.08c-4.53,2.72-6.8,6.54-6.8,11.46s1.83,8.46,5.5,10.62c3.67,2.16,8.14,3.67,13.4,4.53l24.6,4.01c9.06,1.47,17.05,3.67,23.96,6.6,6.91,2.94,12.28,7.04,16.12,12.3,3.84,5.27,5.76,12.09,5.76,20.46,0,13.04-5.05,23.46-15.15,31.27-10.1,7.81-25.04,11.72-44.81,11.72s-35.16-3.86-46.17-11.59c-11.01-7.72-17.33-17.55-18.97-29.46v-3.88h32.63c.78,7.34,4.19,12.71,10.23,16.12,6.04,3.41,13.47,5.12,22.27,5.12s15.62-1.49,20.2-4.47c4.58-2.98,6.86-7.1,6.86-12.37s-1.94-8.57-5.83-10.68c-3.89-2.11-9.07-3.69-15.54-4.73l-24.61-4.01c-8.55-1.38-16.08-3.73-22.6-7.06-6.52-3.32-11.63-7.73-15.35-13.21-3.71-5.48-5.57-12.19-5.57-20.14Z"></path>
+      <path class="cls-1" d="M1290.92,54.78h24.99V18.65h34.84v36.13h28.49v23.7h-28.49v75.63c0,3.37.88,5.98,2.65,7.83,1.77,1.86,4.42,2.79,7.96,2.79h17.22v24.86h-26.03c-11.48,0-20.46-2.93-26.94-8.81-6.48-5.87-9.71-14.42-9.71-25.64v-76.66h-24.99v-23.7Z"></path>
+    </g>
+  </svg></span>
+        </a>
+      </div>
+      <div class="footer-copyright">
+        © 2026 Generalist AI, Inc. All Rights Reserved.
+      </div>
+      <div class="footer-social-icons">
+        <a href="https://x.com/GeneralistAI" class="footer-social-icon" target="_blank"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://www.youtube.com/@Generalist_AI" class="footer-social-icon" target="_blank"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.linkedin.com/company/generalistai" class="footer-social-icon" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    </div>
+  </footer>
+<!-- /include footer -->
+
+<!-- #include scripts-common -->
+  <!-- Contact Panel Script -->
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/contact-panel.js"></script><div id="contact-modal" class="contact-modal">
+    <div class="contact-modal-dialog">
+      <button class="contact-modal-close" aria-label="Close">×</button>
+      <h2 class="contact-modal-title">Get in Touch</h2>
+      <p class="contact-modal-subtitle">If you'd like to join the team, partner with us, or have any other general inquiries, please reach us at: <a href="mailto:info@generalistai.com">info@generalistai.com</a></p>
+      <p class="contact-modal-subtitle">If you have a particular use case for robots, please include links to videos of the tasks or processes you're interested in automating.</p>
+      <form id="contact-form" class="contact-form" novalidate="">
+        <label class="contact-label">
+          <span>Name <span class="contact-required">*</span></span>
+          <input type="text" name="name" required="" autocomplete="name">
+        </label>
+        <label class="contact-label">
+          <span>Email <span class="contact-required">*</span></span>
+          <input type="email" name="email" required="" autocomplete="email">
+        </label>
+        <label class="contact-label">
+          <span>Phone</span>
+          <input type="tel" name="phone" autocomplete="tel">
+        </label>
+        <label class="contact-label">
+          <span>Company <span class="contact-required">*</span></span>
+          <input type="text" name="company" required="" autocomplete="organization">
+        </label>
+        <label class="contact-label">
+          <span>Video / links of tasks you want robots to do</span>
+          <textarea name="video_url" rows="3" placeholder="https://..."></textarea>
+        </label>
+        <label class="contact-label">
+          <span>Message <span class="contact-required">*</span></span>
+          <textarea name="message" rows="4" required=""></textarea>
+        </label>
+        <button type="submit" class="contact-submit">Submit</button>
+        <p class="contact-status" id="contact-status"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Brand Logo Script -->
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/brand.js"></script>
+<!-- /include scripts-common -->
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function initPlayOverlay(videoId, btnId) {
+      var video = document.getElementById(videoId);
+      var btn = document.getElementById(btnId);
+      if (!video || !btn) return;
+      var wrapper = btn.parentElement;
+      wrapper.classList.add('ready');
+
+      function startVideo(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (video.paused) {
+          video.play();
+          video.controls = true;
+          btn.classList.add('hidden');
+          wrapper.classList.remove('ready');
+          wrapper.removeEventListener('click', startVideo);
+          btn.removeEventListener('click', startVideo);
+        }
+      }
+
+      btn.addEventListener('click', startVideo);
+      wrapper.addEventListener('click', startVideo);
+    }
+
+    initPlayOverlay('hero-video', 'hero-play-btn');
+    initPlayOverlay('improv-video', 'improv-play-btn');
+  });
+  </script>
+
+  <script>
+  (function () {
+    var grid = document.getElementById('gen1-video-grid');
+    if (!grid) return;
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function extractYouTubeId(url) {
+      var m = url.match(/(?:v=|youtu\.be\/|\/embed\/)([\w-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    var PLAY_SVG =
+      '<svg viewBox="0 0 68 48" aria-hidden="true">' +
+      '<path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,0.13,34,0,34,0S12.21,0.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#212121" opacity="0.85"/>' +
+      '<path d="M 45,24 27,14 27,34" fill="#fff"/>' +
+      '</svg>';
+
+    fetch('/blog/apr-02-2026-GEN-1/assets/video-grid.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || !Array.isArray(data.videos)) return;
+        var html = data.videos.map(function (v) {
+          var id = extractYouTubeId(v.url || '');
+          if (!id) return '';
+          var title = escapeHtml(v.title || '');
+          return '<div class="blog-v2-video-container">' +
+            '<button class="yt-facade" type="button" data-yt-id="' + id + '" ' +
+            'data-yt-title="' + title + '" aria-label="Play video: ' + title + '">' +
+            '<img class="yt-facade-thumb" ' +
+            'src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" ' +
+            'alt="" loading="lazy" decoding="async">' +
+            '<span class="yt-facade-play">' + PLAY_SVG + '</span>' +
+            '</button>' +
+            '</div>';
+        }).join('');
+        grid.innerHTML = html;
+      })
+      .catch(function (err) { console.error('Failed to load video grid:', err); });
+
+    grid.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('.yt-facade');
+      if (!btn) return;
+      var id = btn.getAttribute('data-yt-id');
+      var title = btn.getAttribute('data-yt-title') || '';
+      if (!id) return;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id +
+        '?autoplay=1&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3';
+      iframe.title = title;
+      iframe.setAttribute('allow',
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+      iframe.setAttribute('allowfullscreen', '');
+      btn.parentNode.replaceChild(iframe, btn);
+    });
+  })();
+  </script>
+
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/orbit-animation.js"></script>
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/figures.js"></script>
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/blog-render.js"></script>
+  <script>BlogRender.renderPostNav('blog-nav');</script>
+
+  <script src="./Generalist - GEN-1_ Scaling Embodied Foundation Models to Mastery_files/blog-header-nav.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      function positionFootnotes() {
+        var footnoteRefs = document.querySelectorAll('.footnote-ref');
+        var positionedFootnotes = [];
+
+        footnoteRefs.forEach(function(ref) {
+          var footnoteId = ref.getAttribute('data-footnote');
+          var footnote = document.querySelector('.footnote[data-footnote="' + footnoteId + '"]');
+
+          if (footnote) {
+            var container = document.querySelector('.blog-v2-container');
+            if (!container) return;
+
+            var containerRect = container.getBoundingClientRect();
+            var containerLeft = containerRect.left + window.scrollX;
+            var containerWidth = containerRect.width;
+            var columnWidth = containerWidth / 12;
+
+            var leftPosition = containerLeft + (9 * columnWidth);
+            var footnoteWidth = 2 * columnWidth;
+
+            var refRect = ref.getBoundingClientRect();
+            var refTop = refRect.top + window.scrollY;
+
+            var originalDisplay = footnote.style.display;
+            footnote.style.visibility = 'hidden';
+            footnote.style.display = 'block';
+            footnote.style.width = footnoteWidth + 'px';
+            var footnoteHeight = footnote.offsetHeight;
+            footnote.style.visibility = '';
+            footnote.style.display = originalDisplay;
+
+            var spacing = 10;
+            for (var i = 0; i < positionedFootnotes.length; i++) {
+              var positioned = positionedFootnotes[i];
+              var overlapTop = refTop < positioned.bottom + spacing;
+              var overlapBottom = refTop + footnoteHeight > positioned.top - spacing;
+              if (overlapTop && overlapBottom) {
+                refTop = positioned.bottom + spacing;
+              }
+            }
+
+            footnote.style.left = leftPosition + 'px';
+            footnote.style.top = refTop + 'px';
+            footnote.style.width = footnoteWidth + 'px';
+
+            positionedFootnotes.push({
+              top: refTop,
+              bottom: refTop + footnoteHeight,
+              element: footnote
+            });
+          }
+        });
+      }
+
+      positionFootnotes();
+      window.addEventListener('resize', positionFootnotes);
+      window.addEventListener('scroll', positionFootnotes);
+    });
+  </script>
+
+  <script>
+  (function () {
+    document.querySelectorAll('.video-race').forEach(function (container) {
+      var restartDelay = parseFloat(container.getAttribute('data-restart-delay') || '5') * 1000;
+      var videos = Array.from(container.querySelectorAll('video'));
+      var timerEls = Array.from(container.querySelectorAll('[data-timer]'));
+      var timerValues = Array.from(container.querySelectorAll('[data-timer] .timer-value'));
+      var timerIcons = Array.from(container.querySelectorAll('[data-timer] .timer-icon'));
+      var rafId = null;
+      var started = false;
+      var loaded = false;
+      var finishedCount = 0;
+      var frozen = [];
+
+      for (var i = 0; i < videos.length; i++) frozen.push(false);
+
+      function formatTime(sec) {
+        var str = sec.toFixed(1);
+        if (sec < 10) str = '0' + str;
+        return str + 's';
+      }
+
+      function updateTimers() {
+        for (var i = 0; i < videos.length; i++) {
+          if (!frozen[i]) {
+            timerValues[i].textContent = formatTime(videos[i].currentTime);
+          }
+        }
+        if (finishedCount < videos.length) {
+          rafId = requestAnimationFrame(updateTimers);
+        }
+      }
+
+      function onVideoEnded(idx) {
+        return function () {
+          frozen[idx] = true;
+          timerEls[idx].classList.add('stopped');
+          timerIcons[idx].textContent = '\u2705';
+          finishedCount++;
+          if (finishedCount >= videos.length) {
+            if (rafId) cancelAnimationFrame(rafId);
+            setTimeout(resetAndWait, restartDelay);
+          }
+        };
+      }
+
+      function resetAndWait() {
+        started = false;
+        finishedCount = 0;
+        for (var i = 0; i < videos.length; i++) {
+          frozen[i] = false;
+          videos[i].currentTime = 0;
+          videos[i].pause();
+          timerValues[i].textContent = formatTime(0);
+          timerIcons[i].textContent = '\u23F1\uFE0F';
+          timerEls[i].classList.remove('stopped');
+        }
+        checkVisibility();
+      }
+
+      function startPlayback() {
+        if (started) return;
+        started = true;
+        finishedCount = 0;
+        for (var i = 0; i < videos.length; i++) {
+          frozen[i] = false;
+          timerEls[i].classList.remove('stopped');
+          timerIcons[i].textContent = '\u23F1\uFE0F';
+          videos[i].play();
+        }
+        rafId = requestAnimationFrame(updateTimers);
+      }
+
+      function isFullyInView() {
+        var rect = container.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= window.innerHeight;
+      }
+
+      function checkVisibility() {
+        if (started || !loaded) return;
+        if (isFullyInView()) startPlayback();
+      }
+
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      for (var i = 0; i < videos.length; i++) {
+        videos[i].addEventListener('ended', onVideoEnded(i));
+      }
+
+      if (isIOS) {
+        // iOS Safari doesn't reliably play video from blob URLs.
+        // Fall back to native preloading from the original src.
+        Promise.all(videos.map(function (v) {
+          return new Promise(function (resolve) {
+            if (v.readyState >= 2) { resolve(); return; }
+            v.addEventListener('loadeddata', resolve, { once: true });
+            v.load();
+          });
+        })).then(function () {
+          loaded = true;
+          checkVisibility();
+        });
+      } else {
+        // Fetch entire video files as blobs before playing — eliminates
+        // mid-playback stalls caused by bandwidth contention with the
+        // other autoplaying videos on the page.
+        Promise.all(videos.map(function (v) {
+          return fetch(v.src)
+            .then(function (r) { return r.blob(); })
+            .then(function (blob) {
+              v.src = URL.createObjectURL(blob);
+              return new Promise(function (resolve) {
+                v.addEventListener('loadeddata', resolve, { once: true });
+              });
+            });
+        })).then(function () {
+          loaded = true;
+          checkVisibility();
+        });
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) checkVisibility();
+      }, { threshold: 1.0 });
+      observer.observe(container);
+
+      window.addEventListener('scroll', checkVisibility, { passive: true });
+    });
+  })();
+  </script>
+
+
+
+</body></html>

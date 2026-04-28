@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'IowanOldSt BT';
+    font-style: normal;
+    font-weight: 400;
+    src: local('IowanOldSt BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-bt-586c36a8d7712.woff') format('woff');
+}
+@font-face {
+    font-family: 'IowanOldSt BT';
+    font-style: italic;
+    font-weight: 400;
+    src: local('IowanOldSt BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-italic-bt-586c3740dc396.woff') format('woff');
+}
+@font-face {
+    font-family: 'IowanOldSt BT';
+    font-style: normal;
+    font-weight: 700;
+    src: local('IowanOldSt BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-bold-bt-586c371d8d669.woff') format('woff');
+}
+@font-face {
+    font-family: 'IowanOldSt BT';
+    font-style: italic;
+    font-weight: 700;
+    src: local('IowanOldSt BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-bold-italic-bt-586c37701cb62.woff') format('woff');
+}
+@font-face {
+    font-family: 'IowanOldSt Blk BT';
+    font-style: normal;
+    font-weight: 400;
+    src: local('IowanOldSt Blk BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-black-bt-586c36e930225.woff') format('woff');
+}
+@font-face {
+    font-family: 'IowanOldSt Blk BT';
+    font-style: italic;
+    font-weight: 400;
+    src: local('IowanOldSt Blk BT'), url('https://fonts.cdnfonts.com/s/14232/bitstream-iowan-old-style-black-italic-bt-586c378f12ca1.woff') format('woff');
+}
+
+

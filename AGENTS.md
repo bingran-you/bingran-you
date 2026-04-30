@@ -34,7 +34,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 ├── README.md                                                # Human-facing GitHub profile
 ├── .agents/ .claude/ .openclaw/                             # Agent runtime state + skills
 ├── bingran-you-private/          # 🔒 Private submodule — never exfiltrate
-├── trusted-external-repos/       # Vendored trusted repos (skills, gstack)
+├── trusted-external-repos/       # Vendored trusted repos (skills, claude-skills, gstack, gbrain)
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
 ├── scripts/                      # Utility scripts
@@ -45,7 +45,9 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 - `bingran-you-private` — **private.** Treat contents as confidential. Never paste into external channels, commits outside the submodule, PRs, or LLM calls that leave the machine.
 - `trusted-external-repos/skills` — shared skills library.
+- `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
 - `trusted-external-repos/gstack` — gstack tooling.
+- `trusted-external-repos/gbrain` — gbrain tooling.
 
 If a submodule looks stale, check `git submodule status` before assuming it's broken.
 

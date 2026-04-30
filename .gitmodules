@@ -30,3 +30,7 @@
 	path = current-projects/skillsbench
 	url = https://github.com/bingran-you/skillsbench.git
 	branch = main
+[submodule "trusted-external-repos/claude-skills"]
+	path = trusted-external-repos/claude-skills
+	url = https://github.com/bingran-you/claude-skills.git
+	branch = main

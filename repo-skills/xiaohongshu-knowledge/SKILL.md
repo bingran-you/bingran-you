@@ -5,7 +5,7 @@ description: Use when writing, planning, analyzing, or editing Xiaohongshu (小�
 
 # Xiaohongshu Knowledge Library
 
-Comprehensive knowledge base for writing and operating on Xiaohongshu (小红书 / RedNote). Sourced from `vivy-yi/xiaohongshu-skills` (vendored at `trusted-external-repos/xiaohongshu-skills/`).
+Comprehensive knowledge base for writing and operating on Xiaohongshu (小红书 / RedNote). Sourced from `vivy-yi/xiaohongshu-skills`, now vendored locally under `vendor/xiaohongshu-skills/`.
 
 **This is reference knowledge, not automation.** Bingran writes drafts and publishes manually. Do not attempt to log in, post, comment, or browse Xiaohongshu from this skill.
 
@@ -13,7 +13,7 @@ Comprehensive knowledge base for writing and operating on Xiaohongshu (小红书
 
 1. Identify the user's intent (writing a post? title? hashtag set? account audit?).
 2. Pick the matching category and sub-skill from the index below.
-3. Read `trusted-external-repos/xiaohongshu-skills/skills/<category>/<sub-skill>/SKILL.md`. Each file is a self-contained playbook with frameworks, templates, dos/don'ts, and case studies.
+3. Read `vendor/xiaohongshu-skills/skills/<category>/<sub-skill>/SKILL.md`. Each file is a self-contained playbook with frameworks, templates, dos/don'ts, and case studies.
 4. Apply the framework to the draft. Cite which sub-skill you used in your reasoning.
 5. For multi-faceted asks (e.g. "write a full post"), chain several sub-skills (typically: `note-writing` style → `title-writing` → `hashtag-optimization` → `cover-design`).
 
@@ -45,7 +45,7 @@ Plus from `05-平台规则` (compliance, before publishing):
 
 ## Full category index
 
-All paths relative to `trusted-external-repos/xiaohongshu-skills/skills/`.
+All paths relative to `vendor/xiaohongshu-skills/skills/`.
 
 ### 01-内容创作 (23 skills) — content creation
 `audio-processing`, `content-layout`, `content-planning`, `content-portfolio`, `content-repurposing`, `content-scaling`, `copywriting-skills`, `cover-design`, `graphic-content-creation`, `graphic-layout`, `hashtag-optimization`, `image-editing`, `interaction-content`, `live-streaming-content`, `script-writing`, `seeding-copywriting`, `series-creation`, `short-video-production`, `time-album`, `title-writing`, `topic-participation`, `tutorial-creation`, `vlog-creation`
@@ -76,7 +76,7 @@ All paths relative to `trusted-external-repos/xiaohongshu-skills/skills/`.
 
 ## Companion skill
 
-`xiaohongshu-ops` (from `Xiangyu-CAS/xiaohongshu-ops-skill`, vendored separately) covers the same domain with a strategy/creation framework — title skeletons, hook formulas, viral-post reverse engineering. Cross-reference it for tactical writing patterns. Note: that skill assumes OpenClaw browser publishing — ignore the publish/automation sections; use only the creation/analysis content.
+`xiaohongshu-ops` (from `Xiangyu-CAS/xiaohongshu-ops-skill`, now vendored locally under `vendor/xiaohongshu-ops-skill/`) covers the same domain with a strategy/creation framework — title skeletons, hook formulas, viral-post reverse engineering. Cross-reference it for tactical writing patterns. Note: that skill assumes OpenClaw browser publishing — ignore the publish/automation sections; use only the creation/analysis content.
 
 ## Output language
 

@@ -12,7 +12,7 @@
 	branch = main
 [submodule "trusted-external-repos/gbrain"]
 	path = trusted-external-repos/gbrain
-	url = https://github.com/garrytan/gbrain.git
+	url = https://github.com/bingran-you/gbrain.git
 	branch = master
 [submodule "trusted-external-repos/xiaohongshu-skills"]
 	path = trusted-external-repos/xiaohongshu-skills
@@ -28,7 +28,7 @@
 	branch = main
 [submodule "current-projects/first-tree"]
 	path = current-projects/first-tree
-	url = https://github.com/agent-team-foundation/first-tree.git
+	url = https://github.com/bingran-you/first-tree.git
 	branch = main
 [submodule "current-projects/DoWhiz"]
 	path = current-projects/DoWhiz

@@ -1,3 +1,7 @@
+[submodule "bingran-you-private"]
+	path = bingran-you-private
+	url = https://github.com/bingran-you/bingran-you-private.git
+	branch = main
 [submodule "trusted-external-repos/skills"]
 	path = trusted-external-repos/skills
 	url = https://github.com/bingran-you/skills.git
@@ -6,17 +10,10 @@
 	path = trusted-external-repos/gstack
 	url = https://github.com/bingran-you/gstack.git
 	branch = main
-[submodule "bingran-you-private"]
-	path = bingran-you-private
-	url = https://github.com/bingran-you/bingran-you-private.git
-[submodule "trusted-external-repos/first-tree"]
-	path = trusted-external-repos/first-tree
-	url = https://github.com/agent-team-foundation/first-tree.git
-	branch = main
-[submodule "trusted-external-repos/skillsbench"]
-	path = trusted-external-repos/skillsbench
-	url = https://github.com/benchflow-ai/skillsbench.git
-	branch = main
+[submodule "trusted-external-repos/gbrain"]
+	path = trusted-external-repos/gbrain
+	url = https://github.com/garrytan/gbrain.git
+	branch = master
 [submodule "trusted-external-repos/xiaohongshu-skills"]
 	path = trusted-external-repos/xiaohongshu-skills
 	url = https://github.com/vivy-yi/xiaohongshu-skills.git
@@ -24,3 +21,20 @@
 [submodule "trusted-external-repos/xiaohongshu-ops-skill"]
 	path = trusted-external-repos/xiaohongshu-ops-skill
 	url = https://github.com/Xiangyu-CAS/xiaohongshu-ops-skill.git
+	branch = main
+[submodule "current-projects/mews"]
+	path = current-projects/mews
+	url = https://github.com/bingran-you/mews.git
+	branch = main
+[submodule "current-projects/first-tree"]
+	path = current-projects/first-tree
+	url = https://github.com/agent-team-foundation/first-tree.git
+	branch = main
+[submodule "current-projects/DoWhiz"]
+	path = current-projects/DoWhiz
+	url = https://github.com/bingran-you/DoWhiz.git
+	branch = dev
+[submodule "current-projects/skillsbench"]
+	path = current-projects/skillsbench
+	url = https://github.com/bingran-you/skillsbench.git
+	branch = main

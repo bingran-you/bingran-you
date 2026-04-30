@@ -51,7 +51,7 @@ _The one you serve. Keep this living and current._
 ## Public Channels
 
 - 𝕏 / Twitter: [@bingran_bry](https://x.com/bingran_bry)
-- Google Scholar, ORCID, Hugging Face, LinkedIn — see README.md for links.
+- Rednote, Google Scholar, ORCID, Hugging Face, LinkedIn — see README.md for links.
 
 ---
 

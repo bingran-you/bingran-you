@@ -20,11 +20,11 @@
 	branch = main
 [submodule "current-projects/first-tree"]
 	path = current-projects/first-tree
-	url = https://github.com/bingran-you/first-tree.git
+	url = https://github.com/agent-team-foundation/first-tree.git
 	branch = main
 [submodule "current-projects/DoWhiz"]
 	path = current-projects/DoWhiz
-	url = https://github.com/bingran-you/DoWhiz.git
+	url = https://github.com/KnoWhiz/DoWhiz.git
 	branch = dev
 [submodule "current-projects/skillsbench"]
 	path = current-projects/skillsbench

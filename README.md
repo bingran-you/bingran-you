@@ -4,7 +4,7 @@
 
 I build reliable AI systems and trapped-ion quantum experiments. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
-## 🖥️ AI Builder
+## 💻 AI Builder
 
 ### How I Build
 

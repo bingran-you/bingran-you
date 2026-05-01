@@ -10,8 +10,9 @@ Fill in as you learn. Delete sections that don't apply.
 
 - **Primary stack:** Codex + GPT-5.5 **and** Claude Code + Opus 4.7 (both prompt-cache-heavy; pick per task — Codex for long-horizon autonomous runs, Claude Code for interactive pair work)
 - **Secondary:** Anthropic SDK and OpenAI SDK for custom tooling
-- **Shared skill libraries:** `trusted-external-repos/skills/`, `trusted-external-repos/claude-skills/` (submodules)
-- **Workspace skills:** source lives in `repo-skills/` and `trusted-external-repos/open-design/skills/`; mirrored into `.claude/skills` and `.agents/skills` by `scripts/sync_skills.sh` as directory symlinks
+- **Reference skill libraries:** `trusted-external-repos/skills/`, `trusted-external-repos/claude-skills/` (submodules)
+- **Workspace skills:** source lives in `repo-skills/` and `trusted-external-repos/open-design/skills/`; `scripts/sync_skills.sh` mirrors valid skills into `.claude/skills` and `.agents/skills` as per-skill directory symlinks
+- **Auto-bootstrap hooks:** `.claude/settings.json` and `.codex/config.toml` both attempt `scripts/sync_skills.sh init` on session start; if skills look stale, run that command manually
 - **Harness/tooling repos:** `trusted-external-repos/gstack/`, `trusted-external-repos/gbrain/`
 
 ## Repos & Workspaces
@@ -19,6 +20,7 @@ Fill in as you learn. Delete sections that don't apply.
 - **Main workspace root:** `~/Downloads/GitHub/bingran-you/`
 - **Worktrees root:** `~/Downloads/GitHub/Claude-Worktrees/bingran-you/` — parallel sessions, per-branch.
 - **Private submodule:** `bingran-you-private/` — confidential, never exfiltrate.
+- **Active project submodules:** `current-projects/DoWhiz`, `current-projects/first-tree`, `current-projects/mews`, `current-projects/skillsbench`
 
 ## Ion-Trap Environment
 

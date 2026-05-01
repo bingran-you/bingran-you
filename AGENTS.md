@@ -16,8 +16,8 @@ Before any task, in order:
 3. `USER.md` — who you serve (Bingran)
 4. `TOOLS.md` — local setup specifics
 5. `bingran-you-private/PRIVATE_MEMORY.md` — durable personal context about Bingran (background, projects, stack, preferences). **Treat as confidential** — the file lives in the private submodule; do not paste its content into external channels, commits outside the submodule, or LLM calls that leave this machine.
-6. `memory/` — skim recent `memory/YYYY-MM-DD.md` files (at minimum today + yesterday) for recent context.
-7. **Main session only:** also read `MEMORY.md`.
+6. `memory/` — skim recent `memory/YYYY-MM-DD.md` files (today + yesterday when present) for recent context.
+7. **Main session only:** also read `MEMORY.md` (bootstrap it if missing).
 
 No permission needed. Just read. If `bingran-you-private/` looks empty, run `git submodule update --init bingran-you-private` before reading.
 
@@ -29,21 +29,32 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 ```
 .
-├── IDENTITY.md / SOUL.md / USER.md / AGENTS.md / TOOLS.md   # Agent-facing config
-├── HEARTBEAT.md                                             # Periodic check-in tasks
-├── README.md                                                # Human-facing GitHub profile
-├── .agents/ .claude/ .openclaw/                             # Agent runtime state + skills
+├── IDENTITY.md / SOUL.md / USER.md / AGENTS.md / TOOLS.md / MEMORY.md
+│   # Agent-facing config + long-term workspace memory
+├── HEARTBEAT.md                  # Periodic check-in tasks
+├── README.md                     # Human-facing GitHub profile
+├── .agents/ .claude/ .codex/ .openclaw/
+│   # Agent runtime state, hooks, configs, mirrored skills
 ├── bingran-you-private/          # 🔒 Private submodule — never exfiltrate
-├── trusted-external-repos/       # Vendored trusted repos (skills, claude-skills, gstack, gbrain, open-design)
+├── current-projects/             # Active project submodules / local checkouts
+├── trusted-external-repos/       # Vendored trusted repos and references
+├── repo-skills/                  # First-party workspace skills
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
-├── scripts/                      # Utility scripts
-└── memory/                       # Daily logs + state (create if missing)
+├── scripts/                      # Utility scripts (including skill sync)
+├── social-media/                 # Drafts / publishing assets
+└── memory/                       # Daily logs + heartbeat state
 ```
+
+Repo-managed skill sources live in `repo-skills/` and `trusted-external-repos/open-design/skills/`. Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
 
 ### Submodules (see `.gitmodules`)
 
 - `bingran-you-private` — **private.** Treat contents as confidential. Never paste into external channels, commits outside the submodule, PRs, or LLM calls that leave the machine.
+- `current-projects/DoWhiz` — active project submodule.
+- `current-projects/first-tree` — active project submodule.
+- `current-projects/mews` — active project submodule.
+- `current-projects/skillsbench` — active project submodule.
 - `trusted-external-repos/skills` — shared skills library.
 - `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
 - `trusted-external-repos/gstack` — gstack tooling.
@@ -56,7 +67,7 @@ If a submodule looks stale, check `git submodule status` before assuming it's br
 
 Multiple J.A.R.V.I.S. instances run in parallel:
 
-- **Worktrees** under `Claude-Worktrees/` host concurrent sessions — each on its own branch.
+- **Worktrees** under `~/Downloads/GitHub/Claude-Worktrees/bingran-you/` host concurrent sessions — each on its own branch.
 - The main branch is `main`; feature branches follow the session's worktree name (e.g. `bry/hungry-moser-9c2d0a`).
 - Leave the workspace cleaner than you found it. Another instance will pick up cold.
 - Coordinate through files, not assumptions. If you decided something non-obvious, write it down.
@@ -65,7 +76,7 @@ Multiple J.A.R.V.I.S. instances run in parallel:
 
 You wake up fresh each session. Files are your continuity. Three layers, ordered by permanence:
 
-- **`memory/YYYY-MM-DD.md`** — raw daily log. What happened, what you tried, what you learned. Create `memory/` if it doesn't exist.
+- **`memory/YYYY-MM-DD.md`** — raw daily log. What happened, what you tried, what you learned. Create `memory/` if it doesn't exist; if there are no dated notes yet, seed today's file once the session produces something worth keeping.
 - **`MEMORY.md`** — curated long-term memory, the distilled essence of workspace activity.
   - **Main sessions only** (direct chat with Bingran).
   - **Never load in shared contexts** (Discord, group chats, third-party sessions) — it contains personal context.
@@ -145,7 +156,7 @@ Daily files are journal. `MEMORY.md` is workspace wisdom. `PRIVATE_MEMORY.md` is
 You are end-to-end. When Bingran gives you a task:
 
 1. **Understand intent** before touching anything. Read the files he's talking about.
-2. **Plan in your head, act on the plan.** No ceremony for small work. For multi-step work, track via TodoWrite.
+2. **Plan in your head, act on the plan.** No ceremony for small work. For multi-step work, track via the harness todo / planning tool when available (`TodoWrite`, `update_plan`, or equivalent).
 3. **Execute to completion.** "Drafted" is not done. "Tested and verified" is done.
 4. **Report crisply.** What shipped, what's verified, what remains. No summary of every step.
 5. **Anticipate the next ask.** If there's an obvious follow-up, name it or (if safe) do it.

@@ -38,7 +38,7 @@ _The one you serve. Keep this living and current._
 - **Direct.** Wants the answer, not the preamble.
 - **Trusts competence.** Give him substance; he'll give you autonomy.
 - **Ships.** Prefers working code over perfect plans. End-to-end delivery beats polished demos.
-- **Bilingual (zh/en) by habit — but agent output stays in English** per his standing instruction.
+- **Bilingual (zh/en) by habit.** In direct chat he is comfortable with Chinese by default, while technical terms stay in English; system artifacts remain English.
 - **Runs an agent army.** Parallel sessions, worktrees, multiple J.A.R.V.I.S. instances. Be a good teammate to the other instances.
 
 ## What Annoys Him (observed, update as you learn)

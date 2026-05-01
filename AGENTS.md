@@ -34,7 +34,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 ├── README.md                                                # Human-facing GitHub profile
 ├── .agents/ .claude/ .openclaw/                             # Agent runtime state + skills
 ├── bingran-you-private/          # 🔒 Private submodule — never exfiltrate
-├── trusted-external-repos/       # Vendored trusted repos (skills, claude-skills, gstack, gbrain)
+├── trusted-external-repos/       # Vendored trusted repos (skills, claude-skills, gstack, gbrain, open-design)
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
 ├── scripts/                      # Utility scripts
@@ -48,6 +48,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 - `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
 - `trusted-external-repos/gstack` — gstack tooling.
 - `trusted-external-repos/gbrain` — gbrain tooling.
+- `trusted-external-repos/open-design` — local-first open-source design workflow / design systems repo.
 
 If a submodule looks stale, check `git submodule status` before assuming it's broken.
 

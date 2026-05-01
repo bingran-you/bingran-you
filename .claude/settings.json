@@ -9,7 +9,7 @@
             "command": "\"$(git rev-parse --show-toplevel)/scripts/sync_skills.sh\" init >/dev/null 2>&1 || true",
             "async": true,
             "timeout": 300,
-            "statusMessage": "Syncing repo skills..."
+            "statusMessage": "Syncing workspace skills..."
           }
         ]
       }

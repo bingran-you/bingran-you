@@ -11,7 +11,7 @@ Fill in as you learn. Delete sections that don't apply.
 - **Primary stack:** Codex + GPT-5.5 **and** Claude Code + Opus 4.7 (both prompt-cache-heavy; pick per task — Codex for long-horizon autonomous runs, Claude Code for interactive pair work)
 - **Secondary:** Anthropic SDK and OpenAI SDK for custom tooling
 - **Shared skill libraries:** `trusted-external-repos/skills/`, `trusted-external-repos/claude-skills/` (submodules)
-- **Repo-local skills:** source lives in `repo-skills/`; mirrored into `.claude/skills` and `.agents/skills` by `scripts/sync_skills.sh`
+- **Workspace skills:** source lives in `repo-skills/` and `trusted-external-repos/open-design/skills/`; mirrored into `.claude/skills` and `.agents/skills` by `scripts/sync_skills.sh` as directory symlinks
 - **Harness/tooling repos:** `trusted-external-repos/gstack/`, `trusted-external-repos/gbrain/`
 
 ## Repos & Workspaces

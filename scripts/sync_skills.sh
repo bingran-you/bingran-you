@@ -4,12 +4,14 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "$0")" && pwd -P)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd -P)"
-MANIFEST_PATH="$REPO_ROOT/repo-skills/manifest.txt"
 
-SUBMODULE_PATHS=(
-  "trusted-external-repos/skills"
-  "trusted-external-repos/gstack"
-  "trusted-external-repos/skillsbench"
+SOURCE_ROOTS=(
+  "repo-skills"
+  "trusted-external-repos/open-design/skills"
+)
+
+MANAGED_SUBMODULES=(
+  "trusted-external-repos/open-design"
 )
 
 ENTRYPOINT_DIRS=(
@@ -23,7 +25,7 @@ typeset -A LINK_SOURCES=()
 
 usage() {
   cat <<EOF
-Mirror the managed skill list into both Claude Code and Codex entrypoints.
+Mirror auto-discovered workspace skills into both Claude Code and Codex entrypoints.
 
 Usage:
   $0 status
@@ -35,38 +37,19 @@ Usage:
 Commands:
   status   Show tracked submodule commits and entrypoint counts.
   list     Show the resolved skill names and their source paths.
-  init     Initialize required submodules, then rebuild the entrypoints.
-  refresh  Rebuild the entrypoints from repo-skills/manifest.txt.
-  update   Fast-forward managed submodules to upstream main, then rebuild.
+  init     Initialize managed submodules, then rebuild the entrypoints.
+  refresh  Rebuild the entrypoints from the auto-discovered source roots.
+  update   Fast-forward managed submodules, then rebuild the entrypoints.
 EOF
 }
 
-trim_line() {
-  local value="$1"
-  value="${value%%#*}"
-  value="${value#"${value%%[![:space:]]*}"}"
-  value="${value%"${value##*[![:space:]]}"}"
-  print -r -- "$value"
-}
-
-require_directory() {
+require_source_root() {
   local repo_path="$1"
   local absolute_path="$REPO_ROOT/$repo_path"
 
   if [[ ! -d "$absolute_path" ]]; then
-    echo "Missing directory: $repo_path" >&2
-    exit 1
-  fi
-}
-
-require_skill_directory() {
-  local repo_path="$1"
-  local absolute_path="$REPO_ROOT/$repo_path"
-
-  require_directory "$repo_path"
-
-  if [[ ! -f "$absolute_path/SKILL.md" ]]; then
-    echo "Missing SKILL.md in: $repo_path" >&2
+    echo "Missing source root: $repo_path" >&2
+    echo "Run '$0 init' to initialize managed submodules and rebuild the entrypoints." >&2
     exit 1
   fi
 }
@@ -86,53 +69,46 @@ register_skill() {
   LINK_SOURCES[$skill_name]="$source_label"
 }
 
-load_manifest() {
-  local raw_line=""
-  local line=""
-  local command=""
-  local arg1=""
-  local arg2=""
-  local extra=""
+is_valid_skill_name() {
+  local skill_name="$1"
+  [[ "$skill_name" =~ '^[A-Za-z0-9._:-]+$' ]]
+}
 
-  [[ -f "$MANIFEST_PATH" ]] || {
-    echo "Missing manifest: $MANIFEST_PATH" >&2
-    exit 1
-  }
+discover_skills() {
+  local source_root=""
+  local skill_dir=""
+  local skill_name=""
+  local repo_path=""
 
   LINK_NAMES=()
   LINK_TARGETS=()
   LINK_SOURCES=()
 
-  while IFS= read -r raw_line || [[ -n "$raw_line" ]]; do
-    line="$(trim_line "$raw_line")"
-    [[ -z "$line" ]] && continue
+  for source_root in "${SOURCE_ROOTS[@]}"; do
+    require_source_root "$source_root"
 
-    command=""
-    arg1=""
-    arg2=""
-    extra=""
-    read -r command arg1 arg2 extra <<<"$line"
+    for skill_dir in "$REPO_ROOT/$source_root"/*(N); do
+      [[ -d "$skill_dir" ]] || continue
+      [[ -f "$skill_dir/SKILL.md" ]] || continue
 
-    if [[ -n "$extra" ]]; then
-      echo "Too many fields in manifest line: $line" >&2
-      exit 1
-    fi
+      skill_name="${skill_dir:t}"
+      if ! is_valid_skill_name "$skill_name"; then
+        echo "Skipping skill with unsupported name '$skill_name' from '$source_root'." >&2
+        echo "Rename the directory to use only letters, numbers, dot, underscore, colon, or hyphen." >&2
+        continue
+      fi
 
-    [[ "$command" == "link" && -n "$arg1" && -n "$arg2" ]] || {
-      echo "Invalid manifest line: $line" >&2
-      exit 1
-    }
-
-    require_skill_directory "$arg2"
-    register_skill "$arg1" "$arg2" "$line"
-  done < "$MANIFEST_PATH"
+      repo_path="${skill_dir#$REPO_ROOT/}"
+      register_skill "$skill_name" "$repo_path" "$source_root"
+    done
+  done
 }
 
 rebuild_entrypoints() {
   local entrypoint_dir=""
   local skill_name=""
 
-  load_manifest
+  discover_skills
 
   for entrypoint_dir in "${ENTRYPOINT_DIRS[@]}"; do
     rm -rf "$entrypoint_dir"
@@ -156,8 +132,45 @@ show_entrypoint_status() {
   fi
 }
 
+show_source_status() {
+  local source_root=""
+  local skill_dir=""
+  local count=0
+  local invalid_count=0
+  local skill_name=""
+
+  for source_root in "${SOURCE_ROOTS[@]}"; do
+    if [[ ! -d "$REPO_ROOT/$source_root" ]]; then
+      echo "$source_root (missing)"
+      continue
+    fi
+
+    count=0
+    invalid_count=0
+    for skill_dir in "$REPO_ROOT/$source_root"/*(N); do
+      [[ -d "$skill_dir" ]] || continue
+      [[ -f "$skill_dir/SKILL.md" ]] || continue
+
+      skill_name="${skill_dir:t}"
+      if ! is_valid_skill_name "$skill_name"; then
+        invalid_count=$((invalid_count + 1))
+        continue
+      fi
+
+      count=$((count + 1))
+    done
+
+    if (( invalid_count > 0 )); then
+      echo "$source_root ($count source skills, $invalid_count skipped invalid names)"
+    else
+      echo "$source_root ($count source skills)"
+    fi
+  done
+}
+
 show_status() {
-  git -C "$REPO_ROOT" submodule status -- "${SUBMODULE_PATHS[@]}"
+  git -C "$REPO_ROOT" submodule status -- "${MANAGED_SUBMODULES[@]}"
+  show_source_status
   show_entrypoint_status "$REPO_ROOT/.agents/skills"
   show_entrypoint_status "$REPO_ROOT/.claude/skills"
 }
@@ -165,10 +178,10 @@ show_status() {
 show_resolved_list() {
   local skill_name=""
 
-  load_manifest
+  discover_skills
 
   for skill_name in ${(on)LINK_NAMES}; do
-    echo "$skill_name -> ${LINK_TARGETS[$skill_name]}"
+    echo "$skill_name -> ${LINK_TARGETS[$skill_name]} (${LINK_SOURCES[$skill_name]})"
   done
 }
 
@@ -180,7 +193,7 @@ case "${1:-status}" in
     show_resolved_list
     ;;
   init)
-    git -C "$REPO_ROOT" submodule update --init --recursive "${SUBMODULE_PATHS[@]}"
+    git -C "$REPO_ROOT" submodule update --init --recursive "${MANAGED_SUBMODULES[@]}"
     rebuild_entrypoints
     show_status
     ;;
@@ -189,7 +202,7 @@ case "${1:-status}" in
     show_status
     ;;
   update)
-    git -C "$REPO_ROOT" submodule update --init --remote "${SUBMODULE_PATHS[@]}"
+    git -C "$REPO_ROOT" submodule update --init --remote "${MANAGED_SUBMODULES[@]}"
     rebuild_entrypoints
     show_status
     ;;

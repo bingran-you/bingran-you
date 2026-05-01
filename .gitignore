@@ -1,6 +1,8 @@
 .omx/
 scripts/githuber/target/
 /.claude/worktrees
+/.claude/skills/
+/.agents/skills/
 .DS_Store
 /papers/papers-reading/GEN-1/presentation-workspace/scratch
 /papers/papers-reading/GEN-1/presentation-workspace/node_modules

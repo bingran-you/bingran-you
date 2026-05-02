@@ -20,8 +20,8 @@ export default function ProjectsPage() {
         </p>
       </header>
 
-      <Section title="🖥️ AI Builder" items={ai} />
-      <Section title="⚛︎ Ion Trapper" items={ion} />
+      <Section title="AI Builder" items={ai} />
+      <Section title="Ion Trapper" items={ion} />
     </div>
   );
 }
@@ -35,7 +35,7 @@ function Section({
 }) {
   return (
     <section>
-      <h2 className="text-sm font-mono uppercase tracking-widest text-[var(--muted)] mb-6">
+      <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-6">
         {title}
       </h2>
       <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
@@ -48,7 +48,7 @@ function Section({
               className="flex flex-col gap-1 py-5 group"
             >
               <span className="text-base font-medium group-hover:underline underline-offset-4">
-                {p.emoji} {p.name}
+                {p.name}
               </span>
               <span className="text-sm text-[var(--muted)] leading-relaxed">
                 {p.description}

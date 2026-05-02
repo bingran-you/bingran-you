@@ -48,6 +48,14 @@ export const projects: Project[] = [
     track: "ai",
   },
   {
+    name: "mews",
+    href: "https://github.com/bingran-you/mews",
+    description:
+      "Local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.",
+    emoji: "🐈",
+    track: "ai",
+  },
+  {
     name: "DeepTutor",
     href: "https://deeptutor.knowhiz.us/",
     description:

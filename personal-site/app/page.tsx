@@ -4,7 +4,7 @@ import { education, projects, papers } from "@/lib/content";
 
 export default function Home() {
   const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 4);
-  const ionHighlights = papers.filter((p) => p.track === "ion").slice(0, 3);
+  const paperHighlights = papers.filter((p) => p.track === "ai").slice(0, 2);
 
   return (
     <div className="space-y-24">
@@ -110,7 +110,7 @@ export default function Home() {
           </Link>
         </div>
         <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {ionHighlights.map((p) => (
+          {paperHighlights.map((p) => (
             <li key={p.href}>
               <a
                 href={p.href}

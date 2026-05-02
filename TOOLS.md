@@ -21,6 +21,7 @@ Fill in as you learn. Delete sections that don't apply.
 - **Worktrees root:** `~/Downloads/GitHub/Claude-Worktrees/bingran-you/` — parallel sessions, per-branch.
 - **Private submodule:** `bingran-you-private/` — confidential, never exfiltrate.
 - **Active project submodules:** `current-projects/DoWhiz`, `current-projects/first-tree`, `current-projects/mews`, `current-projects/skillsbench`
+- **Personal site:** `personal-site/` — Next.js + MDX source for `bingranyou.com`, deployed on Vercel (project `personal-site` under team `bingran-yous-projects`)
 
 ## Ion-Trap Environment
 

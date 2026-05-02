@@ -13,6 +13,16 @@ export type Paper = {
   track: "ai" | "ion";
 };
 
+export type Education = {
+  institution: string;
+  location: string;
+  degree: string;
+  period: string;
+  summary: string;
+  metrics?: string[];
+  highlights: string[];
+};
+
 export const projects: Project[] = [
   {
     name: "SkillsBench",
@@ -121,5 +131,34 @@ export const papers: Paper[] = [
     blurb:
       "Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.",
     track: "ion",
+  },
+];
+
+export const education: Education[] = [
+  {
+    institution: "University of California, Berkeley",
+    location: "Berkeley, California",
+    degree: "PhD Candidate in Physics",
+    period: "2022 — Present",
+    summary:
+      "Graduate research spanning trapped-ion quantum systems, integrated photonics, ion-photon interfaces, and quantum networking.",
+    metrics: ["Physics PhD", "Haeffner Lab"],
+    highlights: [
+      "Research focus on scalable trapped-ion hardware and photonic integration.",
+      "Builds experimental systems that connect precision physics with dependable engineering.",
+    ],
+  },
+  {
+    institution: "University of Chinese Academy of Sciences",
+    location: "Beijing, China",
+    degree: "BS in Physics, Minor in Computer Science",
+    period: "2018 — 2022",
+    summary:
+      "Undergraduate training in physics with a strong computational foundation across mathematics, programming, and scientific problem solving.",
+    metrics: ["GPA 3.95 / 4.00", "Rank 1 / 54"],
+    highlights: [
+      "Graduated at the top of the cohort in physics.",
+      "Built an early bridge between physical systems work and software-driven experimentation.",
+    ],
   },
 ];

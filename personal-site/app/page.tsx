@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { projects, papers } from "@/lib/content";
+import { education, projects, papers } from "@/lib/content";
 
 export default function Home() {
   const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 4);
@@ -124,6 +124,72 @@ export default function Home() {
                 experiments that have to survive real-world noise.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-[2rem] border border-[var(--border)] bg-white/70 p-6 shadow-[0_24px_80px_-54px_rgba(15,49,84,0.35)] backdrop-blur sm:p-8 dark:bg-slate-950/70">
+        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+          <div className="space-y-4">
+            <p className="font-mono text-[11px] uppercase tracking-[0.34em] text-[var(--muted)]">
+              Education
+            </p>
+            <h2 className="font-display text-4xl leading-none tracking-[-0.04em] sm:text-[3.2rem]">
+              Formal training in physics, computation, and systems thinking.
+            </h2>
+            <p className="max-w-md text-base leading-relaxed text-[var(--muted)] text-pretty">
+              The academic path behind the builder: physics-first training,
+              computing fluency, and a habit of treating rigor as a design
+              constraint rather than a slogan.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {education.map((item) => (
+              <article
+                key={`${item.institution}-${item.period}`}
+                className="rounded-[1.6rem] border border-[var(--border)] bg-white/85 p-5 shadow-[0_18px_40px_-34px_rgba(15,49,84,0.28)] dark:bg-white/[0.04] sm:p-6"
+              >
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-[var(--muted)]">
+                      {item.period}
+                    </p>
+                    <h3 className="mt-3 text-xl font-semibold tracking-tight text-foreground">
+                      {item.institution}
+                    </h3>
+                    <p className="mt-1 text-sm text-[var(--muted)]">
+                      {item.degree} · {item.location}
+                    </p>
+                  </div>
+                  {item.metrics?.length ? (
+                    <div className="flex flex-wrap gap-2 sm:max-w-[15rem] sm:justify-end">
+                      {item.metrics.map((metric) => (
+                        <span
+                          key={metric}
+                          className="rounded-full border border-[var(--border)] bg-[var(--background)]/70 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--accent)] dark:bg-white/[0.03]"
+                        >
+                          {metric}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                <p className="mt-5 max-w-3xl text-sm leading-relaxed text-[var(--muted)] text-pretty sm:text-[15px]">
+                  {item.summary}
+                </p>
+                <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {item.highlights.map((highlight) => (
+                    <li
+                      key={highlight}
+                      className="rounded-[1.15rem] border border-[var(--border)] bg-white/70 px-4 py-3 text-sm leading-relaxed text-[var(--muted)] dark:bg-white/[0.03]"
+                    >
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </div>
       </section>

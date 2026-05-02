@@ -2,10 +2,10 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #f4efe7;
+  --background: #faf8f4;
   --foreground: #14161b;
-  --muted: #5e6570;
-  --border: rgba(20, 22, 27, 0.14);
+  --muted: #6b7280;
+  --border: rgba(20, 22, 27, 0.10);
   --accent: #1f5f9f;
   --accent-strong: #0f3154;
 }
@@ -24,10 +24,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #09111c;
-    --foreground: #f5f6f8;
-    --muted: #9aa3b2;
-    --border: rgba(232, 238, 249, 0.12);
+    --background: #0c0e12;
+    --foreground: #ececef;
+    --muted: #8a93a1;
+    --border: rgba(232, 238, 249, 0.10);
     --accent: #84b8ff;
     --accent-strong: #c8defd;
   }
@@ -38,26 +38,12 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(31, 95, 159, 0.18), transparent 32%),
-    radial-gradient(circle at 88% 16%, rgba(196, 147, 92, 0.16), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(244, 239, 231, 0.92)),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01", "ss02", "cv01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background:
-      radial-gradient(circle at top left, rgba(80, 140, 214, 0.22), transparent 30%),
-      radial-gradient(circle at 85% 15%, rgba(24, 86, 150, 0.18), transparent 26%),
-      linear-gradient(180deg, rgba(5, 9, 16, 0.5), rgba(9, 17, 28, 0.94)),
-      var(--background);
-  }
 }
 
 ::selection {

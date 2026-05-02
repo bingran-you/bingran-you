@@ -53,6 +53,11 @@ export default function Home() {
                 <p className="mt-1 text-sm text-[var(--muted)]">
                   {item.degree} · {item.location}
                 </p>
+                {item.metrics?.length ? (
+                  <p className="mt-1 font-mono text-xs text-[var(--muted)]">
+                    {item.metrics.join(" · ")}
+                  </p>
+                ) : null}
               </div>
             </li>
           ))}

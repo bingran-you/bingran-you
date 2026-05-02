@@ -138,11 +138,11 @@ export const education: Education[] = [
   {
     institution: "University of California, Berkeley",
     location: "Berkeley, California",
-    degree: "PhD Candidate in Physics",
+    degree: "PhD Candidate in Applied Science & Technology",
     period: "2022 — Present",
     summary:
       "Graduate research spanning trapped-ion quantum systems, integrated photonics, ion-photon interfaces, and quantum networking.",
-    metrics: ["Physics PhD", "Haeffner Lab"],
+    metrics: ["Haeffner Lab"],
     highlights: [
       "Research focus on scalable trapped-ion hardware and photonic integration.",
       "Builds experimental systems that connect precision physics with dependable engineering.",

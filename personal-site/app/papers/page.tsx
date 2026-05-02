@@ -55,6 +55,9 @@ function Section({
               rel="noopener noreferrer"
               className="flex flex-col gap-1 py-5 group"
             >
+              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--muted)]">
+                {p.venue}
+              </span>
               <span className="text-base font-medium leading-snug group-hover:underline underline-offset-4">
                 {p.title}
               </span>

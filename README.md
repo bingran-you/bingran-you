@@ -35,8 +35,8 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
 - 🌲 [first-tree](https://github.com/agent-team-foundation/first-tree) - A Git-native context layer for decisions, ownership, and shared team knowledge.
 - 🥷 [DoWhiz](https://github.com/KnoWhiz/DoWhiz) - An agent-native product for getting work done across email, chat, documents, and related tools.
-- 🐈 [mews](https://github.com/bingran-you/mews) - A local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.
 - 🧠 [DeepTutor](https://deeptutor.knowhiz.us/) - An AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
+- 🐈 [mews](https://github.com/bingran-you/mews) - A local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.
 - 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - Seeded mock environments for testing agent behavior in realistic workflows.
 - 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
 - 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
@@ -44,8 +44,8 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 
 ### Selected Papers
 
-- 📑 [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
-- 📑 [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *arXiv* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
+- 📑 *arXiv* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
 
 ## ⚛︎ Ion Trapper
 
@@ -74,10 +74,10 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 
 ### Selected Papers
 
-- 📑 [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
-- 📑 [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
-- 📑 [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable quantum information processing.
-- 📑 [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.
+- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
+- 📑 *arXiv* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
+- 📑 *Nature* · [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable quantum information processing.
+- 📑 *Phys. Rev. Lett.* · [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.
 
 ## Connect
 

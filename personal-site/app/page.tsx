@@ -3,7 +3,7 @@ import Link from "next/link";
 import { education, projects, papers } from "@/lib/content";
 
 export default function Home() {
-  const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 4);
+  const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 5);
   const paperHighlights = papers.filter((p) => p.track === "ai").slice(0, 2);
 
   return (
@@ -67,7 +67,7 @@ export default function Home() {
       <section>
         <div className="flex items-baseline justify-between gap-4">
           <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-            Selected projects
+            Current projects
           </h2>
           <Link
             href="/projects"
@@ -118,6 +118,9 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="flex flex-col gap-1 py-5 group"
               >
+                <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--muted)]">
+                  {p.venue}
+                </span>
                 <span className="text-base font-medium leading-snug group-hover:underline underline-offset-4">
                   {p.title}
                 </span>

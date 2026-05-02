@@ -1,6 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { education, projects, papers } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: "Bingran You — AI Builder & Ion Trapper",
+  description:
+    "Bingran You is a PhD candidate at UC Berkeley (Haeffner Lab) building reliable AI agent systems and trapped-ion quantum experiments.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Bingran You — AI Builder & Ion Trapper",
+    description:
+      "PhD candidate at UC Berkeley. Reliable AI agent systems × trapped-ion quantum experiments.",
+    url: "/",
+    type: "profile",
+  },
+};
 
 export default function Home() {
   const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 5);

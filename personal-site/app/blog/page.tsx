@@ -4,7 +4,16 @@ import { getAllPostsMetadata } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Short notes on AI agents, quantum experiments, and craft.",
+  description:
+    "Short notes by Bingran You on AI agents, trapped-ion quantum experiments, and the craft of making complex systems behave on purpose.",
+  alternates: { canonical: "/blog" },
+  openGraph: {
+    title: "Blog · Bingran You",
+    description:
+      "Short notes on AI agents, quantum experiments, and the craft of dependable systems.",
+    url: "/blog",
+    type: "website",
+  },
 };
 
 export default async function BlogPage() {

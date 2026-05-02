@@ -19,9 +19,19 @@ export async function generateMetadata({
   const { slug } = await params;
   if (!postSlugs.includes(slug as PostSlug)) return {};
   const mod = await import(`@/content/posts/${slug}.mdx`);
+  const url = `/blog/${slug}`;
   return {
     title: mod.metadata.title,
     description: mod.metadata.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: mod.metadata.title,
+      description: mod.metadata.description,
+      url,
+      type: "article",
+      publishedTime: mod.metadata.date,
+      authors: ["Bingran You"],
+    },
   };
 }
 

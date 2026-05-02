@@ -3,7 +3,16 @@ import { papers } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Papers",
-  description: "Selected publications across AI agents and trapped-ion physics.",
+  description:
+    "Selected publications by Bingran You spanning AI agent benchmarks (ClawsBench, SkillsBench) and trapped-ion physics (Nature, Phys. Rev. Lett., npj Nanophotonics).",
+  alternates: { canonical: "/papers" },
+  openGraph: {
+    title: "Papers · Bingran You",
+    description:
+      "Selected publications across AI agents and trapped-ion physics.",
+    url: "/papers",
+    type: "website",
+  },
 };
 
 export default function PapersPage() {

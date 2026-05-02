@@ -3,7 +3,16 @@ import { projects } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected projects across AI systems and trapped-ion experiments.",
+  description:
+    "Open-source projects by Bingran You — AI agent benchmarks and tooling (SkillsBench, first-tree, DoWhiz, DeepTutor, mews) and trapped-ion experiment software (bem, artiq_photonics_integration).",
+  alternates: { canonical: "/projects" },
+  openGraph: {
+    title: "Projects · Bingran You",
+    description:
+      "Open-source AI agent infrastructure and trapped-ion experiment software.",
+    url: "/projects",
+    type: "website",
+  },
 };
 
 export default function ProjectsPage() {

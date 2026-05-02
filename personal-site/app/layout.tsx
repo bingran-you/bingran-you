@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { SocialLinks } from "@/components/social-links";
@@ -11,6 +11,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
 });
 
@@ -51,11 +56,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="border-b border-[var(--border)]">
-          <div className="mx-auto max-w-3xl px-6 py-6 flex items-center justify-between">
+        <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-white/55 backdrop-blur dark:bg-slate-950/55">
+          <div className="mx-auto max-w-4xl px-6 py-6 flex items-center justify-between">
             <Link
               href="/"
               className="font-mono text-sm tracking-tight text-foreground hover:opacity-70 transition"
@@ -75,11 +80,11 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <main className="flex-1 mx-auto w-full max-w-3xl px-6 py-16">
+        <main className="flex-1 mx-auto w-full max-w-4xl px-6 py-14 sm:py-16">
           {children}
         </main>
         <footer className="border-t border-[var(--border)]">
-          <div className="mx-auto max-w-3xl px-6 py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mx-auto max-w-4xl px-6 py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-[var(--muted)]">
               © {new Date().getFullYear()} Bingran You · Berkeley, CA
             </p>

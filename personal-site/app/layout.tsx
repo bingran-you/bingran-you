@@ -59,8 +59,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-white/55 backdrop-blur dark:bg-slate-950/55">
-          <div className="mx-auto max-w-4xl px-6 py-6 flex items-center justify-between">
+        <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur">
+          <div className="mx-auto max-w-4xl px-6 py-5 flex items-center justify-between">
             <Link
               href="/"
               className="font-mono text-sm tracking-tight text-foreground hover:opacity-70 transition"

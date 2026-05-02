@@ -39,6 +39,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 ├── current-projects/             # Active project submodules / local checkouts
 ├── trusted-external-repos/       # Vendored trusted repos and references
 ├── repo-skills/                  # First-party workspace skills
+├── personal-site/                # bingranyou.com — Next.js + MDX, deployed on Vercel
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
 ├── scripts/                      # Utility scripts (including skill sync)

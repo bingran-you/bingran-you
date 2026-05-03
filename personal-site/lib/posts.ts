@@ -1,4 +1,7 @@
-export const postSlugs = ["welcome"] as const;
+export const postSlugs = [
+  "seo-and-geo-for-a-personal-site",
+  "welcome",
+] as const;
 
 export type PostSlug = (typeof postSlugs)[number];
 

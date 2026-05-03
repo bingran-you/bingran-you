@@ -1,0 +1,75 @@
+export const metadata = {
+  title: "SEO and GEO for a Personal Site",
+  description:
+    "What I changed on bingranyou.com so it gets found by Google, Bing, and LLM answer engines — without changing how the site looks.",
+  date: "2026-05-03",
+};
+
+# SEO and GEO for a Personal Site
+
+I rebuilt this site as a small Next.js + MDX app and shipped it without thinking much about discovery. It loaded fast, it looked the way I wanted, and that was the bar. Then I asked the obvious next question: when someone searches "Bingran You" — on Google, on Bing, inside ChatGPT, inside Claude — what shows up?
+
+The answer turned out to be "not much." So I spent a weekend doing the boring, invisible work that makes a personal site legible to both classical search and the new generation of LLM-driven answer engines. None of it changed how the site looks. All of it changed how the site is *parsed*.
+
+This post is the field notes.
+
+## Two audiences, same plumbing
+
+The split today is roughly:
+
+- **Classical search** (Google, Bing) reads HTML, follows links, ranks pages.
+- **Generative engines** (ChatGPT search, Claude with browsing, Perplexity, Cursor, Phind) consume the same web but with very different priorities. They love structured data, clean prose, machine-readable indexes, and clear entity signals. They tolerate messy HTML far less than Googlebot does.
+
+The good news: the moves that help the first audience also help the second. The bad news: the *visible* moves (rewriting copy, redesigning) don't help much. The real wins are below the fold.
+
+## What I changed
+
+### 1. Verify ownership in Google Search Console and Bing Webmaster
+
+Both let you submit a sitemap, watch indexing status, and see what queries you actually rank for. Bing matters specifically because ChatGPT search, Copilot, and DuckDuckGo all index through it. I verified the apex via DNS TXT for Google, then dropped a `BingSiteAuth.xml` into `public/`.
+
+### 2. One host of record
+
+The site was reachable on both `bingranyou.com` and `www.bingranyou.com`. Google sees that as two sites and splits ranking signal between them. Fix: a permanent (308) redirect from `www` to apex via Next.js `redirects()` with a host matcher, plus an explicit `metadata.alternates.canonical` on every route. From now on there is exactly one URL Google can call canonical.
+
+### 3. Per-entity structured data
+
+The layout already had a `Person` and a `WebSite` JSON-LD block. I added per-route entities:
+
+- Each paper as `ScholarlyArticle`, with `isPartOf` pointing to the venue and a `sameAs` link to arXiv or the journal DOI.
+- Each project as `SoftwareSourceCode`, with `codeRepository` set when it lives on GitHub.
+- Each blog post as `BlogPosting` with `datePublished`, `dateModified`, and a canonical `mainEntityOfPage`.
+
+This is the difference between Google parsing your `/papers` page as "a list of links" versus parsing it as "five publications, each with an author, venue, and abstract." The second produces rich results. The first produces a blue link.
+
+### 4. Dynamic Open Graph images
+
+Every route segment now ships an `opengraph-image.tsx` that renders a 1200×630 PNG at build time via `next/og`. Cream paper, serif display title, mono wordmark — same vocabulary as the site itself. Slack, X, LinkedIn, iMessage, and most LLM previews now show a real card instead of a placeholder.
+
+### 5. `/llms.txt` and `/llms-full.txt`
+
+The [llmstxt.org](https://llmstxt.org) convention is to expose two markdown files at the root: a short navigational index (`/llms.txt`) and a full-text bundle (`/llms-full.txt`). LLM crawlers actively look for them — they're the GEO equivalent of `sitemap.xml`. Mine include identity, social and scholarly profiles, the paper list, the project list, and (for the full version) the body of every blog post, read straight from the MDX source.
+
+### 6. A real `/about` page
+
+This is the only visible addition. It's a list-and-divider page, same vocabulary as the rest of the site, but every paragraph is a first-person factual sentence: *I am a PhD candidate at UC Berkeley. I work in the Haeffner Lab. I do X and Y.* LLMs ground entity queries on dense factual prose. A hero with a poetic tagline is fine for humans; an `/about` page with claims a model can lift verbatim is what answers questions like "who is Bingran You?"
+
+The page also embeds `ProfilePage` schema with a `mainEntity` `Person` carrying `jobTitle`, `affiliation`, `knowsAbout`, and the full `sameAs` profile set.
+
+## What I deliberately didn't do
+
+- **Keyword-stuffed copy.** Useless for LLMs, embarrassing on a personal site.
+- **AI-generated filler posts.** Worse than no content; both Google and LLMs are increasingly hostile to it.
+- **Tracking and analytics noise.** A personal site doesn't need a heatmap.
+- **Visual changes.** The constraint was "keep the simple, elegant style." Almost everything above is invisible to a human visitor — it's all in the head, the meta tags, the structured data, the off-page assets.
+
+## What's left
+
+The two highest-leverage things are external, and only I can do them:
+
+- **A Wikidata item** linking ORCID, Scholar, and the apex. Once that's live, the site becomes a node in Google's Knowledge Graph and most LLMs' entity tables.
+- **Backlink closure** — making sure GitHub, X, LinkedIn, ORCID, and arXiv submissions all point to `bingranyou.com`. The site already declares `sameAs` outward; now the platforms need to point inward.
+
+After that, the only remaining lever is the slow one: writing more posts that are actually worth indexing.
+
+— Bingran

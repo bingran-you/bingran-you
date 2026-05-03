@@ -1,3 +1,6 @@
+import { stat } from "node:fs/promises";
+import path from "node:path";
+
 export const postSlugs = [
   "seo-and-geo-for-a-personal-site",
   "welcome",
@@ -28,4 +31,10 @@ export async function getAllPostsMetadata(): Promise<
     })),
   );
   return all.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export async function getPostLastModified(slug: PostSlug) {
+  const filePath = path.join(process.cwd(), "content", "posts", `${slug}.mdx`);
+  const { mtime } = await stat(filePath);
+  return mtime;
 }

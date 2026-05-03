@@ -68,7 +68,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Current Focus
 
-- ⚛︎ Integrated photonics for trapped-ion systems
+- 💡 Integrated photonics for trapped-ion systems
 - 🔗 Ion-photon interfaces and multiplexed networking
 - 🧩 Novel ion trap architectures, including 3D-printed microtraps
 

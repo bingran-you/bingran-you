@@ -3,6 +3,17 @@ import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { SocialLinks } from "@/components/social-links";
+import {
+  jsonLdScriptContent,
+  OG_IMAGE_URL,
+  personJsonLd,
+  SITE_DESCRIPTION,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_OG_DESCRIPTION,
+  SITE_URL,
+  websiteJsonLd,
+} from "@/lib/jsonld";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,86 +31,39 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bingranyou.com"),
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
     default: "Bingran You — AI Builder & Ion Trapper",
-    template: "%s · Bingran You",
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments.",
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "Bingran You",
-    description:
-      "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion quantum experiments.",
-    url: "https://bingranyou.com",
-    siteName: "Bingran You",
+    title: SITE_NAME,
+    description: SITE_OG_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "en_US",
     type: "website",
+    images: [OG_IMAGE_URL],
   },
   twitter: {
     card: "summary_large_image",
     creator: "@bingran_bry",
+    title: SITE_NAME,
+    description: SITE_OG_DESCRIPTION,
+    images: [OG_IMAGE_URL],
   },
   alternates: {
     canonical: "/",
   },
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  keywords: [...SITE_KEYWORDS],
   verification: {
     google: "xWQd6sxfEf5jfU4AtrNcPv0jg71Ia8gQvXAcQmWKpyo",
   },
-};
-
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Bingran You",
-  givenName: "Bingran",
-  familyName: "You",
-  url: "https://bingranyou.com",
-  image: "https://bingranyou.com/images/profile/bingran-you-portrait.jpg",
-  jobTitle: "PhD Candidate",
-  description:
-    "PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments.",
-  alumniOf: [
-    {
-      "@type": "CollegeOrUniversity",
-      name: "University of California, Berkeley",
-      sameAs: "https://www.berkeley.edu/",
-    },
-    {
-      "@type": "CollegeOrUniversity",
-      name: "University of Chinese Academy of Sciences",
-      sameAs: "https://english.ucas.ac.cn/",
-    },
-  ],
-  affiliation: {
-    "@type": "Organization",
-    name: "Haeffner Lab, University of California, Berkeley",
-    url: "https://haeffnerlab.berkeley.edu/",
-  },
-  knowsAbout: [
-    "Reliable AI Systems",
-    "AI Agents",
-    "Trapped-Ion Quantum Computing",
-    "Integrated Photonics",
-    "Quantum Networking",
-  ],
-  sameAs: [
-    "https://x.com/bingran_bry",
-    "https://github.com/bingran-you",
-    "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en",
-    "https://orcid.org/0000-0002-0316-2115",
-    "https://huggingface.co/bingran-you",
-    "https://www.linkedin.com/in/bingran-you-775b4017b/",
-    "https://www.youtube.com/@BingranBRY",
-  ],
-};
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Bingran You",
-  url: "https://bingranyou.com",
-  inLanguage: "en",
-  author: { "@type": "Person", name: "Bingran You" },
 };
 
 const nav = [
@@ -124,13 +88,13 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+            __html: jsonLdScriptContent(personJsonLd()),
           }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteJsonLd).replace(/</g, "\\u003c"),
+            __html: jsonLdScriptContent(websiteJsonLd()),
           }}
         />
         <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur">

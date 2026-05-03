@@ -1,6 +1,6 @@
 import { ogContentType, ogSize, renderOgImage } from "@/lib/og";
 
-export const alt = "Bingran You — AI Builder & Ion Trapper";
+export const alt = "Bingran You — Agentic Builder & Ion Trapper";
 export const size = ogSize;
 export const contentType = ogContentType;
 

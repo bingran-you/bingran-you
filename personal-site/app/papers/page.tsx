@@ -35,7 +35,7 @@ export default function PapersPage() {
         </p>
       </header>
 
-      <Section title="AI Builder" items={ai} />
+      <Section title="Agentic Builder" items={ai} />
       <Section title="Ion Trapper" items={ion} />
     </div>
   );

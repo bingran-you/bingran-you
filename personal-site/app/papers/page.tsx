@@ -4,6 +4,7 @@ import { papers } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Papers",
   description: "Selected publications across AI agents and trapped-ion physics.",
+  alternates: { canonical: "/papers" },
 };
 
 export default function PapersPage() {

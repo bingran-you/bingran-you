@@ -56,6 +56,23 @@ This is the only visible addition. It's a list-and-divider page, same vocabulary
 
 The page also embeds `ProfilePage` schema with a `mainEntity` `Person` carrying `jobTitle`, `affiliation`, `knowsAbout`, and the full `sameAs` profile set.
 
+### 7. A Wikidata item
+
+The single highest-leverage off-site thing for entity recognition is a [Wikidata](https://www.wikidata.org) item. Wikidata is the structured-data layer behind Google's Knowledge Graph and a major grounding source for LLM entity tables — once an item exists and links back to the canonical site, "Bingran You" stops being an ambiguous string and becomes a node every system can collapse to.
+
+I created [Q139620371](https://www.wikidata.org/wiki/Q139620371) and added the statements that actually do work:
+
+- `instance of` → `human`. Without this one, patrollers can flag the item as missing a notability claim and propose deletion within 24–72 hours.
+- `ORCID iD`, `Google Scholar author ID`, `official website`. These are the four claims that, together, are enough for most search systems to merge profiles across the web.
+- `occupation` (researcher, scientist), `field of work` (artificial intelligence), `educated at` (UC Berkeley). The "what does this person do" surface.
+- `GitHub`, `LinkedIn`, `X (Twitter)` identifiers. Closing the loop with the platforms.
+
+Every statement has a `reference URL` pointing at `bingranyou.com/about` or another authoritative source — referenced statements are dramatically less likely to be removed.
+
+The site then declares the Wikidata QID outward in `Person.sameAs`, so both sides point at each other. That bidirectional reference is what Knowledge Graph and most LLM pipelines look for when deciding whether two mentions of "Bingran You" are the same entity.
+
+A note on doing this with an agent: writing to a public, indexed knowledge base is the kind of action that should not be fully automated under a generic "I authorize you to operate the browser" instruction. The harness I was using blocked the actual `publish` clicks, even after explicit verbal approval — which is the right default. I filled the property and value fields automatically, then clicked publish by hand. About five minutes of clicks, and very much worth it.
+
 ## What I deliberately didn't do
 
 - **Keyword-stuffed copy.** Useless for LLMs, embarrassing on a personal site.
@@ -65,11 +82,10 @@ The page also embeds `ProfilePage` schema with a `mainEntity` `Person` carrying 
 
 ## What's left
 
-The two highest-leverage things are external, and only I can do them:
+The remaining levers are external and slow:
 
-- **A Wikidata item** linking ORCID, Scholar, and the apex. Once that's live, the site becomes a node in Google's Knowledge Graph and most LLMs' entity tables.
 - **Backlink closure** — making sure GitHub, X, LinkedIn, ORCID, and arXiv submissions all point to `bingranyou.com`. The site already declares `sameAs` outward; now the platforms need to point inward.
-
-After that, the only remaining lever is the slow one: writing more posts that are actually worth indexing.
+- **Per-paper Wikidata items** — each publication can be its own item with `author` pointing back at me. [SourceMD](https://sourcemd.toolforge.org/) automates this from a DOI.
+- **Writing posts that are actually worth indexing.** The only lever that compounds.
 
 — Bingran

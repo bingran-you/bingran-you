@@ -8,10 +8,12 @@ REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd -P)"
 SOURCE_ROOTS=(
   "repo-skills"
   "trusted-external-repos/open-design/skills"
+  "trusted-external-repos/marketingskills/skills"
 )
 
 MANAGED_SUBMODULES=(
   "trusted-external-repos/open-design"
+  "trusted-external-repos/marketingskills"
 )
 
 ENTRYPOINT_DIRS=(

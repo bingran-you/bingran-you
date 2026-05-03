@@ -135,7 +135,7 @@ export const papers: Paper[] = [
     href: "https://www.nature.com/articles/s41586-025-09474-1",
     venue: "Nature",
     blurb:
-      "3D-printed micro ion trap technology for scalable quantum information processing.",
+      "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
     track: "ion",
   },
   {
@@ -144,7 +144,7 @@ export const papers: Paper[] = [
     href: "https://doi.org/10.1103/PhysRevLett.130.200201",
     venue: "Phys. Rev. Lett.",
     blurb:
-      "Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.",
+      "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",
     track: "ion",
   },
 ];
@@ -156,7 +156,7 @@ export const education: Education[] = [
     degree: "PhD Candidate in Applied Science & Technology",
     period: "2022 — Present",
     summary:
-      "Graduate research spanning trapped-ion quantum systems, integrated photonics, ion-photon interfaces, and quantum networking.",
+      "Graduate research in atomic, molecular and optical physics — trapped ions, integrated photonics, and ion-photon interfaces.",
     metrics: ["Haeffner Lab"],
     highlights: [
       "Research focus on scalable trapped-ion hardware and photonic integration.",

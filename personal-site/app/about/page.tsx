@@ -5,7 +5,7 @@ import { jsonLdScriptContent } from "@/lib/jsonld";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Bingran You — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion quantum experiments.",
+    "Bingran You — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion experiments in atomic, molecular and optical physics.",
   alternates: { canonical: "/about" },
 };
 
@@ -19,7 +19,7 @@ const profilePageJsonLd = {
     url: "https://bingranyou.com",
     jobTitle: "PhD Candidate",
     description:
-      "PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments.",
+      "PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.",
     affiliation: {
       "@type": "Organization",
       name: "Haeffner Lab, University of California, Berkeley",
@@ -28,9 +28,10 @@ const profilePageJsonLd = {
     knowsAbout: [
       "Reliable AI Systems",
       "AI Agents",
-      "Trapped-Ion Quantum Computing",
+      "Atomic, Molecular and Optical Physics",
+      "Trapped Ions",
       "Integrated Photonics",
-      "Quantum Networking",
+      "Ion-Photon Interfaces",
     ],
     sameAs: [
       "https://www.wikidata.org/wiki/Q139620371",
@@ -48,7 +49,7 @@ const profilePageJsonLd = {
 const facts = [
   "I am Bingran You, a PhD candidate in Applied Science & Technology at UC Berkeley, advised in the Haeffner Lab.",
   "I build reliable AI systems — agent infrastructure, evaluation harnesses, and applied AI products that need to behave under noisy real-world conditions.",
-  "I run trapped-ion quantum experiments — integrated photonics for individual ion addressing, ion-photon interfaces for networking, and 3D-printed micro ion traps for scalable hardware.",
+  "I run trapped-ion experiments in atomic, molecular and optical physics — integrated photonics for individual ion addressing, ion-photon interfaces, and 3D-printed micro ion traps for scalable hardware.",
   "Both tracks share one craft: turning complex, noisy systems into something that behaves on purpose.",
 ];
 
@@ -66,8 +67,8 @@ const focusAreas = [
     items: [
       "Adjoint-optimized integrated photonic circuits for individual trapped-ion addressing.",
       "Temporally multiplexed ion-photon interfaces via fast ion-chain transport.",
-      "3D-printed micro ion trap technology for scalable quantum information processing.",
-      "Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.",
+      "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
+      "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",
     ],
   },
 ];

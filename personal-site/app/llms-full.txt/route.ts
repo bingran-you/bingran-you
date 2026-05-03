@@ -25,7 +25,7 @@ export async function GET() {
 
   const body = `# Bingran You — full index
 
-> PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments. This file is intended for LLM and search crawlers and contains the same index as /llms.txt plus the full text of every blog post.
+> PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics. This file is intended for LLM and search crawlers and contains the same index as /llms.txt plus the full text of every blog post.
 
 ## Identity
 

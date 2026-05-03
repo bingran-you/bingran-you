@@ -1,3 +1,6 @@
+import { stat } from "node:fs/promises";
+import path from "node:path";
+
 export const postSlugs = ["welcome"] as const;
 
 export type PostSlug = (typeof postSlugs)[number];
@@ -13,6 +16,15 @@ export async function getPostMetadata(
 ): Promise<PostMetadata> {
   const mod = await import(`@/content/posts/${slug}.mdx`);
   return mod.metadata as PostMetadata;
+}
+
+export function getPostFilePath(slug: PostSlug) {
+  return path.join(process.cwd(), "content", "posts", `${slug}.mdx`);
+}
+
+export async function getPostLastModified(slug: PostSlug) {
+  const { mtime } = await stat(getPostFilePath(slug));
+  return mtime;
 }
 
 export async function getAllPostsMetadata(): Promise<

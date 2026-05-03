@@ -1,28 +1,48 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { projects } from "@/lib/content";
+import { createPageMetadata } from "@/lib/site";
+import { getCollectionPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
+const description =
+  "Selected projects across AI systems and trapped-ion experiments.";
+
+export const metadata: Metadata = createPageMetadata({
   title: "Projects",
-  description: "Selected projects across AI systems and trapped-ion experiments.",
-};
+  description,
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   const ai = projects.filter((p) => p.track === "ai");
   const ion = projects.filter((p) => p.track === "ion");
+  const collectionPageJsonLd = getCollectionPageJsonLd({
+    path: "/projects",
+    name: "Projects",
+    description,
+    items: projects.map((project) => ({
+      name: project.name,
+      url: project.href,
+      description: project.description,
+    })),
+  });
 
   return (
-    <div className="space-y-16">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Projects</h1>
-        <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">
-          A snapshot of the things I&apos;m lucky to work on. Most are open
-          source; the rest will be when they&apos;re ready.
-        </p>
-      </header>
+    <>
+      <JsonLd data={collectionPageJsonLd} />
+      <div className="space-y-16">
+        <header>
+          <h1 className="text-3xl font-semibold tracking-tight">Projects</h1>
+          <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">
+            A snapshot of the things I&apos;m lucky to work on. Most are open
+            source; the rest will be when they&apos;re ready.
+          </p>
+        </header>
 
-      <Section title="AI Builder" items={ai} />
-      <Section title="Ion Trapper" items={ion} />
-    </div>
+        <Section title="AI Builder" items={ai} />
+        <Section title="Ion Trapper" items={ion} />
+      </div>
+    </>
   );
 }
 

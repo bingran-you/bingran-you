@@ -1,36 +1,56 @@
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/json-ld";
 import { papers } from "@/lib/content";
+import { createPageMetadata } from "@/lib/site";
+import { getCollectionPageJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
+const description =
+  "Selected publications across AI agents and trapped-ion physics.";
+
+export const metadata: Metadata = createPageMetadata({
   title: "Papers",
-  description: "Selected publications across AI agents and trapped-ion physics.",
-};
+  description,
+  path: "/papers",
+});
 
 export default function PapersPage() {
   const ai = papers.filter((p) => p.track === "ai");
   const ion = papers.filter((p) => p.track === "ion");
+  const collectionPageJsonLd = getCollectionPageJsonLd({
+    path: "/papers",
+    name: "Papers",
+    description,
+    items: papers.map((paper) => ({
+      name: paper.title,
+      url: paper.href,
+      description: paper.blurb ?? paper.venue,
+    })),
+  });
 
   return (
-    <div className="space-y-16">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Papers</h1>
-        <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">
-          Selected publications. See{" "}
-          <a
-            className="underline underline-offset-4"
-            href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Google Scholar
-          </a>{" "}
-          for the full list.
-        </p>
-      </header>
+    <>
+      <JsonLd data={collectionPageJsonLd} />
+      <div className="space-y-16">
+        <header>
+          <h1 className="text-3xl font-semibold tracking-tight">Papers</h1>
+          <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">
+            Selected publications. See{" "}
+            <a
+              className="underline underline-offset-4"
+              href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Scholar
+            </a>{" "}
+            for the full list.
+          </p>
+        </header>
 
-      <Section title="AI Builder" items={ai} />
-      <Section title="Ion Trapper" items={ion} />
-    </div>
+        <Section title="AI Builder" items={ai} />
+        <Section title="Ion Trapper" items={ion} />
+      </div>
+    </>
   );
 }
 

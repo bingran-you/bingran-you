@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { postSlugs, type PostSlug } from "@/lib/posts";
+import { blogPostingJsonLd, jsonLdScriptContent } from "@/lib/jsonld";
 
 export const dynamicParams = false;
 
@@ -32,9 +33,21 @@ export default async function PostPage({ params }: { params: Params }) {
   const { default: Post, metadata } = await import(
     `@/content/posts/${slug}.mdx`
   );
+  const jsonLd = jsonLdScriptContent(
+    blogPostingJsonLd({
+      slug,
+      title: metadata.title,
+      description: metadata.description,
+      date: metadata.date,
+    }),
+  );
 
   return (
     <article className="space-y-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <header className="space-y-3">
         <Link
           href="/blog"

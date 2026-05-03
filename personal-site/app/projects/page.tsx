@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { projects } from "@/lib/content";
+import { graphScriptContent, projectJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -10,9 +11,14 @@ export const metadata: Metadata = {
 export default function ProjectsPage() {
   const ai = projects.filter((p) => p.track === "ai");
   const ion = projects.filter((p) => p.track === "ion");
+  const jsonLd = graphScriptContent(projects.map(projectJsonLd));
 
   return (
     <div className="space-y-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd }}
+      />
       <header>
         <h1 className="text-3xl font-semibold tracking-tight">Projects</h1>
         <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">

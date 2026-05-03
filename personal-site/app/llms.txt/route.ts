@@ -22,6 +22,7 @@ I work on two tracks: reliable AI agent systems, and trapped-ion quantum hardwar
 - Location: Berkeley, California, USA
 - Site: ${SITE}/
 - Email: bingran.you@berkeley.edu
+- Wikidata: https://www.wikidata.org/wiki/Q139620371
 - ORCID: https://orcid.org/0000-0002-0316-2115
 - Google Scholar: https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en
 - GitHub: https://github.com/bingran-you

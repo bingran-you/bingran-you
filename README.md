@@ -1,6 +1,6 @@
 # Hi, I'm Bingran 👋
 
-📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 💻 Agentic Builder | ⚛︎ Ion Trapper
+📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 💻 Agentic Builder | ⚛️ Ion Trapper
 
 I build reliable AI systems and run trapped-ion experiments in atomic, molecular and optical physics. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
@@ -68,7 +68,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Current Focus
 
-- ⚛️ Integrated photonics for trapped-ion systems
+- ⚛︎ Integrated photonics for trapped-ion systems
 - 🔗 Ion-photon interfaces and multiplexed networking
 - 🧩 Novel ion trap architectures, including 3D-printed microtraps
 

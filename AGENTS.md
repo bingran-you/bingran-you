@@ -47,7 +47,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 └── memory/                       # Daily logs + heartbeat state
 ```
 
-Repo-managed skill sources live in `repo-skills/` and `trusted-external-repos/open-design/skills/`. Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
+Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, and `trusted-external-repos/marketingskills/skills/`. Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
 
 ### Submodules (see `.gitmodules`)
 
@@ -58,6 +58,7 @@ Repo-managed skill sources live in `repo-skills/` and `trusted-external-repos/op
 - `current-projects/skillsbench` — active project submodule.
 - `trusted-external-repos/skills` — shared skills library.
 - `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
+- `trusted-external-repos/marketingskills` — trusted external marketing skills library; mirrored into workspace skill entrypoints via `scripts/sync_skills.sh`.
 - `trusted-external-repos/gstack` — gstack tooling.
 - `trusted-external-repos/gbrain` — gbrain tooling.
 - `trusted-external-repos/open-design` — local-first open-source design workflow / design systems repo.

@@ -38,3 +38,7 @@
 	path = trusted-external-repos/open-design
 	url = https://github.com/bingran-you/open-design.git
 	branch = main
+[submodule "trusted-external-repos/marketingskills"]
+	path = trusted-external-repos/marketingskills
+	url = https://github.com/bingran-you/marketingskills.git
+	branch = main

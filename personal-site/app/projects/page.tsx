@@ -4,6 +4,7 @@ import { projects } from "@/lib/content";
 export const metadata: Metadata = {
   title: "Projects",
   description: "Selected projects across AI systems and trapped-ion experiments.",
+  alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {

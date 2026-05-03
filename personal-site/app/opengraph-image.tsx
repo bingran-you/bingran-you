@@ -8,6 +8,6 @@ export default function Image() {
   return renderOgImage({
     title: "Bingran You",
     subtitle:
-      "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion quantum experiments.",
+      "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.",
   });
 }

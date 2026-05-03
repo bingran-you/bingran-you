@@ -10,9 +10,9 @@ export async function GET() {
 
   const body = `# Bingran You
 
-> PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments.
+> PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.
 
-I work on two tracks: reliable AI agent systems, and trapped-ion quantum hardware. Different materials, same craft — turning complex, noisy systems into something that behaves on purpose.
+I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecular and optical physics hardware. Different materials, same craft — turning complex, noisy systems into something that behaves on purpose.
 
 ## Identity
 

@@ -9,6 +9,6 @@ export default function Image() {
     eyebrow: "About",
     title: "Bingran You.",
     subtitle:
-      "PhD candidate at UC Berkeley, Haeffner Lab. Reliable AI systems × trapped-ion quantum.",
+      "PhD candidate at UC Berkeley, Haeffner Lab. Reliable AI systems × trapped-ion AMO physics.",
   });
 }

@@ -2,6 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { education, projects, papers } from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
+import {
+  AtomIcon,
+  GraduationCapIcon,
+  LaptopIcon,
+} from "@/components/bio-icons";
 
 export default function Home() {
   const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 5);
@@ -17,17 +22,28 @@ export default function Home() {
       />
       <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:items-start">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-            Berkeley · PhD Candidate
-          </p>
-          <h1 className="mt-5 font-display text-5xl leading-[1.02] tracking-[-0.035em] sm:text-6xl">
+          <h1 className="font-display text-5xl leading-[1.02] tracking-[-0.035em] sm:text-6xl">
             Bingran You
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--muted)] text-pretty">
-            I build reliable AI systems and trapped-ion quantum experiments.
-            Different materials, same craft: turning complex, noisy systems
-            into something that behaves on purpose.
-          </p>
+          <ul className="mt-7 space-y-3 text-base text-[var(--muted)]">
+            <li className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <span className="inline-flex items-center gap-2">
+                <LaptopIcon className="h-[18px] w-[18px] shrink-0" />
+                Agentic Builder
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <AtomIcon className="h-[18px] w-[18px] shrink-0" />
+                Ion Trapper
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <GraduationCapIcon className="h-[18px] w-[18px] shrink-0 mt-[3px]" />
+              <span>
+                PhD Candidate in Applied Science &amp; Technology at UC
+                Berkeley
+              </span>
+            </li>
+          </ul>
         </div>
 
         <div className="relative h-44 w-44 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">

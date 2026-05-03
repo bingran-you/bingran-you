@@ -1,8 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { postSlugs, type PostSlug } from "@/lib/posts";
-import { blogPostingJsonLd, jsonLdScriptContent } from "@/lib/jsonld";
+import {
+  getPostLastModified,
+  getPostMetadata,
+  postSlugs,
+  type PostSlug,
+} from "@/lib/posts";
+import {
+  blogPostingJsonLd,
+  jsonLdScriptContent,
+  OG_IMAGE_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/jsonld";
 
 export const dynamicParams = false;
 
@@ -19,26 +31,50 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   if (!postSlugs.includes(slug as PostSlug)) return {};
-  const mod = await import(`@/content/posts/${slug}.mdx`);
+  const postSlug = slug as PostSlug;
+  const metadata = await getPostMetadata(postSlug);
+  const modifiedTime = (await getPostLastModified(postSlug)).toISOString();
+  const description = metadata.description ?? SITE_DESCRIPTION;
+
   return {
-    title: mod.metadata.title,
-    description: mod.metadata.description,
+    title: metadata.title,
+    description,
     alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      title: `${metadata.title} · ${SITE_NAME}`,
+      description,
+      url: `${SITE_URL}/blog/${slug}`,
+      type: "article",
+      publishedTime: new Date(metadata.date).toISOString(),
+      modifiedTime,
+      authors: [SITE_NAME],
+      images: [OG_IMAGE_URL],
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: "@bingran_bry",
+      title: `${metadata.title} · ${SITE_NAME}`,
+      description,
+      images: [OG_IMAGE_URL],
+    },
   };
 }
 
 export default async function PostPage({ params }: { params: Params }) {
   const { slug } = await params;
   if (!postSlugs.includes(slug as PostSlug)) notFound();
+  const postSlug = slug as PostSlug;
   const { default: Post, metadata } = await import(
     `@/content/posts/${slug}.mdx`
   );
+  const modifiedTime = (await getPostLastModified(postSlug)).toISOString();
   const jsonLd = jsonLdScriptContent(
     blogPostingJsonLd({
       slug,
       title: metadata.title,
       description: metadata.description,
       date: metadata.date,
+      modifiedTime,
     }),
   );
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { education, projects, papers } from "@/lib/content";
+import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
 
 export default function Home() {
   const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 5);
@@ -8,6 +9,12 @@ export default function Home() {
 
   return (
     <div className="space-y-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdScriptContent(profilePageJsonLd("/")),
+        }}
+      />
       <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:items-start">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">

@@ -47,7 +47,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 - 📑 *arXiv* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
 - 📑 *arXiv* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
 
-## ⚛︎ Ion Trapper
+## ⚛️ Ion Trapper
 
 ### How I Build
 

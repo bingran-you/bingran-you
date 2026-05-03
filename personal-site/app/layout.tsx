@@ -65,6 +65,9 @@ export const metadata: Metadata = {
     description: siteConfig.openGraphDescription,
     images: [ogImageUrl],
   },
+  verification: {
+    google: "xWQd6sxfEf5jfU4AtrNcPv0jg71Ia8gQvXAcQmWKpyo",
+  },
 };
 
 const nav = [

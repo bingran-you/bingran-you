@@ -33,6 +33,7 @@ I work on two tracks: reliable AI agent systems, and trapped-ion quantum hardwar
 ## Pages
 
 - [Home](${SITE}/)
+- [About](${SITE}/about)
 - [Projects](${SITE}/projects)
 - [Papers](${SITE}/papers)
 - [Blog](${SITE}/blog)

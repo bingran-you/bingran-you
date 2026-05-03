@@ -107,6 +107,7 @@ const nav = [
   { href: "/projects", label: "Projects" },
   { href: "/papers", label: "Papers" },
   { href: "/blog", label: "Blog" },
+  { href: "/about", label: "About" },
 ];
 
 export default function RootLayout({

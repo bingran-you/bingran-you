@@ -39,6 +39,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@bingran_bry",
   },
+  verification: {
+    google: "xWQd6sxfEf5jfU4AtrNcPv0jg71Ia8gQvXAcQmWKpyo",
+  },
 };
 
 const personJsonLd = {

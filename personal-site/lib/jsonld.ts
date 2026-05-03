@@ -79,6 +79,7 @@ export function personJsonLd() {
       "Quantum Networking",
     ],
     sameAs: [
+      "https://www.wikidata.org/wiki/Q139620371",
       "https://x.com/bingran_bry",
       "https://github.com/bingran-you",
       "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en",

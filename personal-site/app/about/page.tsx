@@ -55,7 +55,7 @@ const facts = [
 
 const focusAreas = [
   {
-    label: "AI Builder",
+    label: "Agentic Builder",
     items: [
       "Agent skills and tool use, with an emphasis on evaluation that mirrors real workflows.",
       "Productivity agents that triage notifications, dispatch background work, and stay out of the way.",

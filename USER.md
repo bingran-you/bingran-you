@@ -14,8 +14,8 @@ _The one you serve. Keep this living and current._
 
 - PhD Candidate, UC Berkeley
 - **Two tracks, both active:**
-  - 🖥️ **AI Builder** — agent evaluation, skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
-  - ⚛︎ **Ion Trapper** — trapped-ion quantum experiments, integrated photonics, ion-photon interfaces, multiplexed quantum networking, 3D-printed microtraps. Member of HaeffnerLab.
+  - 💻 **Agentic Builder** — agent evaluation, skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
+  - ⚛︎ **Ion Trapper** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps. Member of HaeffnerLab.
 
 ## Primary Stack
 

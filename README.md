@@ -1,10 +1,10 @@
 # Hi, I'm Bingran 👋
 
-📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 🖥️ AI Builder | ⚛︎ Ion Trapper
+📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 💻 Agentic Builder | ⚛︎ Ion Trapper
 
-I build reliable AI systems and trapped-ion quantum experiments. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
+I build reliable AI systems and run trapped-ion experiments in atomic, molecular and optical physics. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
-## 💻 AI Builder
+## 💻 Agentic Builder
 
 ### How I Build
 
@@ -58,26 +58,26 @@ I build reliable AI systems and trapped-ion quantum experiments. This page is a 
 <p align="center">
   <img alt="Integrated photonics" src="https://img.shields.io/badge/Integrated%20Photonics-1E7F5C?style=flat-square" />
   <img alt="Ion shuttling" src="https://img.shields.io/badge/Ion%20Shuttling-0F766E?style=flat-square" />
-  <img alt="Quantum networking" src="https://img.shields.io/badge/Quantum%20Networking-0369A1?style=flat-square" />
+  <img alt="Ion-photon interfaces" src="https://img.shields.io/badge/Ion--Photon%20Interfaces-0369A1?style=flat-square" />
   <img alt="3D Printing" src="https://img.shields.io/badge/3D%20Printing-92400E?style=flat-square" />
 </p>
 
 <p align="center">
-  <sub>From control stack to integrated photonics, quantum interfaces, and microtrap design.</sub>
+  <sub>From control stack to integrated photonics, ion-photon interfaces, and microtrap design.</sub>
 </p>
 
 ### Current Focus
 
 - ⚛️ Integrated photonics for trapped-ion systems
-- 🔗 Ion-photon interfaces and multiplexed quantum networking
+- 🔗 Ion-photon interfaces and multiplexed networking
 - 🧩 Novel ion trap architectures, including 3D-printed microtraps
 
 ### Selected Papers
 
 - 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
 - 📑 *arXiv* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
-- 📑 *Nature* · [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable quantum information processing.
-- 📑 *Phys. Rev. Lett.* · [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing causal non-linear quantum mechanics.
+- 📑 *Nature* · [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable atomic-physics platforms.
+- 📑 *Phys. Rev. Lett.* · [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.
 
 ## Connect
 

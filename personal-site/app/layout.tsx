@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   title: {
-    default: "Bingran You — AI Builder & Ion Trapper",
+    default: SITE_NAME,
     template: `%s · ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,

@@ -3,9 +3,9 @@ import type { Paper, Project } from "@/lib/content";
 export const SITE_URL = "https://bingranyou.com";
 export const SITE_NAME = "Bingran You";
 export const SITE_DESCRIPTION =
-  "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and trapped-ion quantum experiments.";
+  "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.";
 export const SITE_OG_DESCRIPTION =
-  "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion quantum experiments.";
+  "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.";
 export const OG_IMAGE_URL = `${SITE_URL}/images/profile/bingran-you-portrait.jpg`;
 export const PERSON_ID = `${SITE_URL}#person`;
 export const WEBSITE_ID = `${SITE_URL}#website`;
@@ -18,9 +18,10 @@ export const SITE_KEYWORDS = [
   "SkillsBench",
   "first-tree",
   "DoWhiz",
-  "trapped-ion quantum computing",
+  "atomic, molecular and optical physics",
+  "trapped ions",
   "integrated photonics",
-  "quantum networking",
+  "ion-photon interfaces",
   "UC Berkeley",
   "Haeffner Lab",
 ] as const;
@@ -74,9 +75,10 @@ export function personJsonLd() {
     knowsAbout: [
       "Reliable AI Systems",
       "AI Agents",
-      "Trapped-Ion Quantum Computing",
+      "Atomic, Molecular and Optical Physics",
+      "Trapped Ions",
       "Integrated Photonics",
-      "Quantum Networking",
+      "Ion-Photon Interfaces",
     ],
     sameAs: [
       "https://www.wikidata.org/wiki/Q139620371",

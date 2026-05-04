@@ -78,7 +78,7 @@ export default function WaitlistPage() {
                 className="mt-3 text-sm leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Submitting opens an email draft addressed to the founder &mdash;
+                Submitting opens an email draft addressed to the founders &mdash;
                 no servers, no analytics, no wait. Edit it before you send.
               </p>
               <WaitlistForm />

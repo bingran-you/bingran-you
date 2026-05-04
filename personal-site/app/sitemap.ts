@@ -37,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     Math.max(
       (
         await getLatestLastModified([
-          "app/blog/page.tsx",
+          "app/(personal)/blog/page.tsx",
           "lib/posts.ts",
         ])
       ).getTime(),
@@ -45,12 +45,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
+  const aegisLastModified = await getLatestLastModified([
+    "app/aegis/layout.tsx",
+    "app/aegis/page.tsx",
+  ]);
+
   const staticEntries: MetadataRoute.Sitemap = [
     {
       url: `${SITE_URL}/`,
       lastModified: await getLatestLastModified([
         "app/layout.tsx",
-        "app/page.tsx",
+        "app/(personal)/page.tsx",
       ]),
       changeFrequency: "weekly",
       priority: 1,
@@ -59,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/about`,
       lastModified: await getLatestLastModified([
         "app/layout.tsx",
-        "app/about/page.tsx",
+        "app/(personal)/about/page.tsx",
       ]),
       changeFrequency: "monthly",
       priority: 0.9,
@@ -67,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/projects`,
       lastModified: await getLatestLastModified([
-        "app/projects/page.tsx",
+        "app/(personal)/projects/page.tsx",
         "lib/content.ts",
       ]),
       changeFrequency: "monthly",
@@ -76,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/papers`,
       lastModified: await getLatestLastModified([
-        "app/papers/page.tsx",
+        "app/(personal)/papers/page.tsx",
         "lib/content.ts",
       ]),
       changeFrequency: "monthly",
@@ -87,6 +92,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: blogLastModified,
       changeFrequency: "weekly",
       priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis`,
+      lastModified: aegisLastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/aegis/platform`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis/sentinel`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis/attest`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis/cleanse`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis/securebench`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/aegis/research`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/aegis/company`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
+      url: `${SITE_URL}/aegis/waitlist`,
+      lastModified: aegisLastModified,
+      changeFrequency: "monthly",
+      priority: 0.6,
     },
   ];
 

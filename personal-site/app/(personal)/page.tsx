@@ -60,6 +60,93 @@ export default function Home() {
 
       <section>
         <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
+          Now building
+        </h2>
+        <Link
+          href="/aegis"
+          className="group mt-6 block overflow-hidden rounded-2xl border border-[var(--border)] transition hover:border-foreground/30"
+          aria-label="Aegis — security infrastructure for the agent era"
+        >
+          <div
+            className="relative grid gap-6 p-7 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:gap-8"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(240,185,11,0.08) 0%, rgba(240,185,11,0) 55%)",
+            }}
+          >
+            <span
+              className="inline-flex h-12 w-12 items-center justify-center rounded-xl border"
+              style={{
+                borderColor: "rgba(240,185,11,0.4)",
+                background: "rgba(240,185,11,0.12)",
+              }}
+              aria-hidden
+            >
+              <svg viewBox="0 0 32 32" width={22} height={22} aria-hidden>
+                <defs>
+                  <linearGradient
+                    id="home-aegis-grad"
+                    x1="50%"
+                    y1="0%"
+                    x2="50%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stopColor="#F4D055" />
+                    <stop offset="100%" stopColor="#F0B90B" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M16 2.5l11.5 4.4v8.6c0 6.7-4.7 12.7-11.5 14-6.8-1.3-11.5-7.3-11.5-14V6.9L16 2.5z"
+                  fill="none"
+                  stroke="url(#home-aegis-grad)"
+                  strokeWidth="1.4"
+                />
+                <path
+                  d="M16 9v14M9.4 12.6l13.2 6.8M22.6 12.6L9.4 19.4"
+                  stroke="url(#home-aegis-grad)"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  opacity="0.78"
+                />
+                <circle cx="16" cy="16" r="2.4" fill="url(#home-aegis-grad)" />
+              </svg>
+            </span>
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
+                Aegis · research preview
+              </p>
+              <p className="mt-2 text-lg font-medium leading-snug">
+                Security infrastructure for the agent era.
+              </p>
+              <p className="mt-1.5 text-sm text-[var(--muted)] leading-relaxed">
+                Runtime hygiene, web attestation, memory cleansing and
+                adversarial benchmarks for AI agents. Built openly out of
+                Berkeley.
+              </p>
+            </div>
+            <span className="inline-flex items-center gap-2 self-start text-sm text-[var(--muted)] transition group-hover:text-foreground sm:self-center">
+              Explore
+              <svg
+                viewBox="0 0 14 14"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+                className="transition group-hover:translate-x-0.5"
+              >
+                <path d="M2 7h10M8 3l4 4-4 4" />
+              </svg>
+            </span>
+          </div>
+        </Link>
+      </section>
+
+      <section>
+        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
           Education
         </h2>
         <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">

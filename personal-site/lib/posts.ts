@@ -2,6 +2,7 @@ import { stat } from "node:fs/promises";
 import path from "node:path";
 
 export const postSlugs = [
+  "a-curated-vetted-skills-catalog",
   "seo-and-geo-for-a-personal-site",
   "welcome",
 ] as const;

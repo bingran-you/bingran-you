@@ -1,0 +1,84 @@
+export const metadata = {
+  title: "A Curated, Vetted Skills Catalog",
+  description:
+    "Why I open-sourced the skills my agents use — every one personally verified, scanned for safety, and shown alongside its license, author, and source. Plus how to send me a skill you think belongs on the list.",
+  date: "2026-05-04",
+};
+
+# A Curated, Vetted Skills Catalog
+
+There's a [Skills tab](/skills) on this site now. It lists the 178 skills my AI agents army runs with — every prompt, checklist, and template they reach for at runtime. You can search them, read the full SKILL.md on the page, see the license and author, download the file, and click through to the source on GitHub.
+
+I want to explain the *why* behind it, because "another skill list" is exactly what the world doesn't need.
+
+## What this list is not
+
+It is **not exhaustive**. There are thousands of skills floating around now — Anthropic's official skills, the OpenClaw / gstack ecosystem, ClawdHub, GitHub repos full of MDX prompts, every founder's private stash. I am not trying to mirror them all. A list that aspires to completeness ends up indexing slop, and indexing slop helps no one.
+
+It is **not a marketplace**. There's no install button, no rating system, no "trending this week." This is a personal catalog, the way a chef's pantry is personal: you can read every label, but it's still mine.
+
+## What it is
+
+A **curated, vetted, working** set. Three properties, in order:
+
+1. **Curated.** I picked each one because it earns its place in my actual workflow. Many were written by me; the rest came from sources I trust (`@gstack`, `@open-design`, `@marketingskills`, Anthropic's published skills) and earned their slot by surviving real use.
+
+2. **Vetted.** Every skill in here has been read end-to-end. The new [`skill-vetter`](/skills/skill-vetter) skill — by [@spclaudehome](https://clawhub.ai/spclaudehome/skill-vetter), MIT-0, copied verbatim into my workspace — is the protocol I now run on every new candidate before it lands in the catalog: source check, full code review against a red-flag list (suspicious network calls, credential access, obfuscation, eval/exec on external input, etc.), permission-scope review, and a risk classification. If a skill can't pass that bar, it doesn't ship here.
+
+3. **Working.** Each one has been used by an agent of mine on a real task. Skills that *sound* good but never get invoked are noise; they make the catalog harder to navigate without making the work better.
+
+## Why open-source it
+
+Two reasons, both selfish.
+
+**One:** the skills ecosystem is at the awkward stage where every agent author has a private folder of prompts and every new agent author has to rebuild that folder from scratch. That's a colossal waste of taste. Publishing the working subset — even just one person's — moves the floor up a little. If three people read [`marketing-psychology`](/skills/marketing-psychology) on this site and lift the parts they like, that's a win.
+
+**Two:** publishing forces discipline. I can't put a skill on a public catalog with a license, an author, and a "View source" link if I haven't actually read it. The act of cataloging is the act of vetting.
+
+## The skill that vets skills
+
+The catalog has a meta entry: [skill-vetter](/skills/skill-vetter). Run *that* skill before installing any other skill — including any you take from this site. The protocol it encodes is simple but disciplined:
+
+```
+🚨 REJECT IMMEDIATELY IF YOU SEE:
+─────────────────────────────────────────
+• curl/wget to unknown URLs
+• Sends data to external servers
+• Requests credentials/tokens/API keys
+• Reads ~/.ssh, ~/.aws, ~/.config without clear reason
+• Accesses MEMORY.md, USER.md, SOUL.md, IDENTITY.md
+• Uses base64 decode on anything
+• Uses eval() or exec() with external input
+• Modifies system files outside workspace
+• Installs packages without listing them
+• Network calls to IPs instead of domains
+• Obfuscated code (compressed, encoded, minified)
+• Requests elevated/sudo permissions
+• Accesses browser cookies/sessions
+• Touches credential files
+─────────────────────────────────────────
+```
+
+That's a defensive checklist, not a piece of magic. But running it explicitly, before every install, is the difference between a clean catalog and a slowly poisoning one. Paranoia is a feature.
+
+## How the catalog stays in sync
+
+A small build-time script walks `.agents/skills/` (the directory my agents read from), follows each symlink back to its origin collection, parses the SKILL.md frontmatter, picks up any LICENSE file, renders the body to HTML, and emits a JSON blob plus a static `.md` file per skill. The site reads from the JSON. The whole thing runs on `npm run skills:generate` and ships as a normal commit. No background workers, no cron, no surprises.
+
+If you spot stale data, it's because I haven't pushed yet — not because something funny is happening.
+
+## Send me a skill
+
+If you've written or found a skill that earns its keep, I'd genuinely like to see it.
+
+**Email me at [bingran.bry@gmail.com](mailto:bingran.bry@gmail.com)** with:
+
+- A link to the skill (GitHub, ClawdHub, Gist — whatever)
+- One line on what it does that other skills don't
+- Optional: the agent task you used it on
+
+I will not promise to add every submission. I will promise to read each one, run it through the same vetting protocol, and write back. If it lands here, you'll be credited as the author on the detail page. If it doesn't, I'll tell you why.
+
+Worst case: you nudge me to fix a hole in the catalog. Best case: a skill you wrote ends up in someone's agent stack tomorrow.
+
+— Bingran

@@ -9,11 +9,15 @@ SOURCE_ROOTS=(
   "repo-skills"
   "trusted-external-repos/open-design/skills"
   "trusted-external-repos/marketingskills/skills"
+  "trusted-external-repos/gstack"
+  "trusted-external-repos/gstack/browser-skills"
+  "trusted-external-repos/gstack/openclaw/skills"
 )
 
 MANAGED_SUBMODULES=(
   "trusted-external-repos/open-design"
   "trusted-external-repos/marketingskills"
+  "trusted-external-repos/gstack"
 )
 
 ENTRYPOINT_DIRS=(
@@ -78,6 +82,7 @@ is_valid_skill_name() {
 
 discover_skills() {
   local source_root=""
+  local source_root_path=""
   local skill_dir=""
   local skill_name=""
   local repo_path=""
@@ -88,8 +93,19 @@ discover_skills() {
 
   for source_root in "${SOURCE_ROOTS[@]}"; do
     require_source_root "$source_root"
+    source_root_path="$REPO_ROOT/$source_root"
 
-    for skill_dir in "$REPO_ROOT/$source_root"/*(N); do
+    if [[ -f "$source_root_path/SKILL.md" ]]; then
+      skill_name="${source_root_path:t}"
+      if ! is_valid_skill_name "$skill_name"; then
+        echo "Skipping skill with unsupported name '$skill_name' from '$source_root'." >&2
+        echo "Rename the directory to use only letters, numbers, dot, underscore, colon, or hyphen." >&2
+      else
+        register_skill "$skill_name" "$source_root" "$source_root"
+      fi
+    fi
+
+    for skill_dir in "$source_root_path"/*(N); do
       [[ -d "$skill_dir" ]] || continue
       [[ -f "$skill_dir/SKILL.md" ]] || continue
 
@@ -136,20 +152,32 @@ show_entrypoint_status() {
 
 show_source_status() {
   local source_root=""
+  local source_root_path=""
   local skill_dir=""
   local count=0
   local invalid_count=0
   local skill_name=""
 
   for source_root in "${SOURCE_ROOTS[@]}"; do
-    if [[ ! -d "$REPO_ROOT/$source_root" ]]; then
+    source_root_path="$REPO_ROOT/$source_root"
+
+    if [[ ! -d "$source_root_path" ]]; then
       echo "$source_root (missing)"
       continue
     fi
 
     count=0
     invalid_count=0
-    for skill_dir in "$REPO_ROOT/$source_root"/*(N); do
+    if [[ -f "$source_root_path/SKILL.md" ]]; then
+      skill_name="${source_root_path:t}"
+      if ! is_valid_skill_name "$skill_name"; then
+        invalid_count=$((invalid_count + 1))
+      else
+        count=$((count + 1))
+      fi
+    fi
+
+    for skill_dir in "$source_root_path"/*(N); do
       [[ -d "$skill_dir" ]] || continue
       [[ -f "$skill_dir/SKILL.md" ]] || continue
 

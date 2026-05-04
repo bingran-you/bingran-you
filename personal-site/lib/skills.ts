@@ -37,6 +37,7 @@ export const SKILL_CATEGORIES = [
   "Engineering",
   "Reviews & Plans",
   "Security",
+  "Research & Analysis",
   "Media",
   "Other",
 ] as const;
@@ -96,11 +97,15 @@ function inferCategory(slug: string): SkillCategory {
   }
 
   if (
-    /^(security-best-practices|security-ownership-map|security-threat-model|cso)$/.test(
+    /^(security-best-practices|security-ownership-map|security-threat-model|cso|skill-vetter)$/.test(
       slug,
     )
   ) {
     return "Security";
+  }
+
+  if (/^(deep-research|equity-investment-memo)$/.test(slug)) {
+    return "Research & Analysis";
   }
 
   if (

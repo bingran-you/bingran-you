@@ -1,142 +1,140 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  BoltIcon,
   CheckIcon,
-  EyeIcon,
-  GaugeIcon,
-  GlobeIcon,
-  LockIcon,
-  MemoryIcon,
   ShieldIcon,
   TerminalIcon,
 } from "./_components/icons";
 
-const PILLARS = [
-  {
-    href: "/aegis/sentinel",
-    eyebrow: "01 / Runtime",
-    title: "Aegis Sentinel",
-    tagline: "A 360° guard for the agent process.",
-    body: "Local CLI that audits an agent's runtime: scans installed tools, isolates compromised environments, scrubs leaked credentials and sweeps the agent's working memory between tasks.",
-    capabilities: [
-      "Tool & MCP server fingerprinting",
-      "Credential & token leak sweep",
-      "Process isolation profiles",
-      "Compromised-state quarantine",
-    ],
-    Icon: TerminalIcon,
-  },
-  {
-    href: "/aegis/attest",
-    eyebrow: "02 / The web",
-    title: "Aegis Attest",
-    tagline: "TLS, but for whether a site is safe to feed to an agent.",
-    body: "A signed attestation layer that classifies websites and tools by adversarial risk before your agent loads them. Block prompt-injection traps, typo-squatted tools, and content farms designed to hijack agents.",
-    capabilities: [
-      "Adversarial-content classifier",
-      "Tool authorship & supply-chain checks",
-      "Live attestation registry",
-      "Browser-level enforcement plugin",
-    ],
-    Icon: GlobeIcon,
-  },
-  {
-    href: "/aegis/cleanse",
-    eyebrow: "03 / Memory",
-    title: "Aegis Cleanse",
-    tagline: "Hygiene for agent memory — long-term, episodic, vector.",
-    body: "Detects and removes poisoned entries inside agent memory stores. Differential checkpoints, tainted-trace recovery, and policy-as-code rules for what may persist between sessions.",
-    capabilities: [
-      "Memory-poisoning detector",
-      "Tainted-trace replay",
-      "Differential rollback",
-      "Retention policy enforcement",
-    ],
-    Icon: MemoryIcon,
-  },
-  {
-    href: "/aegis/securebench",
-    eyebrow: "04 / Evidence",
-    title: "SecureBench",
-    tagline: "An adversarial benchmark agents must pass before they ship.",
-    body: "Versioned suites of red-team scenarios: tool-poisoning, indirect prompt injection, exfiltration via memory, social-engineered escalation. Get a verifiable score, not a vibes-based audit.",
-    capabilities: [
-      "200+ adversarial scenarios",
-      "Deterministic test environments",
-      "Per-framework score cards",
-      "Continuous regression tracking",
-    ],
-    Icon: GaugeIcon,
-  },
+const STATUS_LINES: [string, string, string][] = [
+  ["S/1", "Stage", "v0.1 research preview · Berkeley"],
+  ["S/2", "First incident audited", "2026-04-22"],
+  ["S/3", "Public threat catalog", "7 families · 18 named incidents"],
+  ["S/4", "Day-one targets", "Claude Code · Codex CLI · OpenAI Agents SDK"],
+  ["S/5", "Binary distribution", "brew + npm + pip · ships to first 50 partners"],
 ];
 
-const STATUS_LINES = [
-  ["S/1", "Status", "Research preview · v0.1"],
-  ["S/2", "Modeled threat surfaces", "47 / agent-era"],
-  ["S/3", "Frameworks covered", "OpenAI · Anthropic · LangChain · CrewAI · MCP"],
-  ["S/4", "Memory backends mapped", "Postgres · pgvector · LanceDB · Mem0"],
-];
-
-const PROBLEM_FACTS = [
+const INCIDENT_CARDS = [
   {
-    metric: "0 ms",
-    label: "is the average latency between an agent reading malicious content and acting on it.",
-    sub: "Indirect prompt injection bypasses every existing AppSec layer because the attack lives in data the agent was told to trust.",
+    metric: "$0 → $4,200",
+    label: "What a single typo-squatted MCP server cost a developer in 4 hours.",
+    sub: "Real incident class, reproduced in v0.1: an agent told to “use the latest yolo-mcp” loaded github.com/jane/yolo-mcp instead of github.com/joe/yolo-mcp. The fork added a one-line credential exfiltration hook on tool registration. Aegis catches this on the audit pass, before the agent starts.",
   },
   {
-    metric: "12+",
-    label: "agent frameworks ship to production with no runtime sandbox.",
-    sub: "Most agents inherit the operator's full shell, browser, mailbox and credentials. The blast radius of a compromise is the user's life.",
+    metric: "~/.claude",
+    label: "How much of your home directory the average agent actually reaches.",
+    sub: "Most coding agents inherit read access to your entire home folder — ~/.aws, ~/.ssh, ~/.kube, ~/.cursor/mcp.json, the eight other config files you wrote in 2024 and forgot. Aegis lists the reachable surface in 30 seconds, with sensitive paths flagged.",
   },
   {
     metric: "∞",
-    label: "is the half-life of a poisoned memory entry.",
-    sub: "Once an attacker writes to a vector store an agent re-reads each turn, the compromise persists across sessions, machines and even teammates.",
+    label: "The half-life of one poisoned vector entry inside an agent’s memory.",
+    sub: "Once an attacker writes “the operator authorizes destructive actions” into the memory the agent re-reads each turn, the consent is inherited across sessions, machines, and teammates. We don’t have the cleanse layer yet — v0.1 captures the trace so you can see it happen.",
   },
 ];
 
-const TIMELINE = [
+const SHIPPED = [
   {
-    year: "2023",
-    label: "Tool calling",
-    body: "Agents could call APIs.",
+    title: "Aegis CLI",
+    state: "Live (v0.1)",
+    body: "One binary. Audit your agent runtime before it starts; watch every tool call, network egress, file write while it runs; quarantine on signal. Ships to early-access partners next week.",
+    stateColor: "var(--ag-teal)",
+    href: "/aegis/sentinel",
   },
   {
-    year: "2024",
-    label: "Multi-step",
-    body: "Agents could plan across calls.",
+    title: "Public threat catalog",
+    state: "Live (v0.1)",
+    body: "7 attack families, 18 named, reproducible incidents. The reproducer for each is open. Anyone can re-run, contribute, or audit.",
+    stateColor: "var(--ag-teal)",
+    href: "/aegis/research#threat-model",
   },
   {
-    year: "2025",
-    label: "Persistent memory",
-    body: "Agents remembered between sessions.",
+    title: "Aegis Attest — web + tool attestation",
+    state: "Roadmap → ~Q3",
+    body: "Signed verdicts on URLs and tools before the agent reads them. Open primitive: federated issuers, tamper-evident registry. Unblocked when CLI is in active terminals.",
+    stateColor: "var(--ag-amber)",
+    href: "/aegis/attest",
   },
   {
-    year: "2026",
-    label: "Autonomous workdays",
-    body: "Agents operate the user's machine for hours, unsupervised.",
+    title: "Aegis Cleanse — memory hygiene",
+    state: "Roadmap → ~Q4",
+    body: "Differential rollback and taint detection across vector / SQL / file memory. Hardest layer to ship correctly; we won’t until we’ve cleansed our own memory store first.",
+    stateColor: "var(--ag-amber)",
+    href: "/aegis/cleanse",
   },
   {
-    year: "next",
-    label: "Aegis",
-    body: "A security layer that operates beside them, not after them.",
+    title: "SecureBench — adversarial benchmark",
+    state: "Alpha (running on ourselves)",
+    body: "207 scenarios designed across 5 suites. We run it against our CLI and our agents. Public score cards open when v0.1 ships externally.",
+    stateColor: "var(--ag-amber)",
+    href: "/aegis/securebench",
   },
 ];
 
-const COVERAGE_LOGOS = [
-  "OpenAI Agents",
-  "Anthropic Claude Code",
-  "Codex CLI",
-  "LangChain",
-  "LangGraph",
-  "CrewAI",
-  "AutoGen",
-  "MCP",
-  "LlamaIndex",
-  "Inkeep",
-  "Mem0",
-  "pgvector",
+const DAY_BY_DAY = [
+  {
+    day: "Day 1",
+    title: "aegis audit .",
+    body: "30 seconds. You see the surface your agent can reach: 4,217 files, 84 env vars, 7 MCP servers (2 unknown), 14 shell tools. You realize you’ve been over-permissioned. You file a Slack thread for your security lead with the audit URL.",
+  },
+  {
+    day: "Day 2",
+    title: "aegis run --profile research-strict -- claude",
+    body: "You launch the agent inside the profile. Filesystem clamped to ./, network allowlisted, unknown MCP blocked. The agent runs as before, except now you have an event stream you can pipe to your terminal, your SIEM, or a file. You leave the room.",
+  },
+  {
+    day: "Day 3",
+    title: "First incident",
+    body: "You hit one. An attested-as-safe domain returned a page with an embedded prompt injection. Aegis flagged it; the agent ignored it. You read the bundle. You add the URL to the public threat catalog. You sleep.",
+  },
+];
+
+const COMPETITORS = [
+  {
+    name: "Lakera Guard, Promptarmor",
+    pos: "in-loop LLM firewalls",
+    diff: "They sit inside the agent. The agent can be argued out of them. Aegis sits outside the process; the agent has no API to talk to it.",
+  },
+  {
+    name: "Robust Intelligence, Hidden Layer",
+    pos: "model security at deploy time",
+    diff: "They harden the model before it ships. Aegis protects the agent process at runtime, against threats the model can’t see.",
+  },
+  {
+    name: "Endor Labs, Snyk",
+    pos: "AppSec for code humans wrote",
+    diff: "They guard the codebase agents read. Aegis guards the runtime where agents act. Lineage; not the same problem.",
+  },
+  {
+    name: "CrowdStrike, SentinelOne (EDR)",
+    pos: "endpoint detection at OS layer",
+    diff: "They’re generic. They don’t understand tool calls, MCP servers, agent memory, or attestation. Aegis is agent-aware.",
+  },
+];
+
+const RISKS = [
+  {
+    n: "01",
+    title: "Frameworks ship native isolation first",
+    body: "OpenAI Agents SDK or Claude Code could ship process isolation natively in 6 months. Mitigation: Aegis is framework-neutral; the value is observability + the cross-framework threat catalog, not isolation alone. We become the layer above whichever vendor implements containment.",
+  },
+  {
+    n: "02",
+    title: "The market is too early",
+    body: "Most agent operators don’t feel the pain yet. Mitigation: pick the engineers who already self-host agents and have already had a near-miss. Twelve such teams → the deal works → the catalog grows → the rest follows when the market catches up.",
+  },
+  {
+    n: "03",
+    title: "Open primitives erode the business",
+    body: "Attestation schema, threat catalog, scoring methodology are all open. Mitigation: defense-in-depth on the parts only we can ship at scale — detection models, hosted ledger, managed control plane, enterprise integrations. The open parts are the moat’s topsoil, not the moat.",
+  },
+];
+
+const TENETS = [
+  "An agent is a privileged user. Treat it like one.",
+  "If a finding can’t be reproduced, it isn’t a finding.",
+  "The web is hostile by default — agents must opt in to read it.",
+  "Memory is not infrastructure. It’s an attack vector.",
+  "Security for agents must be invisible to the human and inevitable to the agent.",
 ];
 
 export default function AegisHome() {
@@ -144,50 +142,52 @@ export default function AegisHome() {
     <>
       <section
         className="ag-grid-bg ag-scanline relative overflow-hidden"
-        style={{ paddingTop: "5rem", paddingBottom: "8rem" }}
+        style={{ paddingTop: "5rem", paddingBottom: "7rem" }}
       >
         <div className="ag-glow" />
         <div className="ag-container relative">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <span className="ag-pill ag-pill-amber">
               <span className="ag-pill-dot" />
-              v0.1 — research preview
+              v0.1 research preview · Berkeley
             </span>
-            <span className="ag-pill">A Bingran You preview</span>
+            <span className="ag-pill">Founder: Bingran You</span>
+            <span className="ag-pill">Solo founder · hiring</span>
           </div>
 
           <h1
             className="ag-display mt-10 max-w-5xl"
             style={{
-              fontSize: "clamp(2.6rem, 6.4vw, 5.6rem)",
-              lineHeight: 1.02,
+              fontSize: "clamp(2.4rem, 5.6vw, 4.8rem)",
+              lineHeight: 1.04,
               letterSpacing: "-0.025em",
             }}
           >
+            <span style={{ color: "var(--ag-fg)" }}>It’s 11 PM.</span>{" "}
             <span className="ag-text-grad">
-              Security infrastructure
-            </span>{" "}
-            <br className="hidden sm:block" />
-            <span style={{ color: "var(--ag-fg)" }}>for the </span>
-            <span className="italic ag-text-amber">agent era</span>
-            <span style={{ color: "var(--ag-fg)" }}>.</span>
+              You gave the agent shell access. You don’t know what it’s about to do.
+            </span>
           </h1>
 
           <p
             className="mt-8 max-w-2xl text-lg leading-relaxed"
             style={{ color: "var(--ag-fg-mute)" }}
           >
-            Your agents read the open web, install tools they discover at
-            runtime, and write to memory you can&rsquo;t inspect. <span style={{ color: "var(--ag-fg)" }}>Aegis is the layer that watches them, verifies them, and contains them</span> &mdash; built so trust in agents can be proven, not assumed.
+            <span style={{ color: "var(--ag-fg)" }}>
+              Aegis is observability for AI agents.
+            </span>{" "}
+            One CLI. <em>Audit</em> the agent’s reachable surface before it starts. <em>Watch</em>{" "}
+            every tool call, file write, and network egress while it runs.{" "}
+            <em>Quarantine</em> on signal. Walk away.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link href="/aegis/waitlist" className="ag-btn ag-btn-primary">
-              Join the early-access waitlist
+              Send us your incident — free audit
               <ArrowRight className="ag-btn-arrow" />
             </Link>
-            <Link href="/aegis/platform" className="ag-btn">
-              See the platform
+            <Link href="/aegis/sentinel" className="ag-btn">
+              See the CLI
               <ArrowRight className="ag-btn-arrow" />
             </Link>
             <Link
@@ -195,7 +195,7 @@ export default function AegisHome() {
               className="text-sm transition hover:text-[var(--ag-amber)]"
               style={{ color: "var(--ag-fg-mute)", marginLeft: "0.5rem" }}
             >
-              or read the manifesto →
+              or read the field notes →
             </Link>
           </div>
 
@@ -250,27 +250,31 @@ export default function AegisHome() {
                   letterSpacing: "-0.022em",
                 }}
               >
-                Agents are running in production with the security model of a
-                browser tab — and the privileges of a CTO.
+                If you let an agent run, you let it run somewhere. The blast
+                radius is your laptop.
               </h2>
               <p
                 className="mt-7 max-w-md text-base leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Today&rsquo;s app-security stack was built for code that humans
-                ship. Agents are <em style={{ color: "var(--ag-fg)" }}>code that ships itself</em>, recompiles itself, and is steered
-                by whatever it reads on the open web in the last 200ms.
+                We trust agents because we watch them. The watching doesn’t
+                scale, and we know it. Most engineers running Claude Code,
+                Codex or Devin in their terminal have given the agent more
+                reach than the agent’s prompt suggests — because the
+                <em> agent’s prompt isn’t where the reach lives</em>. The reach lives
+                in the OS.
               </p>
               <p
                 className="mt-4 max-w-md text-base leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Aegis assumes the agent is the new endpoint, the new supply
-                chain, and the new attack surface — all at once.
+                Aegis tells you the actual reach — first as a number you can
+                show your security lead, then as a stream of events as the
+                agent runs.
               </p>
             </div>
             <div className="space-y-5">
-              {PROBLEM_FACTS.map((p) => (
+              {INCIDENT_CARDS.map((p) => (
                 <article
                   key={p.metric}
                   className="ag-card ag-lift p-7"
@@ -278,9 +282,10 @@ export default function AegisHome() {
                   <p
                     className="ag-display"
                     style={{
-                      fontSize: "clamp(2.2rem, 3.4vw, 3rem)",
+                      fontSize: "clamp(2rem, 3vw, 2.6rem)",
                       color: "var(--ag-amber)",
                       letterSpacing: "-0.02em",
+                      lineHeight: 1.05,
                     }}
                   >
                     {p.metric}
@@ -306,95 +311,80 @@ export default function AegisHome() {
 
       <section className="ag-section">
         <div className="ag-container">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl">
-              <p className="ag-eyebrow">The platform</p>
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <p className="ag-eyebrow">The artifact</p>
               <h2
                 className="ag-display mt-5"
                 style={{
-                  fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                  fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)",
                   letterSpacing: "-0.022em",
                 }}
               >
-                Four layers. One contract: <span className="ag-text-amber italic">verifiable</span> trust in every agent action.
+                Run one command. Get the audit you’ve been meaning to do for
+                three months.
               </h2>
               <p
-                className="mt-5 text-base leading-relaxed"
+                className="mt-6 text-base leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Each Aegis layer ships independently and emits the same evidence
-                format. Adopt the one that hurts most today; compose the rest as
-                your agents earn more privilege.
+                <code className="ag-mono" style={{ color: "var(--ag-amber)" }}>
+                  aegis audit .
+                </code>{" "}
+                runs in your project root, takes ~30 seconds, and emits a
+                report your security lead can read. No SDK, no instrumentation,
+                no daemon. The same data feeds{" "}
+                <code className="ag-mono">aegis run</code> when you’re ready
+                for runtime supervision.
               </p>
-            </div>
-            <Link href="/aegis/platform" className="ag-btn self-start">
-              Platform overview
-              <ArrowRight className="ag-btn-arrow" />
-            </Link>
-          </div>
-
-          <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            {PILLARS.map(({ href, eyebrow, title, tagline, body, capabilities, Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className="ag-card ag-lift group flex flex-col p-8"
+              <ul
+                className="mt-7 space-y-3 text-sm"
+                style={{ color: "var(--ag-fg-mute)" }}
               >
-                <div className="flex items-start justify-between">
-                  <div className="ag-pillar-icon">
-                    <Icon size={18} />
-                  </div>
-                  <span
-                    className="ag-mono text-[11px] tracking-[0.28em]"
-                    style={{ color: "var(--ag-fg-faint)" }}
-                  >
-                    {eyebrow}
-                  </span>
-                </div>
-                <h3
-                  className="ag-display mt-7"
-                  style={{
-                    fontSize: "1.85rem",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {title}
-                </h3>
-                <p
-                  className="mt-2 text-base leading-relaxed"
-                  style={{ color: "var(--ag-fg)" }}
-                >
-                  {tagline}
-                </p>
-                <p
-                  className="mt-3 text-sm leading-relaxed"
-                  style={{ color: "var(--ag-fg-mute)" }}
-                >
-                  {body}
-                </p>
-                <ul
-                  className="mt-6 grid grid-cols-2 gap-x-4 gap-y-2 text-sm"
-                  style={{ color: "var(--ag-fg-mute)" }}
-                >
-                  {capabilities.map((c) => (
-                    <li key={c} className="flex items-start gap-2">
-                      <CheckIcon
-                        size={14}
-                        className="mt-[3px] shrink-0"
-                      />
-                      <span>{c}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  className="mt-7 flex items-center gap-2 text-sm transition group-hover:text-[var(--ag-amber)]"
-                  style={{ color: "var(--ag-fg)" }}
-                >
-                  Read more
-                  <ArrowRight className="transition group-hover:translate-x-0.5" />
-                </div>
-              </Link>
-            ))}
+                {[
+                  "Single static binary, ~14 MB",
+                  "Linux, macOS, Windows · ARM + x86_64",
+                  "Read-only by default — audit pass never mutates state",
+                  "Output is signed JSON; the human-readable view is a render of it",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2">
+                    <CheckIcon
+                      size={14}
+                      className="mt-[3px] shrink-0 ag-text-amber"
+                    />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <pre
+              className="ag-code"
+              dangerouslySetInnerHTML={{
+                __html: `<span class="c-prompt">$</span> <span class="c-cmd">aegis</span> <span class="c-arg">audit</span> .
+<span class="c-comment">▸ aegis audit · v0.1.0</span>
+<span class="c-comment">▸ cwd: ~/work/agent-stack</span>
+
+<span class="c-mute">[fs]</span>      <span class="c-ok">reachable</span>     4,217 files · 2.1 GB
+<span class="c-mute">           </span>      <span class="c-warn">sensitive</span>     ~/.aws/credentials
+<span class="c-mute">           </span>                    ~/.ssh/id_ed25519
+<span class="c-mute">           </span>                    ~/.cursor/mcp.json
+<span class="c-mute">[env]</span>     <span class="c-ok">vars in scope</span> 84
+<span class="c-mute">           </span>      <span class="c-warn">secrets</span>       ANTHROPIC_API_KEY, OPENAI_API_KEY
+<span class="c-mute">           </span>                    DATABASE_URL, GITHUB_TOKEN
+<span class="c-mute">[mcp]</span>     <span class="c-ok">installed</span>     7
+<span class="c-mute">           </span>      <span class="c-warn">unknown</span>       2 (yolo-mcp@HEAD, internal-tools@v0.3)
+<span class="c-mute">[net]</span>     <span class="c-warn">egress</span>        unrestricted
+<span class="c-mute">           </span>      <span class="c-ok">suggest</span>       allowlist {api.anthropic.com,
+<span class="c-mute">           </span>                              api.github.com,
+<span class="c-mute">           </span>                              *.your-domain.com}
+<span class="c-mute">[tools]</span>   <span class="c-ok">shell tools</span>   14 (incl. rm, sudo, curl)
+
+<span style="color: var(--ag-amber)">▸ verdict: amber — surface is wider than declared scope.</span>
+<span class="c-mute">           </span>      profile suggested: <span class="c-arg">research-strict</span>
+<span class="c-mute">           </span>      re-audit with: <span class="c-cmd">aegis</span> <span class="c-arg">audit</span> . <span class="c-flag">--apply</span> research-strict
+<span class="c-mute">           </span>      bundle:        evt://01HKZ5…4KQ.aegis-audit`,
+              }}
+            />
           </div>
         </div>
       </section>
@@ -408,123 +398,147 @@ export default function AegisHome() {
         }}
       >
         <div className="ag-container">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <p className="ag-eyebrow">Architecture</p>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="ag-eyebrow">What we ship today · what’s on the roadmap</p>
               <h2
                 className="ag-display mt-5"
                 style={{
-                  fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)",
+                  fontSize: "clamp(1.9rem, 3.6vw, 2.8rem)",
                   letterSpacing: "-0.022em",
                 }}
               >
-                Beside the agent. Between the agent and the world.
+                One product live. Three on the roadmap.{" "}
+                <span className="ag-text-amber italic">In that order, on purpose.</span>
               </h2>
               <p
-                className="mt-6 text-base leading-relaxed"
+                className="mt-5 text-base leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Aegis runs as an out-of-process supervisor — not as middleware
-                inside the agent loop. The agent can&rsquo;t bypass it, prompt it,
-                or talk it into stepping aside. Every read from the web, every
-                write to memory, every tool spawn passes through a verified
-                control plane.
+                The temptation in agent security is to ship a four-product
+                platform from day one. We’re not doing that. The CLI is the
+                wedge — the smallest thing an engineer pays for this week.
+                The other layers ship after this one earns their keep.
               </p>
-              <ul className="mt-7 space-y-4">
-                {[
-                  {
-                    Icon: EyeIcon,
-                    title: "Observe",
-                    body: "All inputs, tool calls, memory reads/writes are mirrored to a tamper-evident log.",
-                  },
-                  {
-                    Icon: BoltIcon,
-                    title: "Verify",
-                    body: "Each event is checked against attestation, policy, and adversarial classifiers in <2ms.",
-                  },
-                  {
-                    Icon: LockIcon,
-                    title: "Contain",
-                    body: "On signal, Aegis quarantines the agent, snapshots state, and rolls memory to last clean checkpoint.",
-                  },
-                ].map(({ Icon, title, body }) => (
-                  <li key={title} className="flex gap-4">
-                    <span className="ag-pillar-icon shrink-0">
-                      <Icon size={16} />
-                    </span>
-                    <div>
-                      <p
-                        className="text-sm font-medium"
-                        style={{ color: "var(--ag-fg)" }}
-                      >
-                        {title}
-                      </p>
-                      <p
-                        className="mt-1 text-sm leading-relaxed"
-                        style={{ color: "var(--ag-fg-mute)" }}
-                      >
-                        {body}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
             </div>
-            <div>
-              <ArchitectureDiagram />
-            </div>
+            <Link href="/aegis/platform" className="ag-btn self-start">
+              Roadmap · in detail
+              <ArrowRight className="ag-btn-arrow" />
+            </Link>
+          </div>
+
+          <div className="mt-14 grid gap-5 lg:grid-cols-2">
+            {SHIPPED.map((s, idx) => (
+              <Link
+                key={s.title}
+                href={s.href}
+                className={`ag-card ag-lift group flex flex-col p-7 ${
+                  idx === 0 ? "lg:col-span-2 ag-card-amber" : ""
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <h3
+                    className="ag-display"
+                    style={{
+                      fontSize: idx === 0 ? "1.85rem" : "1.4rem",
+                      letterSpacing: "-0.018em",
+                    }}
+                  >
+                    {s.title}
+                  </h3>
+                  <span
+                    className="ag-pill"
+                    style={{
+                      borderColor: s.stateColor,
+                      color: s.stateColor,
+                      background: "rgba(255,255,255,0.02)",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span
+                      className="ag-pill-dot"
+                      style={{ background: s.stateColor, boxShadow: `0 0 10px ${s.stateColor}` }}
+                    />
+                    {s.state}
+                  </span>
+                </div>
+                <p
+                  className="mt-4 text-sm leading-relaxed"
+                  style={{ color: "var(--ag-fg-mute)" }}
+                >
+                  {s.body}
+                </p>
+                <div
+                  className="mt-6 flex items-center gap-2 text-sm transition group-hover:text-[var(--ag-amber)]"
+                  style={{ color: "var(--ag-fg)" }}
+                >
+                  Read more
+                  <ArrowRight className="transition group-hover:translate-x-0.5" />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="ag-section">
         <div className="ag-container">
-          <p className="ag-eyebrow">Coverage on day one</p>
+          <p className="ag-eyebrow">Day 1 · Day 2 · Day 3</p>
           <h2
             className="ag-display mt-5 max-w-3xl"
             style={{
-              fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)",
+              fontSize: "clamp(1.9rem, 3.6vw, 2.8rem)",
               letterSpacing: "-0.022em",
             }}
           >
-            We&rsquo;re building Aegis to drop into the agent stacks teams are
-            already running.
+            What the first week as an early-access partner looks like.
           </h2>
-          <p
-            className="mt-5 max-w-2xl text-base leading-relaxed"
-            style={{ color: "var(--ag-fg-mute)" }}
-          >
-            No SDK rewrite, no proprietary runtime. Aegis attaches at the
-            process and network boundary; existing frameworks light up
-            immediately.
-          </p>
-          <div
-            className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border sm:grid-cols-3 lg:grid-cols-4"
-            style={{
-              borderColor: "var(--ag-line)",
-              background: "var(--ag-line)",
-            }}
-          >
-            {COVERAGE_LOGOS.map((name) => (
-              <div
-                key={name}
-                className="flex h-24 items-center justify-center px-6"
+          <ol className="mt-12 grid gap-5 lg:grid-cols-3">
+            {DAY_BY_DAY.map(({ day, title, body }, idx) => (
+              <li
+                key={day}
+                className="ag-card p-7"
                 style={{
-                  background: "var(--ag-canvas)",
+                  borderColor:
+                    idx === DAY_BY_DAY.length - 1
+                      ? "var(--ag-line-amber)"
+                      : undefined,
                 }}
               >
                 <span
-                  className="ag-mono text-center text-[12px] tracking-[0.18em]"
+                  className="ag-mono text-[11px] tracking-[0.32em]"
                   style={{
-                    color: "var(--ag-fg-mute)",
-                    textTransform: "uppercase",
+                    color:
+                      idx === DAY_BY_DAY.length - 1
+                        ? "var(--ag-amber)"
+                        : "var(--ag-fg-faint)",
                   }}
                 >
-                  {name}
+                  {day}
                 </span>
-              </div>
+                <h3
+                  className="ag-display mt-5"
+                  style={{ fontSize: "1.3rem", letterSpacing: "-0.015em" }}
+                >
+                  <code
+                    className="ag-mono"
+                    style={{
+                      fontSize: "0.9em",
+                      color: "var(--ag-fg)",
+                    }}
+                  >
+                    {title}
+                  </code>
+                </h3>
+                <p
+                  className="mt-3 text-sm leading-relaxed"
+                  style={{ color: "var(--ag-fg-mute)" }}
+                >
+                  {body}
+                </p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -537,7 +551,185 @@ export default function AegisHome() {
         }}
       >
         <div className="ag-container">
-          <p className="ag-eyebrow">A short history of why we&rsquo;re here</p>
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <p className="ag-eyebrow">Founder’s note</p>
+              <h2
+                className="ag-display mt-5"
+                style={{
+                  fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)",
+                  letterSpacing: "-0.022em",
+                }}
+              >
+                I built this because I needed it.
+              </h2>
+              <p
+                className="mt-3 ag-mono text-[11px] tracking-[0.28em]"
+                style={{ color: "var(--ag-fg-faint)" }}
+              >
+                BINGRAN YOU · SOLO FOUNDER · PHD CANDIDATE, UC BERKELEY
+              </p>
+              <a
+                href="https://x.com/bingran_bry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ag-link mt-4 inline-flex text-sm"
+              >
+                @bingran_bry on X
+              </a>
+            </div>
+            <div className="space-y-5 text-base leading-relaxed" style={{ color: "var(--ag-fg-mute)" }}>
+              <p>
+                For the last two years I’ve been benchmarking AI agents at
+                Berkeley — building deterministic test environments
+                (<a className="ag-link" href="https://github.com/bingran-you/smolclaw" target="_blank" rel="noopener noreferrer">smolclaw</a>),
+                an offline behavior-testing CLI
+                (<a className="ag-link" href="https://github.com/bingran-you/sbti-cli" target="_blank" rel="noopener noreferrer">sbti-cli</a>),
+                and{" "}
+                <a className="ag-link" href="https://github.com/benchflow-ai/skillsbench" target="_blank" rel="noopener noreferrer">SkillsBench</a>,
+                a benchmark for agent skill use. On any given day I have eight
+                to twelve agents running on this laptop in parallel worktrees.
+              </p>
+              <p>
+                A month ago I gave Claude Code shell access to fix a small
+                bug. I went to the kitchen. I came back to a process that had
+                touched <code className="ag-mono">~/.aws/credentials</code>,
+                installed an MCP server I didn’t recognize, and had three
+                subprocesses I couldn’t account for. Nothing malicious —
+                just an agent doing its job. But I had no audit trail and no
+                way to make one without instrumenting the agent itself.
+              </p>
+              <p>
+                After two years of measuring how agents do their job, I think
+                the next problem isn’t capability. It’s containment.
+                Aegis is the tool I wished I had last quarter. I’m building
+                it openly. <span style={{ color: "var(--ag-fg)" }}>If you’ve been there — send me a redacted log of an
+                agent run from your last week. I’ll send back a forensic
+                report in 48 hours.</span>{" "}
+                If we missed something, we add the class to the public threat
+                catalog. That’s the deal.
+              </p>
+              <p
+                className="ag-mono text-[12px] tracking-[0.18em]"
+                style={{ color: "var(--ag-fg-faint)" }}
+              >
+                — BINGRAN
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="ag-section">
+        <div className="ag-container">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <p className="ag-eyebrow">Why now</p>
+              <h2
+                className="ag-display mt-5"
+                style={{
+                  fontSize: "clamp(1.9rem, 3.6vw, 2.8rem)",
+                  letterSpacing: "-0.022em",
+                }}
+              >
+                Capability outran containment in 18 months.
+              </h2>
+              <p
+                className="mt-6 text-base leading-relaxed"
+                style={{ color: "var(--ag-fg-mute)" }}
+              >
+                In late 2024, asking an agent to read a webpage was a research
+                demo. In Q1 2026, every coding agent reads, executes, installs,
+                and writes — in production, on developer laptops, with
+                operator credentials, on indefinite loops.
+              </p>
+              <p
+                className="mt-4 text-base leading-relaxed"
+                style={{ color: "var(--ag-fg-mute)" }}
+              >
+                None of that came with a security model. Guardrails sit inside
+                the model loop — the agent can be argued out of them.
+                Frameworks ship default-trust on every input. EDR doesn’t
+                understand tool calls, MCP, or memory. The only working
+                control today is a human watching their terminal.
+              </p>
+              <p
+                className="mt-4 text-base leading-relaxed"
+                style={{ color: "var(--ag-fg)" }}
+              >
+                That control was always going to break. Aegis is the layer
+                that runs while the human walks away.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <p className="ag-eyebrow">How we’re different</p>
+              <div
+                className="overflow-hidden rounded-2xl border"
+                style={{ borderColor: "var(--ag-line)" }}
+              >
+                <div
+                  className="grid grid-cols-[1.4fr_1.4fr] gap-4 px-6 py-3 text-[11px] tracking-[0.3em]"
+                  style={{
+                    background: "var(--ag-canvas-2)",
+                    borderBottom: "1px solid var(--ag-line)",
+                    color: "var(--ag-fg-faint)",
+                    textTransform: "uppercase",
+                    fontFamily: "var(--font-aegis-mono), monospace",
+                  }}
+                >
+                  <span>Adjacent / lineage</span>
+                  <span>Where we sit</span>
+                </div>
+                {COMPETITORS.map((c, idx) => (
+                  <div
+                    key={c.name}
+                    className="grid grid-cols-[1.4fr_1.4fr] items-start gap-4 px-6 py-5"
+                    style={{
+                      borderTop: idx > 0 ? "1px solid var(--ag-line)" : undefined,
+                      background: idx % 2 === 0 ? "var(--ag-canvas)" : "var(--ag-canvas-2)",
+                    }}
+                  >
+                    <div>
+                      <p
+                        className="text-sm font-medium"
+                        style={{ color: "var(--ag-fg)" }}
+                      >
+                        {c.name}
+                      </p>
+                      <p
+                        className="ag-mono mt-1.5 text-[11px] tracking-[0.18em]"
+                        style={{
+                          color: "var(--ag-fg-faint)",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {c.pos}
+                      </p>
+                    </div>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: "var(--ag-fg-mute)" }}
+                    >
+                      {c.diff}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="ag-section ag-dot-bg"
+        style={{
+          background: "var(--ag-canvas-2)",
+          borderTop: "1px solid var(--ag-line)",
+          borderBottom: "1px solid var(--ag-line)",
+        }}
+      >
+        <div className="ag-container">
+          <p className="ag-eyebrow">What could kill this · honestly</p>
           <h2
             className="ag-display mt-5 max-w-3xl"
             style={{
@@ -545,43 +737,28 @@ export default function AegisHome() {
               letterSpacing: "-0.022em",
             }}
           >
-            Each capability we shipped to agents was a new attack surface we
-            forgot to guard.
+            Three risks. All survivable. Worth saying out loud.
           </h2>
-          <ol className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
-            {TIMELINE.map((t, idx) => (
-              <li
-                key={t.year}
-                className="relative flex flex-col gap-2 pl-5"
-                style={{
-                  borderLeft:
-                    idx === TIMELINE.length - 1
-                      ? "1px solid var(--ag-amber)"
-                      : "1px solid var(--ag-line)",
-                }}
-              >
+          <ol className="mt-12 grid gap-5 lg:grid-cols-3">
+            {RISKS.map(({ n, title, body }) => (
+              <li key={n} className="ag-card p-7">
                 <span
-                  className="ag-mono text-[11px] tracking-[0.28em]"
-                  style={{
-                    color:
-                      idx === TIMELINE.length - 1
-                        ? "var(--ag-amber)"
-                        : "var(--ag-fg-faint)",
-                  }}
+                  className="ag-mono text-[11px] tracking-[0.32em]"
+                  style={{ color: "var(--ag-amber)" }}
                 >
-                  {t.year}
+                  R/{n}
                 </span>
-                <p
-                  className="text-base"
-                  style={{ color: "var(--ag-fg)" }}
+                <h3
+                  className="ag-display mt-5"
+                  style={{ fontSize: "1.25rem", letterSpacing: "-0.012em" }}
                 >
-                  {t.label}
-                </p>
+                  {title}
+                </h3>
                 <p
-                  className="text-sm leading-relaxed"
+                  className="mt-3 text-sm leading-relaxed"
                   style={{ color: "var(--ag-fg-mute)" }}
                 >
-                  {t.body}
+                  {body}
                 </p>
               </li>
             ))}
@@ -595,13 +772,7 @@ export default function AegisHome() {
             <div>
               <p className="ag-eyebrow">Manifesto, in five lines</p>
               <ol className="mt-8 space-y-6">
-                {[
-                  "An agent is a privileged user. Treat it like one.",
-                  "If a finding can&rsquo;t be reproduced, it isn&rsquo;t a finding.",
-                  "The web is hostile by default — agents must opt in to read it.",
-                  "Memory is not infrastructure. It&rsquo;s an attack vector.",
-                  "Security for agents must be invisible to the human and inevitable to the agent.",
-                ].map((line, i) => (
+                {TENETS.map((line, i) => (
                   <li
                     key={i}
                     className="grid grid-cols-[2.5rem_1fr] items-start gap-4 border-b pb-6"
@@ -621,8 +792,9 @@ export default function AegisHome() {
                         letterSpacing: "-0.015em",
                         color: "var(--ag-fg)",
                       }}
-                      dangerouslySetInnerHTML={{ __html: line }}
-                    />
+                    >
+                      {line}
+                    </p>
                   </li>
                 ))}
               </ol>
@@ -630,7 +802,7 @@ export default function AegisHome() {
                 href="/aegis/research"
                 className="ag-btn mt-10"
               >
-                Read the full manifesto
+                Field notes · threat catalog · reading list
                 <ArrowRight className="ag-btn-arrow" />
               </Link>
             </div>
@@ -643,32 +815,38 @@ export default function AegisHome() {
               }}
             >
               <ShieldIcon size={28} className="ag-text-amber" />
+              <p className="ag-eyebrow mt-6">The deal</p>
               <p
-                className="ag-display mt-6"
+                className="ag-display mt-4"
                 style={{
-                  fontSize: "1.5rem",
-                  lineHeight: 1.35,
+                  fontSize: "1.4rem",
+                  lineHeight: 1.3,
                   letterSpacing: "-0.012em",
                 }}
               >
-                When your agent acts on your behalf, who&rsquo;s watching?
+                Send us your incident. We send back a forensic report in 48 hours.
               </p>
               <p
                 className="mt-4 text-sm leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Aegis is in private research preview. Early-access partners help
-                us calibrate threat models against real workloads — in exchange,
-                they get the first deterministic security report they&rsquo;ve
-                ever had for their agents.
+                First 50 partners. Sanitized log in, signed bundle out. If it’s a
+                new attack class, we add it to the public catalog (with or
+                without your name — your call).
               </p>
               <Link
                 href="/aegis/waitlist"
-                className="ag-btn ag-btn-primary mt-8 w-full justify-center"
+                className="ag-btn ag-btn-primary mt-7 w-full justify-center"
               >
-                Request early access
+                Send us your incident
                 <ArrowRight className="ag-btn-arrow" />
               </Link>
+              <p
+                className="ag-mono mt-4 text-[11px] tracking-[0.22em]"
+                style={{ color: "var(--ag-fg-faint)" }}
+              >
+                We respond within 3 business days.
+              </p>
             </aside>
           </div>
         </div>
@@ -685,7 +863,8 @@ export default function AegisHome() {
       >
         <div className="ag-glow" />
         <div className="ag-container relative text-center">
-          <p className="ag-eyebrow">Next move</p>
+          <TerminalIcon size={32} className="ag-text-amber mx-auto" />
+          <p className="ag-eyebrow mt-4">One command. Three verbs.</p>
           <h2
             className="ag-display mx-auto mt-6 max-w-4xl"
             style={{
@@ -694,356 +873,29 @@ export default function AegisHome() {
               letterSpacing: "-0.022em",
             }}
           >
-            Build the agent. <span className="ag-text-amber italic">Aegis watches its back.</span>
+            <code className="ag-mono" style={{ color: "var(--ag-fg)" }}>
+              aegis audit · aegis run · aegis quarantine
+            </code>
           </h2>
           <p
             className="mx-auto mt-6 max-w-xl text-base leading-relaxed"
             style={{ color: "var(--ag-fg-mute)" }}
           >
-            Reserve a slot in the early-access program. We pair with twelve
-            teams in 2026 — pick one threat model, ship verifiable evidence in
-            a week.
+            That’s the product. Everything else on this site is the
+            reasoning behind it.
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link href="/aegis/waitlist" className="ag-btn ag-btn-primary">
-              Join the waitlist
+              Send us your incident
               <ArrowRight className="ag-btn-arrow" />
             </Link>
-            <Link href="/aegis/securebench" className="ag-btn">
-              See SecureBench
+            <Link href="/aegis/sentinel" className="ag-btn">
+              See the CLI in detail
               <ArrowRight className="ag-btn-arrow" />
             </Link>
           </div>
         </div>
       </section>
     </>
-  );
-}
-
-function ArchitectureDiagram() {
-  return (
-    <div
-      className="rounded-2xl border p-6 sm:p-8"
-      style={{
-        borderColor: "var(--ag-line)",
-        background:
-          "linear-gradient(180deg, rgba(240,185,11,0.04), rgba(255,255,255,0)) , var(--ag-canvas)",
-      }}
-    >
-      <p className="ag-eyebrow">Diagram · 1.0</p>
-      <svg
-        viewBox="0 0 480 380"
-        className="mt-4 h-auto w-full"
-        role="img"
-        aria-label="Aegis sits between the agent process and the open world."
-      >
-        <defs>
-          <linearGradient id="ag-diagram-amber" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#F4D055" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#F0B90B" stopOpacity="0.6" />
-          </linearGradient>
-          <pattern
-            id="ag-diag-grid"
-            width="20"
-            height="20"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M0 0H20"
-              stroke="rgba(255,255,255,0.04)"
-              strokeWidth="1"
-            />
-            <path
-              d="M0 0V20"
-              stroke="rgba(255,255,255,0.04)"
-              strokeWidth="1"
-            />
-          </pattern>
-        </defs>
-        <rect width="480" height="380" fill="url(#ag-diag-grid)" />
-
-        {/* Agent process */}
-        <g>
-          <rect
-            x="40"
-            y="50"
-            width="140"
-            height="80"
-            rx="10"
-            fill="rgba(255,255,255,0.02)"
-            stroke="rgba(255,255,255,0.18)"
-          />
-          <text
-            x="110"
-            y="78"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="11"
-            letterSpacing="3"
-            fill="#8A92A8"
-          >
-            AGENT
-          </text>
-          <text
-            x="110"
-            y="100"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-display), serif"
-            fontSize="18"
-            fill="#F2F1EC"
-          >
-            Planner
-          </text>
-          <text
-            x="110"
-            y="118"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="10"
-            fill="#555C73"
-          >
-            tools • memory • plan
-          </text>
-        </g>
-
-        {/* Aegis core */}
-        <g>
-          <rect
-            x="200"
-            y="40"
-            width="120"
-            height="280"
-            rx="14"
-            fill="url(#ag-diagram-amber)"
-            opacity="0.18"
-          />
-          <rect
-            x="200"
-            y="40"
-            width="120"
-            height="280"
-            rx="14"
-            fill="none"
-            stroke="#F0B90B"
-            strokeOpacity="0.5"
-            strokeDasharray="3 3"
-          />
-          <text
-            x="260"
-            y="68"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="11"
-            letterSpacing="3"
-            fill="#F0B90B"
-          >
-            AEGIS
-          </text>
-
-          {[
-            { y: 96, label: "Sentinel", sub: "process & runtime" },
-            { y: 152, label: "Attest", sub: "web & tools" },
-            { y: 208, label: "Cleanse", sub: "memory" },
-            { y: 264, label: "SecureBench", sub: "evidence" },
-          ].map((b) => (
-            <g key={b.label}>
-              <rect
-                x="216"
-                y={b.y}
-                width="88"
-                height="40"
-                rx="8"
-                fill="#0A0E18"
-                stroke="rgba(240,185,11,0.45)"
-              />
-              <text
-                x="260"
-                y={b.y + 18}
-                textAnchor="middle"
-                fontFamily="var(--font-aegis-display), serif"
-                fontSize="13"
-                fill="#F2F1EC"
-              >
-                {b.label}
-              </text>
-              <text
-                x="260"
-                y={b.y + 32}
-                textAnchor="middle"
-                fontFamily="var(--font-aegis-mono), monospace"
-                fontSize="9"
-                letterSpacing="1"
-                fill="#8A92A8"
-              >
-                {b.sub}
-              </text>
-            </g>
-          ))}
-        </g>
-
-        {/* World */}
-        <g>
-          <rect
-            x="340"
-            y="50"
-            width="100"
-            height="50"
-            rx="8"
-            fill="rgba(255,255,255,0.02)"
-            stroke="rgba(255,255,255,0.14)"
-          />
-          <text
-            x="390"
-            y="72"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="10"
-            letterSpacing="2"
-            fill="#8A92A8"
-          >
-            WEB
-          </text>
-          <text
-            x="390"
-            y="88"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="9"
-            fill="#555C73"
-          >
-            untrusted
-          </text>
-
-          <rect
-            x="340"
-            y="118"
-            width="100"
-            height="50"
-            rx="8"
-            fill="rgba(255,255,255,0.02)"
-            stroke="rgba(255,255,255,0.14)"
-          />
-          <text
-            x="390"
-            y="140"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="10"
-            letterSpacing="2"
-            fill="#8A92A8"
-          >
-            TOOLS
-          </text>
-          <text
-            x="390"
-            y="156"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="9"
-            fill="#555C73"
-          >
-            mcp · cli · api
-          </text>
-
-          <rect
-            x="340"
-            y="186"
-            width="100"
-            height="50"
-            rx="8"
-            fill="rgba(255,255,255,0.02)"
-            stroke="rgba(255,255,255,0.14)"
-          />
-          <text
-            x="390"
-            y="208"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="10"
-            letterSpacing="2"
-            fill="#8A92A8"
-          >
-            MEMORY
-          </text>
-          <text
-            x="390"
-            y="224"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="9"
-            fill="#555C73"
-          >
-            vector · sql · file
-          </text>
-
-          <rect
-            x="340"
-            y="254"
-            width="100"
-            height="50"
-            rx="8"
-            fill="rgba(255,255,255,0.02)"
-            stroke="rgba(255,255,255,0.14)"
-          />
-          <text
-            x="390"
-            y="276"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="10"
-            letterSpacing="2"
-            fill="#8A92A8"
-          >
-            HUMAN
-          </text>
-          <text
-            x="390"
-            y="292"
-            textAnchor="middle"
-            fontFamily="var(--font-aegis-mono), monospace"
-            fontSize="9"
-            fill="#555C73"
-          >
-            chat · email · cmd
-          </text>
-        </g>
-
-        {/* Connections */}
-        <g
-          stroke="rgba(240,185,11,0.55)"
-          strokeWidth="1.4"
-          fill="none"
-          strokeDasharray="2 4"
-        >
-          <path d="M180 90 H200" />
-          <path d="M180 90 V172 H200" />
-          <path d="M180 90 V228 H200" />
-          <path d="M180 90 V284 H200" />
-        </g>
-        <g
-          stroke="rgba(240,185,11,0.55)"
-          strokeWidth="1.4"
-          fill="none"
-          strokeDasharray="2 4"
-        >
-          <path d="M320 116 H340 V75" />
-          <path d="M320 172 H340 V143" />
-          <path d="M320 228 H340 V211" />
-          <path d="M320 284 H340 V279" />
-        </g>
-
-        <text
-          x="240"
-          y="356"
-          textAnchor="middle"
-          fontFamily="var(--font-aegis-mono), monospace"
-          fontSize="10"
-          letterSpacing="3"
-          fill="#555C73"
-        >
-          AGENT  ──  AEGIS  ──  WORLD
-        </text>
-      </svg>
-    </div>
   );
 }

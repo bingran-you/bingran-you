@@ -30,9 +30,9 @@ export default function SkillsPage() {
           workspace can pick up at runtime.
         </p>
         <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
-          This page rebuilds whenever{" "}
-          <code className="font-mono text-[12px]">.agents/skills/</code>{" "}
-          changes.
+          Generated from{" "}
+          <code className="font-mono text-[12px]">.agents/skills/</code> at
+          build time.
         </p>
       </header>
 

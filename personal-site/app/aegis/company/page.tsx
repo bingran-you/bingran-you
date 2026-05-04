@@ -5,9 +5,9 @@ import { CTASection } from "../_components/cta";
 import { ShieldIcon } from "../_components/icons";
 
 export const metadata: Metadata = {
-  title: "Company · solo founder · Berkeley",
+  title: "Company · two-person team · Berkeley",
   description:
-    "Aegis is an independent security-infrastructure project for AI agents. Solo-founded by Bingran You at UC Berkeley.",
+    "Aegis is an independent security-infrastructure project for AI agents. Co-founded by Bingran You and Serena Ke at UC Berkeley.",
   alternates: { canonical: "/aegis/company" },
 };
 
@@ -70,15 +70,15 @@ const PRINCIPLES = [
 const FAQS = [
   {
     q: "Is this a company yet?",
-    a: "It&rsquo;s a solo-founded research preview. Aegis is being built openly out of UC Berkeley while we calibrate the threat catalog with early-access partners. Incorporation follows real customer pull, not the other way around.",
+    a: "It&rsquo;s a two-person research preview. Aegis is being built openly out of UC Berkeley while we calibrate the threat catalog with early-access partners. Incorporation follows real customer pull, not the other way around.",
   },
   {
-    q: "Why are you the right person to build this?",
-    a: "Two years of agent evaluation research at Berkeley directly above this problem. SkillsBench, sbti-cli, smolclaw &mdash; the prerequisites for SecureBench were already on my GitHub before Aegis had a name. The next problem after measuring how agents do their job is keeping them inside the lines while doing it.",
+    q: "Why are you the right team to build this?",
+    a: "Two years of agent evaluation research at Berkeley directly above this problem. SkillsBench, sbti-cli, smolclaw &mdash; the prerequisites for SecureBench were already on our GitHub before Aegis had a name. The next problem after measuring how agents do their job is keeping them inside the lines while doing it.",
   },
   {
-    q: "Solo founder. Risk?",
-    a: "Yes. Mitigation: hiring research-engineering partners (see below). The Berkeley advisor relationship gives me a research network to draw from. The deal with early-access partners is structurally co-development, not vendor-customer &mdash; the catalog grows by their contribution, not just mine.",
+    q: "Two-person team. Risk?",
+    a: "Yes &mdash; small team, large surface area. Mitigation: we&rsquo;re hiring research-engineering partners (see below), and the Berkeley advisor relationship gives us a research network to draw from. The deal with early-access partners is structurally co-development, not vendor-customer &mdash; the catalog grows by their contribution, not just ours.",
   },
   {
     q: "How is Aegis funded?",
@@ -105,17 +105,17 @@ export default function CompanyPage() {
         eyebrow="Company"
         title={
           <>
-            Solo-founded. Built openly.{" "}
+            Co-founded. Built openly.{" "}
             <span className="ag-text-amber italic">From Berkeley.</span>
           </>
         }
         lead={
           <>
             Aegis is an independent security-infrastructure project for AI
-            agents. Solo founder. Two years of agent evaluation research as
-            the prerequisite. We&rsquo;re building the trust layer we&rsquo;d
-            want running underneath our own agents &mdash; and shipping it
-            before the window closes.
+            agents. A two-person founding team. Two years of agent evaluation
+            research as the prerequisite. We&rsquo;re building the trust layer
+            we&rsquo;d want running underneath our own agents &mdash; and
+            shipping it before the window closes.
           </>
         }
         primary={{ href: "/aegis/waitlist", label: "Send us your incident" }}
@@ -126,7 +126,7 @@ export default function CompanyPage() {
         <div className="ag-container">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <p className="ag-eyebrow">Founder</p>
+              <p className="ag-eyebrow">Founders</p>
               <h2
                 className="ag-display mt-5"
                 style={{
@@ -140,7 +140,7 @@ export default function CompanyPage() {
                 className="mt-3 ag-mono text-[11px] tracking-[0.28em]"
                 style={{ color: "var(--ag-fg-faint)" }}
               >
-                PHD CANDIDATE · UC BERKELEY · AGENT EVALUATION
+                CO-FOUNDER · PHD CANDIDATE · UC BERKELEY · AGENT EVALUATION
               </p>
               <div
                 className="mt-7 space-y-4 text-base leading-relaxed"
@@ -202,6 +202,49 @@ export default function CompanyPage() {
                   bingran.you@berkeley.edu
                 </a>
               </div>
+
+              <div
+                className="mt-10 rounded-xl border p-7"
+                style={{
+                  borderColor: "var(--ag-line)",
+                  background: "var(--ag-canvas)",
+                }}
+              >
+                <h3
+                  className="ag-display"
+                  style={{
+                    fontSize: "1.5rem",
+                    letterSpacing: "-0.018em",
+                  }}
+                >
+                  Serena Ke
+                </h3>
+                <p
+                  className="mt-2 ag-mono text-[11px] tracking-[0.28em]"
+                  style={{ color: "var(--ag-fg-faint)" }}
+                >
+                  CO-FOUNDER
+                </p>
+                <p
+                  className="mt-4 text-sm leading-relaxed"
+                  style={{ color: "var(--ag-fg-mute)" }}
+                >
+                  Co-founder. Building Aegis alongside Bingran out of Berkeley.
+                </p>
+                <div
+                  className="mt-5 flex flex-wrap gap-3 text-sm"
+                  style={{ color: "var(--ag-fg-mute)" }}
+                >
+                  <a
+                    href="https://github.com/serenakeyitan"
+                    className="ag-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    github.com/serenakeyitan
+                  </a>
+                </div>
+              </div>
             </div>
             <aside
               className="ag-card ag-card-amber p-10"
@@ -216,7 +259,7 @@ export default function CompanyPage() {
                   letterSpacing: "-0.012em",
                 }}
               >
-                Hiring research-engineering partner #1.
+                Hiring research-engineering partner #3.
               </p>
               <p
                 className="mt-4 text-sm leading-relaxed"
@@ -226,7 +269,8 @@ export default function CompanyPage() {
                 products, or red-team tooling &mdash; and you can hold a
                 strong opinion about what
                 &ldquo;verifiable&rdquo; means &mdash; we want to hear from
-                you. Co-founder energy welcome.
+                you. Joining a two-person founding team; founding-engineer
+                energy welcome.
               </p>
               <a
                 href="mailto:bingran.you@berkeley.edu?subject=Aegis%20%E2%80%94%20research-engineering"

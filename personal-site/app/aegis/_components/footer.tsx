@@ -30,7 +30,7 @@ const cols: { heading: string; links: { href: string; label: string }[] }[] = [
   {
     heading: "Company",
     links: [
-      { href: "/aegis/company", label: "About + founder" },
+      { href: "/aegis/company", label: "About + founders" },
       { href: "/aegis/company#prior-work", label: "Prior work" },
       { href: "/aegis/waitlist", label: "Send us your incident" },
       { href: "/", label: "Bingran You" },
@@ -75,7 +75,7 @@ export function AegisFooter() {
               className="ag-mono mt-6 text-[11px] uppercase tracking-[0.28em]"
               style={{ color: "var(--ag-fg-faint)" }}
             >
-              Solo-founded · Berkeley · v0.1
+              Co-founded · Berkeley · v0.1
             </p>
           </div>
           {cols.map((col) => (

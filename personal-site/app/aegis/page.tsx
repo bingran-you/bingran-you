@@ -151,8 +151,8 @@ export default function AegisHome() {
               <span className="ag-pill-dot" />
               v0.1 research preview · Berkeley
             </span>
-            <span className="ag-pill">Founder: Bingran You</span>
-            <span className="ag-pill">Solo founder · hiring</span>
+            <span className="ag-pill">Founders: Bingran You + Serena Ke</span>
+            <span className="ag-pill">Two-person team · hiring</span>
           </div>
 
           <h1
@@ -567,7 +567,7 @@ export default function AegisHome() {
                 className="mt-3 ag-mono text-[11px] tracking-[0.28em]"
                 style={{ color: "var(--ag-fg-faint)" }}
               >
-                BINGRAN YOU · SOLO FOUNDER · PHD CANDIDATE, UC BERKELEY
+                BINGRAN YOU · CO-FOUNDER · PHD CANDIDATE, UC BERKELEY
               </p>
               <a
                 href="https://x.com/bingran_bry"
@@ -577,6 +577,21 @@ export default function AegisHome() {
               >
                 @bingran_bry on X
               </a>
+              <p
+                className="mt-5 text-xs leading-relaxed"
+                style={{ color: "var(--ag-fg-faint)" }}
+              >
+                Co-founded with{" "}
+                <a
+                  className="ag-link"
+                  href="https://github.com/serenakeyitan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Serena Ke
+                </a>
+                .
+              </p>
             </div>
             <div className="space-y-5 text-base leading-relaxed" style={{ color: "var(--ag-fg-mute)" }}>
               <p>

@@ -47,7 +47,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 └── memory/                       # Daily logs + heartbeat state
 ```
 
-Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, and `trusted-external-repos/marketingskills/skills/`. Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
+Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
 
 ### Submodules (see `.gitmodules`)
 

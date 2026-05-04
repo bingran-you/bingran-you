@@ -128,7 +128,7 @@ export default async function SkillDetailPage({
             SKILL.md
           </h2>
           <div
-            className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-pre:bg-[var(--background)] prose-pre:border prose-pre:border-[var(--border)] prose-code:font-mono prose-code:text-[13px] prose-a:text-[var(--accent)] prose-a:underline-offset-4"
+            className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-pre:bg-foreground/[0.04] prose-pre:text-foreground prose-pre:border prose-pre:border-[var(--border)] prose-code:font-mono prose-code:text-[13px] prose-code:text-foreground prose-code:bg-foreground/[0.06] prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-a:text-[var(--accent)] prose-a:underline-offset-4"
             dangerouslySetInnerHTML={{ __html: skill.bodyHtml }}
           />
         </section>

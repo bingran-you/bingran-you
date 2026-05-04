@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/generate-skills-data.mjs && next dev",
+    "prebuild": "node scripts/generate-skills-data.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "skills:generate": "node scripts/generate-skills-data.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

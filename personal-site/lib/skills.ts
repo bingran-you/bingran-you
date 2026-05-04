@@ -1,15 +1,14 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import path from "node:path";
-import matter from "gray-matter";
+import skillsData from "./skills.generated.json";
 
-export type Skill = {
+type RawSkill = {
   slug: string;
   name: string;
   description: string;
-  category: SkillCategory;
   triggers?: string[];
   updatedAt: string;
 };
+
+export type Skill = RawSkill & { category: SkillCategory };
 
 export const SKILL_CATEGORIES = [
   "Marketing & Growth",
@@ -26,13 +25,6 @@ export const SKILL_CATEGORIES = [
 ] as const;
 
 export type SkillCategory = (typeof SKILL_CATEGORIES)[number];
-
-const SKILLS_DIR = path.join(
-  process.cwd(),
-  "..",
-  ".agents",
-  "skills",
-);
 
 function inferCategory(slug: string): SkillCategory {
   if (
@@ -121,81 +113,15 @@ function inferCategory(slug: string): SkillCategory {
   return "Other";
 }
 
-function normalizeDescription(raw: unknown): string {
-  if (typeof raw !== "string") return "";
-  return raw.replace(/\s+/g, " ").trim();
-}
-
-function normalizeTriggers(raw: unknown): string[] | undefined {
-  if (!Array.isArray(raw)) return undefined;
-  const list = raw
-    .map((item) => (typeof item === "string" ? item.trim() : ""))
-    .filter((item) => item.length > 0);
-  return list.length > 0 ? list : undefined;
-}
-
 let cached: Skill[] | null = null;
 
 export function getAllSkills(): Skill[] {
   if (cached) return cached;
-
-  let entries: string[] = [];
-  try {
-    entries = readdirSync(SKILLS_DIR);
-  } catch {
-    cached = [];
-    return cached;
-  }
-
-  const skills: Skill[] = [];
-
-  for (const slug of entries) {
-    if (slug.startsWith(".")) continue;
-    const skillPath = path.join(SKILLS_DIR, slug);
-    let skillStat;
-    try {
-      skillStat = statSync(skillPath);
-    } catch {
-      continue;
-    }
-    if (!skillStat.isDirectory()) continue;
-
-    const skillFile = path.join(skillPath, "SKILL.md");
-    let raw: string;
-    let mtime: Date;
-    try {
-      raw = readFileSync(skillFile, "utf8");
-      mtime = statSync(skillFile).mtime;
-    } catch {
-      continue;
-    }
-
-    let parsed;
-    try {
-      parsed = matter(raw);
-    } catch {
-      continue;
-    }
-
-    const data = parsed.data ?? {};
-    const name =
-      typeof data.name === "string" && data.name.trim().length > 0
-        ? data.name.trim()
-        : slug;
-    const description = normalizeDescription(data.description);
-    if (!description) continue;
-    const triggers = normalizeTriggers(data.triggers);
-
-    skills.push({
-      slug,
-      name,
-      description,
-      category: inferCategory(slug),
-      triggers,
-      updatedAt: mtime.toISOString(),
-    });
-  }
-
+  const raw = skillsData as RawSkill[];
+  const skills: Skill[] = raw.map((s) => ({
+    ...s,
+    category: inferCategory(s.slug),
+  }));
   skills.sort((a, b) => a.name.localeCompare(b.name));
   cached = skills;
   return cached;

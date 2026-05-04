@@ -15,7 +15,6 @@ link aspnet-core trusted-external-repos/skills/skills/.curated/aspnet-core
 link chatgpt-apps trusted-external-repos/skills/skills/.curated/chatgpt-apps
 link cli-creator trusted-external-repos/skills/skills/.curated/cli-creator
 link cloudflare-deploy trusted-external-repos/skills/skills/.curated/cloudflare-deploy
-link doc trusted-external-repos/skills/skills/.curated/doc
 link docs-to-skill trusted-external-repos/skillsbench/.claude/skills/docs-to-skill
 link figma trusted-external-repos/skills/skills/.curated/figma
 link figma-code-connect-components trusted-external-repos/skills/skills/.curated/figma-code-connect-components

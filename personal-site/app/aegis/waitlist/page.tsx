@@ -4,58 +4,58 @@ import { WaitlistForm } from "./_form";
 import { CheckIcon, ShieldIcon } from "../_components/icons";
 
 export const metadata: Metadata = {
-  title: "Join the waitlist",
+  title: "Send us your incident",
   description:
-    "Apply to become an Aegis early-access partner. Twelve teams in 2026 — verifiable security evidence in a week.",
+    "First 50 partners. Sanitized log in. Forensic report in 48 hours. New attack class lands in the public threat catalog. That&rsquo;s the deal.",
   alternates: { canonical: "/aegis/waitlist" },
 };
 
-const BENEFITS = [
+const RETURNS = [
   {
-    title: "First-cohort tooling",
-    body: "Sentinel binary, Cleanse policy starter kit, and a sealed SecureBench run for your stack.",
+    title: "A forensic report in 48 hours",
+    body: "Within two business days you get a signed, deterministic incident bundle: what the agent reached, what it touched, what it tried to write or send, and where the policy boundary was crossed.",
   },
   {
-    title: "A hardening review",
-    body: "We sit with your team and produce a written risk audit of your current agent stack — your stack, your threat model.",
+    title: "The CLI binary, plus a hardening review",
+    body: "We sit with your team for an hour, walk your stack, and produce a written hardening review. Every recommendation has a reproducer.",
   },
   {
-    title: "Direct line to the builders",
-    body: "Shared Slack with the Aegis team. Bug fixes ship the same day. Roadmap moves on what you actually need.",
+    title: "Direct line to the builder",
+    body: "Shared Slack. Bug fixes ship the same day. Roadmap moves on what you actually need. No support queue, no SLA — until we earn one.",
   },
   {
-    title: "Co-authored case study",
-    body: "When the work&rsquo;s done, you decide whether we publish — and on what terms. Public case study, private playbook, or both.",
+    title: "Co-authored case study (or not)",
+    body: "When the work&rsquo;s done, you decide whether we publish. Public case study, private playbook with a public threat-catalog entry, or nothing at all. Your call, every time.",
   },
 ];
 
 const QUALIFY = [
   "You ship an agent that interacts with the open web, third-party tools, or persistent memory.",
   "You can dedicate ~2h/week of an engineer or security lead for 4 weeks.",
-  "You can run a single binary or attach a process supervisor to your agent runtime.",
-  "You&rsquo;re willing to share a redacted incident or threat model that helped us shape SecureBench.",
+  "You have, or can produce, one redacted log of an agent run from your last week.",
+  "You&rsquo;re willing to share enough about a redacted incident that we can shape SecureBench around it.",
 ];
 
 export default function WaitlistPage() {
   return (
     <>
       <PageHero
-        eyebrow="Early access"
+        eyebrow="The deal"
         title={
           <>
-            Twelve teams in 2026.{" "}
+            Send us your incident.{" "}
             <span className="ag-text-amber italic">
-              Verifiable evidence in a week.
+              We send back a forensic report in 48 hours.
             </span>
           </>
         }
         lead={
           <>
-            Aegis is in private research preview. Tell us about your stack and
-            your threat surface — we&rsquo;ll come back with a one-page
-            proposal: which Aegis layer to start with, what we&rsquo;ll
-            instrument, and what evidence you&rsquo;ll have to show after
-            week one.
+            First 50 partners. Sanitized log in, signed bundle out. New attack
+            class lands in the public threat catalog (with or without your
+            name &mdash; your call). It&rsquo;s reciprocal: you get
+            deterministic evidence for your auditor; we get a real incident,
+            the catalog gets smarter.
           </>
         }
       />
@@ -72,13 +72,13 @@ export default function WaitlistPage() {
                   letterSpacing: "-0.018em",
                 }}
               >
-                Tell us what your agent touches.
+                Tell us about your incident, or the agent you&rsquo;re afraid of.
               </h2>
               <p
                 className="mt-3 text-sm leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Submitting opens an email draft addressed to the Aegis team —
+                Submitting opens an email draft addressed to the founder &mdash;
                 no servers, no analytics, no wait. Edit it before you send.
               </p>
               <WaitlistForm />
@@ -91,10 +91,10 @@ export default function WaitlistPage() {
                   className="ag-display mt-5"
                   style={{ fontSize: "1.4rem", letterSpacing: "-0.015em" }}
                 >
-                  What partners get
+                  What you get back
                 </h3>
                 <ul className="mt-5 space-y-4">
-                  {BENEFITS.map((b) => (
+                  {RETURNS.map((b) => (
                     <li key={b.title} className="flex items-start gap-3">
                       <CheckIcon
                         size={14}
@@ -137,9 +137,7 @@ export default function WaitlistPage() {
                       >
                         {String(idx + 1).padStart(2, "0")}
                       </span>
-                      <span
-                        dangerouslySetInnerHTML={{ __html: q }}
-                      />
+                      <span dangerouslySetInnerHTML={{ __html: q }} />
                     </li>
                   ))}
                 </ul>
@@ -161,8 +159,8 @@ export default function WaitlistPage() {
                   className="mt-3 text-sm leading-relaxed"
                   style={{ color: "var(--ag-fg)" }}
                 >
-                  We respond within 3 business days. Cohorts close on the 1st
-                  and 15th of each month.
+                  We respond within 3 business days. Forensic report within 48
+                  hours of receiving your sanitized log.
                 </p>
               </div>
             </aside>

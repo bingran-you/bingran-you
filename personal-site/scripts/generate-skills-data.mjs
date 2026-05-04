@@ -223,6 +223,9 @@ for (const slug of entries) {
     absoluteSource = skillSymlink;
   }
   const source = deriveSource(absoluteSource);
+  if (typeof data.author === "string" && data.author.trim().length > 0) {
+    source.author = data.author.trim();
+  }
   const license = readLicense(skillSymlink);
   if (license) withLicense += 1;
 

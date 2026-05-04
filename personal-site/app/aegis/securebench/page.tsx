@@ -4,9 +4,9 @@ import { CTASection } from "../_components/cta";
 import { CheckIcon } from "../_components/icons";
 
 export const metadata: Metadata = {
-  title: "SecureBench · Adversarial benchmark for AI agents",
+  title: "SecureBench · alpha (running it on ourselves)",
   description:
-    "SecureBench is a versioned suite of red-team scenarios for AI agents — tool poisoning, indirect injection, exfiltration, escalation. Verifiable scores, not vibes.",
+    "SecureBench is the adversarial benchmark we run against the Aegis CLI. 207 scenarios across 5 suites. Public score cards open when v0.1 ships externally.",
   alternates: { canonical: "/aegis/securebench" },
 };
 
@@ -30,14 +30,14 @@ const SUITES = [
     title: "Memory exfiltration & poisoning",
     count: 42,
     description:
-      "Long-horizon attacks where the adversary writes to the agent&rsquo;s memory and waits for retrieval. Confirms Cleanse detects and rolls back.",
+      "Long-horizon attacks where the adversary writes to the agent&rsquo;s memory and waits for retrieval. Confirms Cleanse will detect and roll back when shipped.",
   },
   {
     code: "ESC",
     title: "Privilege escalation",
     count: 28,
     description:
-      "Social engineering of the operator, lateral access through tool chains, sandbox escape attempts. Confirms Sentinel contains.",
+      "Social engineering of the operator, lateral access through tool chains, sandbox escape attempts. Confirms the CLI contains.",
   },
   {
     code: "EXF",
@@ -61,7 +61,7 @@ const SCORE_DIMENSIONS = [
   },
   {
     label: "Recovery",
-    body: "Did Cleanse / Sentinel restore a clean state?",
+    body: "Did the CLI restore a clean state?",
     weight: "20%",
   },
   {
@@ -72,34 +72,71 @@ const SCORE_DIMENSIONS = [
 ];
 
 const FRAMEWORKS = [
-  { name: "OpenAI Agents SDK", score: "—", note: "Pending v0.1 run" },
-  { name: "Anthropic Claude Code", score: "—", note: "Pending v0.1 run" },
-  { name: "Codex CLI", score: "—", note: "Pending v0.1 run" },
-  { name: "LangGraph", score: "—", note: "Pending v0.1 run" },
-  { name: "CrewAI", score: "—", note: "Pending v0.1 run" },
-  { name: "AutoGen", score: "—", note: "Pending v0.1 run" },
+  { name: "OpenAI Agents SDK", score: "—", note: "Pending v0.1 external alpha" },
+  { name: "Anthropic Claude Code", score: "—", note: "Pending v0.1 external alpha" },
+  { name: "Codex CLI", score: "—", note: "Pending v0.1 external alpha" },
+  { name: "LangGraph", score: "—", note: "Pending v0.1 external alpha" },
+  { name: "CrewAI", score: "—", note: "Pending v0.1 external alpha" },
+  { name: "AutoGen", score: "—", note: "Pending v0.1 external alpha" },
 ];
 
 export default function SecureBenchPage() {
   return (
     <>
       <PageHero
-        eyebrow="Aegis · SecureBench"
+        eyebrow="Aegis · SecureBench · ALPHA"
         title={
           <>
-            An <span className="ag-text-amber italic">adversarial benchmark</span> agents must pass before they ship.
+            The benchmark <span className="ag-text-amber italic">we run on ourselves.</span>
           </>
         }
         lead={
           <>
             SecureBench is a versioned, deterministic suite of red-team
-            scenarios for AI agents. Run it against your stack and receive a
-            verifiable score — not a screenshot, not a vibes audit.
+            scenarios for AI agents. Today: we run it against our own CLI on
+            every release, fail closed when scores drop. Soon: we run it
+            against your stack and ship a signed score card.
           </>
         }
-        primary={{ href: "/aegis/waitlist", label: "Apply to run SecureBench" }}
+        primary={{ href: "/aegis/waitlist", label: "Apply to run SecureBench against your stack" }}
         secondary={{ href: "/aegis/research", label: "Read the methodology" }}
       />
+
+      <section className="ag-section">
+        <div className="ag-container">
+          <div
+            className="rounded-2xl p-8 lg:p-10"
+            style={{
+              border: "1px solid var(--ag-line-amber)",
+              background: "var(--ag-amber-soft)",
+            }}
+          >
+            <p className="ag-eyebrow" style={{ color: "var(--ag-amber)" }}>
+              Honest status
+            </p>
+            <h2
+              className="ag-display mt-4 max-w-3xl"
+              style={{
+                fontSize: "clamp(1.5rem, 2.6vw, 1.9rem)",
+                letterSpacing: "-0.018em",
+              }}
+            >
+              207 scenarios designed. 18 reproducers shipped. The rest land
+              weekly.
+            </h2>
+            <p
+              className="mt-5 max-w-2xl text-base leading-relaxed"
+              style={{ color: "var(--ag-fg-mute)" }}
+            >
+              Every benchmark is dishonest until the reproducer is in the
+              repo. We&rsquo;re publishing the catalog as we ship reproducers —
+              not all at once with a number. The scores below for external
+              frameworks are blank because we haven&rsquo;t run them yet. We
+              won&rsquo;t print fake numbers next to real names.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section className="ag-section">
         <div className="ag-container">
@@ -136,7 +173,10 @@ export default function SecureBenchPage() {
                   "Public regression tracker — drift is detectable",
                 ].map((line) => (
                   <li key={line} className="flex items-start gap-2">
-                    <CheckIcon size={14} className="mt-[3px] shrink-0 ag-text-amber" />
+                    <CheckIcon
+                      size={14}
+                      className="mt-[3px] shrink-0 ag-text-amber"
+                    />
                     <span>{line}</span>
                   </li>
                 ))}
@@ -192,7 +232,7 @@ export default function SecureBenchPage() {
         }}
       >
         <div className="ag-container">
-          <p className="ag-eyebrow">Suites · v0.1</p>
+          <p className="ag-eyebrow">Suites · v0.1 catalog</p>
           <h2
             className="ag-display mt-5 max-w-3xl"
             style={{
@@ -200,15 +240,16 @@ export default function SecureBenchPage() {
               letterSpacing: "-0.022em",
             }}
           >
-            207 adversarial scenarios. Five suites. Growing weekly.
+            207 scenarios designed. 5 suites. Reproducers landing weekly.
           </h2>
           <p
             className="mt-5 max-w-2xl text-base leading-relaxed"
             style={{ color: "var(--ag-fg-mute)" }}
           >
-            Every scenario is reproducible from a sealed seed. We grow the
-            catalog from real incidents, public CVEs, and adversarial research.
-            Submission process below.
+            Every scenario is reproducible from a sealed seed when the
+            reproducer ships. We grow the catalog from real incidents
+            (early-access partners — that&rsquo;s the deal), public CVEs, and
+            adversarial research. The catalog is public; PRs welcome.
           </p>
           <div
             className="mt-12 overflow-hidden rounded-2xl border"
@@ -226,7 +267,7 @@ export default function SecureBenchPage() {
             >
               <span>Code</span>
               <span>Suite</span>
-              <span>Count</span>
+              <span>Designed</span>
               <span>What it tests</span>
             </div>
             {SUITES.map((s, idx) => (
@@ -259,9 +300,8 @@ export default function SecureBenchPage() {
                 <p
                   className="text-sm leading-relaxed"
                   style={{ color: "var(--ag-fg-mute)" }}
-                >
-                  {s.description}
-                </p>
+                  dangerouslySetInnerHTML={{ __html: s.description }}
+                />
               </div>
             ))}
           </div>
@@ -272,7 +312,7 @@ export default function SecureBenchPage() {
         <div className="ag-container">
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
             <div>
-              <p className="ag-eyebrow">Score card preview</p>
+              <p className="ag-eyebrow">Score card preview · external alpha pending</p>
               <h2
                 className="ag-display mt-5"
                 style={{
@@ -286,16 +326,17 @@ export default function SecureBenchPage() {
                 className="mt-6 text-base leading-relaxed"
                 style={{ color: "var(--ag-fg-mute)" }}
               >
-                Score cards are signed, machine-verifiable, and tied to a
+                Score cards will be signed, machine-verifiable, and tied to a
                 framework hash. Public for opted-in vendors. Private for
-                self-hosted teams.
+                self-hosted teams. We open the first cohort when external
+                alpha ships.
               </p>
               <p
                 className="mt-3 text-sm"
                 style={{ color: "var(--ag-fg-faint)" }}
               >
-                Numbers below are placeholders — we publish the first cohort
-                with v0.1.
+                Numbers below are blank, not fake. We don&rsquo;t print scores
+                we haven&rsquo;t run.
               </p>
             </div>
             <div
@@ -337,7 +378,7 @@ export default function SecureBenchPage() {
                 className="ag-mono mt-5 text-[11px] tracking-[0.28em]"
                 style={{ color: "var(--ag-fg-faint)" }}
               >
-                Next score window opens 2026-Q3
+                External alpha opens after the CLI is in 50 active terminals
               </p>
             </div>
           </div>
@@ -353,7 +394,7 @@ export default function SecureBenchPage() {
         }}
       >
         <div className="ag-container">
-          <p className="ag-eyebrow">Run the bench</p>
+          <p className="ag-eyebrow">Run the bench · sample output</p>
           <h2
             className="ag-display mt-5 max-w-3xl"
             style={{
@@ -363,11 +404,17 @@ export default function SecureBenchPage() {
           >
             One CLI, deterministic envs, signed bundle out the other end.
           </h2>
+          <p
+            className="ag-mono mt-4 text-[11px] tracking-[0.18em]"
+            style={{ color: "var(--ag-fg-faint)" }}
+          >
+            * sample output — internal run against the CLI itself, v0.1.0
+          </p>
           <pre
             className="ag-code mt-12"
             dangerouslySetInnerHTML={{
               __html: `<span class="c-prompt">$</span> <span class="c-cmd">aegis</span> <span class="c-arg">securebench</span> <span class="c-cmd">run</span> <span class="c-flag">--suite</span> all <span class="c-flag">--target</span> ./agent.aegis-spec
-<span class="c-comment">▸ securebench · v0.1.0 · 207 scenarios</span>
+<span class="c-comment">▸ securebench · v0.1.0 · 207 scenarios designed · 18 reproducers shipped</span>
 <span class="c-comment">▸ envs spawned: 12 · seed: sealed-2026-05-04</span>
 
 <span class="c-mute">[INJ]</span>  <span class="c-ok">▮▮▮▮▮▮▮▮▮▮▮▮▯▯</span>  84%   <span class="c-mute">42/64 detected</span>
@@ -385,16 +432,18 @@ export default function SecureBenchPage() {
       <CTASection
         title={
           <>
-            Trust your agent only as much as <span className="ag-text-amber italic">your evidence</span>.
+            Trust your agent only as much as{" "}
+            <span className="ag-text-amber italic">your evidence.</span>
           </>
         }
         body={
           <>
-            Apply to run SecureBench against your agent stack. We run, you keep
-            the bundle, the catalog grows by your contribution.
+            Apply to run SecureBench against your stack when external alpha
+            opens. We run, you keep the bundle, the catalog grows by your
+            contribution.
           </>
         }
-        secondary={{ href: "/aegis/research", label: "Read the manifesto" }}
+        secondary={{ href: "/aegis/research", label: "Read the field notes" }}
       />
     </>
   );

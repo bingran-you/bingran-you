@@ -113,15 +113,14 @@ export default function Home() {
             </span>
             <div>
               <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-                Aegis · research preview
+                Aegis · v0.1 · solo-founded
               </p>
               <p className="mt-2 text-lg font-medium leading-snug">
-                Security infrastructure for the agent era.
+                Observability for AI agents. One CLI. Audit before, watch during.
               </p>
               <p className="mt-1.5 text-sm text-[var(--muted)] leading-relaxed">
-                Runtime hygiene, web attestation, memory cleansing and
-                adversarial benchmarks for AI agents. Built openly out of
-                Berkeley.
+                The deal: send us a redacted log of an agent run. We send back
+                a forensic report in 48 hours.
               </p>
             </div>
             <span className="inline-flex items-center gap-2 self-start text-sm text-[var(--muted)] transition group-hover:text-foreground sm:self-center">

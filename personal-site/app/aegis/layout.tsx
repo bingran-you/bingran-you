@@ -25,17 +25,17 @@ const aegisMono = JetBrains_Mono({
 });
 
 const AEGIS_DESCRIPTION =
-  "Aegis is the security layer for the agent era. Runtime hygiene, memory cleansing, and adversarial benchmarks for AI agents that act on behalf of humans.";
+  "Aegis is observability for AI agents. One CLI: audit the agent's reachable surface before it starts, watch every tool call and file write while it runs. Walk away.";
 
 export const metadata: Metadata = {
   title: {
-    default: "Aegis · Security infrastructure for the agent era",
+    default: "Aegis · Observability for AI agents · audit before, watch during",
     template: "%s · Aegis",
   },
   description: AEGIS_DESCRIPTION,
   alternates: { canonical: "/aegis" },
   openGraph: {
-    title: "Aegis · Security infrastructure for the agent era",
+    title: "Aegis · Observability for AI agents",
     description: AEGIS_DESCRIPTION,
     url: `${SITE_URL}/aegis`,
     siteName: "Aegis",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aegis · Security infrastructure for the agent era",
+    title: "Aegis · Observability for AI agents",
     description: AEGIS_DESCRIPTION,
     creator: "@bingran_bry",
   },

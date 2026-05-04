@@ -11,12 +11,27 @@ const SURFACES = [
   { id: "multi", label: "Multi-agent orchestration" },
 ] as const;
 
-const PRIORITIES = [
-  { id: "sentinel", label: "Aegis Sentinel — runtime hygiene" },
-  { id: "attest", label: "Aegis Attest — web/tool attestation" },
-  { id: "cleanse", label: "Aegis Cleanse — memory hygiene" },
-  { id: "securebench", label: "SecureBench — adversarial benchmark" },
-  { id: "all", label: "Not sure yet — recommend one" },
+const INTENT = [
+  {
+    id: "incident",
+    label: "I have a redacted incident log — audit it.",
+  },
+  {
+    id: "preflight",
+    label: "I&rsquo;m about to give an agent more reach. Audit my stack.",
+  },
+  {
+    id: "framework",
+    label: "I&rsquo;m an agent framework / platform team. Let&rsquo;s integrate.",
+  },
+  {
+    id: "research",
+    label: "I&rsquo;m a security researcher / red-teamer. Let&rsquo;s collaborate.",
+  },
+  {
+    id: "watch",
+    label: "Just watching for now &mdash; keep me on the list.",
+  },
 ] as const;
 
 export function WaitlistForm() {
@@ -25,7 +40,7 @@ export function WaitlistForm() {
   const [org, setOrg] = useState("");
   const [role, setRole] = useState("");
   const [surfaces, setSurfaces] = useState<string[]>([]);
-  const [priority, setPriority] = useState<string>("all");
+  const [intent, setIntent] = useState<string>("incident");
   const [stack, setStack] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -36,12 +51,13 @@ export function WaitlistForm() {
   }
 
   function buildMailto() {
-    const subject = `Aegis early-access — ${org || name || "applicant"}`;
+    const intentText =
+      INTENT.find((i) => i.id === intent)?.label.replace(/&rsquo;/g, "'").replace(/&mdash;/g, "—") ??
+      "(not specified)";
+    const subject = `Aegis early-access — ${org || name || "applicant"} — ${intent}`;
     const surfaceList = SURFACES.filter((s) =>
       surfaces.includes(s.id),
     ).map((s) => `  - ${s.label}`).join("\n") || "  (none specified)";
-    const priorityLabel =
-      PRIORITIES.find((p) => p.id === priority)?.label ?? "(not specified)";
 
     const body = [
       `Name: ${name}`,
@@ -49,19 +65,19 @@ export function WaitlistForm() {
       `Organization: ${org}`,
       `Role: ${role}`,
       "",
+      `What I want: ${intentText}`,
+      "",
       "Attack surfaces in scope:",
       surfaceList,
-      "",
-      `Priority Aegis layer: ${priorityLabel}`,
       "",
       "Current agent stack:",
       stack || "(not specified)",
       "",
-      "Anything else:",
+      "Anything else (incident summary, deadline, constraint):",
       notes || "(none)",
       "",
       "—",
-      "Submitted via aegis waitlist · bingranyou.com/aegis/waitlist",
+      "Submitted via aegis · bingranyou.com/aegis/waitlist",
     ].join("\n");
 
     return `mailto:bingran.you@berkeley.edu?subject=${encodeURIComponent(
@@ -120,6 +136,48 @@ export function WaitlistForm() {
         </Field>
       </div>
 
+      <Field label="What do you want from this?">
+        <div className="grid gap-2">
+          {INTENT.map((p) => (
+            <label
+              key={p.id}
+              className="flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm transition"
+              style={{
+                border:
+                  intent === p.id
+                    ? "1px solid var(--ag-amber)"
+                    : "1px solid var(--ag-line)",
+                background:
+                  intent === p.id
+                    ? "var(--ag-amber-soft)"
+                    : "var(--ag-canvas-2)",
+                color: "var(--ag-fg)",
+              }}
+            >
+              <input
+                type="radio"
+                name="intent"
+                value={p.id}
+                checked={intent === p.id}
+                onChange={() => setIntent(p.id)}
+                className="sr-only"
+              />
+              <span
+                className="inline-block h-3 w-3 shrink-0 rounded-full"
+                style={{
+                  border:
+                    intent === p.id
+                      ? "1px solid var(--ag-amber)"
+                      : "1px solid var(--ag-line-strong)",
+                  background: intent === p.id ? "var(--ag-amber)" : "transparent",
+                }}
+              />
+              <span dangerouslySetInnerHTML={{ __html: p.label }} />
+            </label>
+          ))}
+        </div>
+      </Field>
+
       <Field label="What does your agent touch? (pick all)">
         <div className="grid gap-2 sm:grid-cols-2">
           {SURFACES.map((s) => {
@@ -156,48 +214,6 @@ export function WaitlistForm() {
         </div>
       </Field>
 
-      <Field label="Which Aegis layer interests you most?">
-        <div className="grid gap-2">
-          {PRIORITIES.map((p) => (
-            <label
-              key={p.id}
-              className="flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm transition"
-              style={{
-                border:
-                  priority === p.id
-                    ? "1px solid var(--ag-amber)"
-                    : "1px solid var(--ag-line)",
-                background:
-                  priority === p.id
-                    ? "var(--ag-amber-soft)"
-                    : "var(--ag-canvas-2)",
-                color: "var(--ag-fg)",
-              }}
-            >
-              <input
-                type="radio"
-                name="priority"
-                value={p.id}
-                checked={priority === p.id}
-                onChange={() => setPriority(p.id)}
-                className="sr-only"
-              />
-              <span
-                className="inline-block h-3 w-3 shrink-0 rounded-full"
-                style={{
-                  border:
-                    priority === p.id
-                      ? "1px solid var(--ag-amber)"
-                      : "1px solid var(--ag-line-strong)",
-                  background: priority === p.id ? "var(--ag-amber)" : "transparent",
-                }}
-              />
-              {p.label}
-            </label>
-          ))}
-        </div>
-      </Field>
-
       <Field label="Current agent stack (one line)">
         <input
           className="ag-input"
@@ -208,19 +224,17 @@ export function WaitlistForm() {
         />
       </Field>
 
-      <Field label="Anything else we should know?">
+      <Field label="Incident summary, or anything else we should know">
         <textarea
           className="ag-input"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={4}
-          placeholder="A specific incident, a deadline, a constraint, a colleague we should talk to."
+          placeholder="Sanitized version: which agent, what surface, what went wrong (or what you&rsquo;re afraid of). Plus any deadlines or constraints."
         />
       </Field>
 
-      <div
-        className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between"
-      >
+      <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
         <p
           className="ag-mono text-[11px] tracking-[0.18em]"
           style={{ color: "var(--ag-fg-faint)" }}

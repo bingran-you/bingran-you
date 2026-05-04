@@ -8,29 +8,33 @@ import { AegisMark } from "./logo";
 const productLinks = [
   {
     href: "/aegis/sentinel",
-    label: "Aegis Sentinel",
-    blurb: "Runtime hygiene for local agents",
-  },
-  {
-    href: "/aegis/attest",
-    label: "Aegis Attest",
-    blurb: "Verifies the open web for agents",
-  },
-  {
-    href: "/aegis/cleanse",
-    label: "Aegis Cleanse",
-    blurb: "Memory hygiene & poison detection",
+    label: "Aegis CLI",
+    blurb: "Live · audit + watch your agents",
+    state: "live",
   },
   {
     href: "/aegis/securebench",
     label: "SecureBench",
-    blurb: "Adversarial benchmark for agents",
+    blurb: "Alpha · running it on ourselves",
+    state: "alpha",
+  },
+  {
+    href: "/aegis/attest",
+    label: "Aegis Attest",
+    blurb: "Roadmap · web/tool attestation",
+    state: "roadmap",
+  },
+  {
+    href: "/aegis/cleanse",
+    label: "Aegis Cleanse",
+    blurb: "Roadmap · memory hygiene",
+    state: "roadmap",
   },
 ];
 
 const otherLinks = [
-  { href: "/aegis/platform", label: "Platform" },
-  { href: "/aegis/research", label: "Research" },
+  { href: "/aegis/platform", label: "Roadmap" },
+  { href: "/aegis/research", label: "Field notes" },
   { href: "/aegis/company", label: "Company" },
 ];
 
@@ -157,7 +161,7 @@ export function AegisNav() {
             className="ag-btn ag-btn-primary"
             style={{ padding: "0.6rem 1rem" }}
           >
-            Join waitlist
+            Send us your incident
             <ArrowRight className="ag-btn-arrow" />
           </Link>
         </div>

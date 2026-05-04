@@ -3,36 +3,36 @@ import { AegisMark } from "./logo";
 
 const cols: { heading: string; links: { href: string; label: string }[] }[] = [
   {
-    heading: "Products",
+    heading: "Live",
     links: [
-      { href: "/aegis/sentinel", label: "Aegis Sentinel" },
-      { href: "/aegis/attest", label: "Aegis Attest" },
-      { href: "/aegis/cleanse", label: "Aegis Cleanse" },
-      { href: "/aegis/securebench", label: "SecureBench" },
+      { href: "/aegis/sentinel", label: "Aegis CLI" },
+      { href: "/aegis/securebench", label: "SecureBench (alpha)" },
+      { href: "/aegis/research#threat-model", label: "Threat catalog" },
     ],
   },
   {
-    heading: "Platform",
+    heading: "Roadmap",
     links: [
-      { href: "/aegis/platform", label: "Overview" },
-      { href: "/aegis/platform#architecture", label: "Architecture" },
-      { href: "/aegis/platform#integrations", label: "Integrations" },
+      { href: "/aegis/platform", label: "Roadmap overview" },
+      { href: "/aegis/attest", label: "Aegis Attest (~Q3)" },
+      { href: "/aegis/cleanse", label: "Aegis Cleanse (~Q4)" },
     ],
   },
   {
-    heading: "Resources",
+    heading: "Field notes",
     links: [
-      { href: "/aegis/research", label: "Research & manifesto" },
-      { href: "/aegis/research#threat-model", label: "Threat model" },
+      { href: "/aegis/research", label: "Manifesto + notes" },
+      { href: "/aegis/research#threat-model", label: "Threat catalog v0.1" },
+      { href: "/aegis/research#field-notes", label: "Notes from the laptop" },
       { href: "/aegis/research#vocabulary", label: "Glossary" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { href: "/aegis/company", label: "About" },
-      { href: "/aegis/company#principles", label: "Principles" },
-      { href: "/aegis/waitlist", label: "Join waitlist" },
+      { href: "/aegis/company", label: "About + founder" },
+      { href: "/aegis/company#prior-work", label: "Prior work" },
+      { href: "/aegis/waitlist", label: "Send us your incident" },
       { href: "/", label: "Bingran You" },
     ],
   },
@@ -67,14 +67,15 @@ export function AegisFooter() {
               className="mt-5 max-w-xs text-sm leading-relaxed"
               style={{ color: "var(--ag-fg-mute)" }}
             >
-              Security infrastructure for the agent era. Independent runtime,
-              memory and benchmark layers — verifiable, not aspirational.
+              Observability for AI agents. One CLI today, three layers on the
+              roadmap. Built openly. The deal: send us your incident, we send
+              back a forensic report.
             </p>
             <p
               className="ag-mono mt-6 text-[11px] uppercase tracking-[0.28em]"
               style={{ color: "var(--ag-fg-faint)" }}
             >
-              Built in Berkeley
+              Solo-founded · Berkeley · v0.1
             </p>
           </div>
           {cols.map((col) => (
@@ -122,8 +123,9 @@ export function AegisFooter() {
             className="text-xs"
             style={{ color: "var(--ag-fg-faint)" }}
           >
-            No production system. Vision-stage research preview. Treat
-            screenshots & numbers as illustrative.
+            v0.1 research preview. The CLI ships to early-access partners.
+            Sample CLI outputs are illustrative; threat-catalog reproducers
+            are real and replayable.
           </p>
         </div>
       </div>

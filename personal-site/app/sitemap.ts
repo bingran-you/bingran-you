@@ -5,6 +5,7 @@ import {
   getAllPostsMetadata,
   getPostLastModified,
 } from "@/lib/posts";
+import { getAllSkills, getSkillsLastModified } from "@/lib/skills";
 
 const SITE_URL = "https://bingranyou.com";
 
@@ -94,6 +95,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${SITE_URL}/skills`,
+      lastModified: getSkillsLastModified(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/aegis`,
       lastModified: aegisLastModified,
       changeFrequency: "weekly",
@@ -149,5 +156,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticEntries, ...postEntries];
+  const skillEntries: MetadataRoute.Sitemap = getAllSkills().map((skill) => ({
+    url: `${SITE_URL}/skills/${skill.slug}`,
+    lastModified: new Date(skill.updatedAt),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...postEntries, ...skillEntries];
 }

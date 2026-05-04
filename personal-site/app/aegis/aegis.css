@@ -1,0 +1,386 @@
+.aegis-root {
+  --ag-canvas: #07090f;
+  --ag-canvas-2: #0a0e18;
+  --ag-surface: #0e1320;
+  --ag-surface-2: #131a2c;
+  --ag-surface-3: #1a2238;
+  --ag-line: rgba(255, 255, 255, 0.08);
+  --ag-line-strong: rgba(255, 255, 255, 0.18);
+  --ag-line-amber: rgba(240, 185, 11, 0.32);
+  --ag-fg: #f2f1ec;
+  --ag-fg-mute: #8a92a8;
+  --ag-fg-faint: #555c73;
+  --ag-amber: #f0b90b;
+  --ag-amber-2: #f4cf57;
+  --ag-amber-soft: rgba(240, 185, 11, 0.14);
+  --ag-coral: #ff6b47;
+  --ag-violet: #7c5cff;
+  --ag-teal: #3dd9c1;
+  --ag-grad: linear-gradient(180deg, #0a0e18 0%, #07090f 100%);
+
+  background: var(--ag-canvas);
+  color: var(--ag-fg);
+  font-family: var(--font-aegis-sans), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv01";
+  letter-spacing: -0.005em;
+  min-height: 100vh;
+}
+
+.aegis-root ::selection {
+  background: var(--ag-amber);
+  color: var(--ag-canvas);
+}
+
+.aegis-root a {
+  color: inherit;
+}
+
+/* Display headings */
+.ag-display {
+  font-family: var(--font-aegis-display), ui-serif, Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  line-height: 1.02;
+}
+
+.ag-mono {
+  font-family: var(--font-aegis-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.ag-eyebrow {
+  font-family: var(--font-aegis-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ag-fg-mute);
+}
+
+.ag-rule {
+  height: 1px;
+  background: var(--ag-line);
+  width: 100%;
+}
+
+.ag-rule-amber {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ag-line-amber) 30%,
+    var(--ag-line-amber) 70%,
+    transparent 100%
+  );
+}
+
+/* Buttons */
+.ag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  border: 1px solid var(--ag-line-strong);
+  background: transparent;
+  color: var(--ag-fg);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+  cursor: pointer;
+}
+
+.ag-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.ag-btn-primary {
+  background: var(--ag-amber);
+  color: #1a1408;
+  border-color: var(--ag-amber);
+}
+
+.ag-btn-primary:hover {
+  background: var(--ag-amber-2);
+  border-color: var(--ag-amber-2);
+}
+
+.ag-btn-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.18s ease;
+}
+
+.ag-btn:hover .ag-btn-arrow {
+  transform: translateX(2px);
+}
+
+/* Card */
+.ag-card {
+  border: 1px solid var(--ag-line);
+  background: var(--ag-surface);
+  border-radius: 14px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ag-card:hover {
+  border-color: var(--ag-line-strong);
+  background: var(--ag-surface-2);
+}
+
+.ag-card-amber {
+  border-color: var(--ag-line-amber);
+  background: linear-gradient(180deg, rgba(240, 185, 11, 0.04) 0%, rgba(240, 185, 11, 0) 60%),
+    var(--ag-surface);
+}
+
+/* Pill */
+.ag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--ag-line-strong);
+  border-radius: 999px;
+  font-family: var(--font-aegis-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ag-fg-mute);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ag-pill-amber {
+  border-color: var(--ag-line-amber);
+  color: var(--ag-amber-2);
+  background: var(--ag-amber-soft);
+}
+
+.ag-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ag-amber);
+  box-shadow: 0 0 10px var(--ag-amber);
+}
+
+/* Code block */
+.ag-code {
+  font-family: var(--font-aegis-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  background: var(--ag-canvas-2);
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  color: var(--ag-fg);
+  overflow-x: auto;
+}
+
+.ag-code .c-prompt {
+  color: var(--ag-amber);
+}
+.ag-code .c-cmd {
+  color: var(--ag-fg);
+}
+.ag-code .c-arg {
+  color: var(--ag-teal);
+}
+.ag-code .c-flag {
+  color: var(--ag-violet);
+}
+.ag-code .c-comment {
+  color: var(--ag-fg-faint);
+}
+.ag-code .c-warn {
+  color: var(--ag-coral);
+}
+.ag-code .c-ok {
+  color: var(--ag-teal);
+}
+.ag-code .c-mute {
+  color: var(--ag-fg-mute);
+}
+
+/* Background ornament */
+.ag-grid-bg {
+  position: relative;
+  isolation: isolate;
+}
+
+.ag-grid-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ag-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ag-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 75%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ag-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 30% at 50% 0%, rgba(240, 185, 11, 0.12), transparent 70%),
+    radial-gradient(ellipse 35% 25% at 80% 30%, rgba(124, 92, 255, 0.08), transparent 70%);
+  z-index: 0;
+}
+
+/* Hero scribed shield */
+.ag-shield-glow {
+  filter: drop-shadow(0 0 28px rgba(240, 185, 11, 0.35));
+}
+
+/* Underline link */
+.ag-link {
+  position: relative;
+  color: var(--ag-fg);
+  border-bottom: 1px solid var(--ag-line-strong);
+  padding-bottom: 1px;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.ag-link:hover {
+  color: var(--ag-amber);
+  border-color: var(--ag-amber);
+}
+
+/* Marquee row */
+.ag-row-divide > * + * {
+  border-top: 1px solid var(--ag-line);
+}
+
+/* Numbered list */
+.ag-num {
+  font-family: var(--font-aegis-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ag-fg-faint);
+}
+
+/* Section spacing */
+.ag-section {
+  padding-top: 7rem;
+  padding-bottom: 7rem;
+}
+
+@media (max-width: 640px) {
+  .ag-section {
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* Container */
+.ag-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Faint scanline ornament for hero */
+.ag-scanline {
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.018) 0px,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+/* Text gradient for hero accent */
+.ag-text-grad {
+  background: linear-gradient(180deg, #f2f1ec 0%, #aab2c8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ag-text-amber {
+  color: var(--ag-amber);
+}
+
+/* Status row */
+.ag-status-line {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.2rem;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--ag-line);
+  align-items: center;
+  font-family: var(--font-aegis-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--ag-fg-mute);
+}
+
+.ag-status-line:last-child {
+  border-bottom: 1px solid var(--ag-line);
+}
+
+/* Subtle hover lift */
+.ag-lift {
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.ag-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Form input */
+.ag-input {
+  width: 100%;
+  background: var(--ag-canvas-2);
+  border: 1px solid var(--ag-line);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  color: var(--ag-fg);
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.18s ease;
+}
+
+.ag-input:focus {
+  outline: none;
+  border-color: var(--ag-amber);
+}
+
+.ag-input::placeholder {
+  color: var(--ag-fg-faint);
+}
+
+/* Diagram pieces */
+.ag-pillar {
+  position: relative;
+  padding: 1.25rem 1.4rem 1.4rem;
+  border: 1px solid var(--ag-line);
+  border-radius: 12px;
+  background: var(--ag-surface);
+}
+
+.ag-pillar-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--ag-line-amber);
+  background: var(--ag-amber-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ag-amber);
+}
+
+/* Subtle dot ornament */
+.ag-dot-bg {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 18px 18px;
+}

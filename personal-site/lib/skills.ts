@@ -1,11 +1,28 @@
 import skillsData from "./skills.generated.json";
 
+export type SkillSource = {
+  collection: string;
+  author: string;
+  repoPath: string;
+  githubUrl?: string;
+};
+
+export type SkillLicense = {
+  name: string;
+  text: string;
+};
+
 type RawSkill = {
   slug: string;
   name: string;
   description: string;
   triggers?: string[];
   updatedAt: string;
+  bodyHtml: string;
+  bodyChars: number;
+  license?: SkillLicense;
+  source: SkillSource;
+  downloadUrl: string;
 };
 
 export type Skill = RawSkill & { category: SkillCategory };

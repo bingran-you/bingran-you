@@ -46,11 +46,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ),
   );
 
-  const aegisLastModified = await getLatestLastModified([
-    "app/aegis/layout.tsx",
-    "app/aegis/page.tsx",
-  ]);
-
   const staticEntries: MetadataRoute.Sitemap = [
     {
       url: `${SITE_URL}/`,
@@ -99,60 +94,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: getSkillsLastModified(),
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/aegis`,
-      lastModified: aegisLastModified,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/aegis/platform`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/aegis/sentinel`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/aegis/attest`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/aegis/cleanse`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/aegis/securebench`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/aegis/research`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/aegis/company`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${SITE_URL}/aegis/waitlist`,
-      lastModified: aegisLastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
     },
   ];
 

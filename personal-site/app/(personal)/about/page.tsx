@@ -42,6 +42,7 @@ const profilePageJsonLd = {
       "https://huggingface.co/bingran-you",
       "https://www.linkedin.com/in/bingran-you-775b4017b/",
       "https://www.youtube.com/@BingranBRY",
+      "https://discord.gg/jsAnjCep",
     ],
   },
 };

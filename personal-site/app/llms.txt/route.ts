@@ -30,6 +30,7 @@ I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecul
 - LinkedIn: https://www.linkedin.com/in/bingran-you-775b4017b/
 - Hugging Face: https://huggingface.co/bingran-you
 - YouTube: https://www.youtube.com/@BingranBRY
+- Discord: https://discord.gg/jsAnjCep
 
 ## Pages
 

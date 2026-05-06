@@ -85,6 +85,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
   <a href="https://x.com/bingran_bry"><img alt="X" src="https://img.shields.io/badge/-X-000000?style=flat-square&logo=x&logoColor=white" /></a>
   <a href="https://xhslink.com/m/gFj0Vwr2Ak"><img alt="Rednote" src="https://img.shields.io/badge/-Rednote-FF2442?style=flat-square&logo=xiaohongshu&logoColor=white" /></a>
   <a href="https://www.youtube.com/@BingranBRY"><img alt="YouTube" src="https://img.shields.io/badge/-YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white" /></a>
+  <a href="https://discord.gg/jsAnjCep"><img alt="Discord" src="https://img.shields.io/badge/-Discord-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>
   <a href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en&authuser=2"><img alt="Google Scholar" src="https://img.shields.io/badge/-Google%20Scholar-4285F4?style=flat-square&logo=googlescholar&logoColor=white" /></a>
   <a href="https://orcid.org/0000-0002-0316-2115"><img alt="ORCID" src="https://img.shields.io/badge/-ORCID-A6CE39?style=flat-square&logo=orcid&logoColor=white" /></a>
   <a href="https://huggingface.co/bingran-you"><img alt="Hugging Face" src="https://img.shields.io/badge/-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>

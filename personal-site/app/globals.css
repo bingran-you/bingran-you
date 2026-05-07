@@ -34,8 +34,14 @@
 }
 
 html {
-  scroll-behavior: smooth;
-  scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+  }
 }
 
 body {
@@ -45,6 +51,7 @@ body {
   font-feature-settings: "ss01", "ss02", "cv01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 ::selection {

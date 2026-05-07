@@ -23,7 +23,7 @@ const profilePageJsonLd = {
     affiliation: {
       "@type": "Organization",
       name: "Haeffner Lab, University of California, Berkeley",
-      url: "https://haeffnerlab.berkeley.edu/",
+      url: "https://ions.berkeley.edu/",
     },
     knowsAbout: [
       "Reliable AI Systems",
@@ -163,7 +163,7 @@ export default function AboutPage() {
             <span className="font-mono text-xs text-[var(--muted)]">Lab</span>
             <a
               className="underline underline-offset-4 decoration-[var(--border)] hover:decoration-foreground"
-              href="https://haeffnerlab.berkeley.edu/"
+              href="https://ions.berkeley.edu/"
               target="_blank"
               rel="noopener noreferrer"
             >

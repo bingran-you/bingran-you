@@ -70,7 +70,7 @@ export function personJsonLd() {
     affiliation: {
       "@type": "Organization",
       name: "Haeffner Lab, University of California, Berkeley",
-      url: "https://haeffnerlab.berkeley.edu/",
+      url: "https://ions.berkeley.edu/",
     },
     knowsAbout: [
       "Reliable AI Systems",

@@ -62,7 +62,7 @@ export function SkillsBrowser({ skills, categories }: Props) {
           <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
         </div>
 
-        <div className="-mx-1 flex flex-wrap gap-1.5">
+        <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 sm:-mx-1 sm:flex-wrap sm:overflow-visible sm:px-1 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <CategoryChip
             label={`All · ${skills.length}`}
             active={activeCategory === "All"}
@@ -117,7 +117,7 @@ export function SkillsBrowser({ skills, categories }: Props) {
                   {list.length}
                 </span>
               </div>
-              <ul className="grid gap-3 sm:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {list.map((s) => (
                   <li key={s.slug}>
                     <SkillCard skill={s} />
@@ -177,7 +177,7 @@ function CategoryChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 text-xs transition ${
+      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs transition ${
         active
           ? "border-foreground bg-foreground text-[var(--background)]"
           : "border-[var(--border)] text-[var(--muted)] hover:border-foreground/30 hover:text-foreground"

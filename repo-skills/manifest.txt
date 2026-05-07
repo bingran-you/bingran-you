@@ -8,6 +8,7 @@
 
 # Repo-local custom skills.
 link skill-creator repo-skills/skill-creator
+link social-scraping-policy repo-skills/social-scraping-policy
 link xiaohongshu-knowledge repo-skills/xiaohongshu-knowledge
 
 # Vendored shared skill libraries.

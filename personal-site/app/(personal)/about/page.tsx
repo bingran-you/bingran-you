@@ -154,9 +154,9 @@ export default function AboutPage() {
             <span className="font-mono text-xs text-[var(--muted)]">Email</span>
             <a
               className="underline underline-offset-4 decoration-[var(--border)] hover:decoration-foreground"
-              href="mailto:bingran.you@berkeley.edu"
+              href="mailto:me@bingranyou.com"
             >
-              bingran.you@berkeley.edu
+              me@bingranyou.com
             </a>
           </li>
           <li className="grid gap-1 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6">

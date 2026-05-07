@@ -119,7 +119,7 @@ const links = [
     label: "LinkedIn",
     icon: LinkedInIcon,
   },
-  { href: "mailto:bingran.bry@gmail.com", label: "Email", icon: EmailIcon },
+  { href: "mailto:me@bingranyou.com", label: "Email", icon: EmailIcon },
 ];
 
 export function SocialLinks() {

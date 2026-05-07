@@ -25,7 +25,7 @@ export default async function PostsPage() {
       {posts.length === 0 ? (
         <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
       ) : (
-        <div className="columns-1 gap-6 sm:columns-2 lg:columns-3">
+        <div className="social-post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
           {posts.map((post) => (
             <SocialPostCard key={post.id} post={post} />
           ))}

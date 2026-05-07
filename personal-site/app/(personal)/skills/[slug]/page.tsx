@@ -63,7 +63,7 @@ export default async function SkillDetailPage({
         </p>
       </header>
 
-      <aside className="grid gap-3 rounded-2xl border border-[var(--border)] p-5 sm:grid-cols-2">
+      <aside className="grid grid-cols-1 gap-3 rounded-2xl border border-[var(--border)] p-5 sm:grid-cols-2">
         <Meta label="Author">{skill.source.author}</Meta>
         <Meta label="Collection">{skill.source.collection}</Meta>
         <Meta label="License">

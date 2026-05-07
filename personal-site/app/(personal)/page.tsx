@@ -13,14 +13,14 @@ export default function Home() {
   const paperHighlights = papers.filter((p) => p.track === "ai").slice(0, 2);
 
   return (
-    <div className="space-y-24">
+    <div className="space-y-16 sm:space-y-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdScriptContent(profilePageJsonLd("/")),
         }}
       />
-      <section className="grid gap-10 sm:grid-cols-[1fr_auto] sm:items-start">
+      <section className="grid gap-8 sm:gap-10 sm:grid-cols-[1fr_auto] sm:items-start">
         <div>
           <h1 className="font-display text-5xl leading-[1.02] tracking-[-0.035em] sm:text-6xl">
             Bingran You
@@ -46,13 +46,13 @@ export default function Home() {
           </ul>
         </div>
 
-        <div className="relative h-44 w-44 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">
+        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">
           <Image
             src="/images/profile/bingran-you-portrait.jpg"
             alt="Bingran You"
             fill
             priority
-            sizes="(max-width: 640px) 11rem, 13rem"
+            sizes="(max-width: 640px) 8rem, 13rem"
             className="object-cover object-[50%_28%]"
           />
         </div>

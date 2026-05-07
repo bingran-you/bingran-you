@@ -90,6 +90,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${SITE_URL}/posts`,
+      lastModified: await getLatestLastModified([
+        "app/(personal)/posts/page.tsx",
+        "content/social/posts.json",
+      ]),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
       url: `${SITE_URL}/skills`,
       lastModified: getSkillsLastModified(),
       changeFrequency: "weekly",

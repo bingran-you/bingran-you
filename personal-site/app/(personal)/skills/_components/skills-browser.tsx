@@ -16,20 +16,26 @@ export function SkillsBrowser({ skills, categories }: Props) {
   );
   const deferredQuery = useDeferredValue(query);
 
-  const filtered = useMemo(() => {
-    const q = deferredQuery.trim().toLowerCase();
-    return skills.filter((s) => {
-      if (activeCategory !== "All" && s.category !== activeCategory)
-        return false;
-      if (!q) return true;
-      return (
+  const q = deferredQuery.trim().toLowerCase();
+
+  const queryMatches = useMemo(() => {
+    if (!q) return skills;
+    return skills.filter(
+      (s) =>
         s.name.toLowerCase().includes(q) ||
         s.slug.toLowerCase().includes(q) ||
         s.description.toLowerCase().includes(q) ||
-        (s.triggers?.some((t) => t.toLowerCase().includes(q)) ?? false)
-      );
-    });
-  }, [skills, deferredQuery, activeCategory]);
+        (s.triggers?.some((t) => t.toLowerCase().includes(q)) ?? false),
+    );
+  }, [skills, q]);
+
+  const filtered = useMemo(() => {
+    if (activeCategory === "All") return queryMatches;
+    return queryMatches.filter((s) => s.category === activeCategory);
+  }, [queryMatches, activeCategory]);
+
+  const queryMatchesAcrossCategories =
+    q && activeCategory !== "All" ? queryMatches.length : 0;
 
   const grouped = useMemo(() => {
     const map = new Map<SkillCategory, Skill[]>();
@@ -77,10 +83,28 @@ export function SkillsBrowser({ skills, categories }: Props) {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="py-16 text-center text-sm text-[var(--muted)]">
-          No skills match{" "}
-          <span className="font-mono">&ldquo;{deferredQuery}&rdquo;</span>.
-        </p>
+        <div className="py-16 text-center text-sm text-[var(--muted)]">
+          <p>
+            No skills match{" "}
+            <span className="font-mono">&ldquo;{deferredQuery}&rdquo;</span>
+            {activeCategory !== "All" ? (
+              <>
+                {" "}
+                in <span className="font-medium">{activeCategory}</span>
+              </>
+            ) : null}
+            .
+          </p>
+          {queryMatchesAcrossCategories > 0 ? (
+            <button
+              type="button"
+              onClick={() => setActiveCategory("All")}
+              className="mt-3 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-foreground transition hover:border-foreground/30"
+            >
+              Search all categories ({queryMatchesAcrossCategories})
+            </button>
+          ) : null}
+        </div>
       ) : (
         <div className="space-y-12">
           {grouped.map(([cat, list]) => (

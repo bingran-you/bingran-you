@@ -21,7 +21,8 @@ Fill in as you learn. Delete sections that don't apply.
 - **Worktrees root:** `~/Downloads/GitHub/Claude-Worktrees/bingran-you/` — parallel sessions, per-branch.
 - **Private submodule:** `bingran-you-private/` — confidential, never exfiltrate.
 - **Active project submodules:** `current-projects/DoWhiz`, `current-projects/first-tree`, `current-projects/mews`, `current-projects/skillsbench`
-- **Personal site:** `personal-site/` — Next.js + MDX source for `bingranyou.com`, deployed on Vercel (project `personal-site` under team `bingran-yous-projects`)
+- **Personal site:** `personal-site/` — Next.js + MDX source for `bingranyou.com`, including the public `/skills`, `/llms.txt`, and `/llms-full.txt` routes; deployed on Vercel (project `personal-site` under team `bingran-yous-projects`)
+- **Skills catalog generation:** `personal-site/scripts/generate-skills-data.mjs` builds `personal-site/lib/skills.generated.json` and downloadable `personal-site/public/skill-files/*.md` entries from mirrored `.agents/skills/`
 
 ## Ion-Trap Environment
 

@@ -44,7 +44,7 @@ _(fill as you go)_
 
 - GitHub: `bingran-you`
 - X / Twitter: `@bingran_bry`
-- Email: `bingran.you@berkeley.edu` (academic), `bingran.bry@gmail.com` (personal)
+- Email: `bingran.you@berkeley.edu` (academic), `me@bingranyou.com` (personal)
 - Hugging Face: `bingran-you`
 
 ## TTS / Voice (if configured)

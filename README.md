@@ -90,5 +90,5 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
   <a href="https://orcid.org/0000-0002-0316-2115"><img alt="ORCID" src="https://img.shields.io/badge/-ORCID-A6CE39?style=flat-square&logo=orcid&logoColor=white" /></a>
   <a href="https://huggingface.co/bingran-you"><img alt="Hugging Face" src="https://img.shields.io/badge/-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>
   <a href="https://www.linkedin.com/in/bingran-you-775b4017b/"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
-  <a href="mailto:bingran.bry@gmail.com"><img alt="Email" src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /></a>
+  <a href="mailto:me@bingranyou.com"><img alt="Email" src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /></a>
 </p>

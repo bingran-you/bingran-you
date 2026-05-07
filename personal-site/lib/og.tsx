@@ -22,8 +22,8 @@ export function renderOgImage({
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "80px",
-          background: "#fafaf9",
-          color: "#0a0a0a",
+          background: "#f4ead7",
+          color: "#1f1a14",
           fontFamily: "Georgia, 'Times New Roman', serif",
         }}
       >
@@ -34,7 +34,7 @@ export function renderOgImage({
             fontFamily: "ui-monospace, Menlo, monospace",
             letterSpacing: "0.32em",
             textTransform: "uppercase",
-            color: "#737373",
+            color: "#a8431c",
           }}
         >
           {eyebrow ?? "bingran.you"}
@@ -63,7 +63,7 @@ export function renderOgImage({
               style={{
                 fontSize: 32,
                 lineHeight: 1.4,
-                color: "#525252",
+                color: "#3d352b",
                 maxWidth: 980,
                 fontFamily: "ui-sans-serif, system-ui, sans-serif",
               }}
@@ -79,7 +79,7 @@ export function renderOgImage({
             justifyContent: "space-between",
             alignItems: "center",
             fontSize: 22,
-            color: "#737373",
+            color: "#6b6055",
             fontFamily: "ui-sans-serif, system-ui, sans-serif",
           }}
         >

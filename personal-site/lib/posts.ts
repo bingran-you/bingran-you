@@ -4,6 +4,7 @@ import path from "node:path";
 export const postSlugs = [
   "a-curated-vetted-skills-catalog",
   "seo-and-geo-for-a-personal-site",
+  "trust-infrastructure-for-ai-in-expert-work",
   "welcome",
 ] as const;
 

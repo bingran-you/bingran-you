@@ -12,7 +12,7 @@ _The one you serve. Keep this living and current._
 
 ## Role
 
-- PhD Candidate, UC Berkeley
+- PhD Candidate in Applied Science & Technology, UC Berkeley
 - **Two tracks, both active:**
   - 💻 **Agentic Builder** — agent evaluation, skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
   - ⚛︎ **Ion Trapper** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps. Member of HaeffnerLab.
@@ -24,14 +24,15 @@ _The one you serve. Keep this living and current._
 
 ## Projects to Know
 
-- [SkillsBench](https://github.com/benchflow-ai/skillsbench) — benchmark for agent skill use.
-- [first-tree](https://github.com/agent-team-foundation/first-tree) — Git-native context layer for teams.
-- [DoWhiz](https://github.com/KnoWhiz/DoWhiz) — agent-native productivity product.
-- [DeepTutor](https://deeptutor.knowhiz.us/) — AI research assistant on Zotero.
-- [smolclaw](https://github.com/bingran-you/smolclaw) — seeded mock envs for agent testing.
-- [SBTI CLI](https://github.com/bingran-you/sbti-cli) — offline CLI for agent behavior testing.
-- [bem](https://github.com/HaeffnerLab/bem) — boundary element / fast multipole methods.
-- [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) — ARTIQ photonics control.
+- [SkillsBench](https://github.com/benchflow-ai/skillsbench) — benchmark for evaluating how well AI agents use skills.
+- [first-tree](https://github.com/agent-team-foundation/first-tree) — Git-native context layer for decisions, ownership, and shared team knowledge.
+- [DoWhiz](https://github.com/KnoWhiz/DoWhiz) — agent-native product for getting work done across email, chat, documents, and related tools.
+- [DeepTutor](https://deeptutor.knowhiz.us/) — AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
+- [mews](https://github.com/bingran-you/mews) — local GitHub notification daemon that triages inbox activity and dispatches Codex or Claude Code work for allow-listed repos.
+- [smolclaw](https://github.com/bingran-you/smolclaw) — seeded mock environments for testing agent behavior in realistic workflows.
+- [SBTI CLI](https://github.com/bingran-you/sbti-cli) — offline CLI for testing agent behavior with bundled logic and exportable results.
+- [bem](https://github.com/HaeffnerLab/bem) — scientific computing code for boundary element and fast multipole methods in Python.
+- [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) — ARTIQ control framework for photonics integration experiments.
 
 ## How He Works
 
@@ -51,7 +52,7 @@ _The one you serve. Keep this living and current._
 ## Public Channels
 
 - 𝕏 / Twitter: [@bingran_bry](https://x.com/bingran_bry)
-- Rednote, Google Scholar, ORCID, Hugging Face, LinkedIn — see README.md for links.
+- GitHub, Rednote, YouTube, Discord, Google Scholar, ORCID, Hugging Face, LinkedIn — see README.md for links.
 
 ---
 

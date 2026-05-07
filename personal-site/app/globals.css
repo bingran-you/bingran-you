@@ -96,3 +96,26 @@ body {
   --tw-prose-invert-th-borders: var(--border);
   --tw-prose-invert-td-borders: var(--border);
 }
+
+/* react-tweet embeds: strip the default 550px max-width and the outer
+   margin so the card fills its masonry column. Same idea skillsbench
+   uses; without these the card renders at its native width and breaks
+   the column layout. */
+.social-tweet > div {
+  margin: 0 !important;
+}
+.social-tweet .react-tweet-theme {
+  max-width: 100% !important;
+}
+
+/* Cross-browser masonry stability. Safari and Firefox honor
+   `break-inside: avoid` more reliably when the child is also marked
+   page-break-inside, and inline-block prevents the rare case of a
+   card being split across columns. */
+.social-post-grid > * {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  display: block;
+  width: 100%;
+}

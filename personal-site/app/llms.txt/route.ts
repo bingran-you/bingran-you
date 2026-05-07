@@ -18,7 +18,7 @@ I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecul
 
 - Name: Bingran You
 - Role: PhD Candidate, Applied Science & Technology, UC Berkeley
-- Lab: Haeffner Lab (https://haeffnerlab.berkeley.edu/)
+- Lab: Haeffner Lab (https://ions.berkeley.edu/)
 - Location: Berkeley, California, USA
 - Site: ${SITE}/
 - Email: me@bingranyou.com

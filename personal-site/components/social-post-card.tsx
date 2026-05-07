@@ -1,3 +1,4 @@
+import { Tweet } from "react-tweet";
 import {
   PLATFORM_LABEL,
   type SocialPlatform,
@@ -77,6 +78,15 @@ const PLATFORM_ACCENT: Record<SocialPlatform, string> = {
   other: "text-[var(--muted)]",
 };
 
+// Per-platform aspect ratios for thumbnail slots. Locking the aspect at the
+// container level reserves space *before* the image loads, eliminating the
+// reflow flicker that breaks the masonry layout in Safari and Firefox.
+const THUMB_ASPECT: Partial<Record<SocialPlatform, string>> = {
+  youtube: "16 / 9",
+  xiaohongshu: "4 / 5", // most XHS notes are portrait; cover-fit handles outliers
+  bilibili: "16 / 10",
+};
+
 function formatDate(date: string) {
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return date;
@@ -87,10 +97,36 @@ function formatDate(date: string) {
   });
 }
 
+// Pull the numeric tweet id out of either the stored id (`x-<digits>`) or
+// the post URL (`/status/<digits>`). Returns null when neither yields one.
+function extractTweetId(post: SocialPost): string | null {
+  const fromId = post.id.match(/^x-(\d+)$/);
+  if (fromId) return fromId[1];
+  const fromUrl = post.url.match(/status\/(\d+)/);
+  if (fromUrl) return fromUrl[1];
+  return null;
+}
+
 export function SocialPostCard({ post }: { post: SocialPost }) {
+  // X / Twitter: defer to react-tweet, which fetches the tweet from the
+  // public syndication API at render time and emits a fully styled card —
+  // no manual title/thumbnail bookkeeping, deleted tweets degrade to a
+  // built-in tombstone, and identical heights stabilize the masonry grid.
+  if (post.platform === "x") {
+    const tweetId = extractTweetId(post);
+    if (tweetId) {
+      return (
+        <div className="social-tweet mb-6 break-inside-avoid">
+          <Tweet id={tweetId} />
+        </div>
+      );
+    }
+  }
+
   const Icon = PLATFORM_ICON[post.platform];
   const accent = PLATFORM_ACCENT[post.platform];
   const hasThumb = Boolean(post.thumbnail);
+  const aspect = THUMB_ASPECT[post.platform];
 
   return (
     <a
@@ -100,23 +136,28 @@ export function SocialPostCard({ post }: { post: SocialPost }) {
       className="group mb-6 block break-inside-avoid overflow-hidden rounded-md border border-[var(--border)] bg-[var(--background)] transition hover:border-foreground/40 hover:shadow-sm"
     >
       {hasThumb ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={post.thumbnail}
-          alt=""
-          loading="lazy"
-          className="block w-full"
-        />
+        <div
+          className="block w-full overflow-hidden bg-[var(--muted)]/10"
+          style={aspect ? { aspectRatio: aspect } : undefined}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.thumbnail}
+            alt={post.title}
+            loading="lazy"
+            className="block h-full w-full object-cover"
+          />
+        </div>
       ) : (
-        // Text-only tweet (or any post without media): render the body text
-        // as the visual itself, in a stylized quote-card style. Falls back to
-        // an icon-only block if there's no text at all.
+        // Text-only post (or any post without media): render the body text as
+        // the visual itself, in a stylized quote-card style. Falls back to an
+        // icon-only block if there is no text at all.
         <div
           className={`relative flex w-full flex-col justify-between gap-4 bg-[var(--muted)]/5 p-5 ${accent}`}
           style={{ minHeight: "11rem" }}
         >
           <p className="font-serif text-[1.05rem] leading-snug text-foreground line-clamp-[8] whitespace-pre-line">
-            {post.description || post.title || " "}
+            {post.description || post.title || " "}
           </p>
           <Icon className="absolute bottom-4 right-4 h-5 w-5 opacity-40" />
         </div>

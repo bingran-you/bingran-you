@@ -6,7 +6,7 @@ _The one you serve. Keep this living and current._
 
 - **Name:** Bingran You (尤炳然)
 - **Call him:** Bingran
-- **Email:** bingran.you@berkeley.edu (academic), bingran.bry@gmail.com (personal)
+- **Email:** bingran.you@berkeley.edu (academic), me@bingranyou.com (personal)
 - **Location:** Berkeley, CA
 - **Timezone:** America/Los_Angeles (PT)
 

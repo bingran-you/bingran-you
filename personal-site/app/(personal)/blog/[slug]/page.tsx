@@ -4,8 +4,7 @@ import Link from "next/link";
 import {
   getPostLastModified,
   getPostMetadata,
-  postSlugs,
-  type PostSlug,
+  getPostSlugs,
 } from "@/lib/posts";
 import {
   blogPostingJsonLd,
@@ -18,8 +17,9 @@ import {
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return postSlugs.map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const slugs = await getPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 type Params = Promise<{ slug: string }>;
@@ -30,10 +30,10 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  if (!postSlugs.includes(slug as PostSlug)) return {};
-  const postSlug = slug as PostSlug;
-  const metadata = await getPostMetadata(postSlug);
-  const modifiedTime = (await getPostLastModified(postSlug)).toISOString();
+  const slugs = await getPostSlugs();
+  if (!slugs.includes(slug)) return {};
+  const metadata = await getPostMetadata(slug);
+  const modifiedTime = (await getPostLastModified(slug)).toISOString();
   const description = metadata.description ?? SITE_DESCRIPTION;
 
   return {
@@ -62,12 +62,12 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: { params: Params }) {
   const { slug } = await params;
-  if (!postSlugs.includes(slug as PostSlug)) notFound();
-  const postSlug = slug as PostSlug;
+  const slugs = await getPostSlugs();
+  if (!slugs.includes(slug)) notFound();
   const { default: Post, metadata } = await import(
     `@/content/posts/${slug}.mdx`
   );
-  const modifiedTime = (await getPostLastModified(postSlug)).toISOString();
+  const modifiedTime = (await getPostLastModified(slug)).toISOString();
   const jsonLd = jsonLdScriptContent(
     blogPostingJsonLd({
       slug,

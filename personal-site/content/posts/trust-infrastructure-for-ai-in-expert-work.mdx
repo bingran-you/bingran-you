@@ -1,0 +1,114 @@
+export const metadata = {
+  title: "A Project I've Been Turning Over: Trust Infrastructure for AI in Expert Work",
+  description:
+    "Notes from brainstorming a project idea — what it would take to make AI advice trustworthy enough for real expert workflows, and the design rules I keep coming back to: grounding, abstention, approval-gated action, and the day-14 reopen test.",
+  date: "2026-05-06",
+};
+
+# A Project I've Been Turning Over: Trust Infrastructure for AI in Expert Work
+
+This is a brainstorm post, not a launch post. I've been circling an idea for a while and it has finally compressed into something I can write down. The point of putting it on the site is partly to think clearly, partly to invite people who've thought about the same problem to push back.
+
+The shape of the idea, in one sentence:
+
+> Frontier models are smart enough to be useful inside high-stakes expert workflows. They are not yet trustworthy enough. The interesting work is the trust layer, not the model.
+
+## The gap I keep seeing
+
+When I watch experts try to use general-purpose AI assistants inside their actual job — not toy questions, real decisions with consequences — the same pattern shows up.
+
+The model produces a confident, fluent recommendation. The expert reads it, can't tell if any of the citations are real, can't tell whether the model would have flagged a missing piece of evidence on its own, and ends up doing the work twice: once with the model, once without, just to be sure. After two or three rounds of this, the assistant gets demoted to *typing partner* — useful for drafting, never trusted for the call.
+
+The failure isn't that the model is dumb. It's that the model has no idea what it doesn't know, no incentive to abstain, and no concept that some of its outputs might cost the user a week of redo work.
+
+So the gap is not intelligence. The gap is **trust**.
+
+## What "trust layer" actually means
+
+If I take that gap seriously, the project breaks into three pieces. None of them is a model. All of them are infrastructure.
+
+1. **Grounded recommendation.** When the assistant proposes a next step, every claim is linked to its evidence — papers, prior records, protocol documents, observed runs. If a claim has no evidence, the assistant says so out loud rather than fabricating one.
+
+2. **Calibrated abstention.** When evidence is weak, missing, or contradictory, the system says *"I can't tell from what I have"* in a way that's louder than its confidence on the cases it can handle. Abstention is a feature, not a failure mode.
+
+3. **Approval-gated action.** The system prepares the next action — a parameter sheet, a checklist, a script draft — and waits. A human approves before anything executes. The assistant is a careful colleague, not an autonomous agent.
+
+None of these are research-frontier ideas on their own. The work is in **making them load-bearing in a real workflow** instead of decorative.
+
+## The design rule I keep coming back to
+
+The rule that has done the most work for me, when sketching what to build and what to cut, is this:
+
+> Will a real user reopen the tool on day 14?
+
+Not "is the demo impressive." Not "did the launch tweet do well." Not "is the benchmark publishable." Just: two weeks after a real practitioner first uses this thing, do they open it again, *unprompted*, on a real piece of their own work?
+
+If yes, the trade-off survives. If no, cut it.
+
+This is unfashionable. Most project plans optimize for an artifact — a paper, a demo video, a benchmark, a launch. Artifacts are easier to track and easier to brag about. But an artifact without reuse is a research output. Reuse is what tells you whether the thing is alive.
+
+I've started writing the day-14 reopen test into design docs explicitly, as a tiebreaker for every scope decision.
+
+## The contamination rule (research method bleeding into product)
+
+A specific instance of "take reuse seriously" that I had to learn the hard way:
+
+The person who reviews your evaluation items cannot also be your dogfooding user.
+
+If a reviewer has seen the ground-truth labels — what *should* the system have answered, when *should* it have abstained — they cannot give you clean preference data when they later use the tool. They've been spoiled. Their preference is contaminated.
+
+This is empirical-research hygiene applied to product testing. It feels obvious once written down, easy to violate in practice because the same warm contacts who'd review your eval are the same warm contacts who'd dogfood. You have to recruit two separate pools, with two different value exchanges, and document who has seen what.
+
+I'm finding this kind of cross-domain transfer — where research method becomes product discipline — to be one of the more useful muscles when designing a tool inside a domain I know.
+
+## Trust is invisible (and that's the marketing problem)
+
+Here is the awkward bit. A trust layer prevents harm. Prevention does not videotape.
+
+When the system abstains, nothing visible happens. When the approval gate catches a wrong move, the *correct* output is *no event*. The product is least visible exactly when it's working.
+
+The honest answer to this isn't "make a flashier demo." It's:
+
+- **Show the counterfactual.** Side-by-side with a vanilla model on the same task, same prompt, same context. Let the failure be the comparison's failure, not a re-prompted strawman.
+- **Constrain the comparison hard.** Every comparison shown publicly should have a reproducible run ID. If a viewer can't re-run it, cut the shot. The comparison's integrity *is* the moat; lose that and you've lost the thing you were trying to demonstrate.
+
+I find the marketing pull toward "make the contrast sharper" surprisingly strong even on a project I haven't shipped. Writing the fairness rule down before the edit, not during, is the only thing that holds the line.
+
+## The public/private boundary
+
+A small structural insight that has saved me hours of debate with myself:
+
+You don't have to choose between *fully open-source for credibility* and *fully proprietary for moat*. The interesting projects pick a boundary.
+
+Roughly:
+
+- **Public.** Harness, a representative subset of evaluation items, the demo, the technical report, the methods.
+- **Private.** The highest-value expert annotations, reviewer disagreement notes, real-user usage logs, the long tail of edge cases that took a domain expert to label correctly.
+
+Open source serves discovery and serves trust. The hardest-won data — the part that took expertise and time to produce — stays proprietary. Both halves reinforce each other; neither half on its own would.
+
+## The 15-vs-50 discipline
+
+One more anti-pattern I had to fight: the temptation to ship 50 mediocre evaluation items instead of 15 vetted ones.
+
+Fifty looks more impressive in a README. Fifteen, with clear ground truth, two-reviewer agreement, and reproducible scoring, is dramatically more useful — and dramatically harder to produce. The instinct to pad numbers comes from optimizing for the artifact (the README screenshot) instead of for what the artifact is supposed to *do* (let someone else reproduce a real reliability claim).
+
+I'm using a simple rule: **15 is the floor, and 15 is the cap.** No padding. If only fifteen items pass the bar by the deadline, ship fifteen.
+
+## What I'm planning to test
+
+The thing I want to know before committing more time:
+
+Can I get a real practitioner — someone actively doing this kind of work in their week — to use a rough version of the tool, on their own real task, three times in two weeks, with at least one of those reopens being self-initiated, and prefer it to a plain model on at least two of three?
+
+That's the tightest version I can write of "is this real." If yes, the rest of the project is worth building. If no, the honest move is to publish the framework as a research note and learn from why.
+
+I'd rather find out in ten days than in ninety.
+
+## Where this leaves me
+
+Still brainstorming, partly. The hard parts of the project aren't the architecture — they're the disciplines: the day-14 reopen test, the reviewer/user separation, the fairness rule on comparisons, the 15-vs-50 cap, the public/private boundary. The architecture follows from the disciplines. Skip the disciplines and you build the same thing everyone else is building, which is a wrapper that demos well and doesn't get reopened.
+
+If you've thought about any of this — especially if you've shipped something into a real expert workflow and watched whether it actually gets reused — I'd genuinely like to hear what you learned. The footer has the usual ways to reach me.
+
+— Bingran

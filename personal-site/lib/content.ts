@@ -149,6 +149,14 @@ export const papers: Paper[] = [
   },
 ];
 
+export function getAiProjectHighlights(limit = 5): Project[] {
+  return projects.filter((p) => p.track === "ai").slice(0, limit);
+}
+
+export function getAiPaperHighlights(limit = 2): Paper[] {
+  return papers.filter((p) => p.track === "ai").slice(0, limit);
+}
+
 export const education: Education[] = [
   {
     institution: "University of California, Berkeley",

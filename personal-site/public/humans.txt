@@ -1,0 +1,17 @@
+/* TEAM */
+
+   Bingran You (尤炳然)
+   Site:    https://bingran.ai
+   Email:   me@bingranyou.com
+   GitHub:  bingran-you
+   ORCID:   0000-0002-0316-2115
+   Lab:     Haeffner Lab, UC Berkeley
+
+
+/* SITE */
+
+   Last update:  2026/05/08
+   Standards:    HTML5, CSS3, TypeScript
+   Components:   Next.js 16, React 19, MDX, Tailwind CSS 4
+   Hosting:      Vercel
+   Source:       https://github.com/bingran-you/bingran-you

@@ -44,7 +44,7 @@ export const SKILL_CATEGORIES = [
 
 export type SkillCategory = (typeof SKILL_CATEGORIES)[number];
 
-function inferCategory(slug: string): SkillCategory {
+export function inferCategory(slug: string): SkillCategory {
   if (
     slug.startsWith("html-ppt") ||
     /^(simple-deck|replit-deck|frontend-slides|weekly-update|guizang-ppt|magazine-poster|pptx-html-fidelity-audit|social-carousel)$/.test(

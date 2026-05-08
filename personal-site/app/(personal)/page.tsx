@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { education, projects, papers } from "@/lib/content";
+import {
+  education,
+  getAiPaperHighlights,
+  getAiProjectHighlights,
+} from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
 import {
   AtomIcon,
@@ -9,8 +13,8 @@ import {
 } from "@/components/bio-icons";
 
 export default function Home() {
-  const aiHighlights = projects.filter((p) => p.track === "ai").slice(0, 5);
-  const paperHighlights = papers.filter((p) => p.track === "ai").slice(0, 2);
+  const aiHighlights = getAiProjectHighlights();
+  const paperHighlights = getAiPaperHighlights();
 
   return (
     <div className="space-y-16 sm:space-y-24">

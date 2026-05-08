@@ -1,15 +1,15 @@
 ---
 name: social-scraping-policy
-description: Use before any browser-driven (computer-use, Playwright, claude-in-chrome, MCP, scripted fetch) read or scrape against social platforms — especially X / Twitter and Xiaohongshu / RedNote. Defines (1) SAFE scraping rules — account choice, tool choice, pacing, fingerprint hygiene, session length, abort signals, the legal / ToS boundaries Bingran's accounts must stay inside; (2) the bingranyou.com /posts pipeline — paste a post URL → extract metadata → land a card with a thumbnail, including the recipes that actually work for X, Xiaohongshu, YouTube and Bilibili. Read this BEFORE clicking, navigating, or pulling data from these sites — even when the user only says "go look at X", "grab those posts", or "add this link to /posts."
+description: Use before any browser-driven (computer-use, Playwright, claude-in-chrome, MCP, scripted fetch) read or scrape against social platforms — especially X / Twitter and Xiaohongshu / RedNote. Defines (1) SAFE scraping rules — account choice, tool choice, pacing, fingerprint hygiene, session length, abort signals, the legal / ToS boundaries Bingran's accounts must stay inside; (2) the bingran.ai /posts pipeline — paste a post URL → extract metadata → land a card with a thumbnail, including the recipes that actually work for X, Xiaohongshu, YouTube and Bilibili. Read this BEFORE clicking, navigating, or pulling data from these sites — even when the user only says "go look at X", "grab those posts", or "add this link to /posts."
 ---
 
 # Social Scraping Policy & Operating Manual
 
-How to read / scrape X (Twitter) and Xiaohongshu (RedNote) without damaging Bingran's accounts, **and** how to turn a post URL into a card on bingranyou.com/posts. Three parts:
+How to read / scrape X (Twitter) and Xiaohongshu (RedNote) without damaging Bingran's accounts, **and** how to turn a post URL into a card on bingran.ai/posts. Three parts:
 
 1. **Why these platforms are different** — the threat model, so the rules below make sense.
 2. **The operating manual** — concrete, numeric defaults: account, tool, pacing, fingerprint, signals, backoff.
-3. **The /posts pipeline** — concrete recipes that take a post URL and land a card on bingranyou.com (data layout, per-platform extractors, thumbnail strategy, "paste-a-link" flow).
+3. **The /posts pipeline** — concrete recipes that take a post URL and land a card on bingran.ai (data layout, per-platform extractors, thumbnail strategy, "paste-a-link" flow).
 
 This skill is the gate AND the playbook. If you read it and still don't know what to do, stop and ask Bingran.
 
@@ -231,7 +231,7 @@ Stop and ask Bingran. The cost of a 60-second pause to confirm is much lower tha
 
 ---
 
-## Part 3 — The /posts pipeline (bingranyou.com/posts)
+## Part 3 — The /posts pipeline (bingran.ai/posts)
 
 Bingran's site has a **`/posts` page** that aggregates original posts from X, Xiaohongshu, YouTube and (eventually) Bilibili as cards in a masonry grid. When the user pastes a post URL with intent like "add this to /posts" / "grab these posts" / "把这条加进去" — this is what to do.
 

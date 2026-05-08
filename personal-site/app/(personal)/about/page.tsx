@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { education } from "@/lib/content";
 import { jsonLdScriptContent } from "@/lib/jsonld";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
@@ -12,11 +13,11 @@ export const metadata: Metadata = {
 const profilePageJsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
-  url: "https://bingranyou.com/about",
+  url: `${SITE_URL}/about`,
   mainEntity: {
     "@type": "Person",
     name: "Bingran You",
-    url: "https://bingranyou.com",
+    url: SITE_URL,
     jobTitle: "PhD Candidate",
     description:
       "PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.",

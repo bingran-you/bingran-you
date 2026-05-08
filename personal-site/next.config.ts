@@ -11,8 +11,20 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/:path*",
+        has: [{ type: "host", value: "bingranyou.com" }],
+        destination: "https://bingran.ai/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
         has: [{ type: "host", value: "www.bingranyou.com" }],
-        destination: "https://bingranyou.com/:path*",
+        destination: "https://bingran.ai/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.bingran.ai" }],
+        destination: "https://bingran.ai/:path*",
         permanent: true,
       },
     ];

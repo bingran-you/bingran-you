@@ -5,9 +5,8 @@ import {
   getAllPostsMetadata,
   getPostLastModified,
 } from "@/lib/posts";
+import { SITE_URL } from "@/lib/site";
 import { getAllSkills, getSkillsLastModified } from "@/lib/skills";
-
-const SITE_URL = "https://bingranyou.com";
 
 async function getFileLastModified(relativePath: string) {
   const { mtime } = await stat(

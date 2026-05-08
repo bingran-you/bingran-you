@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import type { Skill, SkillCategory } from "@/lib/skills";
+import { buildSkillsViewModel } from "@/lib/skills-browser-vm";
 
 type Props = {
   skills: Skill[];
@@ -16,36 +17,14 @@ export function SkillsBrowser({ skills, categories }: Props) {
   );
   const deferredQuery = useDeferredValue(query);
 
-  const q = deferredQuery.trim().toLowerCase();
-
-  const queryMatches = useMemo(() => {
-    if (!q) return skills;
-    return skills.filter(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.slug.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q) ||
-        (s.triggers?.some((t) => t.toLowerCase().includes(q)) ?? false),
-    );
-  }, [skills, q]);
-
-  const filtered = useMemo(() => {
-    if (activeCategory === "All") return queryMatches;
-    return queryMatches.filter((s) => s.category === activeCategory);
-  }, [queryMatches, activeCategory]);
-
-  const queryMatchesAcrossCategories =
-    q && activeCategory !== "All" ? queryMatches.length : 0;
-
-  const grouped = useMemo(() => {
-    const map = new Map<SkillCategory, Skill[]>();
-    for (const cat of categories) map.set(cat, []);
-    for (const s of filtered) {
-      if (!map.has(s.category)) map.set(s.category, []);
-      map.get(s.category)!.push(s);
-    }
-    return Array.from(map.entries()).filter(([, list]) => list.length > 0);
-  }, [filtered, categories]);
+  const vm = useMemo(
+    () =>
+      buildSkillsViewModel(skills, categories, {
+        query: deferredQuery,
+        activeCategory,
+      }),
+    [skills, categories, deferredQuery, activeCategory],
+  );
 
   return (
     <div className="space-y-8">
@@ -64,25 +43,22 @@ export function SkillsBrowser({ skills, categories }: Props) {
 
         <div className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 sm:-mx-1 sm:flex-wrap sm:overflow-visible sm:px-1 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <CategoryChip
-            label={`All · ${skills.length}`}
+            label={`All · ${vm.totalCount}`}
             active={activeCategory === "All"}
             onClick={() => setActiveCategory("All")}
           />
-          {categories.map((cat) => {
-            const count = skills.filter((s) => s.category === cat).length;
-            return (
-              <CategoryChip
-                key={cat}
-                label={`${cat} · ${count}`}
-                active={activeCategory === cat}
-                onClick={() => setActiveCategory(cat)}
-              />
-            );
-          })}
+          {categories.map((cat) => (
+            <CategoryChip
+              key={cat}
+              label={`${cat} · ${vm.categoryCounts.get(cat) ?? 0}`}
+              active={activeCategory === cat}
+              onClick={() => setActiveCategory(cat)}
+            />
+          ))}
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {vm.isEmpty ? (
         <div className="py-16 text-center text-sm text-[var(--muted)]">
           <p>
             No skills match{" "}
@@ -95,19 +71,19 @@ export function SkillsBrowser({ skills, categories }: Props) {
             ) : null}
             .
           </p>
-          {queryMatchesAcrossCategories > 0 ? (
+          {vm.queryMatchesAcrossCategories > 0 ? (
             <button
               type="button"
               onClick={() => setActiveCategory("All")}
               className="mt-3 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-foreground transition hover:border-foreground/30"
             >
-              Search all categories ({queryMatchesAcrossCategories})
+              Search all categories ({vm.queryMatchesAcrossCategories})
             </button>
           ) : null}
         </div>
       ) : (
         <div className="space-y-12">
-          {grouped.map(([cat, list]) => (
+          {vm.groups.map(([cat, list]) => (
             <section key={cat}>
               <div className="mb-4 flex items-baseline justify-between">
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">

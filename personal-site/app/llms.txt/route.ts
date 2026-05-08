@@ -1,7 +1,6 @@
 import { papers, projects } from "@/lib/content";
 import { getAllPostsMetadata } from "@/lib/posts";
-
-const SITE = "https://bingranyou.com";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 

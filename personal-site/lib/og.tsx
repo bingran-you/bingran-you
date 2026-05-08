@@ -85,7 +85,7 @@ export function renderOgImage({
         >
           <span>Bingran You · Berkeley, CA</span>
           <span style={{ fontFamily: "ui-monospace, Menlo, monospace" }}>
-            bingranyou.com
+            bingran.ai
           </span>
         </div>
       </div>

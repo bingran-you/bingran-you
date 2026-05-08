@@ -9,6 +9,7 @@
     "lint": "eslint",
     "skills:generate": "node scripts/generate-skills-data.mjs",
     "post:add": "node scripts/add-social-post.mjs",
+    "indexnow:ping": "node scripts/ping-indexnow.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

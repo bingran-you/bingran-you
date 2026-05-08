@@ -1,51 +1,52 @@
 export const metadata = {
-  title: "Running Projects with Zero Employees: What Worked, What Didn't",
+  title: "What I See Working — and Not — in Zero-Employee Operations",
   description:
-    "Field notes from running several side projects without hiring. Where agents bought leverage, where they didn't, and what I had to do myself anyway.",
+    "An honest read of where the zero-human and one-person company ideas are actually shipping in 2026, where they're partially demonstrated, and where they remain narrative. Anchored in Paperclip, Andon Market, Project Vend, ClawBank, Coinbase x402, and Medvi rather than my own claims.",
   date: "2026-05-08",
 };
 
-# Running Projects with Zero Employees
+# What I See Working — and Not — in Zero-Employee Operations
 
-Field notes from a year of running several side projects without hiring. None of these are billion-dollar companies. They are the right size to actually test whether the [zero-human company](/zero-human-company) idea survives contact with shipping software to real users.
+Most posts on this topic are either breathless hype or skeptical takedowns. The honest answer in mid-2026 is &quot;yes, but in a narrower band than the hype suggests, and with specific failure modes you can name.&quot; This is my read of where the [zero-human company](/zero-human-company) and [one-person company](/one-person-company) ideas are actually shipping, where they are partially demonstrated, and where they remain narrative.
 
-I am writing this because most posts on the topic are either breathless hype or skeptical takedowns. The honest answer in 2026 is &quot;yes, but in a narrower band than the hype suggests.&quot;
+I am anchoring this in the public reference points — Paperclip, Andon Market, Project Vend, ClawBank, Coinbase x402, AWS Bedrock AgentCore Payments, Medvi, Coinbase&apos;s one-person teams memo — rather than personal claims. Where I have direct opinion, I will mark it.
 
-## What worked
+## What is genuinely shipping
 
-**Content and SEO, fully.** Drafting, editing, publishing, internal linking, schema markup — all of it can be agent-driven with a strong style guide and an eval that catches voice drift and hallucinated facts. The SEO surface of every project I run is largely agent-shipped at this point. I review weekly; I do not write.
+**Single-product SaaS at the AI-native one-person company mode.** A founder running a small product with agentic content, SEO and GEO, first-line support, and most engineering. The Coinbase one-person teams memo (May 2026) is essentially the same idea inside a public company: combine engineer, designer, and PM into a single AI-native role. This is the most repeatable, well-understood mode in 2026.
 
-**First-line support, mostly.** A support agent with read access to the docs, write access to a structured ticket system, and a clear escalation path handles 70–80% of inbound questions on small products. The remaining 20% are real edge cases that benefit from a human eye, and that is the only place I personally touch tickets.
+**Newsletter, course, info-product, programmatic-SEO, and niche-directory businesses.** Agents handle drafting, ingestion, refresh, and operations; founder handles selection, voice, taste, and approvals. The cost structure does not look like a traditional business of comparable revenue.
 
-**Routine engineering, with caveats.** Bug fixes inside a well-tested module, small features behind feature flags, dependency upgrades — agents ship these reliably when the test suite is honest. The caveat: the agent layer is only as good as the test layer. Skimping on tests means the agent ships bad code confidently.
+**Live experiments where an LLM manages a real business with real money.** Anthropic&apos;s Project Vend put Claude in charge of a small office shop in 2025. Andon Labs&apos; Andon Market signed a three-year retail lease in San Francisco&apos;s Cow Hollow in 2026 and put an AI agent named Luna in charge of product, pricing, hours, and even hiring decisions. Humans handle physical execution; the management layer is software.
 
-**Operations and reporting.** Reconciling invoices, generating weekly metrics, drafting quarterly reviews. Boring, repetitive, well-bounded — exactly what agents are good at.
+**Agent-organisation control planes as a product category.** Paperclip&apos;s open-source positioning — agent org chart, budgets, heartbeats, governance, audit — has crystallised what the operating system for a zero-human company actually looks like. This was muddled twelve months ago; it is much clearer now.
 
-## What didn&apos;t work
+**Agentic payment rails.** Coinbase&apos;s x402 and AWS Bedrock AgentCore Payments give agents a way to discover services, pay micropayments, and continue execution under enterprise-grade governance, compliance, budget controls, and audit. This was the missing layer for any agent doing real commerce.
 
-**Anything with a deadline and external dependencies.** Coordinating with a podcast guest, scheduling a launch, chasing a partner&apos;s legal team — agents either get politely ignored or come across as off-key. I do these myself.
+## What is partially demonstrated
 
-**Cold sales and high-stakes negotiation.** Agents can warm leads. They cannot, in 2026, replace me on a sales call where a real human is deciding whether to trust the company. I have not seen anyone solve this honestly.
+**Agents self-incorporating and holding financial accounts.** ClawBank&apos;s Manfred has demonstrated registering a US LLC, obtaining an EIN, and operating against an FDIC-insured bank account and a crypto wallet through an API key. The reporting on it is careful: the change is operational, not regulatory. Ownership, tax, and liability rules still apply, and a responsible human or organisation is still on the hook.
 
-**Anything that required taste under uncertainty.** Picking the next product to build, deciding to kill a feature, choosing a brand voice from scratch — these are intent-layer decisions and the agent layer is bad at them by design. When I tried to push these down to agents, the output was confident and wrong. When I kept them at the intent layer, things worked.
+**Multi-agent organisations of meaningful scale.** Five to twenty agents working concurrently under a Paperclip-style control plane, with budgets and approvals, are demonstrably possible in 2026. Whether they hold up over months, in production, with adversarial users, is still being learned in public.
 
-**Long-horizon execution.** Anything that took more than a couple of days of agent runtime started drifting. The agent would forget context, recompute things it had already decided, or quietly change direction. State-of-the-art evaluation harnesses still measure agent reliability in tasks, not in quarters, and that gap is real in production.
+**A genuine one-person billion-dollar company.** Sam Altman has predicted it since 2024; Dario Amodei publicly predicted in 2026 that the first one might appear by year-end. The most-cited reference case, Medvi (Matthew Gallagher&apos;s GLP-1 telehealth business), reportedly hit $401M of 2025 sales — but later hired family and contractors, depended on third-party medical and pharmacy partners, and surfaced real failure modes (chatbot fabrications about pricing, unverifiable products, FDA letters, marketing-related complaints). It is a strong signal, not a clean proof.
 
-## What I had to do myself anyway
+## What is still narrative
 
-A short list, honestly:
+**A company that, in any defensible legal or fiduciary sense, runs without a responsible human or organisation.** Company registration, KYC/AML, banking, tax, contracts, and liability all assume an identifiable responsible party. The ClawBank-style experiments make agent ownership operationally smoother but do not change that constraint. &quot;Zero human&quot; in the strict sense is not what the working implementations actually claim; the more honest description is human-supervised autonomous operations.
 
-- Strategy and pricing decisions.
-- The first version of the brand voice (after which agents kept it consistent).
-- Customer calls with anyone whose contract was over a few thousand dollars.
-- Anything legal — contracts, disputes, compliance.
-- Hard kills. Agents will not voluntarily turn themselves off; the founder has to.
-- This blog. I write these myself. I think the trust hit from auto-generated personal essays is bigger than the time saved.
+**Stable multi-quarter agent execution without a control plane.** The frontier agent task horizon has grown impressively; the failure mode is no longer one-shot reasoning, it is drift over weeks, context loss across sessions, and inconsistent decisions as state accumulates. This is the bottleneck that Paperclip-style tooling is trying to remove, but it is not yet a solved problem.
 
-## The honest summary
+**Agent organisations operating in heavily regulated industries without structural human-in-the-loop requirements.** Finance, healthcare, legal — the human approval is in the regulation, not in the technology. AI helps the human decide faster; it does not remove the requirement.
 
-A zero-human company today is real for a specific shape of business: digital, repeatable, tolerant of single-digit error rates, with a founder willing to operate strictly at the intent layer. For that shape, the leverage is unreasonable — the cost structure does not look like a traditional business at all.
+## What I am personally watching
 
-For other shapes — regulated, deeply relational, physical — the term is aspirational. Worth tracking, not worth committing to as an operating model in 2026.
+This is opinion, marked as such.
 
-I plan to keep updating this page as the constraints move. The list of &quot;what didn&apos;t work&quot; gets shorter every quarter.
+I think the Paperclip-shaped product category — agent organisation control planes — is where the next year of compounding progress lives. Building one more coding agent is no longer the bottleneck; managing a small organisation of them inside policy is.
+
+I think the boundary between &quot;one-person company&quot; and &quot;zero-human company&quot; will keep moving toward the high-leverage end as control planes mature. The working answer for most founders in 2026 is the AI-native one-person company mode — founder as orchestrator — not the aspirational zero-human mode.
+
+I think the moats will move quickly. When every founder gets the same AI starter kit, the differentiators are vertical know-how, distribution and trust, proprietary data, taste, and compliance edges. &quot;I have AI tools&quot; is not a moat; &quot;I have AI tools and a thing the agents cannot regenerate&quot; is.
+
+I will keep updating this page as the constraints move. The list of &quot;still narrative&quot; gets shorter every quarter. None of it is shrinking to empty.

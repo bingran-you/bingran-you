@@ -7,28 +7,6 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "bingranyou.com" }],
-        destination: "https://bingran.ai/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.bingranyou.com" }],
-        destination: "https://bingran.ai/:path*",
-        permanent: true,
-      },
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.bingran.ai" }],
-        destination: "https://bingran.ai/:path*",
-        permanent: true,
-      },
-    ];
-  },
 };
 
 const withMDX = createMDX({

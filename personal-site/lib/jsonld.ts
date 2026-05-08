@@ -1,6 +1,7 @@
 import type { Paper, Project } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
 
-export const SITE_URL = "https://bingranyou.com";
+export { SITE_URL };
 export const SITE_NAME = "Bingran You";
 export const SITE_DESCRIPTION =
   "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.";

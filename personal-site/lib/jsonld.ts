@@ -198,6 +198,81 @@ export function blogPostingJsonLd(args: {
   } as const;
 }
 
+export function definedTermJsonLd(args: {
+  path: string;
+  name: string;
+  alternateName?: ReadonlyArray<string>;
+  description: string;
+  termCode?: string;
+}) {
+  const url = `${SITE_URL}${args.path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    "@id": `${url}#term`,
+    name: args.name,
+    ...(args.alternateName ? { alternateName: [...args.alternateName] } : {}),
+    description: args.description,
+    ...(args.termCode ? { termCode: args.termCode } : {}),
+    url,
+    inDefinedTermSet: {
+      "@type": "DefinedTermSet",
+      name: "Bingran You — Glossary",
+      url: `${SITE_URL}/`,
+    },
+  } as const;
+}
+
+export function articleJsonLd(args: {
+  path: string;
+  title: string;
+  description: string;
+  date: string;
+  modifiedTime?: string;
+  about?: string;
+  keywords?: ReadonlyArray<string>;
+}) {
+  const url = `${SITE_URL}${args.path}`;
+  const publishedTime = isoDate(args.date);
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${url}#article`,
+    headline: args.title,
+    name: args.title,
+    description: args.description,
+    datePublished: publishedTime,
+    dateModified: args.modifiedTime ?? publishedTime,
+    url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+    },
+    author,
+    publisher: author,
+    image: [OG_IMAGE_URL],
+    isAccessibleForFree: true,
+    inLanguage: "en",
+    ...(args.about ? { about: args.about } : {}),
+    ...(args.keywords ? { keywords: [...args.keywords] } : {}),
+  } as const;
+}
+
+export function breadcrumbJsonLd(
+  trail: ReadonlyArray<{ name: string; path: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((step, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: step.name,
+      item: `${SITE_URL}${step.path}`,
+    })),
+  } as const;
+}
+
 export function graphScriptContent(items: ReadonlyArray<object>) {
   const graph = {
     "@context": "https://schema.org",

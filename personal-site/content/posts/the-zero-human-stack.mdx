@@ -1,0 +1,54 @@
+export const metadata = {
+  title: "The 3-Layer Zero-Human Stack, in Practice",
+  description:
+    "Intent, agents, infrastructure — the three layers of a zero-human company, and the specific failure modes I keep hitting at each one.",
+  date: "2026-05-08",
+};
+
+# The 3-Layer Zero-Human Stack, in Practice
+
+Every working [zero-human company](/zero-human-company) I have built or watched closely has the same three layers. The labels are mine; the structure is not. Mixing the layers is the single most common reason a zero-human-flavored project quietly turns into a solopreneur grind with extra steps.
+
+This is the stack, top down, with the failure mode I keep hitting at each layer.
+
+## Layer 1 — Intent
+
+This is the founder. One person, full stop. The intent layer decides what the company does, who it serves, what it costs, what it stops doing. It owns capital allocation and irreversible decisions.
+
+It does **not** write tickets, post on social, ship code, or answer customer email. The moment it does, the company is no longer a zero-human company; it is a solopreneur business with a fancy CI pipeline.
+
+The failure mode: scope creep down. The founder gets bored, or impatient, or insecure about what the agents are shipping, and starts &quot;just&quot; doing things by hand. Within two weeks they are back to running operations. The fix is structural — give the agent layer enough authority that the founder cannot helpfully intervene at the line level.
+
+## Layer 2 — Agents
+
+This is the LLM-driven work. Each agent has four things: a scope, a budget (tokens, dollars, calls per day), an evaluation that tells you whether it is doing its job, and a clear handoff back to the intent layer when it gets stuck.
+
+Concrete example from my own work. The marketing agent for a small product I run has scope &quot;produce one short post per platform per week, in the brand voice, citing only verified facts.&quot; Budget is a fixed monthly token spend. Evaluation is a weekly score from a judge model on voice fidelity, factual grounding, and engagement. Handoff is a daily summary with anything the agent flagged as uncertain.
+
+The failure mode: scope creep up. Agents will quietly take on more than their scope if you let them. The marketing agent starts answering DMs. The support agent starts making product decisions. The eng agent starts changing infra. Without budgets and evals, the agent layer eats the intent layer.
+
+## Layer 3 — Infrastructure
+
+This is the boring deterministic plumbing. Stripe for payments. Vercel for hosting. Resend for email. Supabase or Postgres for state. GitHub Actions for CI. Observability for everything.
+
+This layer is what makes the agent layer cheap and reliable instead of slow and fragile. Every time I have caught an agent flailing — looping on a task, burning tokens, missing an obvious solution — the underlying problem was that the infrastructure layer was forcing the agent to reason about something a deterministic call should have handled.
+
+The failure mode: agents reasoning about plumbing. If your agent has to figure out which API key to use for which environment, you have an infrastructure problem, not an agent problem. Push as much determinism down as you can. The agent layer should be reasoning about strategy and language, not URLs and credentials.
+
+## How the layers talk
+
+Intent → Agent: through written briefs, OKRs, kill/keep decisions. Slow cadence. Days to weeks.
+
+Agent → Agent: through documented hand-offs in shared state (a task queue, a project board, a doc). Medium cadence. Hours to days.
+
+Agent → Infrastructure: through tool calls, with retries, idempotency, and observability. Fast cadence. Seconds to minutes.
+
+Infrastructure → Agent: through structured returns, not raw text. The agent should rarely be parsing a string when it could be reading a typed response.
+
+When the layers talk in their proper cadences, the company runs. When the founder is talking to infrastructure (logging into Stripe to refund someone) or the agents are talking to intent (asking the founder to make a low-stakes pricing call), one of the layers is broken.
+
+## What this is good for
+
+This stack is good for thinking about *where* a problem lives. New customer complaint? It&apos;s an agent-layer eval miss. Burning too much money? Probably an infrastructure-layer determinism gap, surfacing as agent thrash. Strategy drift? Intent layer hasn&apos;t made a decision and the agents are filling in.
+
+It is not a finished blueprint. The interesting work is in the connective tissue — the briefs, the evals, the handoffs — and that is where most of my engineering time on these projects actually goes.

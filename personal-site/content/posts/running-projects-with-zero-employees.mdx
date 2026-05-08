@@ -1,0 +1,51 @@
+export const metadata = {
+  title: "Running Projects with Zero Employees: What Worked, What Didn't",
+  description:
+    "Field notes from running several side projects without hiring. Where agents bought leverage, where they didn't, and what I had to do myself anyway.",
+  date: "2026-05-08",
+};
+
+# Running Projects with Zero Employees
+
+Field notes from a year of running several side projects without hiring. None of these are billion-dollar companies. They are the right size to actually test whether the [zero-human company](/zero-human-company) idea survives contact with shipping software to real users.
+
+I am writing this because most posts on the topic are either breathless hype or skeptical takedowns. The honest answer in 2026 is &quot;yes, but in a narrower band than the hype suggests.&quot;
+
+## What worked
+
+**Content and SEO, fully.** Drafting, editing, publishing, internal linking, schema markup — all of it can be agent-driven with a strong style guide and an eval that catches voice drift and hallucinated facts. The SEO surface of every project I run is largely agent-shipped at this point. I review weekly; I do not write.
+
+**First-line support, mostly.** A support agent with read access to the docs, write access to a structured ticket system, and a clear escalation path handles 70–80% of inbound questions on small products. The remaining 20% are real edge cases that benefit from a human eye, and that is the only place I personally touch tickets.
+
+**Routine engineering, with caveats.** Bug fixes inside a well-tested module, small features behind feature flags, dependency upgrades — agents ship these reliably when the test suite is honest. The caveat: the agent layer is only as good as the test layer. Skimping on tests means the agent ships bad code confidently.
+
+**Operations and reporting.** Reconciling invoices, generating weekly metrics, drafting quarterly reviews. Boring, repetitive, well-bounded — exactly what agents are good at.
+
+## What didn&apos;t work
+
+**Anything with a deadline and external dependencies.** Coordinating with a podcast guest, scheduling a launch, chasing a partner&apos;s legal team — agents either get politely ignored or come across as off-key. I do these myself.
+
+**Cold sales and high-stakes negotiation.** Agents can warm leads. They cannot, in 2026, replace me on a sales call where a real human is deciding whether to trust the company. I have not seen anyone solve this honestly.
+
+**Anything that required taste under uncertainty.** Picking the next product to build, deciding to kill a feature, choosing a brand voice from scratch — these are intent-layer decisions and the agent layer is bad at them by design. When I tried to push these down to agents, the output was confident and wrong. When I kept them at the intent layer, things worked.
+
+**Long-horizon execution.** Anything that took more than a couple of days of agent runtime started drifting. The agent would forget context, recompute things it had already decided, or quietly change direction. State-of-the-art evaluation harnesses still measure agent reliability in tasks, not in quarters, and that gap is real in production.
+
+## What I had to do myself anyway
+
+A short list, honestly:
+
+- Strategy and pricing decisions.
+- The first version of the brand voice (after which agents kept it consistent).
+- Customer calls with anyone whose contract was over a few thousand dollars.
+- Anything legal — contracts, disputes, compliance.
+- Hard kills. Agents will not voluntarily turn themselves off; the founder has to.
+- This blog. I write these myself. I think the trust hit from auto-generated personal essays is bigger than the time saved.
+
+## The honest summary
+
+A zero-human company today is real for a specific shape of business: digital, repeatable, tolerant of single-digit error rates, with a founder willing to operate strictly at the intent layer. For that shape, the leverage is unreasonable — the cost structure does not look like a traditional business at all.
+
+For other shapes — regulated, deeply relational, physical — the term is aspirational. Worth tracking, not worth committing to as an operating model in 2026.
+
+I plan to keep updating this page as the constraints move. The list of &quot;what didn&apos;t work&quot; gets shorter every quarter.

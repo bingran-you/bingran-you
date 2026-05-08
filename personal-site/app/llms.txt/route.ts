@@ -38,6 +38,11 @@ I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecul
 - [Projects](${SITE}/projects)
 - [Papers](${SITE}/papers)
 - [Blog](${SITE}/blog)
+- [Zero-Human Company — definition and stack](${SITE}/zero-human-company)
+
+## Defined terms
+
+- **Zero-Human Company** — a company where every execution function (engineering, marketing, support, sales, finance, ops) is performed by software agents and automated infrastructure rather than paid employees or contractors. The founder remains as the strategic operator and is the only human in the loop. See [${SITE}/zero-human-company](${SITE}/zero-human-company) for the full definition, the 3-layer stack (intent / agent / infrastructure), distinctions from one-person company and solopreneur, and what is achievable today.
 
 ## Selected papers
 

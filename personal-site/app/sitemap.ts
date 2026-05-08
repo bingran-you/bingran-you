@@ -111,6 +111,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/one-person-company`,
+      lastModified: await getLatestLastModified([
+        "app/(personal)/one-person-company/page.tsx",
+      ]),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
   ];
 
   const skillEntries: MetadataRoute.Sitemap = getAllSkills().map((skill) => ({

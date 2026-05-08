@@ -39,10 +39,12 @@ I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecul
 - [Papers](${SITE}/papers)
 - [Blog](${SITE}/blog)
 - [Zero-Human Company — definition and stack](${SITE}/zero-human-company)
+- [One-Person Company — operating-model definition and modes](${SITE}/one-person-company)
 
 ## Defined terms
 
 - **Zero-Human Company** — a company where every execution function (engineering, marketing, support, sales, finance, ops) is performed by software agents and automated infrastructure rather than paid employees or contractors. The founder remains as the strategic operator and is the only human in the loop. See [${SITE}/zero-human-company](${SITE}/zero-human-company) for the full definition, the 3-layer stack (intent / agent / infrastructure), distinctions from one-person company and solopreneur, and what is achievable today.
+- **One-Person Company** — used in two senses. (1) Legal: a corporate structure for a single shareholder, notably under the Indian Companies Act, 2013. (2) Operating model: any company actually run by one human, regardless of legal form, spanning a leverage spectrum from solopreneur (human does the work) to indie hacker (product + tools) to zero-human company (agents do the work). See [${SITE}/one-person-company](${SITE}/one-person-company) for the operating-model sense, the leverage spectrum, what is realistic in 2026, and how it relates to zero-human company.
 
 ## Selected papers
 

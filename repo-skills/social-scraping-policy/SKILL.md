@@ -253,13 +253,24 @@ personal-site/
   "id": "x-2052477417240031355",            // <platform>-<native-id>; primary key for dedupe
   "platform": "x",                          // "x" | "xiaohongshu" | "bilibili" | "youtube" | "linkedin" | "other"
   "url": "https://x.com/.../status/...",    // canonical post URL (with xsec_token for XHS)
-  "title": "...",                           // first-line / first-sentence preview
+  "title": "...",                           // optional preview text
   "description": "...",                     // optional, longer body
-  "thumbnail": "https://cdn.../...jpg",     // optional; absent → text-as-visual fallback
+  "thumbnail": "/posts-thumbs/...jpg",      // optional; LOCAL path for XHS, remote https for YouTube/Bilibili, absent for X
   "date": "2026-05-07",                     // YYYY-MM-DD; drives sort order
   "addedVia": "manual" | "auto"             // metadata only
 }
 ```
+
+**Per-platform shape** (what's actually present after the script runs):
+
+| Platform | id | url | date | title | description | thumbnail |
+|---|---|---|---|---|---|---|
+| `x` | ✅ `x-<digits>` | ✅ | ✅ | — | — | — |
+| `youtube` | ✅ `youtube-<vidId>` | ✅ | ✅ | ✅ | ✅ | ✅ remote `i.ytimg.com` |
+| `xiaohongshu` | ✅ `xhs-<noteId>` | ✅ | ✅ | ✅ | ✅ | ✅ **local** `/posts-thumbs/xiaohongshu/<id>.jpg` |
+| `bilibili` | ✅ `bilibili-BV...` | ✅ | ✅ | ✅ | ✅ | ✅ remote `i0.hdslb.com` |
+
+X is intentionally minimal — `react-tweet` fetches everything (text, author, avatar, media, tweet date) from the syndication API at render time, so the only field we record locally is the tweet id.
 
 ### 3.2 The script: `npm run post:add -- <url>`
 
@@ -280,7 +291,7 @@ Per-platform reality, what works server-side, what needs the browser:
 | YouTube | ✅ works | no | `https://www.youtube.com/oembed?url=...&format=json` (title, author, thumbnail) |
 | Bilibili | ✅ works | no | `https://api.bilibili.com/x/web-interface/view?bvid=BV...` (full JSON incl. pubdate) |
 | Xiaohongshu | ✅ works **with `xsec_token`** | no (token IS the auth) | the share URL responds to plain `curl` and serves `og:image` / `og:title` / `og:description` |
-| X / Twitter | ⚠️ partial | yes for media | `https://publish.twitter.com/oembed?url=...` returns text in `html`; **no thumbnail / no native auth-free thumb access** |
+| X / Twitter | ✅ id-only | no | parse `/status/(\d+)` from the URL — that's all the data we need |
 | LinkedIn | ⚠️ partial | yes | generic OG-tag scrape |
 
 Concrete per-platform notes:
@@ -299,28 +310,63 @@ The xsec_token is what XHS calls "share-link auth" — it's tied to the note ID,
 
 XHS bonus: the **first 8 hex chars of the note ID are a unix timestamp** — `Date(parseInt(noteId.slice(0,8), 16) * 1000)` gives you the post date without any extra request.
 
-**X / Twitter — the constrained one.** `publish.twitter.com/oembed` still serves the rendered tweet HTML without auth. The `html` field includes the body and a footer in the form `— <Name> (@handle) <Month> <Day>, <Year>` — strip the footer to extract date. Decode HTML entities (`&amp;`, `&mdash;`, `&hellip;`, `&#39;`). Strip `https://t.co/...` and `pic.twitter.com/...` from the body. **Server-side cannot fetch the tweet page** (login wall) — there is no auth-free path to media URLs.
+XHS thumbnail caveat: the `og:image` URL is signed with a timestamp (`/2026MMDDHHMM/...`) and **expires within hours**. The `add-social-post.mjs` script handles this — it downloads the image immediately into `public/posts-thumbs/xiaohongshu/<note-id>.jpg` and rewrites `thumbnail` to the local path. See § 3.4 for why and how.
 
-### 3.4 Thumbnail strategy — **never empty**
+**X / Twitter — the simple one.** No metadata fetch. The `extractX` function in the script just parses the tweet id from `status/(\d+)` and writes a 4-field stub: `{platform, id, url, date}`. Everything visible (text, author, avatar, embedded media, like/repost counts, original post date) is fetched at render time by `<Tweet id={id}>` from the `react-tweet` library hitting `https://cdn.syndication.twimg.com/tweet-result?id=<id>`. **Do not** restore the old `publish.twitter.com/oembed` path — it added 80 lines of HTML-entity decoding and footer-regex parsing for data that's now redundant. If `--date` isn't passed and the tweet was back-dated, sort order will be off until you edit the JSON.
 
-Goal: every card has visual content. The card component (`components/social-post-card.tsx`) handles two modes:
+### 3.4 Thumbnail strategy — **never empty, never broken**
 
-1. **Has thumbnail** → render `<img src={post.thumbnail}>`, with title + date below.
-2. **No thumbnail** → render the `description` (or `title`) as a **serif text quote** that fills the card's image area, with the platform icon in the corner as a watermark.
+Goal: every card has visual content, and that content survives forever (no broken images six months later).
 
-Mode 2 is what makes text-only X tweets feel intentional rather than broken. Don't try to make every X tweet have a real image — most don't, and faking it via random emoji/gradient backgrounds looks AI-slop. The serif quote IS the visual.
+The card component (`components/social-post-card.tsx`) routes by platform:
 
-**What we tried and rejected** (don't waste budget retrying these):
-- ❌ `claude-in-chrome` `screenshot save_to_disk` of each tweet — the saved file isn't filesystem-accessible from Bash. The MCP saves it for in-message display only.
-- ❌ JS-based DOM extraction of img URLs via `javascript_exec` — Chrome MCP's safety filter blocks anything that returns hrefs / cookie-shaped strings (`[BLOCKED: Cookie/query string data]`).
-- ❌ Headless Playwright/Puppeteer hitting X — login wall + § Part 1 anti-bot risk.
-- ❌ Server-side fetch of X tweet HTML — login wall.
+1. **`platform === "x"`** → render `<Tweet id={tweetId}>` from `react-tweet`. Server component, fetches from `cdn.syndication.twimg.com` at build/request time. No `posts.json` thumbnail involved. Deleted tweets degrade to a built-in `<TweetNotFound>` tombstone.
+2. **Has `thumbnail`** (other platforms) → `<img src={post.thumbnail}>` inside an aspect-ratio-locked container, with title + date below.
+3. **Has no thumbnail and not X** (rare; only manual `--platform other` entries) → render text as a serif quote that fills the image slot, with platform icon as watermark.
 
-**What works for thumbnails:**
-- YouTube → oembed `thumbnail_url`
-- Bilibili → API `pic` field
-- XHS → `og:image` from the share URL fetched server-side
-- X without media → text-as-visual (mode 2 above), no thumbnail field needed
+**Where the thumbnail comes from:**
+- **YouTube** → oembed `thumbnail_url` (e.g., `i.ytimg.com/vi/<id>/hqdefault.jpg`). Stable forever, leave remote.
+- **Bilibili** → API `pic` field (e.g., `i0.hdslb.com/...`). Stable, leave remote.
+- **Xiaohongshu** → 🚨 **download to local.** XHS CDN URLs are signed with a timestamp embedded in the path (`/2026MMDDHHMM/...`) and expire — leaving a `?` placeholder where the cover used to be. The `add-social-post.mjs` script downloads the `og:image` immediately to `public/posts-thumbs/xiaohongshu/<note-id>.jpg` (HTTP fetch with `Referer: https://www.xiaohongshu.com/` header — required, otherwise the CDN 403s) and rewrites `thumbnail` to `/posts-thumbs/xiaohongshu/<note-id>.jpg` so the page references the local copy. Total cost is ~135 KB per card.
+- **X** → no thumbnail; `<Tweet>` handles all media inline.
+
+**Why `react-tweet` for X (not the older text-as-visual path):**
+- Tweets that were "Post on X" stubs (script-extracted title was empty) now render the real tweet content.
+- Embedded media (images / videos / quoted tweets) shows up automatically.
+- Card heights become consistent within the masonry — no more alternating tall-text-card / short-tweet-stub.
+- Zero data to maintain in `posts.json`.
+
+**What we tried and rejected** (don't waste budget retrying):
+- ❌ `claude-in-chrome` `screenshot` / `zoom` of each XHS or X post — the in-page MCP overlay (a "Stop Claude" button) gets baked into the saved image. Cropping it out adds fragility. Use server-side `fetch` of the underlying CDN URL instead.
+- ❌ JS-based extraction of CDN URLs via Chrome MCP `javascript_tool` — its safety filter blocks any string that looks like a signed URL (`[BLOCKED: Cookie/query string data]`). Use `find` / `read_page` / DOM rect coordinates instead, or `fetch` the URL server-side.
+- ❌ Headless Playwright / Puppeteer hitting X or XHS while logged in — login wall + § Part 1 anti-bot risk on Bingran's account.
+- ❌ Restoring the `publish.twitter.com/oembed` extractor for X — react-tweet supersedes it. The 80 lines of footer-regex + entity decoding bought us no rendered value.
+
+### 3.4.5 Cross-browser layout stability — the masonry trap
+
+CSS columns + variable-height children + async-loading images = different layout in Chrome / Safari / Firefox. Three rules pin it down:
+
+1. **Aspect-ratio per platform**, set on the image's container, before the image loads:
+   ```ts
+   const THUMB_ASPECT = { youtube: "16 / 9", xiaohongshu: "4 / 5", bilibili: "16 / 10" };
+   ```
+   Reserves vertical space → no reflow when the image network arrives. `object-fit: cover` on the inner `<img>` handles cropping.
+2. **Triple-property break-inside avoidance** on every grid child:
+   ```css
+   .social-post-grid > * {
+     break-inside: avoid;
+     page-break-inside: avoid;
+     -webkit-column-break-inside: avoid;
+   }
+   ```
+   Old Safari needs the `-webkit-` prefix; old Firefox respects the `page-break-` legacy name better than the modern one.
+3. **react-tweet CSS overrides** (kill the lib's default 550px max-width and outer margin so the embed fills its column):
+   ```css
+   .social-tweet > div { margin: 0 !important; }
+   .social-tweet .react-tweet-theme { max-width: 100% !important; }
+   ```
+
+Together these three things turn a jagged masonry that reflows visibly on first paint into a stable grid that's identical in all three browsers.
 
 ### 3.5 The "paste a link" flow
 
@@ -328,22 +374,28 @@ This is the default path when the user pastes a single post URL.
 
 ```
 1. cd personal-site
-2. npm run post:add -- "<paste url here>"
+2. npm run post:add -- "<paste url here>"           # auto-detects platform from domain
 3. Read the printed JSON entry. Sanity check:
    - Is the platform right?
-   - Is the title actual content (not "Post on X" garbage)?
-   - Is the date plausible (not today's fallback when it shouldn't be)?
-   - Does the thumbnail URL load?
-4. If anything's off → re-run with --title / --date / --thumbnail overrides.
-   If extractor fundamentally can't get something (e.g., X media), edit posts.json by hand.
-5. npm run lint && npm run build      # verify
-6. Open localhost:3000/posts to spot-check the card
+   - Is the date plausible? (script defaults to today if extractor can't find one)
+   - For YouTube/Bilibili: does the remote thumbnail URL load?
+   - For Xiaohongshu: does `public/posts-thumbs/xiaohongshu/<id>.jpg` exist on disk?
+     (the script logs `[ok] cached thumbnail (<bytes>B) -> /posts-thumbs/...`)
+   - For X: only id+url+date — no other content; react-tweet renders the rest.
+4. If date is wrong → re-run with --date YYYY-MM-DD. Other --title / --description /
+   --thumbnail overrides are available but rarely needed for the four primary platforms.
+5. npm run lint && npm run build                    # verify; /posts is statically generated
+6. Open localhost:3000/posts to spot-check the card across viewport sizes
 7. git add personal-site/content/social/posts.json
+   git add personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg   # only for XHS
 8. git commit -m "personal-site: add post — <one-line summary>"
 9. git push + gh pr create + (if Bingran says ship) gh pr merge --squash
 ```
 
-Step 7 is intentionally narrow — only `posts.json`. Do NOT bulk-add unrelated regenerated files (skills.generated.json, public/skill-files/*.md auto-regenerate during `npm run dev`).
+Step 7 is intentionally narrow:
+- `posts.json` always
+- `public/posts-thumbs/xiaohongshu/<note-id>.jpg` for XHS only
+- Do NOT bulk-add unrelated regenerated files. `skills.generated.json` and `public/skill-files/*.md` auto-regenerate during `npm run dev` and belong to a different change.
 
 ### 3.6 The bulk-harvest flow (initial backfill / catch-up)
 
@@ -390,41 +442,42 @@ Older videos beyond the RSS window: must be added via `npm run post:add -- <watc
 ### 3.7 Common gotchas (real ones we hit)
 
 - **XHS bare `/explore/<id>` 404s** — always use the share URL with `xsec_token`. Profile-page hrefs include the token; copy them whole.
-- **HTML entities in X oembed** — handle `&mdash;`, `&amp;`, `&hellip;`, `&apos;`, `&nbsp;`, `&#39;`, numeric entities. Decode BEFORE the date-footer regex, not after.
-- **X t.co URLs** — strip from title and body. They're not media URLs, they're redirector hashes.
-- **X tweets that are pure media or pure links** — body becomes empty after stripping. Fall back to title `"Post on X"` rather than emitting a blank string.
-- **Date defaults** — if extractor fails to find a date, the script defaults to today. Always sanity-check old posts.
-- **`xsec_token` URL encoding** — the token contains `=` and `+`. Use `encodeURIComponent` when building the URL programmatically. The XHS server accepts both encoded and raw, but consistent encoding makes the JSON cleaner.
-- **`npm run dev` regenerates skills data** — don't `git add -A` or you'll commit `lib/skills.generated.json` and `public/skill-files/*.md` along with your post change. Stage explicit paths.
-- **YouTube RSS only returns ~15 entries** — fine for steady-state, miss anything older.
-- **X account isolation** — the `oembed` fetch is unauthenticated and doesn't touch Bingran's `@bingran_bry` session cookies. So the post:add script is account-safe even though browser-based X ops are not.
+- **XHS thumbnail 403 cross-origin** — even when the URL is fresh, fetching it from a non-XHS origin (or without a Referer header) returns 403. The script sets `Referer: https://www.xiaohongshu.com/`. If you need to download by hand, the same header makes `curl` work.
+- **XHS thumbnail expiry** — signed timestamp in the path; valid for hours, not days. Always cache locally on add. If you spot a `?` placeholder on `/posts`, the URL has rotted — re-add the post or copy a fresh share URL.
+- **Date defaults to today** — if extractor can't find a date (X always; XHS sometimes), the script writes today. Pass `--date YYYY-MM-DD` for back-dated entries, or sort order will be wrong.
+- **`xsec_token` URL encoding** — the token contains `=` and `+`. Use `encodeURIComponent` when building the URL programmatically. XHS server accepts both encoded and raw, but consistent encoding makes the JSON cleaner.
+- **`npm run dev` regenerates skills data** — don't `git add -A` or you'll commit `lib/skills.generated.json` and `public/skill-files/*.md` along with your post change. Stage explicit paths only.
+- **YouTube RSS only returns ~15 entries** — fine for steady-state monitoring, misses anything older. Use `npm run post:add` per URL for backfill.
+- **react-tweet build-time fetch** — `<Tweet>` calls the syndication API during `next build`. If the build server has no internet (rare in CI but possible), tweets fail to render. Vercel build env has internet; local builds offline will get tombstones.
+- **`react-tweet` light theme by default** — looks fine on the cream Berkeley palette, slightly off in dark mode. Wrap in `<div data-theme="dark">` based on `prefers-color-scheme` if it matters.
+- **Chrome MCP `[BLOCKED: Cookie/query string data]`** — the safety filter strips signed-URL strings from JS-tool returns. If you need a CDN URL, fetch the page server-side and parse `og:image` from `<meta>`, or use Chrome MCP `find` to get DOM hrefs (those return through a different path that isn't filtered).
+- **Account isolation for the script** — `add-social-post.mjs` only does anonymous server-side `fetch` (YouTube oembed, Bilibili API, XHS share URL, XHS image CDN). Doesn't touch Bingran's account cookies on any platform. § Part 2 risk applies only when a workflow uses `claude-in-chrome` against the live X / XHS UI.
 
 ### 3.8 Decision tree for "add this to /posts"
 
 ```
 incoming URL
-├── youtube.com / youtu.be       → npm run post:add -- <url>          ✅ 1 step
-├── bilibili.com / b23.tv        → npm run post:add -- <url>          ✅ 1 step
+├── youtube.com / youtu.be       → npm run post:add -- <url>           ✅ 1 step, remote thumb
+├── bilibili.com / b23.tv        → npm run post:add -- <url>           ✅ 1 step, remote thumb
 ├── xhslink.com / xiaohongshu.com
-│    ├── has xsec_token in URL   → npm run post:add -- <url>          ✅ 1 step
+│    ├── has xsec_token in URL   → npm run post:add -- <url>           ✅ 1 step, thumb auto-cached locally
 │    └── bare /explore/<id>      → ask Bingran for the share URL,
 │                                  OR open profile in claude-in-chrome and copy
 │                                  the token-bearing href                ⚠️ needs browser
-├── x.com / twitter.com
-│    ├── text-only or short      → npm run post:add -- <url>           ✅ 1 step (no thumb is fine)
-│    └── has media you want      → run post:add for text + manually
-│                                  edit posts.json with --thumbnail or
-│                                  curated text. Don't fight oembed.    ⚠️
+├── x.com / twitter.com          → npm run post:add -- <url>           ✅ 1 step (id-only; react-tweet renders the rest)
+│                                  Pass --date YYYY-MM-DD for back-dated tweets.
 ├── linkedin.com                 → npm run post:add -- <url>           ⚠️ generic OG, often thin
 └── anything else                → npm run post:add -- <url>           ✅ falls through to generic OG scrape
 ```
+
+For all four primary platforms (YouTube / Bilibili / XHS / X), the happy path is one command + `--date` if needed.
 
 ### 3.9 Anti-detection considerations specific to /posts work
 
 The `/posts` pipeline mostly stays out of § Part 2 risk because:
 
 - **Server-side `fetch` from add-social-post.mjs** uses no Bingran-account cookies. Doesn't count against any account's risk score. Free.
-- **YouTube oembed, Bilibili JSON, Twitter publish-oembed, XHS share URL** are unauthenticated public endpoints. ToS-fine for personal use.
+- **YouTube oembed, Bilibili JSON, XHS share URL, XHS image CDN, Twitter syndication (via react-tweet)** are unauthenticated public endpoints. ToS-fine for personal use.
 - The only browser-driven steps are the **bulk harvest** (§ 3.6). Apply § Part 2 budgets there: stay under 50 items / 10 min / 6 navs/min on X, under 30 / 8 / 4 on XHS. Use the search URL pattern (denser, fewer navs) rather than scrolling the whole profile feed.
 - **Don't rebuild the harvest just to "refresh" data.** New posts come in trickle; use the paste-a-link flow per post. Re-running a full harvest is the kind of pattern that flips a yellow signal.
 

@@ -82,7 +82,7 @@ const distinctions: Array<{ term: string; definition: string }> = [
   {
     term: "One-Person Company (OPC)",
     definition:
-      "A legal corporate structure (notably under Indian Companies Act, 2013) for a single shareholder. It is a legal form, not an operating model. A zero-human company is an operating model and can be incorporated as an OPC, an LLC, a C-corp, or anything else.",
+      "Used in two senses. (1) Legal: a corporate structure (notably under the Indian Companies Act, 2013) for a single shareholder. (2) Operating model: any company actually run by one human. A zero-human company is one mode of the operating-model sense — see /one-person-company for the full leverage spectrum.",
   },
   {
     term: "Solopreneur",
@@ -378,6 +378,15 @@ export default function ZeroHumanCompanyPage() {
           Further reading
         </h2>
         <ul className="space-y-2 text-base leading-relaxed">
+          <li>
+            <Link
+              href="/one-person-company"
+              className="underline hover:opacity-70"
+            >
+              One-Person Company — the broader category and leverage
+              spectrum
+            </Link>
+          </li>
           <li>
             <Link
               href="/blog/zero-human-vs-one-person-company"

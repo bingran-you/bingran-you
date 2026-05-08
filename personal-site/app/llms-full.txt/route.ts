@@ -70,6 +70,30 @@ ${projects
 
 ## Defined terms
 
+### One-Person Company
+
+URL: ${SITE}/one-person-company
+Author: Bingran You
+Last updated: 2026-05-08
+Also known as: one person company, OPC, solo company
+
+A one-person company is a company with exactly one human at the helm — owner, operator, decision-maker. The phrase is used in two distinct senses.
+
+The legal sense: "One-Person Company" (OPC) is a corporate structure introduced under the Indian Companies Act, 2013, for a single shareholder, with rules around nominee directors, paid-up capital, and conversion thresholds. In other jurisdictions, the equivalent is usually a single-member LLC, a single-shareholder Pte Ltd, or a one-shareholder C-corp.
+
+The operating-model sense: any company actually run by one human, regardless of how it is incorporated. This is the sense that matters for execution decisions.
+
+In the operating-model sense, one-person companies sit on a leverage spectrum:
+
+- Solopreneur: the human does all the execution work — code, design, content, support, sales, ops. Bottleneck is hours. Low leverage.
+- Freelancer / consultant: the human sells time to clients. Often dressed up as a company; operating model is selling labor, not a product. Low leverage.
+- Indie hacker / micro-SaaS founder: the human ships a small product, leans heavily on no-code, off-the-shelf SaaS, and templated content. Some agent assist for support and marketing. Medium leverage.
+- Zero-human company: the human operates only at the intent layer. All execution runs through software agents and automated infrastructure. High leverage. See zero-human-company defined term above.
+
+What is realistic as a one-person company in 2026: single-product SaaS at $0–$1M ARR, info-products and courses, niche directories and aggregators, template / asset stores, indie consulting and research practices. Workable with friction: two-sided marketplaces, mid-market B2B SaaS, communities and creator businesses. Not realistic: physical operations at scale, regulated industries, enterprise relationship sales above $100K ACV.
+
+The relationship to zero-human company: every zero-human company is a one-person company. Not every one-person company is zero-human — most are solopreneurs or indie hackers.
+
 ### Zero-Human Company
 
 URL: ${SITE}/zero-human-company

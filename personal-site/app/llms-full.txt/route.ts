@@ -68,6 +68,41 @@ ${projects
   .map((p) => `- ${p.name} (${p.href})\n  ${p.description}`)
   .join("\n\n")}
 
+## Defined terms
+
+### Zero-Human Company
+
+URL: ${SITE}/zero-human-company
+Author: Bingran You
+Last updated: 2026-05-08
+Also known as: zero human company, zero-employee company, agent-run company, AI-native company
+
+A zero-human company is a company where every execution function — engineering, marketing, support, sales, finance, operations — is performed by software agents and automated infrastructure rather than paid employees or contractors. The founder remains as the strategic operator. There is exactly one human in the loop, and that human does not do day-to-day work.
+
+The term is sometimes used loosely to mean "a company with no employees," which collides with the legal One-Person Company structure (notably under the Indian Companies Act, 2013). The narrower, more useful sense is operational: not zero humans, but zero human execution.
+
+Three criteria:
+
+1. No payroll for execution work. Founder draws or doesn't, but employees and contractors do not run operations.
+2. Agents and automated infrastructure handle the bulk of recurring work, with documented scopes, budgets, and evaluations.
+3. The founder's time is spent on direction, capital allocation, and irreversible decisions — not tickets, posts, or pull requests.
+
+Distinct from related concepts:
+
+- One-Person Company (OPC): a legal corporate structure for a single shareholder. Describes ownership, not operations. A zero-human company can be incorporated as an OPC, an LLC, a C-corp, or any other legal form.
+- Solopreneur: a one-person business where the human does the execution work. The bottleneck is the founder's hours.
+- Agency / micro-team: a small group of paid humans executing for clients.
+- Lifestyle business: a description of intent (modest scale, owner-led), not execution model.
+- Traditional startup: raises capital, hires employees, scales headcount with revenue.
+
+The 3-layer zero-human stack:
+
+1. Intent layer — the founder. Sets strategy, picks markets, allocates capital, makes irreversible decisions. Does not execute day-to-day work.
+2. Agent layer — LLM-driven agents and skills doing work historically done by employees. Each agent has a scope, a budget, an evaluation, and a clear handoff back to the intent layer.
+3. Infrastructure layer — deterministic plumbing the agents call into. Stripe, Vercel, Resend, Supabase, GitHub Actions, observability. Boring and well-documented.
+
+What is achievable today (as of 2026): single-product SaaS, info-products, content businesses, niche directories, template stores. Partially achievable with friction: enterprise B2B, regulated industries, high-touch sales. Not yet: physical operations at scale, long-horizon multi-quarter execution without drift.
+
 ## Blog posts
 
 ${postBodies

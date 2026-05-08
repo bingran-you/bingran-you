@@ -260,71 +260,21 @@ async function extractXiaohongshu(url) {
 }
 
 async function extractX(url) {
-  // Try Twitter publish oembed (still public, no auth)
-  try {
-    const data = await fetchJSON(
-      `https://publish.twitter.com/oembed?omit_script=1&url=${encodeURIComponent(url)}`,
-    );
-    const html = data.html || "";
-    // Decode entities and strip tags
-    const text = decodeHTMLEntities(html.replace(/<[^>]+>/g, " "))
-      .replace(/\s+/g, " ")
-      .trim();
-    // The oembed footer is "— <Name> (@handle) <Month> <Day>, <Year>"
-    // strip trailing handle/date footer to get clean tweet body
-    const footerRe =
-      /\s*[—\-]\s*[^()]+\([^)]+\)\s+([A-Z][a-z]+\s+\d{1,2},\s+\d{4})\s*$/;
-    let date = null;
-    const fm = text.match(footerRe);
-    let tweetBody = text;
-    if (fm) {
-      date = isoDate(fm[1]);
-      tweetBody = text.slice(0, fm.index).trim();
-    }
-    // Strip ALL t.co URLs (not just trailing) and pic.twitter.com refs
-    tweetBody = tweetBody
-      .replace(/https?:\/\/t\.co\/\S+/g, "")
-      .replace(/pic\.twitter\.com\/\S+/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-    const m = url.match(/status\/(\d+)/);
-    // Title: first sentence/line, capped at ~140 chars on a word boundary.
-    const firstChunk = tweetBody.split(/[\n]/, 1)[0].trim();
-    let title;
-    if (firstChunk.length >= 6 && firstChunk.length <= 140) {
-      title = firstChunk;
-    } else if (tweetBody.length >= 6) {
-      const cut = tweetBody.slice(0, 140);
-      const lastSpace = cut.lastIndexOf(" ");
-      title = (lastSpace > 60 ? cut.slice(0, lastSpace) : cut).trim() + "…";
-    } else {
-      title = "Post on X";
-    }
-    // Only add description if it materially extends the title.
-    let description;
-    if (tweetBody.length > title.length + 20 && tweetBody !== title) {
-      description = tweetBody;
-    }
-    return {
-      platform: "x",
-      id: m ? `x-${m[1]}` : null,
-      url,
-      title,
-      description,
-      thumbnail: undefined,
-      date,
-    };
-  } catch (e) {
-    console.warn(`[x] oembed failed (${e.message}); writing minimal stub`);
-    const m = url.match(/status\/(\d+)/);
-    return {
-      platform: "x",
-      id: m ? `x-${m[1]}` : null,
-      url,
-      title: "Post on X",
-      date: null,
-    };
-  }
+  // X cards on /posts render via react-tweet, which fetches everything
+  // (text, author, avatar, media, date) from the syndication API at
+  // request time. The only field we have to record locally is the
+  // tweet id so the renderer can find it. Date defaults to today; pass
+  // --date YYYY-MM-DD to override for back-dated entries.
+  const m = url.match(/status\/(\d+)/);
+  return {
+    platform: "x",
+    id: m ? `x-${m[1]}` : null,
+    url,
+    title: undefined,
+    description: undefined,
+    thumbnail: undefined,
+    date: null,
+  };
 }
 
 async function extractGeneric(url, platform = "other") {

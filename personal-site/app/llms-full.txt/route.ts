@@ -2,8 +2,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { papers, projects, education } from "@/lib/content";
 import { getAllPostsMetadata } from "@/lib/posts";
-
-const SITE = "https://bingranyou.com";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 

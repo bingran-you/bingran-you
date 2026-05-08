@@ -1,6 +1,6 @@
-# bingranyou.com
+# bingran.ai
 
-Personal site of [Bingran You](https://bingranyou.com) — built with Next.js + MDX, deployed on Vercel.
+Personal site of [Bingran You](https://bingran.ai) — built with Next.js + MDX, deployed on Vercel. Old domain `bingranyou.com` 301-redirects here.
 
 ## Stack
 

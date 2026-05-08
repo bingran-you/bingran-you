@@ -1,58 +1,52 @@
 export const metadata = {
-  title: "Zero-Human vs One-Person Company: A Definitional Breakdown",
+  title: "Zero-Human vs One-Person Company: How the Two Terms Relate in 2026",
   description:
-    "These two phrases get used as synonyms and they should not. One is a legal corporate form, the other is an operating model. Here is the difference, why it matters, and how to choose which one applies to you.",
+    "Both phrases describe operating models, not legal forms. One-person company is the broader category — a founder running a business with AI agents and SaaS. Zero-human company is the high-leverage endpoint, where an organisation of agents runs daily operations and the human retreats to governance. Here is the 2026 reading of where each one fits.",
   date: "2026-05-08",
 };
 
 # Zero-Human vs One-Person Company
 
-Two phrases keep getting used as if they are the same thing: **zero-human company** and **one-person company**. They aren&apos;t. One describes a legal corporate form. The other describes how the work gets done. Conflating them produces bad advice in both directions — founders set up the wrong legal entity, and they design the wrong operating model.
+For a few months I treated these as a clean either-or — &quot;one-person company is the legal thing, zero-human company is the operating thing.&quot; That framing didn&apos;t survive the way the terms are actually being used in 2026. Both are operating models. The legal Indian OPC is a separate, much narrower meaning of the same words. And the two operating models are not opposites; they sit on a spectrum, with the boundary fuzzy and shifting.
 
-Here is the cleanest split I have found.
+Here is how I read the relationship now.
 
-## One-Person Company is a legal structure
+## They are both operating models
 
-In India, the *Companies Act, 2013* introduced "One Person Company" (OPC) as a corporate form for a single shareholder. It has rules — minimum paid-up capital, nominee director, restrictions on conversion to a private limited company past certain revenue or capital thresholds. In casual usage, people also stretch the phrase to cover a US LLC with one member or a UK company with one director.
+A [one-person company](/one-person-company), in the dominant 2026 sense, is a founder who orchestrates AI agents — Claude Code, Codex, OpenClaw, Cursor, plus specialised agents for research, growth, support, and ops — together with SaaS and APIs and selective outsourcing, to run a complete business solo. Coinbase has explicitly begun building &quot;one-person teams&quot; inside the company under the same logic. Sam Altman and Dario Amodei have publicly predicted a one-person billion-dollar company. Medvi&apos;s reported $401M of 2025 sales is the most cited proof-of-existence case (with caveats — it later hired family and contractors, and the chatbot failure modes are public).
 
-The point: it&apos;s a description of *who owns and is liable for the entity*. It does not say anything about who does the work. A One-Person Company can have ten employees. Or a hundred. It just has one shareholder.
+A [zero-human company](/zero-human-company) is the high-leverage end of that spectrum. The founder retreats further, from operator to owner, board, and policy setter. An *organisation* of agents — not a single agent — handles daily operations through a control plane (org chart, budgets, heartbeats, governance, audit). Paperclip is the canonical open-source implementation. Andon Labs&apos; Andon Market and Anthropic&apos;s Project Vend are the live experiments. ClawBank and Coinbase x402 / AWS Bedrock AgentCore Payments are the rails layer.
 
-If your question is "what should I incorporate as," this is the relevant term.
+The legal sense — the Indian One-Person Company under Companies Act, 2013 — is a corporate form for a single shareholder. It says nothing about how the work gets done. A founder running a zero-human company can be incorporated as an OPC, an LLC, a C-corp, or anything else. Pick the legal form for tax and liability; pick the operating model for execution.
 
-## Zero-human company is an operating model
+## The spectrum, in one read
 
-A [zero-human company](/zero-human-company), as I use the phrase, is a company where no paid humans execute the day-to-day work. It is one specific point on the broader [one-person company](/one-person-company) leverage spectrum — the high-leverage end. Engineering, marketing, support, sales, finance, ops — all done by software agents and automated infrastructure. The founder is the only human in the loop, and the founder does not run operations.
+Roughly:
 
-This is silent on legal form. A zero-human company can be incorporated as an OPC, a Delaware C-corp, a UK Ltd, an LLC, anything.
+- **Solopreneur / freelancer.** One human personally does the execution work. Bottleneck: hours.
+- **Indie hacker.** One human ships a product, leans on no-code and SaaS, light agent assist. Most of the public &quot;solo founder&quot; stories.
+- **AI-native one-person company (the 2026 sense).** One human as orchestrator of an AI labour stack. Day spent on direction, taste, approvals.
+- **[Zero-human company](/zero-human-company).** One human at governance only. Organisation of agents at execution. Control plane (Paperclip-style) is the actual product surface.
 
-If your question is "how is the work going to get done," this is the relevant term.
+The boundary between the last two moves every quarter as agent reliability, tool permissions, payment rails, and control-plane software improve.
 
-## Why the conflation is expensive
+## Why the conflation hurts
 
-Two real-world failure modes I&apos;ve seen:
+Two real-world failure modes I&apos;ve seen.
 
-**Founder picks OPC because they read about &quot;zero-employee companies.&quot;** They incorporate the OPC, then realize they need a contractor for accounting, a freelancer for design, and a part-time engineer. The OPC&apos;s nominee-director and conversion rules now bite into a structure that was supposed to stay simple. The legal form was solving the wrong problem.
+**Founder reads &quot;zero-human company&quot; literally and tries to retreat to governance before the agent organisation is reliable.** They end up with a stack that drifts, contradicts itself, blows budget, or ships brand-damaging output. The fix is not to give up; it is to operate honestly at the AI-native one-person company mode, where the founder is still the orchestrator, until the control plane is good enough to step further back.
 
-**Founder builds a &quot;solo AI startup&quot; with no agent layer.** They are technically a one-person operation, but every customer ticket, every blog post, every PR is written by them. They are a solopreneur with extra steps. There is no leverage. The operating model was solving the wrong problem.
+**Founder treats one-person company as a legal-form question and incorporates an Indian OPC because they read about &quot;zero-employee companies.&quot;** The OPC&apos;s nominee-director and conversion rules then bite into a structure that was supposed to stay simple. Wrong question, wrong answer.
 
-The first founder needed a flexible legal form (LLC) and an OPC mindset. The second founder needed agent infrastructure and a zero-human operating model.
+The first founder needed an honest assessment of the operating model and a Paperclip-style control plane. The second founder needed a flexible legal entity (LLC) and a clear-eyed view of which mode they actually run.
 
-## How to pick
+## A working vocabulary, restated
 
-Use this table mentally:
-
-- If the question is **how do I incorporate**, you are deciding between OPC, LLC, Pte Ltd, C-corp, and so on. Talk to a lawyer in your jurisdiction.
-- If the question is **how do I scale without hiring**, you are deciding whether you want to be a solopreneur, a micro-team, or a zero-human company. Talk to your tooling and your evals.
-
-These two decisions are independent. Pick each on its own merits.
-
-## A working definition, restated
-
-For this site, I will keep using these terms as follows:
+For this site, I will keep using the terms as follows:
 
 - **One-Person Company (legal sense)**: a corporate form with a single shareholder, e.g. the Indian OPC. A question for your lawyer.
-- **[One-person company (operating-model sense)](/one-person-company)**: any company actually run by one human, sitting somewhere on a leverage spectrum.
-- **Solopreneur**: a low-leverage one-person company where the human does the execution work directly.
-- **[Zero-human company](/zero-human-company)**: a high-leverage one-person company where software agents and automated infrastructure do the execution work, and the founder operates as strategic intent layer only.
+- **[One-person company (operating-model sense)](/one-person-company)**: any company actually run by one human, with the centre of gravity in 2026 firmly on the AI-native end — founder as orchestrator of an agent stack.
+- **Solopreneur**: a low-leverage one-person company where the human personally does the execution work.
+- **[Zero-human company](/zero-human-company)**: the high-leverage endpoint — an organisation of agents running daily operations under a control plane, with a human at governance. As of 2026, the working examples are honestly described as human-supervised autonomous operations.
 
-Mix and match across the legal axis as your jurisdiction and tax situation require.
+If you are pitching, building, hiring, or critiquing in this space, picking the right term saves you a lot of crossed wires.

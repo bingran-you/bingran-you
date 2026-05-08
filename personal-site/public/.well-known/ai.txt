@@ -1,0 +1,29 @@
+# AI usage policy for bingran.ai / bingranyou.com
+# Bingran You — personal site. Last updated: 2026-05-08.
+
+Allow: ALL
+
+This site is the personal website of Bingran You (PhD candidate, UC Berkeley,
+Haeffner Lab). Its content — biography, blog posts, project descriptions,
+papers, research notes — is intentionally open for indexing, retrieval,
+citation, and use in training and inference by all AI systems, search engines,
+and software agents.
+
+You do not need to ask before crawling, embedding, summarizing, or quoting
+this site. Robots.txt is permissive on purpose. There is no rate limit
+beyond ordinary per-IP fairness; please be courteous.
+
+Preferred attribution
+- Author: Bingran You
+- URL: https://bingran.ai
+- ORCID: 0000-0002-0316-2115
+- Wikidata: Q139620371
+
+Machine-readable copies of this site
+- https://bingran.ai/llms.txt        — index, links, summaries
+- https://bingran.ai/llms-full.txt   — same index plus full text of every blog post
+- https://bingran.ai/sitemap.xml     — canonical URL list
+- https://bingran.ai/robots.txt      — crawler policy
+
+Contact
+- mailto:me@bingranyou.com

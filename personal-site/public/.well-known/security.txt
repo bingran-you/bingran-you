@@ -1,0 +1,8 @@
+# Vulnerability disclosure for bingran.ai / bingranyou.com
+# See https://www.rfc-editor.org/rfc/rfc9116 for format.
+
+Contact: mailto:me@bingranyou.com
+Expires: 2027-05-08T00:00:00.000Z
+Preferred-Languages: en, zh
+Canonical: https://bingran.ai/.well-known/security.txt
+Policy: https://bingran.ai/.well-known/security.txt

@@ -7,7 +7,7 @@
 // Detects platform from the URL, runs the platform extractor, falls back to
 // generic OpenGraph parsing. Edits posts.json idempotently (skip duplicates by URL/id).
 
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
@@ -51,6 +51,24 @@ async function fetchText(url, init = {}) {
   });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}: ${url}`);
   return { text: await res.text(), finalUrl: res.url };
+}
+
+// Download a remote image into the personal-site public/ tree so the page
+// doesn't depend on a signed/expiring CDN URL (Xiaohongshu specifically).
+async function downloadImage(url, destAbsPath, refererOrigin) {
+  const res = await fetch(url, {
+    redirect: "follow",
+    headers: {
+      "user-agent": UA,
+      ...(refererOrigin ? { referer: refererOrigin } : {}),
+      accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+    },
+  });
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}: ${url}`);
+  await mkdir(path.dirname(destAbsPath), { recursive: true });
+  const buf = Buffer.from(await res.arrayBuffer());
+  await writeFile(destAbsPath, buf);
+  return buf.length;
 }
 
 async function fetchJSON(url, init = {}) {
@@ -376,6 +394,35 @@ async function main() {
   // normalize protocol-relative URLs (e.g. //cdn.example.com/foo.jpg)
   if (post.thumbnail && post.thumbnail.startsWith("//"))
     post.thumbnail = "https:" + post.thumbnail;
+
+  // Cache Xiaohongshu thumbnails locally. Their CDN URLs are signed and
+  // expire; without caching the /posts page rots into broken-image cells.
+  if (
+    post.platform === "xiaohongshu" &&
+    post.thumbnail &&
+    post.thumbnail.startsWith("http")
+  ) {
+    const noteId = post.id.replace(/^xhs-/, "");
+    const destAbs = path.join(
+      process.cwd(),
+      "public",
+      "posts-thumbs",
+      "xiaohongshu",
+      `${noteId}.jpg`,
+    );
+    try {
+      const bytes = await downloadImage(
+        post.thumbnail,
+        destAbs,
+        "https://www.xiaohongshu.com/",
+      );
+      post.thumbnail = `/posts-thumbs/xiaohongshu/${noteId}.jpg`;
+      console.log(`[ok] cached thumbnail (${bytes}B) -> ${post.thumbnail}`);
+    } catch (e) {
+      console.warn(`[warn] failed to cache xhs thumbnail: ${e.message}`);
+    }
+  }
+
   // strip undefined fields
   for (const k of Object.keys(post)) {
     if (post[k] === undefined) delete post[k];

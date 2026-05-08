@@ -1,51 +1,12 @@
 import type { Metadata } from "next";
 import { education } from "@/lib/content";
-import { jsonLdScriptContent } from "@/lib/jsonld";
-import { SITE_URL } from "@/lib/site";
+import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "Bingran You — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion experiments in atomic, molecular and optical physics.",
   alternates: { canonical: "/about" },
-};
-
-const profilePageJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  url: `${SITE_URL}/about`,
-  mainEntity: {
-    "@type": "Person",
-    name: "Bingran You",
-    url: SITE_URL,
-    jobTitle: "PhD Candidate",
-    description:
-      "PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.",
-    affiliation: {
-      "@type": "Organization",
-      name: "Haeffner Lab, University of California, Berkeley",
-      url: "https://ions.berkeley.edu/",
-    },
-    knowsAbout: [
-      "Reliable AI Systems",
-      "AI Agents",
-      "Atomic, Molecular and Optical Physics",
-      "Trapped Ions",
-      "Integrated Photonics",
-      "Ion-Photon Interfaces",
-    ],
-    sameAs: [
-      "https://www.wikidata.org/wiki/Q139620371",
-      "https://x.com/bingran_bry",
-      "https://github.com/bingran-you",
-      "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en",
-      "https://orcid.org/0000-0002-0316-2115",
-      "https://huggingface.co/bingran-you",
-      "https://www.linkedin.com/in/bingran-you-775b4017b/",
-      "https://www.youtube.com/@BingranBRY",
-      "https://discord.gg/jsAnjCep",
-    ],
-  },
 };
 
 const facts = [
@@ -81,7 +42,7 @@ export default function AboutPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: jsonLdScriptContent(profilePageJsonLd),
+          __html: jsonLdScriptContent(profilePageJsonLd("/about")),
         }}
       />
 

@@ -38,10 +38,9 @@ const author = {
   url: SITE_URL,
 };
 
-export function personJsonLd() {
+function personEntity() {
   return {
-    "@context": "https://schema.org",
-    "@type": "Person",
+    "@type": "Person" as const,
     "@id": PERSON_ID,
     name: SITE_NAME,
     givenName: "Bingran",
@@ -73,6 +72,16 @@ export function personJsonLd() {
       name: "Haeffner Lab, University of California, Berkeley",
       url: "https://ions.berkeley.edu/",
     },
+    worksFor: {
+      "@type": "Organization",
+      name: "Haeffner Lab, University of California, Berkeley",
+      url: "https://ions.berkeley.edu/",
+      parentOrganization: {
+        "@type": "CollegeOrUniversity",
+        name: "University of California, Berkeley",
+        sameAs: "https://www.berkeley.edu/",
+      },
+    },
     knowsAbout: [
       "Reliable AI Systems",
       "AI Agents",
@@ -92,7 +101,14 @@ export function personJsonLd() {
       "https://www.youtube.com/@BingranBRY",
       "https://discord.gg/jsAnjCep",
     ],
-  } as const;
+  };
+}
+
+export function personJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    ...personEntity(),
+  };
 }
 
 export function websiteJsonLd() {
@@ -101,7 +117,7 @@ export function websiteJsonLd() {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     name: SITE_NAME,
-    alternateName: ["bingranyou.com", "bingran.you"],
+    alternateName: ["bingranyou.com"],
     url: SITE_URL,
     inLanguage: "en",
     author: { "@id": PERSON_ID },
@@ -121,8 +137,8 @@ export function profilePageJsonLd(path: "/" | "/about" = "/") {
     inLanguage: "en",
     isPartOf: { "@id": WEBSITE_ID },
     about: { "@id": PERSON_ID },
-    mainEntity: { "@id": PERSON_ID },
-  } as const;
+    mainEntity: personEntity(),
+  };
 }
 
 export function paperJsonLd(paper: Paper) {

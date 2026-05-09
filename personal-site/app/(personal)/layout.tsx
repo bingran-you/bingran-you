@@ -26,7 +26,7 @@ export default function PersonalLayout({
       <footer className="border-t border-[var(--border)]">
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-[var(--muted)]">
-            © {new Date().getFullYear()} Bingran You · Berkeley, CA
+            © {new Date().getFullYear()} Bingran You · <span lang="zh-Hans">尤炳然</span> · Berkeley, CA
           </p>
           <SocialLinks />
         </div>

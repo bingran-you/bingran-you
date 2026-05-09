@@ -5,12 +5,12 @@ import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Bingran You — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion experiments in atomic, molecular and optical physics.",
+    "Bingran You (尤炳然) — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion experiments in atomic, molecular and optical physics.",
   alternates: { canonical: "/about" },
 };
 
 const facts = [
-  "I am Bingran You, a PhD candidate in Applied Science & Technology at UC Berkeley, advised in the Haeffner Lab.",
+  "I am Bingran You (Chinese: 尤炳然), a PhD candidate in Applied Science & Technology at UC Berkeley, advised in the Haeffner Lab.",
   "I build reliable AI systems — agent infrastructure, evaluation harnesses, and applied AI products that need to behave under noisy real-world conditions.",
   "I run trapped-ion experiments in atomic, molecular and optical physics — integrated photonics for individual ion addressing, ion-photon interfaces, and 3D-printed micro ion traps for scalable hardware.",
   "Both tracks share one craft: turning complex, noisy systems into something that behaves on purpose.",

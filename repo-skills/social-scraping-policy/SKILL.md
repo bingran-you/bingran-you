@@ -13,6 +13,23 @@ How to read / scrape X (Twitter) and Xiaohongshu (RedNote) without damaging Bing
 
 This skill is the gate AND the playbook. If you read it and still don't know what to do, stop and ask Bingran.
 
+## Canonical index — code & docs that belong to this skill
+
+Everything you'd reach for when handling these tasks. The skill is the single source of truth; AGENTS.md just points here.
+
+| Asset | Where it lives | Why it isn't inside this skill dir |
+|---|---|---|
+| `add-social-post.mjs` — URL → metadata → JSON-append script | `personal-site/scripts/add-social-post.mjs` | Wired into `personal-site/package.json` as `npm run post:add`; moving it would break that workflow. Treat *this* SKILL.md as the docs of record; `--help` in the script is intentionally terse. |
+| `posts.json` — the data | `personal-site/content/social/posts.json` | It's the personal-site's content, not a skill artifact. |
+| `social-post-card.tsx` — render component | `personal-site/components/social-post-card.tsx` | Same — site code. |
+| Thumbnail bucket | `personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg` | Public site assets. |
+| Account / pacing / threat-model rules | this file, §§ Part 1–2 | — |
+| Per-platform extractor recipes & XHS fallback | this file, §§ 3.3–3.4 | — |
+| Trigger phrases & decision rule | this file, § 3 preamble + § 3.8 | — |
+| Process discipline ("ship complete, not half-done") | this file, § 3.10 below | — |
+
+If you find scraping-related know-how *anywhere else* in the workspace (random `memory/*.md`, an outdated CLAUDE.md note, a stray script in `social-media/`), the right move is: lift it into this skill, drop a one-line pointer at the original location, and tell Bingran in your status update. The skill stays canonical.
+
 ## When this skill applies
 
 Trigger if the task involves any of:
@@ -566,6 +583,24 @@ The `/posts` pipeline mostly stays out of § Part 2 risk because:
 - **YouTube oembed, Bilibili JSON, XHS image CDN, Twitter syndication (via react-tweet)** are unauthenticated public endpoints. ToS-fine for personal use. (XHS share-URL HTML *was* one too; as of 2026-05-07 it's blocking anonymous fetches — see § 3.3.)
 - The browser-driven steps are the **bulk harvest** (§ 3.6) and now the **per-post XHS fallback** when the script's server-side path 404s. Both touch Bingran's logged-in Chrome session, so apply § Part 2 budgets: stay under 50 items / 10 min / 6 navs/min on X, under 30 / 8 / 4 on XHS. A single fallback add (one navigate, one JS read, one image download) is well under any budget; don't queue ten of them in a tight loop.
 - **Don't rebuild the harvest just to "refresh" data.** New posts come in trickle; use the paste-a-link flow per post. Re-running a full harvest is the kind of pattern that flips a yellow signal.
+
+### 3.10 Process discipline — ship the whole thing, not half
+
+Bingran's standing rule for these tasks: **one PR contains the complete change.** No "I'll add the thumbnail in a follow-up", no "let me ship the JSON now and update the skill later." If you can't finish all of it, don't push yet.
+
+A complete /posts add is:
+
+1. ✅ The post entry in `personal-site/content/social/posts.json` (correct id, url, title, date, `addedVia: "manual"`).
+2. ✅ The thumbnail file present at `personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg` (for XHS) or the remote URL verified loadable (YouTube/Bilibili).
+3. ✅ The `thumbnail` field set in the JSON entry, pointing at #2.
+4. ✅ Diff = +8/-0 in `posts.json`, +1 binary thumbnail file. No regenerated `skills.generated.json`, no other unrelated files.
+5. ✅ Any new pitfall observed during this add → folded back into this SKILL.md *in the same PR*, not as a follow-up.
+6. ✅ Trigger surfaces still pointing at this skill — workspace `AGENTS.md` and `personal-site/AGENTS.md` need at most one short sentence each, and they should still match what this file says.
+7. ✅ PR description names what shipped + what was verified. Squash-merge after Vercel preview goes green.
+
+If step 5 produced changes (new fallback recipe, new gotcha), those changes go in **this file** — not in `memory/`, not in `MEMORY.md`, not in a workspace doc. The skill is canonical; everything else is a pointer.
+
+The reason: shipping in halves means future-you reads the half that landed and assumes the job is done. Bingran will read `posts.json`, see no thumbnail, and fix it himself. That's the failure mode this rule prevents.
 
 ---
 

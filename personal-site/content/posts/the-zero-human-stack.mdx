@@ -1,48 +1,82 @@
 export const metadata = {
-  title: "Reading the Zero-Human Stack Through Paperclip",
+  title: "Reading the Agent-Organisation Stack Through Paperclip",
   description:
-    "Paperclip's framing — agents as employees, the control plane as the company — is the cleanest way to see what an actually-running zero-human company needs. Here is how I read the stack today: intent at the top, an organisation of agents in the middle, deterministic rails at the bottom, and a control plane stitching them together.",
+    "Paperclip's framing — agents as employees, the control plane as the company — is the cleanest way to see what an actually-running zero-human / one-person company needs. Here is how I read the stack today, the specific primitives the control plane has to provide, and how Paperclip relates to the Codex App and Symphony patterns most founders meet first.",
   date: "2026-05-08",
 };
 
-# Reading the Zero-Human Stack Through Paperclip
+# Reading the Agent-Organisation Stack Through Paperclip
 
-The most useful framing for a [zero-human company](/zero-human-company) I have come across is the one Paperclip uses: *if OpenClaw is an employee, Paperclip is the company.* It cleanly separates the agent (the worker that does a task) from the company (the structure that gives the worker scope, budget, reporting line, and accountability). Once you draw that line, the stack stops being a folder of disconnected automations and starts looking like an org with a real operating system.
+The most useful framing I have come across for the new style of company is the one Paperclip uses: *if OpenClaw is an employee, Paperclip is the company.* It cleanly separates the agent (the worker that does a task) from the company (the structure that gives the worker scope, budget, reporting line, and accountability). Once you draw that line, the stack stops being a folder of disconnected automations and starts looking like an org with a real operating system.
 
-Here is how I read the stack today, with the layers and the connective tissue between them.
+This applies to whatever name you use — [zero-human company](/zero-human-company) or [one-person company](/one-person-company). The architecture is the same. What follows is how I read the stack today, with the specific primitives that make the agent organisation actually work.
 
 ## Three layers, one control plane
 
-**Intent / governance.** A single human (or a small board) at the top. Sets goals, allocates capital, signs contracts, owns liability, holds the legal entity, approves irreversible decisions. Slow cadence — days to quarters. This is the layer that does *not* shrink to zero in any honest 2026 implementation; legal personhood, fiduciary duty, and KYC/AML still require a responsible human or human-controlled organisation.
+**Intent and governance.** A single human (or a small board) at the top. Sets goals, allocates capital, signs contracts, owns liability, holds the legal entity, approves irreversible decisions. Slow cadence — days to quarters. This is the layer that does *not* shrink to zero in any honest 2026 implementation; legal personhood, fiduciary duty, KYC/AML, banking, and contract liability all still require a responsible human or organisation behind the system.
 
-**Agent organisation.** Multiple LLM-driven agents with named roles, reporting lines, scopes, monthly budgets, evaluations, and clear handoffs. A research agent, an engineering agent, a marketing agent, a support agent, a finance agent. Each with identity, tool permissions, budget, eval suite, and a heartbeat. This is the layer Paperclip and similar &quot;company OS&quot; tools model. The interesting work is here.
+**Agent organisation.** Multiple LLM-driven agents with named roles, reporting lines, scopes, monthly budgets, evaluations, and clear handoffs. A research agent. An engineering agent. A marketing agent. A support agent. A finance agent. Each one is a worker — usually a wrapper around something like Claude Code, Codex, OpenClaw, or Cursor — given a specific job and the tools to do it.
 
-**Tool and rail layer.** Deterministic infrastructure the agents call into — code execution, hosting, payments, email, CRM, observability — and the rails that let agents interact with the wider economy. GitHub, Vercel, Stripe, Resend, Supabase, observability stack. Plus emerging agent-specific rails: Coinbase x402 and AWS Bedrock AgentCore Payments for transactions, ClawBank-style entities for legal form, scoped API keys for permissions.
+**Tool and rail layer.** Deterministic infrastructure the agents call into — code execution, hosting, payments, email, CRM, observability — plus the rails that let the agent layer interact with the wider economy. GitHub, Vercel, Stripe, Resend, Supabase, observability stack. Plus emerging agent-specific rails: Coinbase x402 and AWS Bedrock AgentCore Payments for transactions, ClawBank-style entities for legal form, scoped API keys for permissions.
 
-The *control plane* is the connective tissue: agent identity and scoped permissions, an org chart with reporting lines, monthly budgets with hard stops, scheduled heartbeats, governance with human approval gates, an audit trail of every decision and tool call, a payments layer, durable memory. Paperclip&apos;s explicit goal is to make this surface a first-class object. Without it, the &quot;agent organisation&quot; is just a Slack channel of bots.
+The interesting layer is the middle one. The interesting question is what holds it together.
+
+## The control-plane primitives
+
+A working control plane provides a small, specific set of primitives. Paperclip is the cleanest open-source articulation of these, and the rest of the field is converging on the same list.
+
+**Agent identity.** Each agent has a name, a role, a set of tool permissions, and an API key with a scope. This is the line between &quot;a script that calls an LLM&quot; and &quot;an actor that the rest of the system can hold accountable.&quot;
+
+**Org chart.** Reporting lines between agents. Who escalates to whom. Who can hand work off to whom. The thing that turns five agents into a team rather than five concurrent processes.
+
+**Scheduled heartbeats.** Agents wake up on a schedule — daily, hourly, on a cron — to check work, take action, or report status. Without heartbeats, agents are passive: they only run when prompted, and the operating cadence collapses to whatever the founder remembers to trigger.
+
+**Budgets with hard stops.** Each agent has a monthly budget — tokens, dollars, calls — and the system enforces it. When an agent hits its limit, it stops; it does not negotiate. This is the primitive that prevents the most common runaway in production: an agent stuck in a retry loop or a coordination knot, burning cost overnight.
+
+**Governance and approvals.** Some classes of action — irreversible ones, customer-facing ones, anything financial above a threshold — route through a human approval. The control plane is the queue. Skipping this primitive is how Project Vend ended up confidently mispricing inventory and how a support bot ends up fabricating products.
+
+**Audit trail.** Every decision and tool call recorded, attributable to the agent that took it. This is what makes the system debuggable when something breaks — and what makes it auditable when a regulator, an investor, or a customer asks how a specific action happened.
+
+**Payment rails.** The agent organisation needs a way to spend money inside policy: pay for SaaS, buy data, settle micropayments to other agents. x402 / AgentCore Payments are the layer being commoditised right now.
+
+**Memory and institutional knowledge.** Durable state — customer history, decision logs, internal evals — that persists across agent sessions and survives an individual agent being swapped out. This is the &quot;company&quot;-ness of the company.
+
+Paperclip&apos;s public roadmap touches every one of these. Plugin systems for specific agent types, scheduled routines, agent reviews and approvals, multi-company isolation, audit features. Reading the roadmap is the cleanest way to see where the field is going next.
 
 ## Failure modes, one per layer
 
 **Intent layer — scope creep down.** The founder gets bored, impatient, or insecure about what the agents are shipping, and starts &quot;just&quot; doing things by hand. Within a couple of weeks they are running operations again. The fix is structural: give the agent organisation enough authority and observability that the founder cannot helpfully intervene at the line level, and route what remains through approvals rather than direct edits.
 
-**Agent layer — scope creep up.** Without enforced budgets and evals, the agent organisation eats the intent layer. The marketing agent starts answering DMs. The support agent starts making product decisions. The eng agent starts changing infra. The control-plane primitives — scope, budget hard stop, eval, escalation path — exist precisely to prevent this.
+**Agent layer — scope creep up.** Without enforced budgets and evals, the agent organisation eats the intent layer. The marketing agent starts answering DMs. The support agent starts making product decisions. The eng agent starts changing infra. Without clear scopes, each agent quietly expands to fill whatever space the others leave.
 
-**Rail layer — agents reasoning about plumbing.** If your agent has to figure out which API key to use for which environment, you have a rail problem, not an agent problem. Push as much determinism down as possible. Agents should reason about strategy and language, not URLs and credentials. This is also where the new agent-specific rails (x402, AgentCore Payments, scoped API keys, ClawBank-style legal entities) start to matter — they keep the agent inside policy by construction.
+**Rail layer — agents reasoning about plumbing.** If your agent has to figure out which API key to use for which environment, you have a rail problem, not an agent problem. Push as much determinism down as possible. Agents should reason about strategy and language, not URLs and credentials. This is also where the new agent-specific rails (x402, AgentCore Payments, scoped API keys, ClawBank-style entities) start to matter — they keep the agent inside policy by construction.
+
+## How Paperclip relates to Codex App and Symphony
+
+Most founders meet OpenAI&apos;s Codex App and the Symphony pattern before they meet Paperclip. It is worth understanding the relationship.
+
+Codex App is an interface for managing multiple coding agents in parallel — long-running tasks, structured handoffs, integration with around ninety third-party plugins. The Symphony pattern uses Linear as the orchestrator: agents pull issues from the task system, run autonomously in dedicated workspaces, and report back when done. The unit of management is the task, not the agent session.
+
+Symphony is the cleanest demonstration of the *first* shift: from chat to task system. It scales well for one role — engineering — and a handful of agents.
+
+Paperclip is the *next* shift: from one role to a multi-role organisation. Once a founder is running a marketing agent plus an eng agent plus a support agent plus a finance agent, a single Linear board is no longer the right surface. You want roles, reporting lines, role-specific budgets, role-specific evals, and a governance queue that spans roles.
+
+The two are not in conflict — most working setups use both. Symphony for the engineering board. Paperclip for the company. Codex sessions and Claude Code instances as the workers underneath both.
 
 ## How the layers talk
 
 Intent → Agent organisation: through written briefs, OKRs, quarterly bets, kill/keep decisions. Slow cadence. Days to weeks.
 
-Agent → Agent: through documented hand-offs in shared state — a task queue, an issue tracker, a doc. The Symphony pattern from OpenAI uses Linear as exactly this medium: agents pull issues, run autonomously, report back. Hours to days.
+Agent → Agent: through documented hand-offs in shared state — a task tracker, a issue queue, a doc. Symphony uses Linear for this; Paperclip generalises it across roles. Hours to days.
 
 Agent → Rails: through tool calls, with retries, idempotency, and observability. Seconds to minutes.
 
 Rails → Agent: through structured returns, not raw text. The agent should rarely be parsing a string when it could be reading a typed response.
 
-When the layers talk in their proper cadences, the company runs. When the founder is talking directly to rails (logging into Stripe to refund someone) or the agents are talking directly to intent (asking the founder to make a low-stakes pricing call), one of the layers is broken.
+When the layers talk in their proper cadences, the company runs. When the founder is talking directly to rails (logging into Stripe to refund someone) or the agents are talking directly to intent (asking the founder to make a low-stakes pricing call), one of the layers is broken — the boundary has leaked.
 
-## Why this framing matters
+## What this framing makes clear
 
-Most public discussion still treats &quot;agent&quot; and &quot;company&quot; as the same word. They are not. An agent is a worker; a company is the structure that lets a hundred workers act as one organisation. The Paperclip-style framing — agents as employees, control plane as the company — is the cleanest way I have seen to describe what an actually-running zero-human company needs that a folder of automations does not.
+Most public discussion still treats &quot;agent&quot; and &quot;company&quot; as the same word. They are not. An agent is a worker; a company is the structure that lets a hundred workers act as one organisation. The Paperclip-style framing — agents as employees, control plane as the company — is the cleanest way I have seen to describe what an actually-running zero-human / one-person company needs that a folder of automations does not.
 
-It also makes clear what is genuinely hard. Building one more agent is no longer the bottleneck. Building the structure that lets ten or twenty agents work concurrently, inside policy, with predictable cost and an auditable record — that is where the engineering hours go, and where the next year of progress in this space will come from.
+It also makes clear what is genuinely hard. Building one more agent is no longer the bottleneck. Building the structure that lets ten or twenty agents work concurrently, inside policy, with predictable cost and an auditable record — that is where the engineering hours go, and where the next year of compounding progress in this space will come from.

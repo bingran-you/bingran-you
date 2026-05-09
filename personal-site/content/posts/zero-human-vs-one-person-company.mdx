@@ -1,52 +1,42 @@
 export const metadata = {
-  title: "Zero-Human vs One-Person Company: How the Two Terms Relate in 2026",
+  title: "Zero-Human Company and One-Person Company: Two Names for the Same Shift",
   description:
-    "Both phrases describe operating models, not legal forms. One-person company is the broader category — a founder running a business with AI agents and SaaS. Zero-human company is the high-leverage endpoint, where an organisation of agents runs daily operations and the human retreats to governance. Here is the 2026 reading of where each one fits.",
+    "These phrases are near-synonyms. Both name the same 2024–2026 organisational pattern: a single founder running a complete business with an AI labour stack of agents, SaaS, and APIs. About 90% of the meaning overlaps; the difference is which side of the same idea each phrase emphasises.",
   date: "2026-05-08",
 };
 
-# Zero-Human vs One-Person Company
+# Zero-Human Company and One-Person Company: Two Names for the Same Shift
 
-For a few months I treated these as a clean either-or — &quot;one-person company is the legal thing, zero-human company is the operating thing.&quot; That framing didn&apos;t survive the way the terms are actually being used in 2026. Both are operating models. The legal Indian OPC is a separate, much narrower meaning of the same words. And the two operating models are not opposites; they sit on a spectrum, with the boundary fuzzy and shifting.
+I spent a few months treating these as two different concepts and trying to draw a clean line between them. That line does not exist in the way the terms are actually being used in 2026. Both phrases describe the same organisational shift. About 90% of the meaning overlaps. They are near-synonyms — one points at the human, the other points at the team — and treating them as opposites or as a spectrum of more-vs-less misses the point.
 
-Here is how I read the relationship now.
+This post is the corrected version of the framing.
 
-## They are both operating models
+## What both phrases name
 
-A [one-person company](/one-person-company), in the dominant 2026 sense, is a founder who orchestrates AI agents — Claude Code, Codex, OpenClaw, Cursor, plus specialised agents for research, growth, support, and ops — together with SaaS and APIs and selective outsourcing, to run a complete business solo. Coinbase has explicitly begun building &quot;one-person teams&quot; inside the company under the same logic. Sam Altman and Dario Amodei have publicly predicted a one-person billion-dollar company. Medvi&apos;s reported $401M of 2025 sales is the most cited proof-of-existence case (with caveats — it later hired family and contractors, and the chatbot failure modes are public).
+The same 2024–2026 pattern: a single founder running a complete business — product, marketing, sales, support, ops — with an AI labour stack that did not exist as a coherent thing before. Coding agents (Claude Code, Codex, OpenClaw, Cursor) handle engineering. Specialised research, growth, support, and operations agents handle the rest. SaaS and APIs are rails. Paperclip-shaped control planes manage the agents as an organisation.
 
-A [zero-human company](/zero-human-company) is the high-leverage end of that spectrum. The founder retreats further, from operator to owner, board, and policy setter. An *organisation* of agents — not a single agent — handles daily operations through a control plane (org chart, budgets, heartbeats, governance, audit). Paperclip is the canonical open-source implementation. Andon Labs&apos; Andon Market and Anthropic&apos;s Project Vend are the live experiments. ClawBank and Coinbase x402 / AWS Bedrock AgentCore Payments are the rails layer.
+The big question that triggered the new vocabulary was the same in both phrasings: *what does it mean to run a real business when the team is software?*
 
-The legal sense — the Indian One-Person Company under Companies Act, 2013 — is a corporate form for a single shareholder. It says nothing about how the work gets done. A founder running a zero-human company can be incorporated as an OPC, an LLC, a C-corp, or anything else. Pick the legal form for tax and liability; pick the operating model for execution.
+## Where each phrase puts the emphasis
 
-## The spectrum, in one read
+[One-person company](/one-person-company) puts the emphasis on the human. *One founder runs this.* It travels with stories about specific founders — Matthew Gallagher and Medvi, Sam Altman&apos;s and Dario Amodei&apos;s public predictions of the first one-person billion-dollar company, the Chinese policy programmes in Shenzhen, Hangzhou, and Beijing, Coinbase&apos;s &quot;one-person teams&quot; experiment inside a public company.
 
-Roughly:
+[Zero-human company](/zero-human-company) puts the emphasis on the team. *No employees execute the day-to-day work.* It travels with stories about agent-organisation infrastructure — Paperclip as the canonical open-source control plane, Andon Market&apos;s Luna running a physical SF retail store, Anthropic&apos;s Project Vend, ClawBank&apos;s Manfred self-incorporating an LLC, Coinbase x402 and AWS Bedrock AgentCore Payments as agentic commerce rails.
 
-- **Solopreneur / freelancer.** One human personally does the execution work. Bottleneck: hours.
-- **Indie hacker.** One human ships a product, leans on no-code and SaaS, light agent assist. Most of the public &quot;solo founder&quot; stories.
-- **AI-native one-person company (the 2026 sense).** One human as orchestrator of an AI labour stack. Day spent on direction, taste, approvals.
-- **[Zero-human company](/zero-human-company).** One human at governance only. Organisation of agents at execution. Control plane (Paperclip-style) is the actual product surface.
+These are two angles on the same picture. Pick whichever phrase fits the conversation; the underlying thing being described is the same.
 
-The boundary between the last two moves every quarter as agent reliability, tool permissions, payment rails, and control-plane software improve.
+## Why the conflation hurts when you treat them as opposites
 
-## Why the conflation hurts
+If you treat the two phrases as a spectrum (one-person at the low end, zero-human at the high end), you end up insisting on a difference that the actual usage does not support. Coinbase&apos;s &quot;one-person teams&quot; memo and Paperclip&apos;s &quot;zero-human company&quot; tagline are pointing at the same kind of thing. So are Sam Altman&apos;s solo-billion prediction and the Andon Market experiment. The difference is which side of the picture is in focus, not which side of a spectrum you are on.
 
-Two real-world failure modes I&apos;ve seen.
-
-**Founder reads &quot;zero-human company&quot; literally and tries to retreat to governance before the agent organisation is reliable.** They end up with a stack that drifts, contradicts itself, blows budget, or ships brand-damaging output. The fix is not to give up; it is to operate honestly at the AI-native one-person company mode, where the founder is still the orchestrator, until the control plane is good enough to step further back.
-
-**Founder treats one-person company as a legal-form question and incorporates an Indian OPC because they read about &quot;zero-employee companies.&quot;** The OPC&apos;s nominee-director and conversion rules then bite into a structure that was supposed to stay simple. Wrong question, wrong answer.
-
-The first founder needed an honest assessment of the operating model and a Paperclip-style control plane. The second founder needed a flexible legal entity (LLC) and a clear-eyed view of which mode they actually run.
+If you treat them as a binary opposition (one-person = founder still does work, zero-human = founder gone), you misread both ends. The founder is never gone in any 2026 implementation — even Andon Market explicitly has Andon Labs as the responsible organisation and human staff for physical work. And the founder of an &quot;ordinary&quot; one-person company in 2026 is rarely doing line-level execution either; the agents are.
 
 ## A working vocabulary, restated
 
-For this site, I will keep using the terms as follows:
+For this site, I will use the terms as follows:
 
-- **One-Person Company (legal sense)**: a corporate form with a single shareholder, e.g. the Indian OPC. A question for your lawyer.
-- **[One-person company (operating-model sense)](/one-person-company)**: any company actually run by one human, with the centre of gravity in 2026 firmly on the AI-native end — founder as orchestrator of an agent stack.
-- **Solopreneur**: a low-leverage one-person company where the human personally does the execution work.
-- **[Zero-human company](/zero-human-company)**: the high-leverage endpoint — an organisation of agents running daily operations under a control plane, with a human at governance. As of 2026, the working examples are honestly described as human-supervised autonomous operations.
+- **[One-person company](/one-person-company)** — the founder-emphasising name for the 2024–2026 pattern: one human orchestrating an AI labour stack to run a complete business. Travels with predictions, reference cases, founder workflow, policy context.
+- **[Zero-human company](/zero-human-company)** — the team-emphasising name for the same pattern: no employees execute the day-to-day work. Travels with agent-organisation control planes (Paperclip), live experiments (Andon Market, Project Vend), legal/financial rails (ClawBank), payment rails (x402, AgentCore Payments).
+- **Solopreneur** — a separate, older idea: one human personally does the execution work. Distinct because no agent layer; the bottleneck is hours.
 
-If you are pitching, building, hiring, or critiquing in this space, picking the right term saves you a lot of crossed wires.
+If you are pitching, building, hiring, or critiquing in this space, picking the right emphasis matters. Trying to police the line between &quot;one-person&quot; and &quot;zero-human&quot; does not — they are two names for the same thing.

@@ -40,6 +40,14 @@ function YouTubeIcon({ className }: IconProps) {
   );
 }
 
+function BilibiliIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className={className} fill="currentColor">
+      <path d="M18.223 3.086a1.25 1.25 0 0 1 0 1.768L17.08 5.996h1.17A3.75 3.75 0 0 1 22 9.747v7.5a3.75 3.75 0 0 1-3.75 3.75H5.75A3.75 3.75 0 0 1 2 17.247v-7.5a3.75 3.75 0 0 1 3.75-3.75h1.166L5.775 4.855a1.25 1.25 0 1 1 1.767-1.768l2.652 2.652c.079.079.148.165.205.257h3.21c.058-.092.126-.179.205-.257l2.652-2.652a1.25 1.25 0 0 1 1.768 0zM18.25 8.496H5.75a1.25 1.25 0 0 0-1.247 1.157L4.5 9.747v7.5a1.25 1.25 0 0 0 1.157 1.247l.093.003h12.5a1.25 1.25 0 0 0 1.247-1.157l.003-.093v-7.5a1.25 1.25 0 0 0-1.25-1.25zM8.25 11.083c.69 0 1.25.56 1.25 1.25v1.665a1.25 1.25 0 1 1-2.5 0v-1.665c0-.69.56-1.25 1.25-1.25zm7.5 0c.69 0 1.25.56 1.25 1.25v1.665a1.25 1.25 0 1 1-2.5 0v-1.665c0-.69.56-1.25 1.25-1.25z" />
+    </svg>
+  );
+}
+
 function DiscordIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden className={className} fill="currentColor">
@@ -92,6 +100,11 @@ const links = [
     href: "https://www.youtube.com/@BingranBRY",
     label: "YouTube",
     icon: YouTubeIcon,
+  },
+  {
+    href: "https://space.bilibili.com/85906410",
+    label: "Bilibili",
+    icon: BilibiliIcon,
   },
   {
     href: "https://discord.gg/jsAnjCep",

@@ -6,6 +6,10 @@
 //
 // Detects platform from the URL, runs the platform extractor, falls back to
 // generic OpenGraph parsing. Edits posts.json idempotently (skip duplicates by URL/id).
+//
+// Canonical docs (when this script returns a canary, when XHS login-walls,
+// account-safety budgets, full /posts pipeline): see the social-scraping-policy
+// skill at repo-skills/social-scraping-policy/SKILL.md.
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";

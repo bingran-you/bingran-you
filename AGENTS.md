@@ -153,17 +153,12 @@ Daily files are journal. `MEMORY.md` is workspace wisdom. `PRIVATE_MEMORY.md` is
 - Running deploys, touching production
 - Any action whose effect leaves this machine
 
-## Task-Specific Skill Triggers
+## Skills that own a domain
 
-Some workspace tasks have a **mandatory entry skill** — invoke it via the Skill tool *before* you start running commands or writing code. The skills exist because we already paid for the lessons; future-you doesn't need to repeat them.
+Some skills are the single source of truth for a domain — invoke them *first* and let them tell you what to do. Don't re-derive their lessons.
 
-| If the task involves … | Always invoke first |
-|---|---|
-| Reading / scraping / metadata-extraction from X (twitter), Xiaohongshu (xhslink, rednote), YouTube, Bilibili, LinkedIn — including any "add this to /posts" / "把这条加到个人网站" / pasted post URL with intent to land it as a card on bingran.ai/posts | **`social-scraping-policy`** — defines tool order (claude-in-chrome MCP, NOT Playwright/headless), pacing budgets, the `/posts` pipeline scripts (`personal-site/scripts/add-social-post.mjs`), and the XHS login-wall fallback recipe |
-| Anything that would `navigate` / `fetch` x.com, xiaohongshu.com, xhslink.com, rednote.com on Bingran's account | **`social-scraping-policy`** — same skill, account-safety side |
-| Writing or planning Xiaohongshu posts (creative side: copy, hashtags, cover design) | **`xiaohongshu-knowledge`** |
-
-Rule of thumb: if the task could risk Bingran's account *or* there's a known-good script you'd otherwise re-derive, the skill exists. Spending 10 seconds reading the skill saves 10 minutes re-discovering its lessons.
+- **`social-scraping-policy`** — anything touching X / Xiaohongshu / xhslink / YouTube / Bilibili / LinkedIn. Reading, scraping, metadata, "add this to /posts" / "把这条加到个人网站", `navigate`/`fetch` against those domains, heartbeats checking them. Owns scripts, fallbacks, account-safety budgets.
+- **`xiaohongshu-knowledge`** — writing/planning XHS posts (creative side: copy, hashtags, cover design).
 
 ## Task Delivery
 

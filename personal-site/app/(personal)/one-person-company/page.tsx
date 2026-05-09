@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   articleJsonLd,
@@ -12,17 +11,17 @@ const PATH = "/one-person-company";
 const PUBLISHED = "2026-05-08";
 
 const ONE_LINER =
-  "In 2026 the dominant sense of 'one-person company' is operational, not legal: a single human who orchestrates AI agents, SaaS, APIs, and selective outsourcing to run a complete business that previously took a small team. Sam Altman and Dario Amodei have publicly predicted the first one-person billion-dollar company. Coinbase has begun explicitly building 'one-person teams' inside the company. The legal Indian OPC is a separate, much narrower meaning.";
+  "A near-synonym for 'zero-human company.' Both phrases name the same 2024–2026 organisational shift: a single founder running a complete business — product, marketing, sales, support, ops — with an AI labour stack of agents, SaaS, and APIs that previously required a small team. One-person company emphasises the founder side; zero-human company emphasises the agent-organisation side. They describe the same thing from two angles.";
 
 export const metadata: Metadata = {
-  title:
-    "One-Person Company — A 2026 Definition, Founder Stack, and What's Actually Working",
+  title: "One-Person Company — Definition, Founder Stack, and What's Actually Working in 2026",
   description:
-    "A one-person company in 2026 is a founder who orchestrates AI agents (Claude Code, Codex, OpenClaw, Cursor), SaaS, and APIs to run a complete business — product, marketing, sales, ops — solo. This page tracks the current Bay Area and China usage, canonical cases like Medvi, the Coinbase 'one-person teams' memo, and how the term sits next to 'zero-human company.'",
+    "A one-person company is the 2024–2026 pattern of a single founder orchestrating AI agents (Claude Code, Codex, OpenClaw, Cursor) plus specialised research/growth/support/ops agents to run a complete business solo. A near-synonym for zero-human company. This page covers the founder stack, the AI-native pod inside large companies (Coinbase one-person teams, Shopify), reference cases (Medvi, Sam Altman and Dario Amodei predictions), the China policy programmes, where the moat is, and what is realistic in 2026.",
   alternates: { canonical: PATH },
   keywords: [
     "one person company",
     "one-person company",
+    "zero-human company",
     "one-person team",
     "AI-native pod",
     "AI-native company",
@@ -34,7 +33,7 @@ export const metadata: Metadata = {
     "Codex Symphony",
     "Claude Code",
     "OpenClaw",
-    "zero-human company",
+    "Paperclip",
     "Bingran You",
   ],
   openGraph: {
@@ -57,6 +56,7 @@ const definedTerm = definedTermJsonLd({
   name: "One-Person Company",
   alternateName: [
     "One Person Company",
+    "Zero-Human Company",
     "One-Person Team",
     "AI-Native Pod",
     "One-Person Unicorn",
@@ -69,17 +69,18 @@ const definedTerm = definedTermJsonLd({
 const article = articleJsonLd({
   path: PATH,
   title:
-    "One-Person Company — A 2026 Definition, Founder Stack, and What's Actually Working",
+    "One-Person Company — Definition, Founder Stack, and What's Actually Working in 2026",
   description: ONE_LINER,
   date: PUBLISHED,
   about: "One-Person Company",
   keywords: [
     "one person company",
+    "zero-human company",
     "Coinbase one-person teams",
     "Medvi",
     "Codex Symphony",
     "Claude Code",
-    "zero-human company",
+    "Paperclip",
   ],
 });
 
@@ -88,71 +89,16 @@ const breadcrumb = breadcrumbJsonLd([
   { name: "One-Person Company", path: PATH },
 ]);
 
-const modes: Array<{
-  label: string;
-  description: ReactNode;
-  leverage: string;
-}> = [
-  {
-    label: "Solopreneur / freelancer",
-    description:
-      "One human personally does the execution work — code, design, content, support, sales, ops. May resell time to clients. The bottleneck is the founder's hours.",
-    leverage: "Low. Revenue is bounded by working hours.",
-  },
-  {
-    label: "Indie hacker / micro-SaaS founder",
-    description:
-      "One human ships a small product, leans heavily on no-code, off-the-shelf SaaS, templated content, and lightweight agent assistance. Most public 'solo founder' stories belong here.",
-    leverage:
-      "Medium. Decoupled from hours via product, but still hands-on for most operational work.",
-  },
-  {
-    label: "AI-native one-person company (the 2026 sense)",
-    description: (
-      <>
-        One human as orchestrator of an AI labour stack: Claude Code,
-        Codex, OpenClaw, Cursor and similar tools as engineering labour;
-        research, growth, support, and ops agents on top; SaaS and APIs as
-        rails. The founder spends the day on direction, taste, and
-        approvals. Medvi&apos;s 2025 trajectory and the &quot;one-person
-        billion-dollar company&quot; predictions from Sam Altman and Dario
-        Amodei point at this mode.
-      </>
-    ),
-    leverage:
-      "High. Revenue is bounded by founder judgment, distribution, and agent reliability — not hours.",
-  },
-  {
-    label: "Zero-human company (aspirational endpoint)",
-    description: (
-      <>
-        One human at the governance layer; an organisation of agents
-        running daily operations. The high-leverage endpoint of the
-        spectrum. See the dedicated{" "}
-        <Link
-          href="/zero-human-company"
-          className="underline hover:opacity-70"
-        >
-          zero-human company definition
-        </Link>{" "}
-        for the control-plane anatomy and the canonical 2026 projects.
-      </>
-    ),
-    leverage:
-      "Maximal — but largely aspirational in 2026; the working examples are human-supervised autonomous operations, not legally autonomous companies.",
-  },
-];
-
 const founderStack: Array<{ surface: string; tools: string }> = [
   {
     surface: "Engineering labour",
     tools:
-      "Claude Code (Anthropic), Codex (OpenAI), OpenClaw, Cursor. Used as agentic coding workers; the founder operates as architect, reviewer, and orchestrator rather than line coder.",
+      "Claude Code (Anthropic), Codex (OpenAI), OpenClaw, Cursor. Used as agentic coding workers; the founder operates as architect, reviewer, and orchestrator rather than line coder. Anthropic explicitly frames Claude Code as shifting the engineer toward architecture, product thinking, and continuous orchestration.",
   },
   {
     surface: "Agent orchestration",
     tools:
-      "OpenAI's Codex App and Symphony (Linear-issue-as-orchestrator pattern), Paperclip-style company control planes for multi-agent setups, custom AGENTS.md / config files.",
+      "OpenAI's Codex App and the Symphony pattern (Linear issues as orchestrator — agents pull work, run autonomously, report back). Paperclip-style company control planes for multi-agent setups, with org chart, budgets, governance, and audit. Custom AGENTS.md / config files describing roles and policies.",
   },
   {
     surface: "Research, growth, content",
@@ -162,12 +108,12 @@ const founderStack: Array<{ surface: string; tools: string }> = [
   {
     surface: "Customer-facing operations",
     tools:
-      "Support agents over a docs and ticket layer; CRM automation; lifecycle email; payments and billing automation. Care needed — see Medvi's well-publicised support-bot failures.",
+      "Support agents over a docs and ticket layer; CRM automation; lifecycle email; payments and billing automation. Care needed — Medvi's first-line support reportedly fabricated drug pricing and products that did not exist; the failure modes at the customer surface are real.",
   },
   {
     surface: "Rails",
     tools:
-      "Stripe, Vercel, Supabase, Resend, GitHub Actions, observability. Increasingly: agent-specific rails like Coinbase x402, AWS Bedrock AgentCore Payments, scoped API keys for agent identity.",
+      "Stripe, Vercel, Supabase, Resend, GitHub Actions, observability. Increasingly: agent-specific rails like Coinbase x402 and AWS Bedrock AgentCore Payments for agentic commerce, scoped API keys for agent identity, ClawBank-style entities for legal form and bank accounts.",
   },
 ];
 
@@ -185,17 +131,17 @@ const realityChecks: Array<{ status: string; items: string[] }> = [
   {
     status: "Workable but with friction",
     items: [
-      "Two-sided marketplaces — agents handle most operations but trust events (disputes, fraud, legal) need a human.",
+      "Two-sided marketplaces — agents handle most operations but trust events (disputes, fraud) need a human.",
       "Mid-market B2B SaaS — agents handle inbound, but enterprise procurement still wants a human voice.",
       "Communities and creator businesses — automation works for backend; the front of the house is the person, by design.",
-      "Healthtech / fintech / regtech — Medvi's $401M run-rate proves scale is possible; FDA letters and chatbot hallucinations prove the compliance failure modes are real.",
+      "Healthtech / fintech / regtech — Medvi's $401M run-rate proves scale is possible; FDA letters and chatbot hallucinations prove the failure modes are real.",
     ],
   },
   {
     status: "Not realistic as a one-person operation in 2026",
     items: [
-      "Anything physical at scale — manufacturing, fulfilment, fleet, retail.",
-      "Heavily regulated industries where the human-in-the-loop requirement is structural, not technical.",
+      "Anything physical at scale — manufacturing, fulfilment, fleet, retail without significant operator support.",
+      "Industries where the human-in-the-loop requirement is structural rather than technical.",
       "Anything dependent on enterprise relationship sales above $100K ACV.",
     ],
   },
@@ -205,12 +151,12 @@ const intraCompany: Array<{ label: string; body: string }> = [
   {
     label: "Coinbase — 'one-person teams'",
     body:
-      "Brian Armstrong's May 2026 organisational memo announced Coinbase would become 'lean, fast, and AI-native,' reduce management layers, and explicitly experiment with 'one-person teams' — combining engineering, design, and product responsibilities into a single AI-native role. Inside a public company, this is the same idea as a one-person company: a single human directing a stack of AI agents to do the work of a small pod.",
+      "Brian Armstrong's May 2026 organisational memo announced Coinbase would become 'lean, fast, and AI-native,' reduce management layers, and explicitly experiment with 'one-person teams' — combining engineering, design, and product responsibilities into a single AI-native role. Inside a public company, this is the same pattern: a single human directing a stack of AI agents to do the work of a small pod.",
   },
   {
     label: "Shopify — 'justify why AI can't'",
     body:
-      "Tobi Lütke's 2025 internal memo required teams to explain why AI cannot accomplish a goal before requesting new headcount or resources, and folded AI use into performance and peer review. The cultural mechanism is the same: agentic capacity is the default substrate, headcount is a supplement.",
+      "Tobi Lütke's 2025 internal AI memo required teams to explain why AI cannot accomplish a goal before requesting new headcount or resources, and folded AI use into performance and peer review. The cultural mechanism is the same: agentic capacity becomes the default substrate, headcount becomes the supplement.",
   },
   {
     label: "Symphony / Linear-as-orchestrator",
@@ -223,7 +169,7 @@ const moats: Array<{ label: string; body: string }> = [
   {
     label: "Vertical know-how",
     body:
-      "Domain depth that lets the founder pick problems and judge agent output that generalist competitors cannot. This is the most defensible moat as AI tooling commoditises.",
+      "Domain depth that lets the founder pick problems and judge agent output that generalist competitors cannot. The most defensible moat as AI tooling commoditises.",
   },
   {
     label: "Distribution and trust",
@@ -243,38 +189,53 @@ const moats: Array<{ label: string; body: string }> = [
   {
     label: "Compliance edges",
     body:
-      "Where regulation is unsettled, the founder who reads and operates within the rules well has an advantage. Where regulation is settled, the founder who knows where the lines are has an advantage. Same skill, different game.",
+      "Where rules are unsettled, the founder who reads and operates within them well has an advantage. Where rules are settled, the founder who knows where the lines are has an advantage. Same skill, different game.",
+  },
+];
+
+const policyProgrammes: Array<{ city: string; body: string }> = [
+  {
+    city: "Shenzhen",
+    body: "Released the 'AI OPC entrepreneurship ecosystem action plan, 2026–2027' in January 2026, integrating talent, industry support, compute, models, corpora, and capital around solo AI founders.",
+  },
+  {
+    city: "Hangzhou",
+    body: "The 'one-person unicorn' programme, started September 2025, reportedly received over 1,300 applications and selected 32 one-person companies into a clustered community.",
+  },
+  {
+    city: "Beijing (Haidian)",
+    body: "Ran the 'Single-Person Army: AI-era One-Person Company (OPC) Founder Accelerator' in March 2026 — covering compliance, AI trends, monetisation, finance, personal IP, and customer acquisition.",
   },
 ];
 
 const faq: Array<{ q: string; a: string }> = [
   {
     q: "What is a one-person company in 2026?",
-    a: "In the dominant 2026 sense, a one-person company is a single human who orchestrates AI agents, SaaS, and APIs to run a complete business — product, marketing, sales, support, ops. The founder is the operator and orchestrator; the execution work has shifted to software. Tools like Claude Code, Codex, OpenClaw, and Cursor handle engineering; specialised agents handle growth, content, support, and operations. There is also a narrower legal sense — see the next question — but it is no longer the dominant meaning.",
+    a: "A single founder running a complete business — product, marketing, sales, support, ops — with an AI labour stack: Claude Code, Codex, OpenClaw, Cursor as engineering workers; specialised research, growth, support, and operations agents on top; SaaS and APIs as rails. The founder is the orchestrator. The agents are the team. The bottleneck shifts from founder hours to founder judgment and agent coordination.",
   },
   {
-    q: "What about the legal 'One-Person Company' under Indian Companies Act, 2013?",
-    a: "It is a corporate form for a single shareholder, with rules around nominee directors and conversion thresholds. In other jurisdictions the equivalent is a single-member LLC, a single-shareholder Pte Ltd, or a one-shareholder C-corp. Pick a legal form for tax and liability reasons. Pick an operating model for execution reasons. The two questions are independent.",
+    q: "Is this the same as a zero-human company?",
+    a: "Yes, in practice. Both phrases describe the same 2024–2026 shift. One-person company emphasises the founder side ('one human runs this'); zero-human company emphasises the agent-organisation side ('the company runs without employees'). About 90% of the meaning overlaps and the terms are used interchangeably in tech contexts. See the dedicated zero-human company page for the agent-organisation control-plane angle.",
   },
   {
     q: "What is a 'one-person team' inside a larger company?",
-    a: "An AI-native pod: one human combining responsibilities that previously required several roles (engineer, designer, PM, marketer) by using AI agents to fill the gaps. Coinbase announced this experiment publicly in May 2026; Shopify's 2025 AI memo created the cultural conditions for it. The mechanism is the same as a one-person company; the legal entity is just the parent organisation.",
+    a: "An AI-native pod: one human combining responsibilities that previously required several roles (engineer, designer, PM, marketer) by using AI agents to fill the gaps. Coinbase announced this experiment publicly in May 2026; Shopify's 2025 AI memo created the cultural conditions for it. Same mechanism as a one-person company; the legal entity is just the parent organisation.",
   },
   {
     q: "Has anyone actually built a billion-dollar one-person company?",
-    a: "Not yet, by mid-2026. The widely-cited reference case is Medvi (Matthew Gallagher's GLP-1 telehealth business): roughly $401M of 2025 sales, built with about a dozen AI tools and a budget reportedly around $20K to start. But Medvi later hired family and contractors, depended on third-party medical and pharmacy partners, and surfaced the failure modes — chatbot hallucinations, FDA warnings, marketing complaints — that the optimistic version of the story tends to omit. Sam Altman and Dario Amodei have publicly predicted a true one-person billion-dollar company; as of mid-2026 the prediction has not been validated.",
+    a: "Not yet, by mid-2026. The widely-cited reference case is Medvi, Matthew Gallagher's GLP-1 telehealth business: roughly $401M of 2025 sales, built with about a dozen AI tools and a budget reportedly around $20K to start. Medvi later hired family and contractors, depended on third-party medical and pharmacy partners, and surfaced real failure modes — chatbot fabrications, FDA warnings, marketing-related complaints — that the optimistic version of the story tends to omit. Sam Altman has predicted a one-person billion-dollar company since 2024; Dario Amodei in 2026 publicly predicted the first might appear by year-end. As of mid-2026 the prediction has not been validated.",
   },
   {
-    q: "How does a one-person company differ from a zero-human company?",
-    a: "They sit on the same spectrum, with the boundary fuzzy and shifting. A one-person company has a human as operator and orchestrator; a zero-human company tries to push the human further back, to governance and policy, with an organisation of agents running daily operations. Most live examples in 2026 are somewhere on the spectrum rather than at either end. The dedicated zero-human company page covers the control-plane anatomy and the canonical projects (Paperclip, Andon Market, ClawBank, x402).",
+    q: "Where is the moat?",
+    a: "Once the agent stack is commoditised, the differentiators are vertical know-how (domain depth), distribution and trust (audience, brand, platform access), proprietary data and context, taste (the judgment between plausible agent outputs), and compliance edges. 'I have AI tools' is not a moat — every competitor will have those by default.",
   },
   {
-    q: "Where is the moat for an AI-native one-person company?",
-    a: "Once the agent stack is commoditised, the differentiators are vertical know-how (domain depth), distribution and trust (audience, brand, platform access), proprietary data and context, taste (the judgment between plausible agent outputs), and compliance edges. The 'I have AI tools' part is not a moat — every competitor will have those by default.",
+    q: "What does the policy context look like in China?",
+    a: "China has the most explicit policy support for AI-era one-person companies. Shenzhen released its 'AI OPC entrepreneurship ecosystem action plan, 2026–2027' in January 2026. Hangzhou's 'one-person unicorn' programme reportedly received over 1,300 applications since September 2025. Beijing's Haidian district ran a one-person company founder accelerator in March 2026.",
   },
   {
-    q: "What is the policy context — China, Shenzhen, Beijing, Hangzhou?",
-    a: "China has explicitly begun policy support for AI-era one-person companies. Shenzhen released the 'AI OPC entrepreneurship ecosystem action plan, 2026–2027' in January 2026. Hangzhou's 'one-person unicorn' programme reportedly received over 1,300 applications since September 2025. Beijing's Haidian district ran an OPC founder accelerator in March 2026 covering compliance, AI trends, monetisation, finance, personal IP, and customer acquisition. The phrase carries policy weight in China that it does not yet carry elsewhere.",
+    q: "What goes wrong in practice?",
+    a: "Agent hallucinations at customer-facing surfaces — Medvi's first-line support reportedly fabricated pricing and products. Long-horizon drift across days and weeks. Coordination collapse when ten agents work in parallel without a control plane. Cost blow-ups without enforced budgets. Compliance gaps where structural human-in-the-loop is required.",
   },
 ];
 
@@ -309,68 +270,71 @@ export default function OnePersonCompanyPage() {
 
       <section className="space-y-6">
         <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-          Two senses of the phrase, in order of current usage
+          Same shift, two names
         </h2>
         <div className="space-y-4 text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
           <p>
-            <strong className="text-foreground">
-              The operating-model sense (dominant, 2026).
-            </strong>{" "}
-            A founder who uses AI agents — Claude Code, Codex, OpenClaw,
-            Cursor and the specialised agents on top of them — together
-            with SaaS and APIs and selective outsourcing to run a complete
-            business. The founder is the orchestrator. The agents are the
-            team. This is the sense that travels with phrases like{" "}
-            <em>one-person team</em>, <em>AI-native pod</em>,{" "}
-            <em>one-person unicorn</em>, and <em>solo founder</em> in 2026
-            Bay Area and Chinese policy discourse.
+            One-person company and{" "}
+            <Link
+              href="/zero-human-company"
+              className="underline hover:opacity-70"
+            >
+              zero-human company
+            </Link>{" "}
+            are near-synonyms in 2026. They both name the organisational
+            pattern that crystallised once frontier coding agents (Claude
+            Code, Codex, OpenClaw, Cursor) and a layer of specialised
+            research / growth / support / ops agents made it practical for
+            a single founder to run a complete business. About 90% of the
+            meaning overlaps; in tech contexts the two phrases are used
+            interchangeably.
           </p>
           <p>
-            <strong className="text-foreground">
-              The legal sense (background).
-            </strong>{" "}
-            &quot;One-Person Company&quot; (OPC) is a corporate structure
-            under the Indian Companies Act, 2013, for a single shareholder,
-            with specific rules around nominee directors and conversion
-            thresholds. In other jurisdictions the equivalent is a
-            single-member LLC, a single-shareholder Pte Ltd, or a
-            one-shareholder C-corp. This is a question for a lawyer in
-            your jurisdiction; it is no longer the dominant meaning of the
-            phrase in tech contexts.
-          </p>
-          <p>
-            The rest of this page is about the operating-model sense.
+            The 10% difference is emphasis. One-person company points at
+            the human — &quot;one founder runs this.&quot; Zero-human
+            company points at the team — &quot;no employees execute the
+            day-to-day work.&quot; This page leans into the founder side:
+            the workflow, the stack, the canonical references, and the
+            policy and prediction context. The{" "}
+            <Link
+              href="/zero-human-company"
+              className="underline hover:opacity-70"
+            >
+              zero-human company page
+            </Link>{" "}
+            leans into the agent-organisation side: control-plane anatomy
+            and the Paperclip-shaped product category.
           </p>
         </div>
       </section>
 
       <section className="space-y-6">
         <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-          The leverage spectrum
+          Origins of the term
         </h2>
-        <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
-          Every one-person company sits somewhere on a spectrum from
-          &quot;the founder personally does everything&quot; to &quot;an
-          organisation of agents runs daily operations and the founder
-          governs.&quot; The phrase is too generic to be useful on its own;
-          the operating mode is what matters, and in 2026 the centre of
-          gravity has moved firmly toward the AI-native end.
-        </p>
-        <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {modes.map((mode) => (
-            <li key={mode.label} className="py-5 space-y-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground">
-                {mode.label}
-              </p>
-              <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
-                {mode.description}
-              </p>
-              <p className="text-sm leading-relaxed text-[var(--muted)] max-w-2xl text-pretty italic">
-                Leverage: {mode.leverage}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-4 text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
+          <p>
+            The phrase started showing up in tech discourse around 2024
+            when Sam Altman publicly predicted the first one-person
+            billion-dollar company. Through 2025 and into 2026 it
+            consolidated alongside parallel phrases —{" "}
+            <em>solo founder</em>, <em>AI-native company</em>,{" "}
+            <em>one-person unicorn</em>, <em>one-person team</em>,{" "}
+            <em>AI-native pod</em>, and <em>zero-human company</em> — all
+            pointing at the same pattern. In 2026, Anthropic&apos;s Dario
+            Amodei publicly predicted the first one-person $1B company
+            could appear by year-end.
+          </p>
+          <p>
+            By mid-2026 the term carries weight in two specific places:
+            in San Francisco, where companies like Coinbase have begun
+            building &quot;one-person teams&quot; internally and
+            agent-organisation tools like Paperclip have crystallised the
+            product category; and in Chinese tech policy, where Shenzhen,
+            Hangzhou, and Beijing have launched explicit support
+            programmes for AI-era one-person companies.
+          </p>
+        </div>
       </section>
 
       <section className="space-y-6">
@@ -378,8 +342,8 @@ export default function OnePersonCompanyPage() {
           The 2026 founder stack
         </h2>
         <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
-          A working AI-native one-person company is not a single tool. It
-          is a stack of agentic surfaces, each with a specific job, glued
+          A working one-person company is not a single tool. It is a
+          stack of agentic surfaces, each with a specific job, glued
           together by orchestration and rails.
         </p>
         <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
@@ -401,7 +365,7 @@ export default function OnePersonCompanyPage() {
           Inside larger companies — the AI-native pod
         </h2>
         <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
-          The one-person company idea is also showing up inside large
+          The one-person company pattern is also showing up inside large
           public companies as the AI-native pod or one-person team. Same
           mechanism, different legal entity.
         </p>
@@ -413,6 +377,56 @@ export default function OnePersonCompanyPage() {
               </p>
               <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
                 {c.body}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
+          Reference case — Medvi
+        </h2>
+        <div className="space-y-4 text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
+          <p>
+            Matthew Gallagher&apos;s GLP-1 telehealth business is the
+            most-cited reference case. Reported numbers: started with
+            about a dozen AI tools and roughly $20K of capital, hit
+            roughly $401M of 2025 sales, with a stated 2026 target near
+            $1.8B.
+          </p>
+          <p>
+            The honest reading: a strong signal that the AI-native
+            one-person company pattern can scale unusually fast in the
+            right vertical, and a clear cautionary tale about its failure
+            modes. Medvi later hired family and contractors, depended on
+            third-party medical and pharmacy partners, and surfaced
+            chatbot fabrications about pricing and products, FDA letters,
+            and marketing-related complaints. The lesson is not &quot;AI
+            replaces everything&quot; — it is that distribution,
+            demand-side advantage, and a founder who knows the market
+            still do most of the work.
+          </p>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
+          China policy context
+        </h2>
+        <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
+          Chinese cities have moved earlier and more explicitly than
+          their US counterparts on policy support for AI-era one-person
+          companies.
+        </p>
+        <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
+          {policyProgrammes.map((p) => (
+            <li key={p.city} className="py-5 space-y-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-foreground">
+                {p.city}
+              </p>
+              <p className="text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
+                {p.body}
               </p>
             </li>
           ))}
@@ -473,34 +487,37 @@ export default function OnePersonCompanyPage() {
         </h2>
         <div className="space-y-4 text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
           <p>
-            I build agent systems for a living. An earlier version of this
-            page led with the legal-vs-operating split as if those two
-            senses had equal weight. They do not, in 2026 — the
-            operating-model sense has the centre of gravity, and the
-            legal sense has receded to a footnote about Indian corporate
-            forms. This rewrite reflects that.
+            I build agent systems for a living. Earlier versions of this
+            page tried to draw a clean line between &quot;one-person
+            company&quot; and &quot;zero-human company.&quot; That line
+            does not exist in the way the terms are actually being used
+            in 2026. Both phrases describe the same shift. The honest
+            framing is to acknowledge them as near-synonyms and then
+            pick which side of the same idea each page emphasises.
           </p>
           <p>
-            The reference points I now anchor to: the Coinbase one-person
-            teams memo (May 2026); OpenAI&apos;s Codex App and Symphony
-            pattern; Anthropic&apos;s Claude Code as an architecture-and-
-            orchestration tool rather than a coding assistant; Medvi as
-            the proof-of-existence case (with its real and well-publicised
-            failure modes); Sam Altman&apos;s and Dario Amodei&apos;s
-            public predictions of a one-person billion-dollar company; and
-            the policy programmes in Shenzhen, Hangzhou, and Beijing.
+            This page is anchored in the references that gave the term
+            weight in 2024–2026: Sam Altman&apos;s and Dario
+            Amodei&apos;s public predictions of a one-person
+            billion-dollar company; Anthropic&apos;s Claude Code as an
+            architecture-and-orchestration tool rather than a coding
+            assistant; OpenAI&apos;s Codex App and the Symphony pattern;
+            the Coinbase one-person teams memo (May 2026); Shopify&apos;s
+            2025 AI memo; Medvi as the most cited reference case (with
+            its real failure modes); and the Chinese policy programmes
+            in Shenzhen, Hangzhou, and Beijing.
           </p>
           <p>
-            For the high-leverage endpoint of the spectrum — the
-            organisation-of-agents mode — see the{" "}
+            For the agent-organisation side of the same story — the
+            Paperclip-shaped control plane and the live experiments
+            (Andon Market, Project Vend, ClawBank) — see the{" "}
             <Link
               href="/zero-human-company"
               className="underline hover:opacity-70"
             >
-              zero-human company definition
-            </Link>{" "}
-            for the control-plane anatomy and the canonical 2026
-            implementations.
+              zero-human company page
+            </Link>
+            .
           </p>
         </div>
       </section>
@@ -531,8 +548,8 @@ export default function OnePersonCompanyPage() {
               href="/zero-human-company"
               className="underline hover:opacity-70"
             >
-              Zero-Human Company — the high-leverage endpoint of the
-              spectrum
+              Zero-Human Company — the same shift, agent-organisation
+              angle
             </Link>
           </li>
           <li>
@@ -540,8 +557,8 @@ export default function OnePersonCompanyPage() {
               href="/blog/zero-human-vs-one-person-company"
               className="underline hover:opacity-70"
             >
-              Zero-human vs one-person company: how the two terms relate in
-              2026
+              Zero-human company and one-person company: two names for
+              the same shift
             </Link>
           </li>
           <li>
@@ -549,7 +566,7 @@ export default function OnePersonCompanyPage() {
               href="/blog/the-zero-human-stack"
               className="underline hover:opacity-70"
             >
-              Reading the zero-human stack through Paperclip
+              Reading the agent-organisation stack through Paperclip
             </Link>
           </li>
           <li>

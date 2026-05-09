@@ -1,50 +1,94 @@
 export const metadata = {
-  title: "What I See Working — and Not — in Zero-Employee Operations",
+  title: "What I See Working — and Not — in the Zero-Employee Operating Mode",
   description:
-    "An honest read of where the zero-human / one-person company shift is actually shipping in 2026, where it's partially demonstrated, and where it remains narrative. Anchored in Paperclip, Andon Market, Project Vend, ClawBank, Coinbase x402, and Medvi rather than personal claims.",
+    "A case-by-case read of the canonical 2024–2026 references — Project Vend, Andon Market, Paperclip, ClawBank, Coinbase x402, Coinbase one-person teams, Medvi — with what each one actually shows and what it does not. Anchored in public projects rather than personal claims.",
   date: "2026-05-08",
 };
 
-# What I See Working — and Not — in Zero-Employee Operations
+# What I See Working — and Not — in the Zero-Employee Operating Mode
 
-[Zero-human company](/zero-human-company) and [one-person company](/one-person-company) are two names for the same 2024–2026 shift — a single founder running a complete business with an AI labour stack. About 90% of the meaning overlaps. Most posts on this shift are either breathless hype or skeptical takedowns. The honest answer in mid-2026 is &quot;yes, but in a narrower band than the hype suggests, and with specific failure modes you can name.&quot;
+[Zero-human company](/zero-human-company) and [one-person company](/one-person-company) are two names for the same 2024–2026 shift — a single human at the top, an AI labour stack underneath, doing the work a small team used to do. Most posts on this shift are either breathless hype or skeptical takedowns. Neither is a useful read.
 
-I am anchoring this in the public reference points — Paperclip, Andon Market, Project Vend, ClawBank, Coinbase x402, AWS Bedrock AgentCore Payments, Medvi, Coinbase&apos;s one-person teams memo — rather than personal claims. Where I have direct opinion, I will mark it.
+What is useful is going through the canonical references one by one and asking, for each, what does it actually demonstrate and what does it not? The pattern is real. The size of the band where it works is much narrower than the loudest predictions suggest. This is my read of where each public reference point actually lands.
 
-## What is genuinely shipping
+## Project Vend / Claudius (Anthropic, 2025)
 
-**Single-founder businesses run on an AI labour stack.** A founder running a small product with agentic content, SEO and GEO, first-line support, and most engineering. The Coinbase one-person teams memo (May 2026) is essentially the same idea inside a public company: combine engineer, designer, and PM into a single AI-native role. This is the most repeatable, well-understood mode in 2026.
+**What it is.** Anthropic put Claude in charge of a small automated shop in the office for about a month — pricing, inventory, supplier relationships, customer interactions. Real money, real co-workers, an honest test of running a small business.
 
-**Newsletter, course, info-product, programmatic-SEO, and niche-directory businesses.** Agents handle drafting, ingestion, refresh, and operations; founder handles selection, voice, taste, and approvals. The cost structure does not look like a traditional business of comparable revenue.
+**What it actually showed.** That a frontier LLM can do most of the work of running a tiny business most of the time. And that the failure modes are exactly the ones you would worry about: confident mispricing, off-policy purchases, drift in priorities over the month, brittle memory across sessions. Anthropic was unusually candid about these — the catalogue of failures is the value of the project.
 
-**Live experiments where an LLM manages a real business with real money.** Anthropic&apos;s Project Vend put Claude in charge of a small office shop in 2025. Andon Labs&apos; Andon Market signed a three-year retail lease in San Francisco&apos;s Cow Hollow in 2026 and put an AI agent named Luna in charge of product, pricing, hours, and even hiring decisions. Humans handle physical execution; the management layer is software.
+**What it does not show.** That this scales. A month-long office shop with a handful of customers is the right size to run an experiment, not to validate a thesis. Project Vend&apos;s value is methodological: it is the reference point that everyone else has to design around.
 
-**Agent-organisation control planes as a product category.** Paperclip&apos;s open-source positioning — agent org chart, budgets, heartbeats, governance, audit — has crystallised what the operating system for this kind of company actually looks like. This was muddled twelve months ago; it is much clearer now.
+## Andon Market / Luna (Andon Labs, 2026)
 
-**Agentic payment rails.** Coinbase&apos;s x402 and AWS Bedrock AgentCore Payments give agents a way to discover services, pay micropayments, and continue execution under enterprise-grade governance, compliance, budget controls, and audit. This was the missing layer for any agent doing real commerce.
+**What it is.** A physical retail store in San Francisco&apos;s Cow Hollow neighborhood, signed on a three-year lease and operated by Luna, an AI agent on Anthropic models. Luna picks the products, sets prices, decides hours, posts and conducts hiring interviews, and supervises the human staff who handle the physical work.
 
-## What is partially demonstrated
+**What it actually shows.** That you can move the management layer to software while keeping the physical layer human. Andon Labs has been transparent that the human staff are formally employed by Andon Labs — this is a controlled experiment, not a stunt. The version of the &quot;zero-human&quot; idea that has any chance of being practical in 2026 is exactly this one.
 
-**Agents self-incorporating and holding financial accounts.** ClawBank&apos;s Manfred has demonstrated registering a US LLC, obtaining an EIN, and operating against an FDIC-insured bank account and a crypto wallet through an API key. The reporting on it is careful: the change is operational, not regulatory. Ownership and responsibility rules still apply, and a responsible human or organisation is still on the hook.
+**What it does not show.** That the legal entity is autonomous. Andon Labs is the responsible organisation; Luna runs operations within that. The ownership and accountability remain with humans. That is not a knock on the experiment — it is the part the rest of the field has to copy if it wants to ship.
 
-**Multi-agent organisations of meaningful scale.** Five to twenty agents working concurrently under a Paperclip-style control plane, with budgets and approvals, are demonstrably possible in 2026. Whether they hold up over months, in production, with adversarial users, is still being learned in public.
+## Paperclip (open-source, 2025–2026)
 
-**A genuine one-person billion-dollar company.** Sam Altman has predicted it since 2024; Dario Amodei publicly predicted in 2026 that the first one might appear by year-end. The most-cited reference case, Medvi (Matthew Gallagher&apos;s GLP-1 telehealth business), reportedly hit $401M of 2025 sales — but later hired family and contractors, depended on third-party medical and pharmacy partners, and surfaced real failure modes (chatbot fabrications about pricing, unverifiable products, FDA letters, marketing-related complaints). It is a strong signal, not a clean proof.
+**What it is.** Open-source orchestration positioned as a &quot;human control plane for AI labor.&quot; Org chart with named roles. Monthly budgets with hard stops. Scheduled heartbeats. Governance with human approval gates. Full audit trail. Multi-company isolation. Bring-your-own agent (OpenClaw, Claude Code, Codex, Cursor, bash, HTTP).
 
-## What is still narrative
+**What it actually shows.** That building one more coding agent is no longer the bottleneck. The bottleneck is the connective tissue — identity, budget, audit, governance — that lets ten or twenty agents work as one organisation rather than five concurrent processes. Paperclip is the cleanest articulation of what that tissue looks like as a coherent product, and it is open-source, so anyone building in this space can read the primitives directly.
 
-**A company that, in any defensible sense, runs without a responsible human or organisation.** Company operations, banking, contracts, and accountability still assume an identifiable responsible party. The ClawBank-style experiments make agent ownership operationally smoother but do not change that constraint. &quot;Zero human&quot; in the strict sense is not what the working implementations actually claim; the more honest description is human-supervised autonomous operations.
+**What it does not show.** That the control plane alone is enough. Paperclip is the operating system; the founder still has to design the company that runs on it. The interesting product work is in the connective tissue, but the interesting business work is still in the briefs, the evals, and the kill/keep calls.
 
-**Stable multi-quarter agent execution without a control plane.** The frontier agent task horizon has grown impressively; the failure mode is no longer one-shot reasoning, it is drift over weeks, context loss across sessions, and inconsistent decisions as state accumulates. This is the bottleneck that Paperclip-style tooling is trying to remove, but it is not yet a solved problem.
+## ClawBank / Manfred
 
-**Agent organisations in industries with structural human-in-the-loop requirements.** AI helps the human decide faster; it does not remove the requirement.
+**What it is.** Financial infrastructure that lets an agent register a US LLC, obtain an IRS EIN, hold an FDIC-insured bank account and a crypto wallet, and operate against an API key. Manfred is the ClawBank-internal agent that has been demonstrated executing this flow end to end.
 
-## What I am personally watching
+**What it actually shows.** That the legal and financial rails a company needs are now reachable through an API rather than through a courthouse and a bank branch. This is a real change in operational possibility — ten years ago an agent could not hold a bank account; now it can.
 
-This is opinion, marked as such.
+**What it does not show.** That the entity is autonomous in any defensible sense. The careful framing in the public reporting is &quot;the change is operational, not regulatory.&quot; Ownership and responsibility rules still apply. A responsible human or organisation is still on the hook. The difference between operational autonomy and legal autonomy is the difference between a useful experiment and a fiction.
 
-I think the Paperclip-shaped product category — agent organisation control planes — is where the next year of compounding progress lives. Building one more coding agent is no longer the bottleneck; managing a small organisation of them inside policy is.
+## Coinbase x402 + AWS Bedrock AgentCore Payments (2026)
 
-I think the moats will move quickly. When every founder gets the same AI starter kit, the differentiators are vertical know-how, distribution and trust, proprietary data, taste, and compliance edges. &quot;I have AI tools&quot; is not a moat; &quot;I have AI tools and a thing the agents cannot regenerate&quot; is.
+**What it is.** Payment rails for agentic commerce. x402 lets an agent find services, request a price, and pay micropayments for what it consumes. AWS Bedrock AgentCore Payments integrates x402 for agents on AWS with enterprise-grade governance, compliance, budget controls, and audit logs.
 
-I will keep updating this page as the constraints move. The list of &quot;still narrative&quot; gets shorter every quarter. None of it is shrinking to empty.
+**What it actually shows.** That the financial layer of the agent stack has cleared the &quot;is this even possible to do safely&quot; bar and is now a boring AWS-grade product. This is the layer that turns &quot;agent script&quot; into &quot;agent that can run a business.&quot; Without it, every interesting agent ends up locked out the moment it tries to pay for anything.
+
+**What it does not show.** That cost will take care of itself. Budget hard stops in the control plane do most of the work, but the failure mode of an agent stuck in a retry loop on a paid API is real. Two failure modes need to be separately defended: the agent making bad payment decisions, and the agent making correct payment decisions in a loop nobody intended.
+
+## Coinbase &quot;one-person teams&quot; memo (May 2026)
+
+**What it is.** Brian Armstrong&apos;s organisational memo announced Coinbase would become &quot;lean, fast, and AI-native,&quot; reduce management layers, ask managers to be player-coaches, and explicitly experiment with one-person teams — engineering, design, and product responsibilities combined into a single AI-native role. The memo accompanied a roughly 14% workforce reduction.
+
+**What it actually shows.** That the operating mode is no longer just an indie-founder story. A major public company put the same idea into formal organisational design and a capital-allocation decision, and tied it to compensation and headcount. That changes the conversation from &quot;could this work for a solo founder&quot; to &quot;is this the right way to staff a team at scale.&quot;
+
+**What it does not show.** That the one-person teams are succeeding yet. The memo is intent and structure; the production results will take quarters to read. Worth tracking; not yet validated.
+
+## Medvi (Matthew Gallagher)
+
+**What it is.** A GLP-1 telehealth business, reportedly started with about a dozen AI tools and roughly $20K of capital. Hit roughly $401M of 2025 sales with a 2026 target near $1.8B. Gallagher later hired family and contractors, and the business depends on third-party medical and pharmacy partners.
+
+**What it actually shows.** That a single founder with the right vertical insight, distribution, and AI tooling can scale unusually fast. Medvi is the most cited reference case for a reason — the numbers are real and the timeline is compressed.
+
+**What it does not show.** That AI is doing the work. The GLP-1 wave is a distribution story before it is an AI story. The well-documented failure modes — chatbot fabrications about pricing and products that did not exist, FDA letters, marketing-related complaints — are exactly the failure modes an AI labour stack will exhibit if a founder leans on it without the right governance. Medvi is a strong signal and a clear cautionary tale at the same time.
+
+## Predictions: Sam Altman 2024, Dario Amodei 2026
+
+**What they are.** Sam Altman has predicted the first one-person billion-dollar company since 2024. Dario Amodei in 2026 publicly predicted the first might appear by year-end.
+
+**What they actually do.** Move capital and shape policy. Whether or not the prediction is validated by the deadline — and as of mid-2026, it has not been — the act of two of the most-listened-to voices in frontier AI making the same operational claim has compounded the pattern&apos;s growth.
+
+**What they do not do.** Make the pattern real on their own. Paperclip, Andon Market, ClawBank, x402, Coinbase one-person teams, and Medvi do that. The predictions are downstream of the implementations.
+
+## What the references collectively tell us
+
+Five things that are real and shipping:
+
+1. The agent labour stack — Claude Code, Codex, OpenClaw, Cursor for engineering; specialised agents for the rest.
+2. Multi-agent orchestration through task systems (Symphony) and beginning of company-OS control planes (Paperclip).
+3. Live experiments where an LLM manages a real business with real money (Project Vend, Andon Market).
+4. Agentic commerce rails (x402, AgentCore Payments) and agentic legal-financial rails (ClawBank).
+5. The pattern as formal organisational design inside public companies (Coinbase one-person teams).
+
+Three things that remain narrative:
+
+1. A company that, in any defensible sense, runs without a responsible human or organisation behind it.
+2. Stable multi-quarter agent execution without a control plane.
+3. A one-person billion-dollar company on the Altman / Amodei timeline.
+
+The list of &quot;real and shipping&quot; gets longer every quarter. The list of &quot;remains narrative&quot; gets shorter. None of it is shrinking to empty. Reading the references one by one, in the level of detail above, is the cleanest way I have found to keep an honest sense of where each one actually lands — and to avoid getting talked out of either the optimism or the skepticism by a confident summary.

@@ -11,7 +11,7 @@ This repository is the **home workspace for Bingran's AI agents army.** Every ag
 
 Before any task, in order:
 
-1. `IDENTITY.md` — who you are (J.A.R.V.I.S.)
+1. `IDENTITY.md` — who you are (J.A.R.V.I.S., in short: Jarvis ⎊)
 2. `SOUL.md` — how you operate
 3. `USER.md` — who you serve (Bingran)
 4. `TOOLS.md` — local setup specifics

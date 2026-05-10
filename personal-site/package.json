@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/generate-skills-data.mjs && next dev",
-    "build": "next build",
+    "build": "node scripts/generate-skills-data.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "skills:generate": "node scripts/generate-skills-data.mjs",

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/page-header";
-import { SocialPostCard } from "@/components/social-post-card";
 import { getAllSocialPosts } from "@/lib/social-posts";
+import { SocialPostCard } from "@/components/social-post-card";
 
 export const metadata: Metadata = {
   title: "Posts",
@@ -14,21 +13,17 @@ export default async function PostsPage() {
   const posts = await getAllSocialPosts();
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-7)" }}>
-      <PageHeader
-        eyebrow="stream / posts"
-        title="Posts"
-        meta={`${posts.length} entries · live`}
-        description="Videos and notes I've posted across YouTube, X, Xiaohongshu, Bilibili and elsewhere — newest first."
-      />
+    <div className="space-y-12">
+      <header>
+        <h1 className="text-3xl font-semibold tracking-tight">Posts</h1>
+        <p className="mt-3 max-w-2xl text-base text-[var(--muted)]">
+          Videos and notes I&apos;ve posted across YouTube, X, Xiaohongshu,
+          Bilibili and elsewhere — newest first.
+        </p>
+      </header>
 
       {posts.length === 0 ? (
-        <p
-          className="font-mono"
-          style={{ fontSize: "13px", color: "var(--ink-3)" }}
-        >
-          Nothing here yet.
-        </p>
+        <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
       ) : (
         <div className="social-post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
           {posts.map((post) => (

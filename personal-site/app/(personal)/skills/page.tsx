@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/page-header";
 import {
   SKILL_CATEGORIES,
   getAllSkills,
@@ -21,31 +20,21 @@ export default function SkillsPage() {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-7)" }}>
-      <PageHeader
-        eyebrow="catalog / skills"
-        title="Skills"
-        meta={`${skills.length} entries · build-time`}
-        description={
-          <>
-            A live catalog of the {skills.length} skills loaded into my AI
-            agents army. Each is a packaged capability — a self-contained set
-            of instructions, references, and helper scripts — that any agent
-            in this workspace can pick up at runtime.
-          </>
-        }
-      />
-      <p
-        className="font-mono"
-        style={{
-          fontSize: "12px",
-          color: "var(--ink-3)",
-          letterSpacing: "0.04em",
-          marginTop: "calc(-1 * var(--space-4))",
-        }}
-      >
-        Generated from <code className="code-chip">.agents/skills/</code> at build time.
-      </p>
+    <div className="space-y-12">
+      <header>
+        <h1 className="text-3xl font-semibold tracking-tight">Skills</h1>
+        <p className="mt-3 max-w-2xl text-base text-[var(--muted)]">
+          A live catalog of the {skills.length} skills loaded into my AI agents
+          army. Each is a packaged capability — a self-contained set of
+          instructions, references, and helper scripts — that any agent in this
+          workspace can pick up at runtime.
+        </p>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
+          Generated from{" "}
+          <code className="font-mono text-[12px]">.agents/skills/</code> at
+          build time.
+        </p>
+      </header>
 
       <SkillsBrowser skills={skills} categories={categoriesInUse} />
     </div>

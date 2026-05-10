@@ -77,24 +77,15 @@ export function BingranOS({
         aria-modal="true"
       >
         <div className={styles.osBar}>
-          <div className={styles.osBarLeft}>
-            <span className={styles.osBarDots}>
-              <span />
-              <span />
-              <span />
-            </span>
-            <span className={styles.osBarBrand}>
-              BingranOS · bingranyou.com
-            </span>
-          </div>
           <button
             type="button"
             className={styles.osBarClose}
             onClick={onClose}
             aria-label="Close BingranOS and return to room"
-          >
-            Close
-          </button>
+          />
+          <div className={styles.osBarTitle}>
+            BingranOS — bingranyou.com
+          </div>
         </div>
 
         <div className={styles.osBody}>

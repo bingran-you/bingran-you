@@ -36,6 +36,10 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
   }, []);
   const [mode, setMode] = useState<PalaceMode>(initialTab ? "monitor" : "intro");
   const [osTab, setOsTab] = useState<string | null>(initialTab);
+  // OS overlay only appears AFTER the dolly-in completes — keeps the
+  // entrance feeling like Henry's where you actually arrive at the screen
+  // before any UI surfaces.
+  const [osReady, setOsReady] = useState(false);
   const mouseRef = useRef<[number, number]>([0, 0]);
 
   const enterRoom = useCallback(() => setMode("idle"), []);
@@ -56,6 +60,19 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
     if (mode !== "intro") return;
     const t = setTimeout(() => setMode("idle"), 5000);
     return () => clearTimeout(t);
+  }, [mode]);
+
+  // Hold the OS overlay back until the camera has nearly arrived at the
+  // monitor pose (camera dolly-in is 1.15s; we wait 0.95s so the OS fades
+  // up over the final 200ms of camera travel + its own 0.45s opacity
+  // transition). On exit, drop it immediately so the panel fades out
+  // while the camera is still close to the screen.
+  useEffect(() => {
+    if (mode === "monitor") {
+      const t = setTimeout(() => setOsReady(true), 950);
+      return () => clearTimeout(t);
+    }
+    setOsReady(false);
   }, [mode]);
 
   // React to hash changes (allows linking between tabs without reload)
@@ -118,7 +135,7 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
       <HUD mode={mode} onExitMonitor={exitMonitor} />
       <BingranOS
         data={data}
-        visible={mode === "monitor"}
+        visible={mode === "monitor" && osReady}
         initialTab={osTab}
         onClose={exitMonitor}
       />

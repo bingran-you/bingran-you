@@ -235,15 +235,16 @@
   position: relative;
   width: min(1100px, 96vw);
   height: min(720px, 86vh);
-  border-radius: 14px;
+  border-radius: 0;
   overflow: hidden;
-  background: linear-gradient(145deg, #fbf3e1 0%, #f4ead7 60%, #ece1c3 100%);
+  background: #fbf3e1;
   color: #1f1a14;
+  /* Classic Mac chrome: thin black outline + a small "shadow" beneath that
+     reads as a window dropped onto the screen. */
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.6),
-    0 0 0 8px #15110b,
-    0 0 0 10px rgba(240, 182, 135, 0.18),
-    inset 0 0 40px rgba(255, 230, 200, 0.5);
+    0 0 0 1px #1f1a14,
+    4px 4px 0 0 rgba(31, 26, 20, 0.85),
+    0 22px 60px rgba(0, 0, 0, 0.55);
   display: flex;
   flex-direction: column;
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
@@ -256,8 +257,8 @@
   background:
     repeating-linear-gradient(
       0deg,
-      rgba(0, 0, 0, 0.03) 0px,
-      rgba(0, 0, 0, 0.03) 1px,
+      rgba(0, 0, 0, 0.022) 0px,
+      rgba(0, 0, 0, 0.022) 1px,
       transparent 1px,
       transparent 3px
     );
@@ -265,63 +266,67 @@
   z-index: 2;
 }
 
+/* Classic Mac title bar: cream background + black drag stripes flanking a
+   centred title pill, with a hollow close box on the left. */
 .osBar {
+  position: relative;
+  height: 38px;
+  background: #fbf3e1;
+  border-bottom: 2px solid #1f1a14;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 1rem;
-  background: linear-gradient(180deg, #1f1a14 0%, #2c241a 100%);
-  color: #ece4d4;
+  padding: 0 12px;
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(240, 182, 135, 0.3);
-}
-
-.osBarLeft {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.osBarDots {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.osBarDots span {
-  width: 11px;
-  height: 11px;
-  border-radius: 999px;
-  background: rgba(236, 228, 212, 0.2);
-  border: 1px solid rgba(236, 228, 212, 0.25);
-}
-
-.osBarDots span:nth-child(1) { background: #e0664e; border-color: #c1543e; }
-.osBarDots span:nth-child(2) { background: #e8b758; border-color: #c19945; }
-.osBarDots span:nth-child(3) { background: #6ab07a; border-color: #4f8c5e; }
-
-.osBarBrand {
+  letter-spacing: 0.16em;
+  color: #1f1a14;
   font-weight: 500;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.osBar::before {
+  content: "";
+  position: absolute;
+  left: 42px;
+  right: 16px;
+  top: 7px;
+  bottom: 9px;
+  background-image: repeating-linear-gradient(
+    180deg,
+    #1f1a14 0 1.4px,
+    transparent 1.4px 5px
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .osBarClose {
-  background: transparent;
-  border: 1px solid rgba(236, 228, 212, 0.3);
-  color: rgba(236, 228, 212, 0.85);
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  position: relative;
+  z-index: 2;
+  width: 16px;
+  height: 16px;
+  background: #fbf3e1;
+  border: 2px solid #1f1a14;
   cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s;
 }
 
 .osBarClose:hover {
-  background: rgba(232, 153, 104, 0.15);
-  color: #f0b687;
-  border-color: #f0b687;
+  background: #1f1a14;
+}
+
+.osBarTitle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background: #fbf3e1;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 
 .osBody {

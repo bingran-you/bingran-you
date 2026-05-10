@@ -25,6 +25,14 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 `AGENTS.md` is the single source of truth. `CLAUDE.md` is a symlink to `AGENTS.md` so Claude Code picks up the same content. **Edit `AGENTS.md` only** — never write to `CLAUDE.md` directly, never replace the symlink with a copy.
 
+## Typical workflow
+
+When you do code changes, always follow the skill `.agents/skills/karpathy-guidelines` for any coding tasks.
+
+For challenging tasks, if the plan is detailed and coherent, you should always try to finish all the requirements instead of asking for permissions, unless your action could bring in-reversible damages.
+
+By default, you should always send a PR and squash merge into main and delete the PR branch when you finish any coding changing stages. And then you can move on to the next stage and do the same process.
+
 ## Workspace Layout
 
 ```
@@ -159,6 +167,10 @@ Some skills are the single source of truth for a domain — invoke them *first* 
 
 - **`social-scraping-policy`** — anything touching X / Xiaohongshu / xhslink / YouTube / Bilibili / LinkedIn. Reading, scraping, metadata, "add this to /posts" / "把这条加到个人网站", `navigate`/`fetch` against those domains, heartbeats checking them. Owns scripts, fallbacks, account-safety budgets.
 - **`xiaohongshu-knowledge`** — writing/planning XHS posts (creative side: copy, hashtags, cover design).
+
+### Adding posts to /posts → `social-scraping-policy`
+
+Any pasted social post URL ("add this to /posts" / "把这条加到个人网站" / X / Xiaohongshu / YouTube / Bilibili / LinkedIn) is owned by the `social-scraping-policy` skill — invoke it first; it documents `npm run post:add`, the XHS Chrome-MCP fallback, and the diff discipline. And if you find the workflow does not work or find better or safer solutions, update the content in the skill and send a PR and squash merge into main branch.
 
 ## Task Delivery
 

@@ -1,1 +1,0 @@
-.agents/skills/first-tree/SKILL.md

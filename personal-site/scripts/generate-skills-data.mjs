@@ -138,6 +138,42 @@ function normalizeDescription(raw) {
   return raw.replace(/\s+/g, " ").trim();
 }
 
+// Best-effort fallback when gray-matter / js-yaml chokes on a SKILL.md
+// frontmatter — usually a stray `key: value` colon inside an unquoted
+// scalar. Pulls just `name` and `description` so the skill still surfaces
+// on the catalog instead of being silently dropped.
+function recoverFrontmatter(raw) {
+  if (!raw.startsWith("---")) return null;
+  const end = raw.indexOf("\n---", 3);
+  if (end < 0) return null;
+  const fm = raw.slice(4, end);
+  const body = raw.slice(end + 4).replace(/^\r?\n/, "");
+
+  const data = {};
+  const nameMatch = /^name:\s*(.+)$/m.exec(fm);
+  if (nameMatch) {
+    data.name = nameMatch[1].trim().replace(/^["']|["']$/g, "");
+  }
+
+  // Folded / literal block scalar: `description: >` or `description: |`
+  // (with optional `-` / `+` chomping) followed by indented lines.
+  const blockMatch = /^description:\s*[>|][-+]?\s*\n((?:[ \t]+.*(?:\r?\n|$))+)/m.exec(fm);
+  if (blockMatch) {
+    data.description = blockMatch[1]
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .join(" ");
+  } else {
+    const inlineMatch = /^description:\s*(.+)$/m.exec(fm);
+    if (inlineMatch) {
+      data.description = inlineMatch[1].trim().replace(/^["']|["']$/g, "");
+    }
+  }
+
+  return { data, content: body };
+}
+
 function normalizeTriggers(raw) {
   if (!Array.isArray(raw)) return undefined;
   const list = raw
@@ -199,8 +235,18 @@ for (const slug of entries) {
   let parsed;
   try {
     parsed = matter(raw);
-  } catch {
-    continue;
+  } catch (err) {
+    const recovered = recoverFrontmatter(raw);
+    if (!recovered) {
+      console.warn(
+        `[generate-skills-data] Skipping ${slug}: frontmatter unparseable (${err.message})`,
+      );
+      continue;
+    }
+    console.warn(
+      `[generate-skills-data] Recovered ${slug} via regex fallback (${err.message})`,
+    );
+    parsed = recovered;
   }
 
   const data = parsed.data ?? {};

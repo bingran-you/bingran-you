@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+// Editorial nav — serif 17px, ink-2 default, lifts to ink on hover. Active
+// item gets weight 600. Mobile drawer reuses same type tokens for consistency.
 const nav = [
   { href: "/projects", label: "Projects" },
   { href: "/papers", label: "Papers" },
@@ -36,18 +38,29 @@ export function SiteNav() {
     };
   }, [open]);
 
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname?.startsWith(href);
+
   return (
     <>
-      <nav className="hidden sm:flex items-center gap-6 text-sm">
-        {nav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="text-[var(--muted)] hover:text-foreground transition"
-          >
-            {item.label}
-          </Link>
-        ))}
+      <nav className="hidden sm:flex items-center gap-9">
+        {nav.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`text-[17px] transition-colors duration-150 ${
+                active
+                  ? "font-semibold text-[var(--ink)]"
+                  : "text-[var(--ink-2)] hover:text-[var(--ink)]"
+              }`}
+              style={{ fontFamily: "var(--font-sans)" }}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
 
       <button
@@ -56,7 +69,7 @@ export function SiteNav() {
         aria-expanded={open}
         aria-controls="mobile-nav-panel"
         onClick={() => setOpen((v) => !v)}
-        className="sm:hidden -mr-2 p-2 text-foreground"
+        className="sm:hidden -mr-2 p-2 text-[var(--ink)]"
       >
         <span className="relative block h-4 w-5" aria-hidden>
           <span
@@ -79,28 +92,34 @@ export function SiteNav() {
 
       <div
         id="mobile-nav-panel"
-        className={`sm:hidden absolute left-0 right-0 top-full origin-top border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur transition duration-200 ease-out ${
+        className={`sm:hidden absolute left-0 right-0 top-full origin-top border-b border-[var(--rule)] transition duration-200 ease-out ${
           open
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-1 opacity-0 pointer-events-none"
         }`}
+        style={{
+          background: "color-mix(in srgb, var(--paper) 95%, transparent)",
+          backdropFilter: "saturate(140%) blur(12px)",
+          WebkitBackdropFilter: "saturate(140%) blur(12px)",
+        }}
       >
-        <ul className="mx-auto max-w-4xl px-4 py-2">
+        <ul
+          className="mx-auto"
+          style={{ maxWidth: "var(--content-max)", padding: "8px var(--gutter)" }}
+        >
           {nav.map((item) => {
-            const active =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname?.startsWith(item.href);
+            const active = isActive(item.href);
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className={`block py-3 text-base transition ${
+                  className={`block py-3 text-[17px] transition ${
                     active
-                      ? "text-foreground"
-                      : "text-[var(--muted)] hover:text-foreground"
+                      ? "font-semibold text-[var(--ink)]"
+                      : "text-[var(--ink-2)] hover:text-[var(--ink)]"
                   }`}
+                  style={{ fontFamily: "var(--font-sans)" }}
                 >
                   {item.label}
                 </Link>

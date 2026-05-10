@@ -79,26 +79,53 @@ export default async function PostPage({ params }: { params: Params }) {
   );
 
   return (
-    <article className="space-y-10">
+    <article style={{ display: "flex", flexDirection: "column", gap: "var(--space-7)" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}
       />
-      <header className="space-y-3">
+      <header
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--space-3)",
+          borderBottom: "1px solid var(--rule)",
+          paddingBottom: "var(--space-5)",
+        }}
+      >
         <Link
           href="/blog"
-          className="inline-block font-mono text-xs uppercase tracking-widest text-[var(--muted)] hover:text-foreground transition"
+          className="eyebrow inline-block transition-colors duration-150 hover:text-[var(--accent-bright)]"
         >
-          ← Blog
+          back · /blog
         </Link>
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight">
+        <h1
+          className="font-display"
+          style={{
+            marginTop: "var(--space-2)",
+            fontSize: "clamp(36px, 5.6vw, 56px)",
+            lineHeight: "var(--leading-tight)",
+            letterSpacing: "var(--tracking-display)",
+            fontWeight: 600,
+            color: "var(--ink)",
+            textWrap: "balance",
+          }}
+        >
           {metadata.title}
         </h1>
-        <time className="block font-mono text-sm text-[var(--muted)] tabular-nums">
+        <time
+          className="font-mono tabular-nums"
+          style={{
+            fontSize: "13px",
+            color: "var(--ink-3)",
+            letterSpacing: "var(--tracking-mono)",
+            marginTop: "var(--space-2)",
+          }}
+        >
           {metadata.date}
         </time>
       </header>
-      <div className="prose prose-zinc dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-a:underline-offset-4 prose-a:decoration-[var(--border)] hover:prose-a:decoration-foreground">
+      <div className="prose max-w-none">
         <Post />
       </div>
     </article>

@@ -1,150 +1,566 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ==========================================================================
+   Bingran You Design System v2 — VOID & PHOSPHOR (dark-first).
+   Single source of truth: tokens, type stack, motion, component utilities.
+   Generated from claude.ai/design handoff. Light cream paper survives as
+   [data-theme="light"] for reading-heavy surfaces.
+   ========================================================================== */
+
 :root {
-  /* Berkeley dusk × lab notebook palette */
-  --background: #f4ead7;        /* aged lab-notebook paper */
-  --foreground: #1f1a14;        /* pine-soot ink */
-  --muted: #6b6055;             /* warm gray, AA on background */
-  --border: rgba(31, 26, 20, 0.12);
-  --accent: #a8431c;            /* Sather Tower terracotta */
-  --accent-strong: #7d2e10;     /* deeper terracotta for hover/emphasis */
+  /* ---------- Color: void / phosphor (DARK is the page) -------------- */
+  --paper:       #08090B;      /* page background — near-black void */
+  --paper-2:     #0F1115;      /* surface, elevated panel */
+  --paper-3:     #161A1F;      /* chip / inline code background */
+  --rule:        #1B1F25;      /* hairline dividers */
+  --rule-strong: #2A3038;      /* hovered/active dividers */
+
+  --ink:         #E8EAEC;      /* primary text — cool bone white */
+  --ink-2:       #9CA3AB;      /* secondary text — graphite */
+  --ink-3:       #5A6068;      /* tertiary text, micro labels — ash */
+
+  /* ---------- Color: dual-track accents -------------------------------- */
+  --accent:        #4ADE80;    /* phosphor green — links, prompt arrow, cursor, live signals */
+  --accent-bright: #7EF5A8;    /* hover/glow */
+  --accent-rust:   #E0703A;    /* warm rust — Agentic Builder track */
+  --accent-2:      #5DA0FF;    /* cool blue — Ion Trapper track */
+  --accent-soft:   rgba(74, 222, 128, 0.12);
+  --accent-glow:   rgba(74, 222, 128, 0.40);
+
+  /* ---------- Card gradients ------------------------------------------- */
+  --card-grad-from: #0E1014;
+  --card-grad-to:   #0A0C10;
+  --card-border:    #1B1F25;
+  --card-border-h:  #2A3038;
+
+  /* ---------- Semantic legacy aliases ---------------------------------- */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --muted:      var(--ink-3);
+  --border:     var(--rule);
+
+  /* ---------- Type scale (px) ------------------------------------------ */
+  --text-xs:    12px;
+  --text-sm:    14px;
+  --text-base:  17px;
+  --text-md:    19px;
+  --text-lg:    22px;
+  --text-xl:    28px;
+  --text-2xl:   36px;
+  --text-3xl:   52px;
+  --text-4xl:   72px;
+  --text-5xl:   96px;
+
+  /* ---------- Type: leading & tracking --------------------------------- */
+  --leading-tight:    1.05;
+  --leading-snug:     1.25;
+  --leading-normal:   1.55;
+  --tracking-display: -0.022em;
+  --tracking-tight:   -0.015em;
+  --tracking-label:   0.16em;
+  --tracking-mono:    0.04em;
+
+  /* ---------- Spacing (8px base) --------------------------------------- */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-7:   48px;
+  --space-8:   64px;
+  --space-9:   96px;
+  --space-10:  128px;
+  --space-11:  192px;
+
+  /* ---------- Layout --------------------------------------------------- */
+  --content-max: 1180px;
+  --gutter:      32px;
+  --header-h:    64px;
+
+  /* ---------- Borders & radii — dark cards earn their roundness ------- */
+  --radius-sm:    5px;     /* code chips */
+  --radius-md:    10px;    /* small cards (project tiles) */
+  --radius-lg:    14px;    /* large surfaces (numbered rows, hero glass) */
+  --radius-pill:  999px;   /* tag chips */
+
+  /* ---------- Motion --------------------------------------------------- */
+  --ease:     cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 360ms;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-strong: var(--accent-strong);
-  /* Per-glyph fallback: Latin → Geist/Newsreader, Han → Noto Serif SC for
-     display contexts, system Han sans (PingFang/Hiragino/YaHei) for body.
-     The browser walks the stack per glyph, so mixed Latin+Han text inside
-     a single element is rendered with the right typeface for each script. */
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-display: var(--font-newsreader), var(--font-noto-serif-sc),
-    "Songti SC", "STSong", "Source Han Serif SC", serif;
+  --color-muted:      var(--muted);
+  --color-border:     var(--border);
+  --color-paper:      var(--paper);
+  --color-paper-2:    var(--paper-2);
+  --color-paper-3:    var(--paper-3);
+  --color-ink:        var(--ink);
+  --color-ink-2:      var(--ink-2);
+  --color-ink-3:      var(--ink-3);
+  --color-rule:       var(--rule);
+  --color-accent:     var(--accent);
+  --color-accent-rust: var(--accent-rust);
+  --color-accent-2:   var(--accent-2);
+
+  /* Per-glyph fallback. Inter is the workhorse for paper titles, author lists,
+     UI body. Source Serif 4 + Noto Serif SC paired for display headings. */
+  --font-sans:    var(--font-inter), -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  --font-display: var(--font-source-serif), var(--font-noto-serif-sc),
+                  "Songti SC", "STSong", "Source Han Serif SC", serif;
+  --font-mono:    var(--font-jetbrains-mono), ui-monospace, SFMono-Regular,
+                  "Berkeley Mono", "IBM Plex Mono", Menlo, monospace;
+  --font-cjk:     var(--font-noto-serif-sc), "Source Han Serif SC",
+                  "Songti SC", "STSong", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1610;      /* warm desk-lamp ink */
-    --foreground: #ece4d4;      /* warm off-white */
-    --muted: #9a8d76;           /* warm gray */
-    --border: rgba(236, 228, 212, 0.12);
-    --accent: #e89968;          /* lit terracotta */
-    --accent-strong: #f0b687;   /* highlighted terracotta */
-  }
+/* ---------- Light cream-paper alt (long-form reading surfaces) ---------- */
+[data-theme="light"] {
+  --paper:       #F4EBD6;
+  --paper-2:     #EFE3C8;
+  --paper-3:     #E7D9B7;
+  --ink:         #15110B;
+  --ink-2:       #3A3328;
+  --ink-3:       #7A6E5C;
+  --rule:        #C9BB9B;
+  --rule-strong: #A99877;
+  --accent:      #1F7A3D;        /* moss — phosphor's daylight cousin */
+  --accent-bright: #15532A;
+  --accent-rust: #B5471A;
+  --accent-2:    #1F4F8A;
+  --accent-soft: rgba(31, 122, 61, 0.12);
+  --accent-glow: rgba(31, 122, 61, 0.18);
+  --card-grad-from: #EFE3C8;
+  --card-grad-to:   #F4EBD6;
+  --card-border:    #C9BB9B;
+  --card-border-h:  #A99877;
 }
 
 html {
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+  background: var(--paper);
 }
 
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-    scrollbar-gutter: stable;
-  }
+  html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
+  font-feature-settings: "kern", "liga";
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--background);
+  background: var(--accent-soft);
+  color: var(--accent-bright);
 }
 
-/* Han typography: square ideographs need slightly looser tracking than the
-   Latin defaults, and the Newsreader text-feature settings (ss01/ss02/cv01/
-   cv11 from `body`) target Latin glyphs only — Noto Serif SC ignores them
-   but inheriting them is harmless. Apply a small letter-spacing nudge so
-   inline Han inside Latin paragraphs (e.g. "Bingran You (Chinese: 尤炳然)")
-   reads as a deliberate inset, not a jam-up. */
-:lang(zh-Hans),
-:lang(zh-Hant),
-:lang(zh) {
+/* ==========================================================================
+   CRT scanline overlay — subtle decoration, lives above content but pointer-
+   events:none. 2px transparent / 1px 2% phosphor stripe. Disabled in light
+   mode and under reduced-motion preference.
+   ========================================================================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(74, 222, 128, 0.018) 2px,
+    rgba(74, 222, 128, 0.018) 3px
+  );
+  mix-blend-mode: screen;
+}
+[data-theme="light"] body::before { display: none; }
+
+/* App shell sits above the scanline */
+body > * { position: relative; z-index: 2; }
+
+/* ==========================================================================
+   Han typography — Noto Serif SC paired with Source Serif 4. Open the
+   tracking slightly so square ideographs sit airy alongside Latin glyphs.
+   ========================================================================== */
+:lang(zh-Hans), :lang(zh-Hant), :lang(zh) {
   letter-spacing: 0.02em;
   font-feature-settings: normal;
 }
-
-/* Display Han (h1 byline, future zh display headings) — open up tracking
-   and sit at the regular Noto Serif SC weight so the glyphs feel airy
-   alongside Newsreader's modulated Latin contours. */
 .font-display:lang(zh-Hans),
 .font-display:lang(zh-Hant),
 .font-display:lang(zh) {
   letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Signature animations
+   ========================================================================== */
+
+/* Blinking terminal caret — 1s steps(2), block of phosphor with halo. */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.term-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.95em;
+  background: var(--accent);
+  vertical-align: -0.1em;
+  margin-left: 4px;
+  box-shadow: 0 0 8px var(--accent-glow);
+  animation: blink 1s steps(2, end) infinite;
+}
+
+/* Ion-chain neighbor jump — outer ions (i=1, i=3) jump in sequence around
+   the excited rust dot at i=2. 1800ms loop, 600ms phase offset between
+   neighbors. Per design bundle brand-ion-chain.html. */
+@keyframes ion-jump {
+  0%, 90%, 100% { transform: translateY(0); opacity: 1; }
+  45%           { transform: translateY(var(--jump-d, -10px)); opacity: 0.55; }
+}
+.ion-jump-anim {
+  animation: ion-jump 1800ms cubic-bezier(0.2, 0, 0, 1) infinite;
+  animation-delay: var(--ion-delay, 0ms);
+}
+
+/* Phosphor link hover underline — dashed → solid as you mouse over. */
+.glow-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(74, 222, 128, 0.35);
+  padding-bottom: 1px;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-bottom-color var(--dur-fast) var(--ease);
+}
+.glow-link:hover {
+  color: var(--accent-bright);
+  border-bottom-color: var(--accent);
+}
+
+/* ==========================================================================
+   Component utility classes
+   ========================================================================== */
+
+/* Section header eyebrow — `›` prompt prefix in phosphor + uppercase mono. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+.eyebrow::before { content: "› "; }
+
+/* Mono micro-label — uppercase tracked, ash gray. Used for section labels
+   that DON'T want the phosphor `›` (e.g. category buckets within a section). */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--ink-3);
   font-weight: 400;
+  line-height: 1;
 }
 
-/* Map Tailwind Typography to the Berkeley-dusk palette so prose pages
-   (blog posts, SKILL.md bodies) stay warm instead of cool zinc. */
+/* Mono meta — version strings, timestamps, paths. Right-rail of headers. */
+.mono-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* Section head — flex eyebrow left, optional meta right, hairline below. */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+/* Sub section head — for the smaller "Selected Papers / All →" pattern. */
+.subsection-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+/* Hairline rule — 1px ruler in --rule, used between rows */
+.hairline { border-top: 1px solid var(--rule); }
+
+/* Gradient card — the system's signature container. 14px radius (10 for
+   small), top→bottom subtle gradient, hairline border that lifts on hover. */
+.card {
+  background: linear-gradient(180deg, var(--card-grad-from) 0%, var(--card-grad-to) 100%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--dur-base) var(--ease);
+}
+.card:hover { border-color: var(--card-border-h); }
+.card-sm {
+  background: linear-gradient(180deg, var(--card-grad-from) 0%, var(--card-grad-to) 100%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-base) var(--ease);
+}
+.card-sm:hover { border-color: var(--card-border-h); }
+
+/* Numbered badge — circular phosphor-bordered chit used in numbered rows
+   (about page focus list, eng review numbered points). */
+.num-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: var(--accent-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Outline button — mono caps on transparent fill. Hovers to ink fill. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 10px 18px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all var(--dur-base) var(--ease);
+  border-radius: 0;
+}
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-fill {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-fill:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+.btn-ghost {
+  border-color: transparent;
+  padding: 10px 0;
+}
+.btn-ghost:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* Stat badge — two-tone mono shield (left ink-on-paper-2, right value). */
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--rule);
+}
+.stat-badge .l {
+  padding: 5px 10px;
+  background: var(--paper-2);
+  color: var(--ink-2);
+}
+.stat-badge .r {
+  padding: 5px 10px;
+  color: var(--ink);
+  border-left: 1px solid var(--rule);
+  background: var(--paper);
+}
+.stat-badge.ink .l { background: var(--ink); color: var(--paper); }
+.stat-badge.accent .r { color: var(--accent); }
+.stat-badge.rust .r   { color: var(--accent-rust); }
+.stat-badge.blue .r   { color: var(--accent-2); }
+
+/* Connect-bar badge — mono pill in the footer, hover inverts to ink fill. */
+.connect-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-2);
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  transition: all var(--dur-fast) var(--ease);
+}
+.connect-badge:hover {
+  color: var(--paper);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* Row hover — subtle background lift on link rows */
+.row-hover {
+  transition: background-color var(--dur-base) var(--ease);
+}
+.row-hover:hover { background-color: var(--paper-2); }
+.row-hover:hover .row-title { color: var(--accent); }
+
+/* Inline code chip — mono on paper-3 with hairline border */
+.code-chip {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--paper-3);
+  color: var(--ink);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #1F252B;
+}
+
+/* Phosphor DOI — used in venue line */
+.doi {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* Italic venue (Source Serif 4, white) — used in academic paper rows */
+.venue-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Tailwind Typography (prose) — dark phosphor mapping for blog body.
+   ========================================================================== */
 .prose {
-  --tw-prose-body: var(--foreground);
-  --tw-prose-headings: var(--foreground);
-  --tw-prose-lead: var(--foreground);
+  --tw-prose-body: var(--ink-2);
+  --tw-prose-headings: var(--ink);
+  --tw-prose-lead: var(--ink-2);
   --tw-prose-links: var(--accent);
-  --tw-prose-bold: var(--foreground);
-  --tw-prose-counters: var(--muted);
-  --tw-prose-bullets: var(--border);
-  --tw-prose-hr: var(--border);
-  --tw-prose-quotes: var(--foreground);
+  --tw-prose-bold: var(--ink);
+  --tw-prose-counters: var(--ink-3);
+  --tw-prose-bullets: var(--rule);
+  --tw-prose-hr: var(--rule);
+  --tw-prose-quotes: var(--ink);
   --tw-prose-quote-borders: var(--accent);
-  --tw-prose-captions: var(--muted);
-  --tw-prose-code: var(--foreground);
-  --tw-prose-pre-code: var(--foreground);
-  --tw-prose-pre-bg: rgba(31, 26, 20, 0.04);
-  --tw-prose-th-borders: var(--border);
-  --tw-prose-td-borders: var(--border);
-  --tw-prose-invert-body: var(--foreground);
-  --tw-prose-invert-headings: var(--foreground);
-  --tw-prose-invert-lead: var(--foreground);
+  --tw-prose-captions: var(--ink-3);
+  --tw-prose-code: var(--ink);
+  --tw-prose-pre-code: var(--ink);
+  --tw-prose-pre-bg: var(--paper-3);
+  --tw-prose-th-borders: var(--rule);
+  --tw-prose-td-borders: var(--rule);
+  --tw-prose-invert-body: var(--ink-2);
+  --tw-prose-invert-headings: var(--ink);
+  --tw-prose-invert-lead: var(--ink-2);
   --tw-prose-invert-links: var(--accent);
-  --tw-prose-invert-bold: var(--foreground);
-  --tw-prose-invert-counters: var(--muted);
-  --tw-prose-invert-bullets: var(--border);
-  --tw-prose-invert-hr: var(--border);
-  --tw-prose-invert-quotes: var(--foreground);
+  --tw-prose-invert-bold: var(--ink);
+  --tw-prose-invert-counters: var(--ink-3);
+  --tw-prose-invert-bullets: var(--rule);
+  --tw-prose-invert-hr: var(--rule);
+  --tw-prose-invert-quotes: var(--ink);
   --tw-prose-invert-quote-borders: var(--accent);
-  --tw-prose-invert-captions: var(--muted);
-  --tw-prose-invert-code: var(--foreground);
-  --tw-prose-invert-pre-code: var(--foreground);
-  --tw-prose-invert-pre-bg: rgba(236, 228, 212, 0.04);
-  --tw-prose-invert-th-borders: var(--border);
-  --tw-prose-invert-td-borders: var(--border);
+  --tw-prose-invert-captions: var(--ink-3);
+  --tw-prose-invert-code: var(--ink);
+  --tw-prose-invert-pre-code: var(--ink);
+  --tw-prose-invert-pre-bg: var(--paper-3);
+  --tw-prose-invert-th-borders: var(--rule);
+  --tw-prose-invert-td-borders: var(--rule);
+  font-family: var(--font-sans);
 }
 
-/* react-tweet embeds: strip the default 550px max-width and the outer
-   margin so the card fills its masonry column. Same idea skillsbench
-   uses; without these the card renders at its native width and breaks
-   the column layout. */
-.social-tweet > div {
-  margin: 0 !important;
-}
-.social-tweet .react-tweet-theme {
-  max-width: 100% !important;
+/* Display headings inside prose — Source Serif 4. */
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
 }
 
-/* Cross-browser masonry stability. Safari and Firefox honor
-   `break-inside: avoid` more reliably when the child is also marked
-   page-break-inside, and inline-block prevents the rare case of a
-   card being split across columns. */
+/* Inline code — phosphor-tinged */
+.prose code {
+  background: var(--paper-3);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #1F252B;
+  font-weight: 400;
+  font-size: 0.92em;
+  color: var(--ink);
+}
+.prose code::before, .prose code::after { content: none; }
+.prose pre {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--paper-3);
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(74, 222, 128, 0.35);
+  padding-bottom: 1px;
+}
+.prose a:hover {
+  color: var(--accent-bright);
+  border-bottom-color: var(--accent);
+}
+
+/* ==========================================================================
+   react-tweet embeds — strip default 550px max + outer margin.
+   ========================================================================== */
+.social-tweet > div { margin: 0 !important; }
+.social-tweet .react-tweet-theme { max-width: 100% !important; }
+
+/* Cross-browser masonry stability */
 .social-post-grid > * {
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
   display: block;
   width: 100%;
+}
+
+/* ==========================================================================
+   Reduced motion — kill all animations.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  body::before { display: none; }
 }

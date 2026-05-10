@@ -54,6 +54,18 @@ export default function Home() {
               </span>
             </li>
           </ul>
+
+          <Link
+            href="/palace"
+            className="mt-7 inline-flex items-center gap-3 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent-strong)] transition hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]"
+          >
+            <span aria-hidden className="relative inline-flex h-2 w-2">
+              <span className="absolute inset-0 rounded-full bg-[var(--accent)]" />
+              <span className="absolute inset-0 rounded-full bg-[var(--accent)] animate-ping opacity-70" />
+            </span>
+            Enter the Memory Palace
+            <span aria-hidden>→</span>
+          </Link>
         </div>
 
         <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">

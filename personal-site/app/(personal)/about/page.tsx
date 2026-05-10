@@ -1,4 +1,9 @@
 import type { Metadata } from "next";
+import {
+  Hairline,
+  PageHeader,
+  SubLabel,
+} from "@/components/page-header";
 import { education } from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
 
@@ -18,7 +23,8 @@ const facts = [
 
 const focusAreas = [
   {
-    label: "Agentic Builder",
+    label: "track: agents",
+    accent: "var(--accent-rust)",
     items: [
       "Agent skills and tool use, with an emphasis on evaluation that mirrors real workflows.",
       "Productivity agents that triage notifications, dispatch background work, and stay out of the way.",
@@ -26,7 +32,8 @@ const focusAreas = [
     ],
   },
   {
-    label: "Ion Trapper",
+    label: "track: ion-traps",
+    accent: "var(--accent-2)",
     items: [
       "Adjoint-optimized integrated photonic circuits for individual trapped-ion addressing.",
       "Temporally multiplexed ion-photon interfaces via fast ion-chain transport.",
@@ -38,7 +45,7 @@ const focusAreas = [
 
 export default function AboutPage() {
   return (
-    <div className="space-y-16">
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-9)" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -46,32 +53,69 @@ export default function AboutPage() {
         }}
       />
 
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">About</h1>
-        <div className="mt-6 space-y-4 text-base leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
-          {facts.map((fact) => (
-            <p key={fact}>{fact}</p>
-          ))}
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="profile / about"
+        title="About"
+        titleZh="关于我"
+        meta="v2.6 · 2026"
+        description={
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
+            {facts.map((fact) => (
+              <p key={fact}>{fact}</p>
+            ))}
+          </div>
+        }
+      />
 
+      {/* Focus — numbered phosphor-bordered rows per design system. */}
       <section>
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-6">
-          Focus
-        </h2>
-        <div className="space-y-10">
+        <div className="eyebrow" style={{ marginBottom: "var(--space-4)" }}>
+          focus
+        </div>
+        <Hairline />
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-7)", marginTop: "var(--space-5)" }}>
           {focusAreas.map((area) => (
             <div key={area.label}>
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--muted)]">
+              <div
+                className="mono-label"
+                style={{ marginBottom: "var(--space-3)", color: area.accent }}
+              >
                 {area.label}
-              </p>
-              <ul className="mt-3 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-                {area.items.map((item) => (
+              </div>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+                {area.items.map((item, i) => (
                   <li
                     key={item}
-                    className="py-4 text-base leading-relaxed text-[var(--muted)]"
+                    className="card"
+                    style={{
+                      padding: "var(--space-5) var(--space-5)",
+                      display: "grid",
+                      gridTemplateColumns: "44px 1fr",
+                      gap: "var(--space-4)",
+                      alignItems: "flex-start",
+                      fontFamily: "var(--font-sans)",
+                    }}
                   >
-                    {item}
+                    <div
+                      className="num-badge"
+                      style={{
+                        borderColor: area.accent,
+                        color: area.accent,
+                        background: `color-mix(in srgb, ${area.accent} 8%, transparent)`,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "16px",
+                        lineHeight: 1.55,
+                        color: "var(--ink)",
+                        paddingTop: 6,
+                      }}
+                    >
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -80,25 +124,64 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Education — same pattern as home page. */}
       <section>
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-6">
-          Education
-        </h2>
-        <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
+        <div className="eyebrow" style={{ marginBottom: "var(--space-4)" }}>
+          education
+        </div>
+        <Hairline />
+        <ul style={{ listStyle: "none" }}>
           {education.map((item) => (
             <li
               key={`${item.institution}-${item.period}`}
-              className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-6"
+              className="grid gap-3 sm:grid-cols-[160px_1fr] sm:gap-6"
+              style={{
+                padding: "var(--space-5) 0",
+                borderBottom: "1px solid var(--rule)",
+              }}
             >
-              <span className="font-mono text-xs text-[var(--muted)] tabular-nums">
+              <span
+                className="font-mono tabular-nums"
+                style={{
+                  fontSize: "13px",
+                  color: "var(--ink-3)",
+                  paddingTop: 4,
+                  letterSpacing: "var(--tracking-mono)",
+                }}
+              >
                 {item.period}
               </span>
               <div>
-                <p className="text-base font-medium">{item.institution}</p>
-                <p className="mt-1 text-sm text-[var(--muted)]">
+                <p
+                  className="font-display"
+                  style={{
+                    fontSize: "19px",
+                    fontWeight: 600,
+                    color: "var(--ink)",
+                  }}
+                >
+                  {item.institution}
+                </p>
+                <p
+                  className="font-mono"
+                  style={{
+                    fontSize: "13px",
+                    color: "var(--ink-2)",
+                    marginTop: 6,
+                    letterSpacing: "var(--tracking-mono)",
+                  }}
+                >
                   {item.degree} · {item.location}
                 </p>
-                <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
+                <p
+                  style={{
+                    marginTop: 8,
+                    fontSize: "15px",
+                    lineHeight: 1.55,
+                    color: "var(--ink-2)",
+                    fontFamily: "var(--font-sans)",
+                  }}
+                >
                   {item.summary}
                 </p>
               </div>
@@ -107,41 +190,71 @@ export default function AboutPage() {
         </ul>
       </section>
 
+      {/* Contact — terminal-style key/value list. */}
       <section>
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-6">
-          Contact
-        </h2>
-        <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)] text-sm">
-          <li className="grid gap-1 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <span className="font-mono text-xs text-[var(--muted)]">Email</span>
+        <div className="eyebrow" style={{ marginBottom: "var(--space-4)" }}>
+          contact
+        </div>
+        <Hairline />
+        <ul
+          className="font-mono"
+          style={{
+            listStyle: "none",
+            marginTop: "var(--space-4)",
+            fontSize: "14px",
+            color: "var(--ink)",
+            lineHeight: 1.9,
+          }}
+        >
+          <ContactRow keyLabel="email" value={
+            <a href="mailto:me@bingranyou.com" className="glow-link">me@bingranyou.com</a>
+          } />
+          <ContactRow keyLabel="lab" value={
             <a
-              className="underline underline-offset-4 decoration-[var(--border)] hover:decoration-foreground"
-              href="mailto:me@bingranyou.com"
-            >
-              me@bingranyou.com
-            </a>
-          </li>
-          <li className="grid gap-1 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <span className="font-mono text-xs text-[var(--muted)]">Lab</span>
-            <a
-              className="underline underline-offset-4 decoration-[var(--border)] hover:decoration-foreground"
               href="https://ions.berkeley.edu/"
               target="_blank"
               rel="noopener noreferrer"
+              className="glow-link"
             >
-              Haeffner Lab, UC Berkeley
+              ions.berkeley.edu
             </a>
-          </li>
-          <li className="grid gap-1 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6">
-            <span className="font-mono text-xs text-[var(--muted)]">
-              Elsewhere
-            </span>
-            <span className="text-[var(--muted)]">
-              Profiles linked in the footer.
-            </span>
-          </li>
+          } meta="Haeffner Lab · UC Berkeley" />
+          <ContactRow keyLabel="elsewhere" value={
+            <span style={{ color: "var(--ink-2)" }}>see footer</span>
+          } />
         </ul>
       </section>
     </div>
+  );
+}
+
+function ContactRow({
+  keyLabel,
+  value,
+  meta,
+}: {
+  keyLabel: string;
+  value: React.ReactNode;
+  meta?: string;
+}) {
+  return (
+    <li
+      className="grid gap-3 sm:grid-cols-[140px_1fr]"
+      style={{
+        padding: "var(--space-3) 0",
+        borderBottom: "1px solid var(--rule)",
+        alignItems: "baseline",
+      }}
+    >
+      <span style={{ color: "var(--accent)" }}>{keyLabel}</span>
+      <div>
+        {value}
+        {meta ? (
+          <span style={{ color: "var(--ink-3)", marginLeft: "var(--space-3)", fontSize: "12px" }}>
+            {meta}
+          </span>
+        ) : null}
+      </div>
+    </li>
   );
 }

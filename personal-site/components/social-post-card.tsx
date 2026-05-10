@@ -133,57 +133,66 @@ export function SocialPostCard({ post }: { post: SocialPost }) {
       href={post.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group mb-6 block break-inside-avoid overflow-hidden rounded-md border border-[var(--border)] bg-[var(--background)] transition hover:border-foreground/40 hover:shadow-sm"
+      className="card group mb-6 block break-inside-avoid overflow-hidden"
     >
       {hasThumb ? (
         <div
-          className="block w-full overflow-hidden bg-[var(--muted)]/10"
-          style={aspect ? { aspectRatio: aspect } : undefined}
+          className="block w-full overflow-hidden"
+          style={{
+            aspectRatio: aspect,
+            background: "var(--paper-3)",
+          }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={post.thumbnail}
             alt={post.title}
             loading="lazy"
-            className="block h-full w-full object-cover"
+            className="block h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-95"
           />
         </div>
       ) : (
-        // Text-only post (or any post without media): render the body text as
-        // the visual itself, in a stylized quote-card style. Falls back to an
-        // icon-only block if there is no text at all.
+        // Text-only post: render body text as the visual itself. Set in Inter
+        // sans (per design system: paper titles & body live in Inter, NOT
+        // serif). Background uses paper-3 chip surface so the quote reads as
+        // an embedded card-within-a-card.
         <div
-          className={`relative flex w-full flex-col justify-between gap-4 bg-[var(--muted)]/5 p-5 ${accent}`}
-          style={{ minHeight: "11rem" }}
+          className={`relative flex w-full flex-col justify-between gap-4 p-5 ${accent}`}
+          style={{ minHeight: "11rem", background: "var(--paper-3)" }}
         >
-          <p className="font-serif text-[1.05rem] leading-snug text-foreground line-clamp-[8] whitespace-pre-line">
+          <p
+            className="text-[1.05rem] leading-snug text-[var(--ink)] line-clamp-[8] whitespace-pre-line"
+            style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.01em" }}
+          >
             {post.description || post.title || " "}
           </p>
           <Icon className="absolute bottom-4 right-4 h-5 w-5 opacity-40" />
         </div>
       )}
       <div className="flex flex-col gap-2 p-4">
-        <div className="flex items-center gap-2 text-xs text-[var(--muted)]">
+        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.06em] text-[var(--ink-3)]">
           <Icon className={`h-3.5 w-3.5 ${accent}`} />
-          <span className="font-mono uppercase tracking-wide">
-            {PLATFORM_LABEL[post.platform]}
-          </span>
+          <span>{PLATFORM_LABEL[post.platform]}</span>
           <span aria-hidden>·</span>
-          <time className="font-mono tabular-nums">
-            {formatDate(post.date)}
-          </time>
+          <time className="tabular-nums">{formatDate(post.date)}</time>
         </div>
         {hasThumb ? (
-          <h3 className="text-base font-medium leading-snug group-hover:underline underline-offset-4">
+          <h3
+            className="text-[18px] font-bold leading-snug text-[var(--ink)] transition-colors duration-150 group-hover:text-[var(--accent)]"
+            style={{ fontFamily: "var(--font-sans)", letterSpacing: "-0.015em" }}
+          >
             {post.title}
           </h3>
         ) : (
-          <span className="text-xs text-[var(--muted)] group-hover:text-foreground transition">
+          <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-[var(--ink-3)] transition-colors duration-150 group-hover:text-[var(--accent)]">
             View on {PLATFORM_LABEL[post.platform]} →
           </span>
         )}
         {hasThumb && post.description ? (
-          <p className="line-clamp-3 text-sm leading-relaxed text-[var(--muted)]">
+          <p
+            className="line-clamp-3 text-[15px] leading-[1.55] text-[var(--ink-2)]"
+            style={{ fontFamily: "var(--font-sans)" }}
+          >
             {post.description}
           </p>
         ) : null}

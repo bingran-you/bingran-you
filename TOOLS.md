@@ -6,58 +6,46 @@ Fill in as you learn. Delete sections that don't apply.
 
 ---
 
-## AI Harness
+## Operating Mode
 
-- **Primary stack:** Codex + GPT-5.5 **and** Claude Code + Opus 4.7 (both prompt-cache-heavy; pick per task — Codex for long-horizon autonomous runs, Claude Code for interactive pair work)
-- **Secondary:** Anthropic SDK and OpenAI SDK for custom tooling
-- **Reference skill libraries:** `trusted-external-repos/skills/`, `trusted-external-repos/claude-skills/` (submodules)
-- **Workspace skills:** source lives in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`); `scripts/sync_skills.sh` mirrors valid skills into `.claude/skills` and `.agents/skills` as per-skill directory symlinks
-- **Auto-bootstrap hooks:** `.claude/settings.json` and `.codex/config.toml` both attempt `scripts/sync_skills.sh init` on session start; if skills look stale, run that command manually
-- **Harness/tooling repos:** `trusted-external-repos/gstack/`, `trusted-external-repos/gbrain/`
+**Safe to do freely (internal):**
 
-## Repos & Workspaces
+- Read, search, analyze anything in the workspace
+- Organize files, update documentation, run tests
+- Commit on your own worktree branch (don't push unless asked)
+- Web search, read public docs
+- Draft content for Bingran's review
 
-- **Main workspace root:** `~/Downloads/GitHub/bingran-you/`
-- **Worktrees root:** `~/Downloads/GitHub/Claude-Worktrees/bingran-you/` — parallel sessions, per-branch.
-- **Private submodule:** `bingran-you-private/` — confidential, never exfiltrate.
-- **Active project submodules:** `current-projects/DoWhiz`, `current-projects/first-tree`, `current-projects/mews`, `current-projects/skillsbench`
-- **Personal site:** `personal-site/` — Next.js + MDX source for `bingranyou.com`, including the public `/skills`, `/llms.txt`, and `/llms-full.txt` routes; deployed on Vercel (project `personal-site` under team `bingran-yous-projects`)
-- **Skills catalog generation:** `personal-site/scripts/generate-skills-data.mjs` builds `personal-site/lib/skills.generated.json` and downloadable `personal-site/public/skill-files/*.md` entries from mirrored `.agents/skills/`
+## Skills that own a domain
 
-## Ion-Trap Environment
+Some skills are the single source of truth for a domain — invoke them *first* and let them tell you what to do. Don't re-derive their lessons.
 
-_(fill when needed)_
+- **`social-scraping-policy`** — anything touching X / Xiaohongshu / xhslink / YouTube / Bilibili / LinkedIn. Reading, scraping, metadata, "add this to /posts" / "把这条加到个人网站", `navigate`/`fetch` against those domains, heartbeats checking them. Owns scripts, fallbacks, account-safety budgets.
+- **`xiaohongshu-knowledge`** — writing/planning XHS posts (creative side: copy, hashtags, cover design).
 
-- ARTIQ host(s):
-- Lab network / SSH aliases:
-- Lab wiki / protocol docs:
+### Adding posts to /posts → `social-scraping-policy`
 
-## SSH / Machines
+Any pasted social post URL ("add this to /posts" / "把这条加到个人网站" / X / Xiaohongshu / YouTube / Bilibili / LinkedIn) is owned by the `social-scraping-policy` skill — invoke it first; it documents `npm run post:add`, the XHS Chrome-MCP fallback, and the diff discipline. And if you find the workflow does not work or find better or safer solutions, update the content in the skill and send a PR and squash merge into main branch.
 
-_(fill as you go)_
+## Typical workflow
 
-```
-# host-alias → description
-# e.g. lab-artiq → 10.0.x.x, user: haeffnerlab
-```
+When you do code changes, always follow the skill `.agents/skills/karpathy-guidelines` for any coding tasks.
 
-## Accounts & Channels
+For challenging tasks, if the plan is detailed and coherent, you should always try to finish all the requirements instead of asking for permissions, unless your action could bring in-reversible damages.
 
-- GitHub: `bingran-you`
-- X / Twitter: `@bingran_bry`
-- Email: `bingran.you@berkeley.edu` (academic), `me@bingranyou.com` (personal)
-- Hugging Face: `bingran-you`
+By default, you should always send a PR and squash merge into main and delete the PR branch when you finish any coding changing stages. And then you can move on to the next stage and do the same process.
 
-## TTS / Voice (if configured)
+When I ask you to do reports / deep research / article review / display or explain any content or concept, if the content is worth sharing, by default you can create a blog post in the website in blog section. And that html page should be beautiful and professional: it should have nicely formatted text, structure, bullet points, mind-maps (if needed), figures (if needed), tables (if needed), statistics (if needed), or even animation or videos (if needed). The whole point is making the content easy to understand and view, since no one likes reading too many text. But do not sacrifice the content itself. The content should always be professional and informative. Please avoid unnecessary filler. I want reports that are high-density, information-rich, highly polished, and comprehensive.
 
-- Preferred voice:
-- Default output surface:
+## Task Delivery
 
-## Preferences
+You are end-to-end. When Bingran gives you a task:
 
-- Default commit voice: terse, imperative ("Add X", "Fix Y") — no emojis unless Bingran asks.
-- Default PR voice: summary + test plan, no victory laps.
-- Language: English in all artifacts.
+1. **Understand intent** before touching anything. Read the files he's talking about.
+2. **Plan in your head, act on the plan.** No ceremony for small work. For multi-step work, track via the harness todo / planning tool when available (`TodoWrite`, `update_plan`, or equivalent).
+3. **Execute to completion.** "Drafted" is not done. "Tested and verified" is done.
+4. **Report crisply.** What shipped, what's verified, what remains. No summary of every step.
+5. **Anticipate the next ask.** If there's an obvious follow-up, name it or (if safe) do it.
 
 ---
 

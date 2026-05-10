@@ -33,6 +33,8 @@ For challenging tasks, if the plan is detailed and coherent, you should always t
 
 By default, you should always send a PR and squash merge into main and delete the PR branch when you finish any coding changing stages. And then you can move on to the next stage and do the same process.
 
+When I ask you to do reports / deep research / article review / display or explain any content or concept, if the content is worth sharing, by default you can create a blog post in the website in blog section. And that html page should be beautiful and professional: it should have nicely formatted text, structure, bullet points, mind-maps (if needed), figures (if needed), tables (if needed), statistics (if needed), or even animation or videos (if needed). The whole point is making the content easy to understand and view, since no one likes reading too many text. But do not sacrifice the content itself. The content should always be professional and informative. Please avoid unnecessary filler. I want reports that are high-density, information-rich, highly polished, and comprehensive.
+
 ## Workspace Layout
 
 ```

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Newsreader } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 import {
   jsonLdScriptContent,
@@ -26,6 +26,18 @@ const geistMono = Geist_Mono({
 const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
+});
+
+// Noto Serif SC pairs with Newsreader for harmonious Han + Latin display.
+// subsets: ["latin"] only controls preload hints; CJK glyphs are still
+// served via unicode-range and lazy-loaded when Chinese characters render.
+// preload: false — most pages have no Chinese, so don't waste a preload slot.
+const notoSerifSC = Noto_Serif_SC({
+  variable: "--font-noto-serif-sc",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  preload: false,
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -82,7 +94,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${notoSerifSC.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

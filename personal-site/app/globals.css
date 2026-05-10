@@ -18,9 +18,15 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-newsreader);
+  /* Per-glyph fallback: Latin → Geist/Newsreader, Han → Noto Serif SC for
+     display contexts, system Han sans (PingFang/Hiragino/YaHei) for body.
+     The browser walks the stack per glyph, so mixed Latin+Han text inside
+     a single element is rendered with the right typeface for each script. */
+  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-display: var(--font-newsreader), var(--font-noto-serif-sc),
+    "Songti SC", "STSong", "Source Han Serif SC", serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -58,6 +64,29 @@ body {
 ::selection {
   background: var(--accent);
   color: var(--background);
+}
+
+/* Han typography: square ideographs need slightly looser tracking than the
+   Latin defaults, and the Newsreader text-feature settings (ss01/ss02/cv01/
+   cv11 from `body`) target Latin glyphs only — Noto Serif SC ignores them
+   but inheriting them is harmless. Apply a small letter-spacing nudge so
+   inline Han inside Latin paragraphs (e.g. "Bingran You (Chinese: 尤炳然)")
+   reads as a deliberate inset, not a jam-up. */
+:lang(zh-Hans),
+:lang(zh-Hant),
+:lang(zh) {
+  letter-spacing: 0.02em;
+  font-feature-settings: normal;
+}
+
+/* Display Han (h1 byline, future zh display headings) — open up tracking
+   and sit at the regular Noto Serif SC weight so the glyphs feel airy
+   alongside Newsreader's modulated Latin contours. */
+.font-display:lang(zh-Hans),
+.font-display:lang(zh-Hant),
+.font-display:lang(zh) {
+  letter-spacing: 0.04em;
+  font-weight: 400;
 }
 
 /* Map Tailwind Typography to the Berkeley-dusk palette so prose pages

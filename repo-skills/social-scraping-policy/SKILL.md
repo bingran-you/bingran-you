@@ -1,6 +1,22 @@
 ---
 name: social-scraping-policy
-description: REQUIRED before any read/scrape/metadata-extraction touching X / Twitter or Xiaohongshu / RedNote (or YouTube / Bilibili / LinkedIn) — including the bingran.ai /posts pipeline. Trigger on ANY of these phrasings even when the user doesn't name a tool: "add this to /posts", "把这条加进来 / 帮我更新到个人网站", paste of an x.com / xhslink.com / xiaohongshu.com / youtube.com / bilibili.com URL with intent to land it as a card, "go look at X", "grab those posts", "summarize my mentions", a heartbeat / cron checking a social platform, or any task that would `navigate` / `fetch` those domains. Defines (1) SAFE scraping rules — account choice, tool choice (claude-in-chrome MCP is the ONE browser tool — NOT Playwright/Puppeteer/headless), pacing, fingerprint hygiene, session length, abort signals, ToS / legal red lines; (2) the bingran.ai /posts pipeline — paste a URL → `npm run post:add` → on XHS canary, fall back to the logged-in Chrome MCP path documented in §3.3. Stop and read this BEFORE writing code, BEFORE clicking, BEFORE running curl. Failure to invoke this skill is the single most common way agents waste a turn (and risk Bingran's accounts) on these tasks.
+description: >-
+  REQUIRED before any read/scrape/metadata-extraction touching X / Twitter or
+  Xiaohongshu / RedNote (or YouTube / Bilibili / LinkedIn) — including the
+  bingran.ai /posts pipeline. Trigger on ANY of these phrasings even when the
+  user doesn't name a tool: "add this to /posts", "把这条加进来 / 帮我更新到个人网站",
+  paste of an x.com / xhslink.com / xiaohongshu.com / youtube.com / bilibili.com
+  URL with intent to land it as a card, "go look at X", "grab those posts",
+  "summarize my mentions", a heartbeat / cron checking a social platform, or
+  any task that would `navigate` / `fetch` those domains. Defines (1) SAFE
+  scraping rules — account choice, tool choice (claude-in-chrome MCP is the
+  ONE browser tool — NOT Playwright/Puppeteer/headless), pacing, fingerprint
+  hygiene, session length, abort signals, ToS / legal red lines; (2) the
+  bingran.ai /posts pipeline — paste a URL → `npm run post:add` → on XHS
+  canary, fall back to the logged-in Chrome MCP path documented in §3.3. Stop
+  and read this BEFORE writing code, BEFORE clicking, BEFORE running curl.
+  Failure to invoke this skill is the single most common way agents waste a
+  turn (and risk Bingran's accounts) on these tasks.
 ---
 
 # Social Scraping Policy & Operating Manual

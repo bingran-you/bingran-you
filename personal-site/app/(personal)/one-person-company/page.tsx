@@ -304,19 +304,55 @@ export default function OnePersonCompanyPage() {
         }}
       />
 
-      <header className="space-y-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-          Definition · 2026
-        </p>
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-pretty">
+      <header
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--space-4)",
+          borderBottom: "1px solid var(--rule)",
+          paddingBottom: "var(--space-5)",
+          marginBottom: "var(--space-5)",
+        }}
+      >
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="eyebrow">definition / one-person-company</span>
+          <span className="mono-meta">v2.6 · 2026</span>
+        </div>
+        <h1
+          className="font-display text-pretty"
+          style={{
+            fontSize: "clamp(36px, 5.6vw, 56px)",
+            lineHeight: "var(--leading-tight)",
+            letterSpacing: "var(--tracking-display)",
+            fontWeight: 600,
+            color: "var(--ink)",
+            textWrap: "balance",
+          }}
+        >
           One-Person Company
         </h1>
-        <p className="text-lg leading-relaxed text-[var(--muted)] max-w-2xl text-pretty">
+        <p
+          className="text-pretty"
+          style={{
+            fontSize: "17px",
+            lineHeight: "var(--leading-normal)",
+            color: "var(--ink-2)",
+            maxWidth: "640px",
+            fontFamily: "var(--font-sans)",
+          }}
+        >
           {ONE_LINER}
         </p>
-        <p className="text-sm text-[var(--muted)]">
+        <p
+          className="font-mono"
+          style={{
+            fontSize: "12px",
+            color: "var(--ink-3)",
+            letterSpacing: "var(--tracking-mono)",
+          }}
+        >
           By{" "}
-          <Link href="/about" className="underline hover:opacity-70">
+          <Link href="/about" className="glow-link">
             Bingran You
           </Link>
           . Last updated {PUBLISHED}.

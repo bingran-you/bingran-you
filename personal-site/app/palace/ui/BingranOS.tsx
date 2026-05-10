@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import type { PalaceData } from "../palace-data";
 import styles from "../styles.module.css";
+import { Tetris } from "./games/Tetris";
+import { Snake } from "./games/Snake";
 
 type TabId =
   | "about"
@@ -12,6 +14,8 @@ type TabId =
   | "blog"
   | "posts"
   | "skills"
+  | "tetris"
+  | "snake"
   | "contact";
 
 const TABS: { id: TabId; label: string; glyph: string }[] = [
@@ -21,6 +25,8 @@ const TABS: { id: TabId; label: string; glyph: string }[] = [
   { id: "blog", label: "Blog", glyph: "❖" },
   { id: "posts", label: "Posts", glyph: "◉" },
   { id: "skills", label: "Skills", glyph: "✦" },
+  { id: "tetris", label: "Tetris", glyph: "▢" },
+  { id: "snake", label: "Snake", glyph: "▷" },
   { id: "contact", label: "Contact", glyph: "@" },
 ];
 
@@ -28,16 +34,36 @@ export function BingranOS({
   data,
   visible,
   onClose,
+  initialTab,
 }: {
   data: PalaceData;
   visible: boolean;
   onClose: () => void;
+  initialTab?: string | null;
 }) {
-  const [tab, setTab] = useState<TabId>("about");
+  const [tab, setTab] = useState<TabId>(() => {
+    const requested = initialTab as TabId | null | undefined;
+    return requested && TABS.some((t) => t.id === requested) ? requested : "about";
+  });
+  const lastVisibleRef = useRef(visible);
+  const lastInitialTabRef = useRef(initialTab);
 
+  // Reset tab when the OS opens, honouring an `initialTab` hint if present.
+  // We compare against refs so the deps array stays a fixed shape — passing
+  // props in as deps triggers a React DEV warning when their reference types
+  // shift across renders.
   useEffect(() => {
-    if (visible) setTab("about");
-  }, [visible]);
+    const justOpened = visible && !lastVisibleRef.current;
+    const initialTabChanged = initialTab !== lastInitialTabRef.current;
+    lastVisibleRef.current = visible;
+    lastInitialTabRef.current = initialTab;
+    if (!visible) return;
+    if (justOpened || initialTabChanged) {
+      const requested = initialTab as TabId | null | undefined;
+      if (requested && TABS.some((t) => t.id === requested)) setTab(requested);
+      else if (justOpened) setTab("about");
+    }
+  });
 
   return (
     <div
@@ -101,6 +127,8 @@ export function BingranOS({
               {tab === "blog" && <BlogTab data={data} />}
               {tab === "posts" && <PostsTab data={data} />}
               {tab === "skills" && <SkillsTab />}
+              {tab === "tetris" && <Tetris active={visible && tab === "tetris"} />}
+              {tab === "snake" && <Snake active={visible && tab === "snake"} />}
               {tab === "contact" && <ContactTab data={data} />}
             </div>
           </section>

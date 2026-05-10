@@ -2,7 +2,7 @@
 
 import type { RefObject } from "react";
 import { useRef } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import * as THREE from "three";
 import type { PalaceMode } from "../PalaceClient";
@@ -43,9 +43,8 @@ export function CameraRig({
   const camRef = useRef<THREE.PerspectiveCamera>(null);
   const targetPos = useRef(new THREE.Vector3(...CAM.intro.pos));
   const lookAt = useRef(new THREE.Vector3(...CAM.intro.look));
-  const size = useThree((s) => s.size);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const cam = camRef.current;
     if (!cam) return;
     const cfg = CAM[mode];
@@ -68,7 +67,7 @@ export function CameraRig({
     );
     cam.position.lerp(targetPos.current, lerpAmt);
 
-    const aspect = size.width / Math.max(1, size.height);
+    const aspect = state.size.width / Math.max(1, state.size.height);
     const targetFov = fovForAspect(cfg.fov, aspect);
     const fovDiff = targetFov - cam.fov;
     if (Math.abs(fovDiff) > 0.01) {

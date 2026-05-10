@@ -614,6 +614,159 @@
   padding: 0.1rem 0.35rem;
 }
 
+/* Games — Tetris + Snake live in BingranOS tabs */
+.gameLayout {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(120px, 200px);
+  gap: 1.2rem;
+  align-items: start;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  .gameLayout {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+}
+
+.gameBoard {
+  position: relative;
+  background: rgba(31, 26, 20, 0.04);
+  border: 1px solid rgba(31, 26, 20, 0.18);
+  border-radius: 6px;
+  padding: 6px;
+  box-shadow: inset 0 0 18px rgba(31, 26, 20, 0.08);
+}
+
+.tetrisGrid {
+  display: grid;
+  width: clamp(180px, 36vh, 280px);
+  aspect-ratio: 10 / 20;
+  gap: 0;
+}
+
+.snakeGrid {
+  display: grid;
+  width: clamp(240px, 50vh, 380px);
+  aspect-ratio: 1 / 1;
+  gap: 0;
+}
+
+.nextGrid {
+  display: grid;
+  width: 76px;
+  aspect-ratio: 1 / 1;
+  gap: 1px;
+  margin-top: 4px;
+}
+
+.cell {
+  border: 1px solid rgba(31, 26, 20, 0.06);
+  box-sizing: border-box;
+}
+
+.gameOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  background: rgba(244, 234, 215, 0.92);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 6px;
+  padding: 1.4rem;
+}
+
+.gameOverlayTitle {
+  font-family: var(--font-newsreader), serif;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  margin: 0;
+  color: #1f1a14;
+}
+
+.gameOverlayMeta {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 20, 0.6);
+  margin: 0;
+  max-width: 24ch;
+  line-height: 1.5;
+}
+
+.gameStartBtn {
+  margin-top: 0.4rem;
+  background: #a8431c;
+  color: #fbf3e1;
+  border: none;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.gameStartBtn:hover {
+  background: #7d2e10;
+}
+
+.gameStartBtn:active {
+  transform: scale(0.97);
+}
+
+.gameSide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.gameStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.gameStatLabel {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 20, 0.55);
+}
+
+.gameStatValue {
+  font-family: var(--font-newsreader), serif;
+  font-size: 1.7rem;
+  letter-spacing: -0.01em;
+  color: #1f1a14;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.gameHelp {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(31, 26, 20, 0.55);
+  line-height: 1.7;
+  margin: 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(31, 26, 20, 0.1);
+}
+
 /* Reveal SSR text when JS is disabled */
 .noscriptStyles {
   display: block;

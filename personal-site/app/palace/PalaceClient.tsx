@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import type { PalaceData } from "./palace-data";
 import styles from "./styles.module.css";
@@ -16,13 +16,40 @@ import { BingranOS } from "./ui/BingranOS";
 
 export type PalaceMode = "intro" | "idle" | "monitor";
 
+const HASH_TO_TAB: Record<string, string> = {
+  "#about": "about",
+  "#projects": "projects",
+  "#papers": "papers",
+  "#blog": "blog",
+  "#posts": "posts",
+  "#skills": "skills",
+  "#tetris": "tetris",
+  "#snake": "snake",
+  "#contact": "contact",
+};
+
 export default function PalaceClient({ data }: { data: PalaceData }) {
-  const [mode, setMode] = useState<PalaceMode>("intro");
+  // Honour a hash like /palace#tetris by jumping straight to the OS with that tab.
+  const initialTab = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    return HASH_TO_TAB[window.location.hash] ?? null;
+  }, []);
+  const [mode, setMode] = useState<PalaceMode>(initialTab ? "monitor" : "intro");
+  const [osTab, setOsTab] = useState<string | null>(initialTab);
   const mouseRef = useRef<[number, number]>([0, 0]);
 
   const enterRoom = useCallback(() => setMode("idle"), []);
-  const enterMonitor = useCallback(() => setMode("monitor"), []);
-  const exitMonitor = useCallback(() => setMode("idle"), []);
+  const enterMonitor = useCallback(() => {
+    setOsTab(null);
+    setMode("monitor");
+  }, []);
+  const exitMonitor = useCallback(() => {
+    setMode("idle");
+    setOsTab(null);
+    if (typeof window !== "undefined" && window.location.hash) {
+      history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
 
   // Auto-advance intro to idle after 5s if the user doesn't click "Enter"
   useEffect(() => {
@@ -30,6 +57,19 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
     const t = setTimeout(() => setMode("idle"), 5000);
     return () => clearTimeout(t);
   }, [mode]);
+
+  // React to hash changes (allows linking between tabs without reload)
+  useEffect(() => {
+    const sync = () => {
+      const tab = HASH_TO_TAB[window.location.hash];
+      if (tab) {
+        setOsTab(tab);
+        setMode("monitor");
+      }
+    };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
 
   // ESC exits monitor mode
   useEffect(() => {
@@ -76,7 +116,12 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
 
       <IntroOverlay visible={mode === "intro"} onEnter={enterRoom} />
       <HUD mode={mode} onExitMonitor={exitMonitor} />
-      <BingranOS data={data} visible={mode === "monitor"} onClose={exitMonitor} />
+      <BingranOS
+        data={data}
+        visible={mode === "monitor"}
+        initialTab={osTab}
+        onClose={exitMonitor}
+      />
     </>
   );
 }

@@ -119,6 +119,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/palace`,
+      lastModified: await getLatestLastModified([
+        "app/palace/page.tsx",
+        "app/palace/PalaceClient.tsx",
+        "app/palace/palace-data.ts",
+      ]),
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
   ];
 
   const skillEntries: MetadataRoute.Sitemap = getAllSkills().map((skill) => ({

@@ -38,6 +38,7 @@ I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecul
 - [Projects](${SITE}/projects)
 - [Papers](${SITE}/papers)
 - [Blog](${SITE}/blog)
+- [Memory Palace (3D room with same content)](${SITE}/palace)
 - [Zero-Human Company — definition and stack](${SITE}/zero-human-company)
 - [One-Person Company — operating-model definition and modes](${SITE}/one-person-company)
 

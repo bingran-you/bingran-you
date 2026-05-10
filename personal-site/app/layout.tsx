@@ -1,10 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Inter,
-  JetBrains_Mono,
-  Noto_Serif_SC,
-  Source_Serif_4,
-} from "next/font/google";
+import { Geist, Geist_Mono, Newsreader, Noto_Serif_SC } from "next/font/google";
 import "./globals.css";
 import {
   jsonLdScriptContent,
@@ -18,45 +13,29 @@ import {
   websiteJsonLd,
 } from "@/lib/jsonld";
 
-// Inter — workhorse for paper titles, author lists, body UI. Per the design
-// system, body sans (NOT serif) — "Source Serif 4 only for italic venue names
-// and display headings paired with Noto Serif SC."
-const inter = Inter({
-  variable: "--font-inter",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
 });
 
-// Source Serif 4 — display headings only (hero name, h1 / h2). Italic instances
-// also serve as venue names (Nature Photonics, Phys. Rev. Lett.) in paper rows.
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
 });
 
-// JetBrains Mono — every micro-label, metadata strip, wordmark, code chip.
-// 400 + 500 covers the system. Subset "latin" only — Han glyphs come from
-// Noto Serif SC via the per-glyph fallback in --font-mono / --font-cjk.
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
 });
 
-// Noto Serif SC pairs with Source Serif 4 — both share the transitional-serif
-// skeleton (open counters, modulated strokes), so mixed Latin + Han text in a
-// single element renders as a coherent typeface family. preload: false because
-// most pages have no Han glyphs; let the browser lazy-load on demand. Per the
-// design system v2.2 cjk-re-paired note: never PingFang sans for display.
+// Noto Serif SC pairs with Newsreader for harmonious Han + Latin display.
+// subsets: ["latin"] only controls preload hints; CJK glyphs are still
+// served via unicode-range and lazy-loaded when Chinese characters render.
+// preload: false — most pages have no Chinese, so don't waste a preload slot.
 const notoSerifSC = Noto_Serif_SC({
   variable: "--font-noto-serif-sc",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500"],
   preload: false,
   display: "swap",
 });
@@ -102,8 +81,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#08090B" },
-    { media: "(prefers-color-scheme: light)", color: "#08090B" },
+    { media: "(prefers-color-scheme: light)", color: "#f4ead7" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1610" },
   ],
 };
 
@@ -115,7 +94,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${sourceSerif.variable} ${jetbrainsMono.variable} ${notoSerifSC.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${notoSerifSC.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

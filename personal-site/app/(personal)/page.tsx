@@ -31,7 +31,7 @@ export default function Home() {
           </h1>
           <p
             lang="zh-Hans"
-            className="mt-2 font-display text-2xl leading-tight tracking-tight text-[var(--muted)] sm:text-3xl"
+            className="mt-3 font-display text-4xl leading-[1.1] text-foreground/85 sm:text-5xl"
           >
             尤炳然
           </p>

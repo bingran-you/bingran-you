@@ -37,6 +37,18 @@
       "headers": [
         { "key": "Cross-Origin-Opener-Policy", "value": "unsafe-none" }
       ]
+    },
+    {
+      "source": "/palace",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/palace/os",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
     }
   ]
 }

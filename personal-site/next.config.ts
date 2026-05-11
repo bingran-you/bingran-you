@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  async rewrites() {
+    return [
+      // /palace serves the vendored outer site (webpack build in public/palace/)
+      { source: "/palace", destination: "/palace/index.html" },
+      // /palace/os serves the vendored inner site (CRA build in public/palace/os/)
+      { source: "/palace/os", destination: "/palace/os/index.html" },
+    ];
+  },
 };
 
 const withMDX = createMDX({

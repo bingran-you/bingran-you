@@ -122,9 +122,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/palace`,
       lastModified: await getLatestLastModified([
-        "app/palace/page.tsx",
-        "app/palace/PalaceClient.tsx",
-        "app/palace/palace-data.ts",
+        // /palace is served as a static webpack/CRA bundle from the vendored
+        // palace-outer + palace-inner sub-apps, stitched together by
+        // scripts/build-palace.mjs and exposed via the rewrites in
+        // next.config.ts. Use those as the source-of-truth files.
+        "next.config.ts",
+        "scripts/build-palace.mjs",
+        "palace-outer/src/Application/Application.ts",
+        "palace-inner/src/components/applications/ShowcaseExplorer.tsx",
       ]),
       changeFrequency: "monthly",
       priority: 0.6,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Html, useTexture } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { BakedGLB, preloadBakedAssets } from "./BakedGLB";
@@ -42,54 +42,21 @@ const SCREEN = {
   rotation: new THREE.Euler(0, 0, 0),
 };
 
-function ScreenLayers({ visible }: { visible: boolean }) {
-  // Multi-layer CRT effect (Henry's pattern):
-  //   1. Backdrop OR iframe (when zoomed in)
-  //   2. Smudge JPG layer on top, additive blend, very low opacity
-  // Video scanline texture removed in v2 — it caused Context Lost when
-  // combined with the baked GLB load. Static smudge alone keeps the glass
-  // glassy without burning GPU memory.
+function ScreenLayers(_: { visible: boolean }) {
+  // Idle state shows a dim phosphor backdrop where the CRT face sits. When
+  // the user clicks the monitor we transition to a full-screen 2D overlay
+  // (see MonitorOverlay below) — sidestepping the drei <Html transform>
+  // distanceFactor calibration mess for a more reliable UX. The smudge layer
+  // gives the CRT face a soft sheen even at idle.
   const smudge = useTexture("/memory-palace/textures/monitor-smudge.jpg");
 
   return (
     <group position={SCREEN.position} rotation={SCREEN.rotation}>
-      {visible ? (
-        <Html
-          transform
-          distanceFactor={0.4}
-          position={[0, 0, 0.002]}
-          style={{
-            width: "320px",
-            height: "240px",
-            background: "#08090B",
-            overflow: "hidden",
-            border: "1px solid #1B1F25",
-            pointerEvents: "auto",
-          }}
-        >
-          <iframe
-            src="/"
-            title="bingran.you inside the CRT"
-            style={{
-              border: 0,
-              display: "block",
-              width: "238%",
-              height: "238%",
-              transform: "scale(0.42)",
-              transformOrigin: "top left",
-            }}
-          />
-        </Html>
-      ) : (
-        // Idle: dim phosphor backdrop so the screen isn't dead-black
-        <mesh position={[0, 0, 0.001]}>
-          <planeGeometry args={[SCREEN.width, SCREEN.height]} />
-          <meshBasicMaterial color="#0d1a1d" />
-        </mesh>
-      )}
-
-      {/* Smudge + fingerprints — additive, low opacity */}
-      <mesh position={[0, 0, 0.012]}>
+      <mesh position={[0, 0, 0.001]}>
+        <planeGeometry args={[SCREEN.width, SCREEN.height]} />
+        <meshBasicMaterial color="#0d1a1d" />
+      </mesh>
+      <mesh position={[0, 0, 0.003]}>
         <planeGeometry args={[SCREEN.width, SCREEN.height]} />
         <meshBasicMaterial
           map={smudge}
@@ -100,6 +67,62 @@ function ScreenLayers({ visible }: { visible: boolean }) {
         />
       </mesh>
     </group>
+  );
+}
+
+// 2D overlay shown when the user is "inside" the monitor — a CRT frame styled
+// div wraps an iframe to bingran.you. This is the v2 escape hatch: instead of
+// fighting Html transform pixel-to-world math, we just give the user the full
+// text site within a phosphor-themed frame.
+function MonitorOverlay({ onClose }: { onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "radial-gradient(ellipse at center, rgba(20,30,28,0.65) 0%, rgba(8,9,11,0.92) 75%)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        zIndex: 10,
+        display: "grid",
+        placeItems: "center",
+        animation: "mpFadeIn 380ms cubic-bezier(0.2, 0, 0, 1)",
+      }}
+    >
+      <style>{`
+        @keyframes mpFadeIn {
+          from { opacity: 0; transform: scale(0.94); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+      <div
+        style={{
+          position: "relative",
+          width: "min(86vw, 1200px)",
+          height: "min(82vh, 800px)",
+          background: "#0a0c10",
+          border: "1px solid #2A3038",
+          borderRadius: 14,
+          overflow: "hidden",
+          boxShadow:
+            "0 0 0 1px rgba(74, 222, 128, 0.08), 0 30px 80px rgba(0,0,0,0.55), inset 0 0 80px rgba(74, 222, 128, 0.04)",
+        }}
+      >
+        <iframe
+          src="/"
+          title="bingran.you"
+          style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -313,7 +336,7 @@ export function Scene() {
             scale={MODEL_SCALE}
           />
 
-          <ScreenLayers visible={view === "monitor"} />
+          <ScreenLayers visible={false} />
         </Suspense>
         <MonitorHitbox onClick={handleMonitorClick} />
 
@@ -325,6 +348,10 @@ export function Scene() {
         onBack={() => setView("default")}
         onEnter={handleMonitorClick}
       />
+
+      {view === "monitor" ? (
+        <MonitorOverlay onClose={() => setView("default")} />
+      ) : null}
     </div>
   );
 }

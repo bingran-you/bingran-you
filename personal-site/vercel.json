@@ -31,6 +31,12 @@
         { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
       ]
+    },
+    {
+      "source": "/palace(/.*)?",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "unsafe-none" }
+      ]
     }
   ]
 }

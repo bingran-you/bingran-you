@@ -102,6 +102,28 @@ h4 {
 
 li {
     margin-bottom: 16px;
+    /* Henry's template only styled <p> and headings; <li> fell back to the
+       body's system sans-serif, which read as un-Win98 next to the Millennium
+       headings. Match <p>. */
+    font-family: Millennium, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+li b,
+li strong {
+    font-family: MillenniumBold, 'Times New Roman', Times, serif;
+}
+
+/* Same fix for any other body text that ends up inside a generic <span>
+   without explicit font-family (e.g. role-period / tag labels in Experience
+   and Projects). */
+.site-page-content span {
+    font-family: Millennium, 'Times New Roman', Times, serif;
+}
+
+.site-page-content span b,
+.site-page-content span strong {
+    font-family: MillenniumBold, 'Times New Roman', Times, serif;
 }
 
 .blend {

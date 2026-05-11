@@ -79,8 +79,13 @@ p b {
 }
 
 h1 {
-    font-family: gastromond, sans-serif;
+    /* Chunky retro display serif. Upstream used Henry's Typekit "gastromond"
+       which is locked to his own domains — falls back to system sans-serif
+       elsewhere. Alfa Slab One (Google Fonts, OFL) is the nearest free
+       look-alike. */
+    font-family: 'Alfa Slab One', Georgia, 'Times New Roman', serif;
     font-size: 64px;
+    letter-spacing: 0.5px;
 }
 
 h2 {

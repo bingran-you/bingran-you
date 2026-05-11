@@ -1,0 +1,247 @@
+export const metadata = {
+  title: "A Bigger Ion Trap, for the Same RF Power",
+  description:
+    "When we moved an ion from a 75 µm to a 135 µm surface trap, the instinct in the room was that the RF system would need a rebuild. The constraint equation said the opposite — same voltage, same power, lower trap frequency. Full Mathieu derivation, scaling table, literature comparison, and the design rule I keep relearning.",
+  date: "2026-05-11",
+};
+
+We're moving an ion from a 75 µm surface trap into a 135 µm one. The new chip is just a scaled-up version of the old, with the ion sitting 1.8× higher above the electrodes. The first instinct in the room — including mine — was that the RF system was going to need a rebuild. Bigger trap means weaker fields at the ion, and the cheapest way to claw the trap depth back is to crank the voltage. More voltage means more power. The number we were preparing for was *bad*.
+
+After actually writing down the constraint equation, the answer turned out to be the opposite. We can move to the bigger trap with **the same voltage and the same power** we're using today — by letting one other knob drop. The rest of this post is the full derivation from the Mathieu equation, a closed-form scaling table, the specific application to our 75 → 135 µm migration with a scan of candidate drive frequencies, a literature comparison against published surface, blade, and 4-rod Paul traps, and the operational caveats. The general design lesson at the end is the part I keep relearning.
+
+## 1. Setup and notation
+
+For a linear Paul trap, or a planar surface trap mapped onto its equivalent radial quadrupole, the symbols I use are:
+
+- $e$, $m$ — ion charge and mass (fixed throughout).
+- $V_{\rm RF}$ — peak amplitude of the RF voltage delivered to the rails. The scope-quoted peak-to-peak is $V_{\rm pp} = 2 V_{\rm RF}$. Formulas below are written in terms of $V_{\rm RF}$; numerical results report $V_{\rm pp}$ where indicated.
+- $\Omega_{\rm RF}$ — angular RF drive frequency. Numerical values quote the linear frequency $f = \Omega_{\rm RF}/(2\pi)$.
+- $r_0$ — characteristic distance entering the radial quadrupole expansion,
+$$\Phi_{\rm RF}(x,y,t) = \frac{V_{\rm RF}\cos(\Omega_{\rm RF}\, t)}{2\, r_0^{2}}\,(x^{2}-y^{2}).$$
+For a 4-rod linear Paul trap, $r_0$ is the rod-to-center distance. For a 5-wire surface trap, $r_0^{2} = h^{2}/\kappa_{\rm geom}$, where $h$ is the ion-electrode height and $\kappa_{\rm geom} \in [0.05,\, 0.3]$ is a dimensionless geometric efficiency set by the electrode layout. At fixed layout, $r_0^{2} \propto h^{2}$.
+- $h$ — ion-electrode height for a surface trap. Two traps with identical layout but linearly scaled dimensions share the same $\kappa_{\rm geom}$.
+
+**Standing assumption.** The scalings below treat $\kappa_{\rm geom}$ as constant when migrating from trap 1 to trap 2 — i.e., the new trap is a geometric scale-up of the old, not a different electrode topology. If the topology changes, $\kappa_{\rm geom}$ should be characterized in situ via an RF-tickle measurement of $q$ versus $V_{\rm RF}$ once an ion is loaded; the formulas then apply with the measured $\kappa_{\rm geom}$.
+
+## 2. Derivation from the Mathieu equation
+
+### 2.1 Equation of motion and the Mathieu form
+
+The radial equation of motion along $\hat x$ is
+$$m\,\ddot x = -e\,\partial_x \Phi_{\rm RF} = -\frac{e V_{\rm RF}\cos(\Omega_{\rm RF}\, t)}{r_0^{2}}\, x.$$
+Introducing the dimensionless time $\tau \equiv \Omega_{\rm RF}\, t / 2$ casts this into canonical Mathieu form
+$$\frac{d^{2} x}{d\tau^{2}} + \bigl[\,a_x - 2 q_x \cos(2\tau)\,\bigr]\, x = 0,$$
+with $a_x = 0$ when no DC quadrupole is applied. Matching the coefficient of $\cos(2\tau)$ identifies the stability parameter
+
+$$\boxed{\; q \;\equiv\; \frac{2\, e\, V_{\rm RF}}{m\, \Omega_{\rm RF}^{2}\, r_0^{2}}\;}$$
+
+The sign of $q$ alternates between $\hat x$ and $\hat y$; only $|q|$ governs stability, and bounded motion requires $|q| < q_{\rm stab} \simeq 0.908$. In practice one operates well below this bound, $|q| \lesssim 0.4$, so the adiabatic expansion below stays accurate.
+
+### 2.2 Secular frequency
+
+For $|q| \lesssim 0.4$ and $|a| \ll q^{2}$, the leading-order Mathieu characteristic exponent yields a slow secular oscillation at
+
+$$\boxed{\;\omega_{\rm sec} = \frac{\Omega_{\rm RF}}{2}\sqrt{a + \tfrac{q^{2}}{2}} \;\;\xrightarrow{\,a=0\,}\;\; \frac{q\,\Omega_{\rm RF}}{2\sqrt{2}}.\;}$$
+
+This fixes the ratio of secular to drive frequency,
+$$\frac{\omega_{\rm sec}}{\Omega_{\rm RF}} = \frac{q}{2\sqrt{2}} \in \Bigl[\,0,\; \tfrac{0.908}{2\sqrt{2}}\,\Bigr) = [0,\, 0.32),$$
+so $\omega_{\rm sec}$ is always well below the drive. The fractional correction beyond this leading order is $\mathcal{O}(q^{2}/8)$; at $q = 0.28$ it is $\sim 1\%$ and we ignore it for design purposes.
+
+### 2.3 Pseudopotential and trap depth
+
+Split $x(t) = X(t) + \xi(t)$ into slow $X$ and fast $\xi$ at $\Omega_{\rm RF}$. The fast component obeys
+$$\ddot\xi \approx -\frac{e V_{\rm RF}\cos(\Omega_{\rm RF}\, t)}{m\, r_0^{2}}\, X \;\Longrightarrow\; \xi(t) = \frac{e V_{\rm RF}}{m\, \Omega_{\rm RF}^{2}\, r_0^{2}}\, X\, \cos(\Omega_{\rm RF}\, t) = \frac{q}{2}\, X\, \cos(\Omega_{\rm RF}\, t),$$
+so the micromotion-to-secular amplitude ratio at the trap rails is $q/2$. Averaging the full force over one RF period yields a slow equation $m\, \ddot X = -\partial\psi/\partial X$ with pseudopotential
+$$\psi(r) = \frac{e^{2}\, V_{\rm RF}^{2}}{4\, m\, \Omega_{\rm RF}^{2}\, r_0^{4}}\, r^{2} = \tfrac12\, m\, \omega_{\rm sec}^{2}\, r^{2}.$$
+Taking the depth at $r = r_0$ as the radial trap depth,
+
+$$\boxed{\;U_{\rm dep} = \psi(r_0) = \frac{e^{2}\, V_{\rm RF}^{2}}{4\, m\, \Omega_{\rm RF}^{2}\, r_0^{2}} = \frac{e\, V_{\rm RF}\, q}{8} = \tfrac12\, m\, \omega_{\rm sec}^{2}\, r_0^{2}.\;}$$
+
+Conventions in the literature sometimes carry a factor of 2 because of $V_{\rm RF}$ vs $V_{\rm pp}$ or different $r_0$ normalizations. I track $V_{\rm RF}$ as the peak amplitude throughout, and $r_0$ as defined by the quadrupole expansion above. With those definitions, the three expressions above are equivalent.
+
+### 2.4 RF voltage and RF power
+
+The trap is driven through a resonator (helical or quarter-wave) with effective shunt impedance $R_{\rm sh} = Q\, Z_0$, where $Q$ is the unloaded quality factor and $Z_0 = \sqrt{L/C}$ is the characteristic impedance. For matched delivery of power $P_{\rm RF}$ to the resonator,
+$$V_{\rm RF}^{2} \approx 2\, P_{\rm RF}\, R_{\rm sh} = 2\, P_{\rm RF}\, Q\, Z_0,$$
+giving the working relation
+
+$$\boxed{\;V_{\rm RF} \propto \sqrt{Q\, Z_0\, P_{\rm RF}} \;\;\Longleftrightarrow\;\; P_{\rm RF} \propto V_{\rm RF}^{2}\;}$$
+
+at fixed resonator geometry. Across different resonator builds, $Q$ and $Z_0$ depend mildly on $\Omega_{\rm RF}$; I treat them as constants for the leading-order scaling, returning to that correction in §7.
+
+## 3. Closed-form scaling table
+
+Holding ion species fixed (so $e$, $m$ fixed) and treating $\kappa_{\rm geom}$ as constant under scaling, the dependencies reduce to explicit power laws. Read each row as: *if you change the row variable by factor $k$, the column quantity changes by $k^{\text{exponent}}$.*
+
+| Vary&nbsp;↓ | $q$ | $\omega_{\rm sec}$ | $U_{\rm dep}$ | $P_{\rm RF}$ |
+|:--|:-:|:-:|:-:|:-:|
+| $V_{\rm RF}$ (others fixed) | $V^{+1}$ | $V^{+1}$ | $V^{+2}$ | $V^{+2}$ |
+| $\Omega_{\rm RF}$ (others fixed) | $\Omega^{-2}$ | $\Omega^{-1}$ | $\Omega^{-2}$ | — |
+| $h$ (others fixed) | $h^{-2}$ | $h^{-2}$ | $h^{-2}$ | — |
+| $P_{\rm RF}$ (others fixed) | $P^{+1/2}$ | $P^{+1/2}$ | $P^{+1}$ | — |
+| *At fixed $q$:* $\Omega_{\rm RF}$ | — | $\Omega^{+1}$ | $\Omega^{+2} h^{+2}$ | $\Omega^{+4} h^{+4}$ |
+| *At fixed $q$:* $V_{\rm RF}$ required | — | — | — | $\propto(\Omega h)^{2}$ |
+
+Two relations summarize the entire constrained-design problem at fixed $q$:
+
+$$\boxed{\;\frac{V_2}{V_1} = \left(\frac{\Omega_2}{\Omega_1}\right)^{2}\!\left(\frac{h_2}{h_1}\right)^{2},\qquad \frac{P_2}{P_1} = \left(\frac{V_2}{V_1}\right)^{2} = \left(\frac{\Omega_2}{\Omega_1}\right)^{4}\!\left(\frac{h_2}{h_1}\right)^{4}.\;}$$
+
+## 4. Application: 75 µm → 135 µm
+
+### 4.1 Anchor the current operating point
+
+With $f_1 = \Omega_{\rm RF}^{(1)}/(2\pi) = 43$ MHz and $f_{\mathrm{sec},1} = \omega_{\rm sec}^{(1)}/(2\pi) = 4.2$ MHz,
+$$q_1 = 2\sqrt{2}\,\frac{f_{\mathrm{sec},1}}{f_1} = 2\sqrt{2}\cdot\frac{4.2}{43} \approx 0.276.$$
+This is well inside the safe operating window ($q \lesssim 0.4$). I hold $q_2 = q_1$ throughout.
+
+### 4.2 The "preserve V and P" sweet spot
+
+With $h_2/h_1 = 135/75 = 1.8$, demanding $V_2 = V_1$ in the constrained-design formula gives
+$$\left(\frac{\Omega_2}{\Omega_1}\right)^{2} = \frac{1}{(h_2/h_1)^{2}} \;\Longrightarrow\; \Omega_2 = \Omega_1\,\frac{h_1}{h_2} = \frac{43}{1.8}\,\text{MHz} \approx 23.9\,\text{MHz},$$
+and correspondingly, since $\omega_{\rm sec} \propto \Omega$ at fixed $q$,
+$$\omega_{\rm sec}^{(2)} = \omega_{\rm sec}^{(1)}\,\frac{\Omega_2}{\Omega_1} = \frac{4.2}{1.8}\,\text{MHz} \approx 2.33\,\text{MHz}.$$
+At this drive, $V_{\rm pp} = 200$ V and $P_{\rm RF} = 2$ W remain exactly the current values (to the accuracy with which $Q$ and $Z_0$ are independent of $\Omega_{\rm RF}$ across this band).
+
+### 4.3 Scan of candidate drive frequencies
+
+For any choice of $\Omega_2$, the required $V_{\rm pp}$ and $P_{\rm RF}$ at $q_2 = q_1$ are
+$$V_{\rm pp}^{(2)} = V_{\rm pp}^{(1)}\!\left(\frac{\Omega_2}{43\,\text{MHz}}\right)^{\!2}(1.8)^{2},\qquad P_{\rm RF}^{(2)} = P_{\rm RF}^{(1)}\!\left(\frac{\Omega_2}{43\,\text{MHz}}\right)^{\!4}(1.8)^{4},$$
+with $(1.8)^{2} = 3.24$ and $(1.8)^{4} \approx 10.50$.
+
+<div className="not-prose my-6 overflow-x-auto">
+<table className="w-full text-sm border-collapse">
+<thead>
+<tr className="border-y border-foreground">
+<th className="px-3 py-2 text-right font-semibold">$\Omega_2/2\pi$ (MHz)</th>
+<th className="px-3 py-2 text-right font-semibold">$V_2/V_1$</th>
+<th className="px-3 py-2 text-right font-semibold">$V_{\rm pp}^{(2)}$ (V)</th>
+<th className="px-3 py-2 text-right font-semibold">$P_2/P_1$</th>
+<th className="px-3 py-2 text-right font-semibold">$P_{\rm RF}^{(2)}$ (W)</th>
+<th className="px-3 py-2 text-right font-semibold">$\omega_{\rm sec}^{(2)}/2\pi$ (MHz)</th>
+</tr>
+</thead>
+<tbody>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">18.0</td><td className="px-3 py-1.5 text-right tabular-nums">0.57</td><td className="px-3 py-1.5 text-right tabular-nums">114</td><td className="px-3 py-1.5 text-right tabular-nums">0.32</td><td className="px-3 py-1.5 text-right tabular-nums">0.65</td><td className="px-3 py-1.5 text-right tabular-nums">1.76</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">20.0</td><td className="px-3 py-1.5 text-right tabular-nums">0.70</td><td className="px-3 py-1.5 text-right tabular-nums">140</td><td className="px-3 py-1.5 text-right tabular-nums">0.49</td><td className="px-3 py-1.5 text-right tabular-nums">0.98</td><td className="px-3 py-1.5 text-right tabular-nums">1.95</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">22.0</td><td className="px-3 py-1.5 text-right tabular-nums">0.85</td><td className="px-3 py-1.5 text-right tabular-nums">170</td><td className="px-3 py-1.5 text-right tabular-nums">0.72</td><td className="px-3 py-1.5 text-right tabular-nums">1.44</td><td className="px-3 py-1.5 text-right tabular-nums">2.15</td></tr>
+<tr className="border-b border-[var(--border)] bg-amber-100/60 dark:bg-amber-900/30 font-semibold"><td className="px-3 py-1.5 text-right tabular-nums">23.9</td><td className="px-3 py-1.5 text-right tabular-nums">1.00</td><td className="px-3 py-1.5 text-right tabular-nums">200</td><td className="px-3 py-1.5 text-right tabular-nums">1.00</td><td className="px-3 py-1.5 text-right tabular-nums">2.00</td><td className="px-3 py-1.5 text-right tabular-nums">2.33</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">26.0</td><td className="px-3 py-1.5 text-right tabular-nums">1.19</td><td className="px-3 py-1.5 text-right tabular-nums">237</td><td className="px-3 py-1.5 text-right tabular-nums">1.40</td><td className="px-3 py-1.5 text-right tabular-nums">2.81</td><td className="px-3 py-1.5 text-right tabular-nums">2.54</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">28.0</td><td className="px-3 py-1.5 text-right tabular-nums">1.37</td><td className="px-3 py-1.5 text-right tabular-nums">275</td><td className="px-3 py-1.5 text-right tabular-nums">1.89</td><td className="px-3 py-1.5 text-right tabular-nums">3.78</td><td className="px-3 py-1.5 text-right tabular-nums">2.73</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">30.0</td><td className="px-3 py-1.5 text-right tabular-nums">1.58</td><td className="px-3 py-1.5 text-right tabular-nums">315</td><td className="px-3 py-1.5 text-right tabular-nums">2.49</td><td className="px-3 py-1.5 text-right tabular-nums">4.97</td><td className="px-3 py-1.5 text-right tabular-nums">2.93</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">33.0</td><td className="px-3 py-1.5 text-right tabular-nums">1.91</td><td className="px-3 py-1.5 text-right tabular-nums">382</td><td className="px-3 py-1.5 text-right tabular-nums">3.64</td><td className="px-3 py-1.5 text-right tabular-nums">7.29</td><td className="px-3 py-1.5 text-right tabular-nums">3.22</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">36.0</td><td className="px-3 py-1.5 text-right tabular-nums">2.27</td><td className="px-3 py-1.5 text-right tabular-nums">454</td><td className="px-3 py-1.5 text-right tabular-nums">5.16</td><td className="px-3 py-1.5 text-right tabular-nums">10.31</td><td className="px-3 py-1.5 text-right tabular-nums">3.51</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-3 py-1.5 text-right tabular-nums">40.0</td><td className="px-3 py-1.5 text-right tabular-nums">2.80</td><td className="px-3 py-1.5 text-right tabular-nums">561</td><td className="px-3 py-1.5 text-right tabular-nums">7.86</td><td className="px-3 py-1.5 text-right tabular-nums">15.72</td><td className="px-3 py-1.5 text-right tabular-nums">3.91</td></tr>
+<tr className="border-b border-foreground"><td className="px-3 py-1.5 text-right tabular-nums">43.0</td><td className="px-3 py-1.5 text-right tabular-nums">3.24</td><td className="px-3 py-1.5 text-right tabular-nums">648</td><td className="px-3 py-1.5 text-right tabular-nums">10.50</td><td className="px-3 py-1.5 text-right tabular-nums">21.00</td><td className="px-3 py-1.5 text-right tabular-nums">4.20</td></tr>
+</tbody>
+</table>
+<p className="text-xs italic text-[var(--muted)] mt-2">
+$h_2 = 135$ µm scan at fixed $q_2 = q_1 \approx 0.276$. Highlighted row is the voltage-preserving sweet spot. Bottom row preserves the original $\omega_{\rm sec}$ at the cost of ~10× power and ~650 V<sub>pp</sub>.
+</p>
+</div>
+
+## 5. Literature comparison: where this design point sits
+
+To anchor the design point in context, the first table below reproduces a curated set of *surface* ion-trap entries from a recent review (electrode dimensions, RF specs, $q$, radial secular frequency, ion height), with the two operating points of this note appended at the bottom for direct comparison. The second table widens the scope across other Paul-trap geometries — linear blade, 4-rod, wheel, cryogenic surface, in-vacuum resonator — drawn from my Zotero library.
+
+### 5.1 Surface ion traps — review compilation
+
+<div className="not-prose my-6 overflow-x-auto">
+<table className="w-full text-sm border-collapse">
+<thead>
+<tr className="border-y border-foreground">
+<th className="px-2 py-2 text-left font-semibold">Ref</th>
+<th className="px-2 py-2 text-right font-semibold">$a$ (µm)</th>
+<th className="px-2 py-2 text-right font-semibold">$b$ (µm)</th>
+<th className="px-2 py-2 text-right font-semibold">$V_{\rm RF}$ (V)</th>
+<th className="px-2 py-2 text-right font-semibold">$\Omega_{\rm RF}/2\pi$ (MHz)</th>
+<th className="px-2 py-2 text-left font-semibold">Ion</th>
+<th className="px-2 py-2 text-right font-semibold">$U_{\rm dep}$ (meV)</th>
+<th className="px-2 py-2 text-right font-semibold">$q$</th>
+<th className="px-2 py-2 text-right font-semibold">$\omega_{\rm rad}/2\pi$ (MHz)</th>
+<th className="px-2 py-2 text-right font-semibold">$h$ (µm)</th>
+</tr>
+</thead>
+<tbody>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[12]</td><td className="px-2 py-1.5 text-right tabular-nums">77</td><td className="px-2 py-1.5 text-right tabular-nums">137</td><td className="px-2 py-1.5 text-right tabular-nums">50–140</td><td className="px-2 py-1.5 text-right tabular-nums">33</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.25–0.34*</td><td className="px-2 py-1.5 text-right tabular-nums">3–4</td><td className="px-2 py-1.5 text-right tabular-nums">84</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[21]</td><td className="px-2 py-1.5 text-right tabular-nums">100</td><td className="px-2 py-1.5 text-right tabular-nums">247</td><td className="px-2 py-1.5 text-right tabular-nums">223</td><td className="px-2 py-1.5 text-right tabular-nums">25.8</td><td className="px-2 py-1.5">Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right tabular-nums">188</td><td className="px-2 py-1.5 text-right tabular-nums">0.43</td><td className="px-2 py-1.5 text-right tabular-nums">4.02</td><td className="px-2 py-1.5 text-right tabular-nums">150</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[24]</td><td className="px-2 py-1.5 text-right" colSpan={2}>asymmetric</td><td className="px-2 py-1.5 text-right tabular-nums">100</td><td className="px-2 py-1.5 text-right tabular-nums">60</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.16–0.19*</td><td className="px-2 py-1.5 text-right tabular-nums">3.5–4</td><td className="px-2 py-1.5 text-right tabular-nums">63</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[25]</td><td className="px-2 py-1.5 text-right" colSpan={2}>asymmetric</td><td className="px-2 py-1.5 text-right tabular-nums">51</td><td className="px-2 py-1.5 text-right tabular-nums">90.7</td><td className="px-2 py-1.5"><sup>24</sup>Mg<sup>+</sup></td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.25*</td><td className="px-2 py-1.5 text-right tabular-nums">8</td><td className="px-2 py-1.5 text-right tabular-nums">40</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[27]</td><td className="px-2 py-1.5 text-right tabular-nums">44</td><td className="px-2 py-1.5 text-right tabular-nums">84</td><td className="px-2 py-1.5 text-right tabular-nums">91</td><td className="px-2 py-1.5 text-right tabular-nums">58.55</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.05–0.12*</td><td className="px-2 py-1.5 text-right tabular-nums">1–2.5</td><td className="px-2 py-1.5 text-right tabular-nums">60</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[32]</td><td className="px-2 py-1.5 text-right tabular-nums">75</td><td className="px-2 py-1.5 text-right tabular-nums">95</td><td className="px-2 py-1.5 text-right tabular-nums">155</td><td className="px-2 py-1.5 text-right tabular-nums">40.6</td><td className="px-2 py-1.5"><sup>88</sup>Sr<sup>+</sup></td><td className="px-2 py-1.5 text-right tabular-nums">25</td><td className="px-2 py-1.5 text-right tabular-nums">0.15*, 0.12*</td><td className="px-2 py-1.5 text-right tabular-nums">2.1, 1.7</td><td className="px-2 py-1.5 text-right tabular-nums">79</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[33]</td><td className="px-2 py-1.5 text-right tabular-nums">45</td><td className="px-2 py-1.5 text-right tabular-nums">136</td><td className="px-2 py-1.5 text-right tabular-nums">72</td><td className="px-2 py-1.5 text-right tabular-nums">38.7</td><td className="px-2 py-1.5"><sup>43</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right tabular-nums">59</td><td className="px-2 py-1.5 text-right tabular-nums">0.3</td><td className="px-2 py-1.5 text-right tabular-nums">4</td><td className="px-2 py-1.5 text-right tabular-nums">75</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">[34]</td><td className="px-2 py-1.5 text-right" colSpan={2}>asymmetric</td><td className="px-2 py-1.5 text-right tabular-nums">140</td><td className="px-2 py-1.5 text-right tabular-nums">20.6</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5 text-right tabular-nums">75</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">230</td></tr>
+<tr className="border-b border-[var(--border)] bg-amber-100/60 dark:bg-amber-900/30 font-semibold"><td className="px-2 py-1.5">current</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">100<sup>pk</sup></td><td className="px-2 py-1.5 text-right tabular-nums">43</td><td className="px-2 py-1.5">—</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.276</td><td className="px-2 py-1.5 text-right tabular-nums">4.2</td><td className="px-2 py-1.5 text-right tabular-nums">75</td></tr>
+<tr className="border-b border-foreground bg-amber-100/60 dark:bg-amber-900/30 font-semibold"><td className="px-2 py-1.5">proposed</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">100<sup>pk</sup></td><td className="px-2 py-1.5 text-right tabular-nums">23.9</td><td className="px-2 py-1.5">—</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">0.276</td><td className="px-2 py-1.5 text-right tabular-nums">2.33</td><td className="px-2 py-1.5 text-right tabular-nums">135</td></tr>
+</tbody>
+</table>
+<p className="text-xs italic text-[var(--muted)] mt-2">
+Top eight rows: from "Table 1. Electrode dimensions and specifications of surface ion traps" in a recent surface-trap review (provided by Bingran). Bottom two rows: this work. Starred $q$ values were computed via $q \approx 2\sqrt{2}\,\omega_s / \Omega_{\rm RF}$ from the reported secular frequency. Both Bingran rows quote $V_{\rm RF} = 100$ V peak (equivalent to $V_{\rm pp} = 200$ V).
+</p>
+</div>
+
+A few sanity-checks fall out of reading this table:
+
+- **The current point (h=75 µm, Ω/2π=43 MHz, ω=4.2 MHz, q=0.28) is very close to row [33]** — same ion height, same secular frequency to within 5%, comparable $q$. The current trap is squarely in published practice.
+- **The proposed point (h=135 µm, Ω/2π=23.9 MHz, ω=2.33 MHz, q=0.28) sits between rows [21] and [34]** — both larger-$h$ designs that drop $\Omega_{\rm RF}$ into the 20–26 MHz band. Rows [21] (h=150 µm, Ω=25.8 MHz) and [34] (h=230 µm, Ω=20.6 MHz) confirm that ~24 MHz at $h \sim 135$ µm is the natural operating band.
+- **$q$ across the review is mostly 0.15–0.43.** Our 0.28 is mid-band — neither aggressive nor overly conservative.
+- **$V_{\rm RF}$ across the review is 50–223 V (peak).** Our 100 V peak (= 200 V<sub>pp</sub>) is mid-band as well.
+
+### 5.2 Other Paul-trap geometries — for breadth
+
+<div className="not-prose my-6 overflow-x-auto">
+<table className="w-full text-sm border-collapse">
+<thead>
+<tr className="border-y border-foreground">
+<th className="px-2 py-2 text-left font-semibold">Group / trap</th>
+<th className="px-2 py-2 text-right font-semibold">Year</th>
+<th className="px-2 py-2 text-left font-semibold">Ion</th>
+<th className="px-2 py-2 text-left font-semibold">Type / T</th>
+<th className="px-2 py-2 text-right font-semibold">$h$ or $r_0$ (µm)</th>
+<th className="px-2 py-2 text-right font-semibold">$\Omega/2\pi$ (MHz)</th>
+<th className="px-2 py-2 text-right font-semibold">$\omega_{\rm rad}/2\pi$ (MHz)</th>
+<th className="px-2 py-2 text-right font-semibold">$q$</th>
+<th className="px-2 py-2 text-left font-semibold">Resonator</th>
+</tr>
+</thead>
+<tbody>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">YK-3 (Innsbruck cryo)</td><td className="px-2 py-1.5 text-right">2015</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5">Surface, 10 K</td><td className="px-2 py-1.5 text-right tabular-nums">h≈100</td><td className="px-2 py-1.5 text-right tabular-nums">21.5</td><td className="px-2 py-1.5 text-right tabular-nums">1.0</td><td className="px-2 py-1.5 text-right tabular-nums">0.13</td><td className="px-2 py-1.5">In-vacuum RLC, &lt;0.1 W</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">"Bastille" (Innsbruck)</td><td className="px-2 py-1.5 text-right">2011</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5">Surface, 295 K</td><td className="px-2 py-1.5 text-right tabular-nums">h=400</td><td className="px-2 py-1.5 text-right tabular-nums">10.2</td><td className="px-2 py-1.5 text-right tabular-nums">0.8–1.1</td><td className="px-2 py-1.5 text-right tabular-nums">0.22–0.30</td><td className="px-2 py-1.5">Helical λ/4, ~2 W</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">ETH PCB (Be⁺)</td><td className="px-2 py-1.5 text-right">2022</td><td className="px-2 py-1.5"><sup>9</sup>Be<sup>+</sup></td><td className="px-2 py-1.5">4-rod, 295 K</td><td className="px-2 py-1.5 text-right tabular-nums">$r_0$=500</td><td className="px-2 py-1.5 text-right tabular-nums">67.4</td><td className="px-2 py-1.5 text-right">—</td><td className="px-2 py-1.5 text-right tabular-nums">~0.30 (quoted)</td><td className="px-2 py-1.5">PCB dual-phase, Q≈43</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">Elevator trap (Da An, Innsbruck)</td><td className="px-2 py-1.5 text-right">2021</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5">4-rod, 295 K</td><td className="px-2 py-1.5 text-right tabular-nums">$r_0$=50–300</td><td className="px-2 py-1.5 text-right tabular-nums">18.1</td><td className="px-2 py-1.5 text-right tabular-nums">0.6–2.0</td><td className="px-2 py-1.5 text-right tabular-nums">0.09–0.31</td><td className="px-2 py-1.5">Toroidal λ/2</td></tr>
+<tr className="border-b border-[var(--border)]"><td className="px-2 py-1.5">Gorman (Sussex)</td><td className="px-2 py-1.5 text-right">2017</td><td className="px-2 py-1.5"><sup>40</sup>Ca<sup>+</sup></td><td className="px-2 py-1.5">Linear blade, 295 K</td><td className="px-2 py-1.5 text-right tabular-nums">$r_0$=300</td><td className="px-2 py-1.5 text-right tabular-nums">30</td><td className="px-2 py-1.5 text-right tabular-nums">2–3</td><td className="px-2 py-1.5 text-right tabular-nums">0.19–0.28</td><td className="px-2 py-1.5">Half-wave (λ/2)</td></tr>
+<tr className="border-b border-foreground"><td className="px-2 py-1.5">Al⁺ clock (NIST)</td><td className="px-2 py-1.5 text-right">2017</td><td className="px-2 py-1.5"><sup>27</sup>Al<sup>+</sup>/<sup>25</sup>Mg<sup>+</sup></td><td className="px-2 py-1.5">Wheel linear, 295 K</td><td className="px-2 py-1.5 text-right tabular-nums">$r_0$=900–1500</td><td className="px-2 py-1.5 text-right tabular-nums">40 &amp; 76</td><td className="px-2 py-1.5 text-right tabular-nums">0.1–0.5<sup>a</sup></td><td className="px-2 py-1.5 text-right tabular-nums">0.02–0.04</td><td className="px-2 py-1.5">Meander line (PCB)</td></tr>
+</tbody>
+</table>
+<p className="text-xs italic text-[var(--muted)] mt-2">
+$h$ for surface traps; rod-to-axis $r_0$ for 4-rod / linear blade. The $q$ column uses radial $\omega_{\rm sec}$; axial frequencies marked <sup>a</sup>. Reading the two tables together: surface traps with $q \in [0.15, 0.35]$ run with $\Omega/2\pi$ from ~20 to ~90 MHz, with $\Omega$ pushing higher as $h$ shrinks. Off-surface geometries (4-rod, blade) expand the parameter space but the underlying $V \propto (\Omega h)^{2}$ scaling at fixed $q$ still organizes the picture.
+</p>
+</div>
+
+## 6. Recommendation
+
+There are three places on the cost curve worth naming:
+
+- **Default — Retune to ~24 MHz.** Reuse $V_{\rm pp} = 200$ V, $P_{\rm RF} = 2$ W, $q \approx 0.28$. Accept $\omega_{\rm sec}/2\pi \approx 2.33$ MHz. This is the only choice that leaves voltage and power unchanged. Resonator needs a new winding (more turns) — see §7.
+- **Compromise — ~30 MHz for $\omega_{\rm sec} \sim 3$ MHz.** Expect ~315 V<sub>pp</sub> and ~5 W (≈ 2.5× current power). Still tractable for a standard helical resonator and within typical breakdown margins. Heating-rate benefit from larger $h$ is mostly retained.
+- **Avoid — Keep $\omega_{\rm sec} = 4.2$ MHz.** Running back at 43 MHz on the bigger trap demands ~650 V<sub>pp</sub> and ~21 W. Voltage exceeds typical breakdown margins on bonded surface-trap chips; power exceeds the thermal budget of most room-temperature helical resonators.
+
+## 7. Operational notes and caveats
+
+- **Resonator retuning.** The LC product scales by $(43/24)^{2} \approx 3.2$. Trap capacitance (~1–3 pF, dominated by the vacuum feedthrough and bonding pads) does not change with $h$. The fix is on the resonator coil: more turns or a longer winding to roughly triple $L$.
+- **$Q$ at lower frequency.** Helical-resonator copper-skin surface resistance scales as $\sqrt{f}$, so $Q$ typically *rises* when moving from 43 MHz to 24 MHz. This gives a modest tailwind in $V_{\rm RF}$ per $\sqrt{P_{\rm RF}}$ that the table does not credit.
+- **Anomalous heating budget.** Empirically the motional heating rate of surface traps scales as $\dot{\bar n} \propto h^{-4}\, \omega_{\rm sec}^{-1}$ (sometimes steeper than $h^{-4}$ for warm traps). $h\colon 75 \to 135$ µm gives a $1.8^{4} \approx 10\times$ suppression; dropping $\omega_{\rm sec}$ by $1.8\times$ gives back ~$1.8\times$. Net improvement is roughly $5$–$6\times$. This is usually the primary motivation for migrating to a larger trap.
+- **Geometric factor.** The formulas assume the new trap is a linear scale-up of the old. If the electrode topology differs, $\kappa_{\rm geom}$ may differ and the $h^{-2}$ scaling acquires an additional dimensionless factor. After the first ion is loaded in the new trap, do an RF-tickle: scan $V_{\rm RF}$ and measure $\omega_{\rm sec}$ to extract the actual $q/V_{\rm RF}$ slope, then use it to refine the design point.
+- **Mathieu corrections.** $\omega_{\rm sec} = q\, \Omega_{\rm RF}/(2\sqrt{2})$ is exact at $q \to 0$; the next correction is of relative size $q^{2}/8$. At $q = 0.28$ this is ~1%, smaller than typical RF voltage stability. If running at $q \gtrsim 0.5$, switch to the continued-fraction expression for the Mathieu characteristic exponent.
+- **Voltage convention.** $V_{\rm RF}$ in this document is the peak amplitude of the RF on a single rail. $V_{\rm pp} = 2 V_{\rm RF}$ is the scope-quoted peak-to-peak on that rail. If the trap is driven differentially ($\pm$ rails), the inter-rail $V_{\rm pp}$ doubles again — but so does the field at the ion, and the $q$ formula's prefactor absorbs this. State the convention explicitly when sharing numbers across labs.
+
+## What I keep relearning
+
+The general shape of this story is one I've now seen often enough that I should probably write it on a sticky note:
+
+> When a scaling problem looks one-dimensional, you're probably holding the wrong things constant.
+
+The "1.8× bigger trap needs 10× more power" framing is *correct under one specific choice* — hold the secular frequency fixed. Drop that constraint and the cost evaporates. The question isn't "what does the bigger trap cost?" It's "what are you actually trying to preserve?" Often the answer turns out to be a habit, not a real requirement.
+
+It's worth being explicit about this in the early design conversations, before someone goes off to spec a 20 W amplifier and a higher-breakdown chip. The number changes by an order of magnitude depending on which thing you decide to hold fixed. Writing down the $q$-constraint surface and asking the team to point at the corner of it they actually want is, I think, a generally underrated move.
+
+— Bingran

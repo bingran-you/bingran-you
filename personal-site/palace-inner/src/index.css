@@ -38,6 +38,18 @@ code {
     src: url(./assets/fonts/Terminal.ttf);
 }
 
+/* Self-hosted Alfa Slab One (OFL, OFL.txt is shipped alongside the file).
+   Used by h1. Self-hosting because the Google Fonts edge intermittently
+   503's on the bingran.ai referer, and we don't want a font CDN as a hard
+   dependency. */
+@font-face {
+    font-family: 'Alfa Slab One';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(./assets/fonts/AlfaSlabOne-Regular.woff2) format('woff2');
+}
+
 
 * {
     -webkit-touch-callout: none;

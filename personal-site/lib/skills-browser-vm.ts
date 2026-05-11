@@ -13,14 +13,22 @@ export type SkillsViewModel = {
   queryMatchesAcrossCategories: number;
 };
 
-function matchesQuery(skill: Skill, q: string): boolean {
-  if (!q) return true;
+function matchesToken(skill: Skill, token: string): boolean {
   return (
-    skill.name.toLowerCase().includes(q) ||
-    skill.slug.toLowerCase().includes(q) ||
-    skill.description.toLowerCase().includes(q) ||
-    (skill.triggers?.some((t) => t.toLowerCase().includes(q)) ?? false)
+    skill.name.toLowerCase().includes(token) ||
+    skill.slug.toLowerCase().includes(token) ||
+    skill.description.toLowerCase().includes(token) ||
+    (skill.triggers?.some((t) => t.toLowerCase().includes(token)) ?? false)
   );
+}
+
+function matchesQuery(skill: Skill, tokens: string[]): boolean {
+  // AND semantics: every whitespace-separated token must hit some field on the
+  // card. This makes "memory palace" find a skill with slug "memory-palace"
+  // (token "memory" hits the slug, token "palace" hits the slug too) instead
+  // of trying to match the literal substring "memory palace" which doesn't
+  // exist anywhere.
+  return tokens.every((t) => matchesToken(skill, t));
 }
 
 export function buildSkillsViewModel(
@@ -28,8 +36,13 @@ export function buildSkillsViewModel(
   categories: SkillCategory[],
   state: SkillsFilterState,
 ): SkillsViewModel {
-  const q = state.query.trim().toLowerCase();
-  const queryMatches = q ? skills.filter((s) => matchesQuery(s, q)) : skills;
+  const tokens = state.query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 0);
+  const queryMatches = tokens.length
+    ? skills.filter((s) => matchesQuery(s, tokens))
+    : skills;
   const filtered =
     state.activeCategory === "All"
       ? queryMatches
@@ -57,6 +70,8 @@ export function buildSkillsViewModel(
     groups,
     isEmpty: filtered.length === 0,
     queryMatchesAcrossCategories:
-      q && state.activeCategory !== "All" ? queryMatches.length : 0,
+      tokens.length && state.activeCategory !== "All"
+        ? queryMatches.length
+        : 0,
   };
 }

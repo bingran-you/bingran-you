@@ -29,12 +29,6 @@ export default function Home() {
           <h1 className="font-display text-5xl leading-[1.02] tracking-[-0.035em] sm:text-6xl">
             Bingran You
           </h1>
-          <p
-            lang="zh-Hans"
-            className="mt-3 font-display text-4xl leading-[1.1] text-foreground/85 sm:text-5xl"
-          >
-            尤炳然
-          </p>
           <ul className="mt-7 space-y-3 text-base text-[var(--muted)]">
             <li className="flex flex-wrap items-center gap-x-6 gap-y-2">
               <span className="inline-flex items-center gap-2">

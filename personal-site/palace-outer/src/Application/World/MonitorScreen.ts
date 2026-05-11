@@ -183,8 +183,11 @@ export default class MonitorScreen extends EventEmitter {
         };
 
         // Set iframe attributes
-        // PROD: mounted at /palace/os/ on bingranyou.com (built from ../palace-inner)
-        iframe.src = '/palace/os/';
+        // PROD: mounted at /palace/os on bingranyou.com (built from ../palace-inner).
+        // No trailing slash — Vercel 308-redirects /palace/os/ → /palace/os and
+        // the intermediate text/plain response leaves the iframe in a broken
+        // state. Hit the rewrite target directly.
+        iframe.src = '/palace/os';
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('dev')) {
             iframe.src = 'http://localhost:3000/';

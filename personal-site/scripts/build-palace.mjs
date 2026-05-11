@@ -38,7 +38,10 @@ function run(cmd, cwd) {
 
 function ensureInstalled(dir) {
   if (!existsSync(path.join(dir, "node_modules"))) {
-    run("npm install --no-audit --no-fund", dir);
+    // Force `--include=dev` so build-time devDeps (babel presets, @types,
+    // etc.) install even when Vercel sets NODE_ENV=production for the
+    // outer build.
+    run("npm install --no-audit --no-fund --include=dev", dir);
   }
 }
 

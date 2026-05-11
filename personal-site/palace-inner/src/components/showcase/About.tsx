@@ -8,7 +8,7 @@ const About: React.FC<AboutProps> = () => {
     return (
         <div className="site-page-content">
             <h1 style={{ marginLeft: -16 }}>Hi, I'm Bingran</h1>
-            <h3>PhD candidate at UC Berkeley · 尤炳然</h3>
+            <h3>PhD candidate at UC Berkeley</h3>
             <br />
             <div className="text-block">
                 <p>

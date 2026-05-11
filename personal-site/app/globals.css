@@ -70,8 +70,8 @@ body {
    Latin defaults, and the Newsreader text-feature settings (ss01/ss02/cv01/
    cv11 from `body`) target Latin glyphs only — Noto Serif SC ignores them
    but inheriting them is harmless. Apply a small letter-spacing nudge so
-   inline Han inside Latin paragraphs (e.g. "Bingran You (Chinese: 尤炳然)")
-   reads as a deliberate inset, not a jam-up. */
+   inline Han inside Latin paragraphs reads as a deliberate inset, not a
+   jam-up. */
 :lang(zh-Hans),
 :lang(zh-Hant),
 :lang(zh) {

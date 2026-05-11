@@ -211,43 +211,55 @@
   50% { opacity: 1; transform: scale(1.15); }
 }
 
-/* BingranOS — appears when the user "enters" the monitor */
-.osLayer {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1rem, 4vw, 3rem);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.55) 100%);
+/* BingranOS — rendered as an HTML element projected onto the 3D monitor
+   screen plane via drei <Html transform>. There is no fade overlay; the OS
+   is permanently mounted so the dolly-in reads as a single smooth zoom.
+   `.monitorScreen` IS the CRT screen face — a deep warm-dark phosphor
+   coating. The OS frame sits inset inside it so a thin band of phosphor
+   shows around the UI, the way an actual CRT displays an image slightly
+   smaller than the physical face. Aspect ratio 4:3 matches the bezel
+   aperture so the projection has no letterbox bands.
+
+   Subtle inset shadow + radial vignette suggest curved glass — turning the
+   "flat texture sticker" feel into "content lit on phosphor". */
+.monitorScreen {
+  width: 1024px;
+  height: 768px;
+  background:
+    radial-gradient(ellipse at 50% 48%, #1c1308 0%, #0d0904 70%, #050301 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.6);
 }
 
-.osLayer.visible {
-  opacity: 1;
-  pointer-events: auto;
+/* Faint phosphor highlight at the top — old CRTs bloom a little at the
+   top center where the electron beam dwells. Soft, low opacity. */
+.monitorScreen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(240, 182, 135, 0.08) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 4;
 }
 
 .osFrame {
-  position: relative;
-  width: min(1100px, 96vw);
-  height: min(720px, 86vh);
-  border-radius: 0;
-  overflow: hidden;
+  position: absolute;
+  /* Inset asymmetrically: a bit more vertical so the OS frame feels like
+     it's centered in the CRT cone rather than glued to the bezel. */
+  top: 4.5%;
+  bottom: 4.5%;
+  left: 3.5%;
+  right: 3.5%;
   background: #fbf3e1;
   color: #1f1a14;
-  /* Classic Mac chrome: thin black outline + a small "shadow" beneath that
-     reads as a window dropped onto the screen. */
-  box-shadow:
-    0 0 0 1px #1f1a14,
-    4px 4px 0 0 rgba(31, 26, 20, 0.85),
-    0 22px 60px rgba(0, 0, 0, 0.55);
   display: flex;
   flex-direction: column;
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+  /* Tiny inner shadow softens the OS edge against the phosphor — sells the
+     "image projected on the screen" feel instead of "rectangle pasted on". */
+  box-shadow: 0 0 24px rgba(240, 182, 135, 0.12);
 }
 
 .osFrame::before {

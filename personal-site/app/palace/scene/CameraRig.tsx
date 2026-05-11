@@ -10,30 +10,35 @@ import type { PalaceMode } from "../PalaceClient";
 type Vec3 = [number, number, number];
 
 // Poses calibrated to the baked GLB world (MODEL_SCALE = 0.15 in BakedScene).
-// The Mac monitor face sits at world (0, 0.22, 0), so all targets read low
-// compared to the older procedural setup — the scene is roughly desk-on-floor
-// scale rather than room-with-tall-desk scale.
+// Monitor screen plane sits at z=0.092 with width 0.20m / height 0.15m (4:3).
+// The BingranOS HTML container (1024×768, 4:3) projects to exactly that —
+// no letterbox/pillarbox inside the CRT bezel. Monitor-mode framing fits
+// the screen HEIGHT in viewport so 16:9 viewports show the screen with a
+// small pillarbox of CRT bezel + room around the sides (which sells the
+// "looking at a real monitor" feel rather than a fullscreen-app illusion):
+//   d = 0.32 - 0.092 = 0.228
+//   visible_height = 2 * d * tan(fov/2) = 0.15 → fov ≈ 36.4°
 const CAM: Record<
   PalaceMode,
   { pos: Vec3; look: Vec3; fov: number; duration: number }
 > = {
   intro: {
-    pos: [1.4, 0.95, 2.4],
-    look: [0, 0.2, -0.15],
+    pos: [1.4, 0.85, 2.3],
+    look: [0, 0.15, -0.1],
     fov: 44,
     duration: 2.1,
   },
   idle: {
-    pos: [0.3, 0.55, 1.6],
-    look: [0, 0.12, -0.1],
+    pos: [0.22, 0.45, 1.4],
+    look: [0, 0.12, -0.05],
     fov: 36,
-    duration: 1.45,
+    duration: 1.6,
   },
   monitor: {
-    pos: [0, 0.22, 0.45],
-    look: [0, 0.22, 0],
-    fov: 22,
-    duration: 1.2,
+    pos: [0, 0.165, 0.32],
+    look: [0, 0.165, 0.092],
+    fov: 36,
+    duration: 1.6,
   },
 };
 
@@ -45,10 +50,12 @@ function fovForAspect(baseFov: number, aspect: number) {
   return Math.min(80, newVertical);
 }
 
-// Cubic ease-in-out — the canonical "buttery" curve. Henry Heffernan's site
-// uses a similar shape: slow start, accelerate, slow finish.
-function cubicInOut(t: number) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+// Quintic ease-in-out — flatter tails than cubic. The flat start and finish
+// matter most for the monitor dolly: the camera "lifts off" and "lands"
+// almost imperceptibly so the zoom reads as one continuous motion rather
+// than a snap-zoom.
+function quintInOut(t: number) {
+  return t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
 }
 
 export function CameraRig({
@@ -111,7 +118,7 @@ export function CameraRig({
 
     if (linearT < 1) {
       // Mid-transition: pure time-based ease, no parallax interference.
-      const eased = cubicInOut(linearT);
+      const eased = quintInOut(linearT);
       cam.position.lerpVectors(fromPos.current, baseTargetPos, eased);
       currentLook.current.lerpVectors(fromLook.current, baseTargetLook, eased);
       cam.fov = THREE.MathUtils.lerp(fromFov.current, targetFovAdj, eased);

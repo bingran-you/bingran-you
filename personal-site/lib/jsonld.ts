@@ -4,16 +4,15 @@ import { SITE_URL } from "@/lib/site";
 export { SITE_URL };
 export const SITE_NAME = "Bingran You";
 export const SITE_DESCRIPTION =
-  "Bingran You (尤炳然) — PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.";
+  "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.";
 export const SITE_OG_DESCRIPTION =
-  "Bingran You (尤炳然) — PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.";
+  "Bingran You — PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.";
 export const OG_IMAGE_URL = `${SITE_URL}/images/profile/bingran-you-portrait.jpg`;
 export const PERSON_ID = `${SITE_URL}#person`;
 export const WEBSITE_ID = `${SITE_URL}#website`;
 export const PROFILE_PAGE_ID = `${SITE_URL}#profile`;
 export const SITE_KEYWORDS = [
   "Bingran You",
-  "尤炳然",
   "You Bingran",
   "AI agents",
   "reliable AI systems",
@@ -45,7 +44,7 @@ function personEntity() {
     "@type": "Person" as const,
     "@id": PERSON_ID,
     name: SITE_NAME,
-    alternateName: ["尤炳然", "You Bingran"],
+    alternateName: ["You Bingran"],
     givenName: "Bingran",
     familyName: "You",
     url: SITE_URL,
@@ -120,7 +119,7 @@ export function websiteJsonLd() {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     name: SITE_NAME,
-    alternateName: ["尤炳然", "bingranyou.com"],
+    alternateName: ["bingranyou.com"],
     url: SITE_URL,
     inLanguage: "en",
     author: { "@id": PERSON_ID },

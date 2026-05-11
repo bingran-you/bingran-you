@@ -1,6 +1,6 @@
 /* TEAM */
 
-   Bingran You (尤炳然)
+   Bingran You
    Site:    https://bingran.ai
    Email:   me@bingranyou.com
    GitHub:  bingran-you

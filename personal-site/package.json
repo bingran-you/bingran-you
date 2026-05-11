@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/generate-skills-data.mjs && next dev",
-    "build": "next build",
+    "build": "npm run palace:build && next build",
     "start": "next start",
     "lint": "eslint",
     "skills:generate": "node scripts/generate-skills-data.mjs",
     "post:add": "node scripts/add-social-post.mjs",
     "indexnow:ping": "node scripts/ping-indexnow.mjs",
+    "palace:install": "cd palace-outer && npm install --no-audit --no-fund && cd ../palace-inner && npm install --no-audit --no-fund",
+    "palace:build": "node scripts/build-palace.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

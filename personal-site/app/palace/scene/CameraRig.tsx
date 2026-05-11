@@ -9,25 +9,29 @@ import type { PalaceMode } from "../PalaceClient";
 
 type Vec3 = [number, number, number];
 
+// Poses calibrated to the baked GLB world (MODEL_SCALE = 0.15 in BakedScene).
+// The Mac monitor face sits at world (0, 0.22, 0), so all targets read low
+// compared to the older procedural setup — the scene is roughly desk-on-floor
+// scale rather than room-with-tall-desk scale.
 const CAM: Record<
   PalaceMode,
   { pos: Vec3; look: Vec3; fov: number; duration: number }
 > = {
   intro: {
-    pos: [3.0, 2.4, 4.6],
-    look: [0, 1.3, -0.85],
-    fov: 42,
+    pos: [1.4, 0.95, 2.4],
+    look: [0, 0.2, -0.15],
+    fov: 44,
     duration: 2.1,
   },
   idle: {
-    pos: [0.4, 1.95, 2.9],
-    look: [0, 1.55, -0.85],
+    pos: [0.3, 0.55, 1.6],
+    look: [0, 0.12, -0.1],
     fov: 36,
     duration: 1.45,
   },
   monitor: {
-    pos: [0, 1.86, 0.8],
-    look: [0, 1.86, -0.85],
+    pos: [0, 0.22, 0.45],
+    look: [0, 0.22, 0],
     fov: 22,
     duration: 1.2,
   },

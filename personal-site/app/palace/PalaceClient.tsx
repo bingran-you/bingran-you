@@ -2,13 +2,10 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 import type { PalaceData } from "./palace-data";
 import styles from "./styles.module.css";
-import { Lighting } from "./scene/Lighting";
-import { Room } from "./scene/Room";
-import { Desk } from "./scene/Desk";
-import { Computer } from "./scene/Computer";
-import { Decor } from "./scene/Decor";
+import { BakedScene } from "./scene/BakedScene";
 import { CameraRig } from "./scene/CameraRig";
 import { IntroOverlay } from "./ui/IntroOverlay";
 import { HUD } from "./ui/HUD";
@@ -111,23 +108,25 @@ export default function PalaceClient({ data }: { data: PalaceData }) {
         onPointerMove={onPointerMove}
       >
         <Canvas
-          shadows
           dpr={[1, 1.8]}
-          gl={{ antialias: true, powerPreference: "high-performance" }}
+          gl={{
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance",
+            toneMapping: THREE.ACESFilmicToneMapping,
+            toneMappingExposure: 1.05,
+            outputColorSpace: THREE.SRGBColorSpace,
+          }}
+          onCreated={({ gl, scene }) => {
+            gl.setClearColor("#0a0805", 1);
+            scene.background = new THREE.Color("#0a0805");
+          }}
         >
+          <color attach="background" args={["#0a0805"]} />
           <Suspense fallback={null}>
-            <color attach="background" args={["#15110b"]} />
-            <fog attach="fog" args={["#15110b", 6, 18]} />
-            <Lighting />
-            <Room />
-            <Desk />
-            <Computer
-              onScreenClick={enterMonitor}
-              screenActive={mode === "monitor"}
-            />
-            <Decor />
-            <CameraRig mode={mode} mouseRef={mouseRef} />
+            <BakedScene onScreenClick={enterMonitor} />
           </Suspense>
+          <CameraRig mode={mode} mouseRef={mouseRef} />
         </Canvas>
       </div>
 

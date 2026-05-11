@@ -32,12 +32,16 @@ const TABS: { id: TabId; label: string; glyph: string }[] = [
 
 export function BingranOS({
   data,
-  visible,
+  active,
   onClose,
   initialTab,
 }: {
   data: PalaceData;
-  visible: boolean;
+  /** True when the OS owns user focus (monitor mode). Drives game ticking
+   *  and ARIA modality but does NOT control mounting — the OS is permanently
+   *  rendered onto the 3D monitor screen so the dolly-in reads as a single
+   *  smooth zoom rather than a fade-in. */
+  active: boolean;
   onClose: () => void;
   initialTab?: string | null;
 }) {
@@ -45,85 +49,78 @@ export function BingranOS({
     const requested = initialTab as TabId | null | undefined;
     return requested && TABS.some((t) => t.id === requested) ? requested : "about";
   });
-  const lastVisibleRef = useRef(visible);
+  const lastActiveRef = useRef(active);
   const lastInitialTabRef = useRef(initialTab);
 
-  // Reset tab when the OS opens, honouring an `initialTab` hint if present.
-  // We compare against refs so the deps array stays a fixed shape — passing
-  // props in as deps triggers a React DEV warning when their reference types
-  // shift across renders.
+  // Reset tab when the OS gains focus, honouring an `initialTab` hint if
+  // present. Compare against refs so the deps array stays fixed-shape.
   useEffect(() => {
-    const justOpened = visible && !lastVisibleRef.current;
+    const justFocused = active && !lastActiveRef.current;
     const initialTabChanged = initialTab !== lastInitialTabRef.current;
-    lastVisibleRef.current = visible;
+    lastActiveRef.current = active;
     lastInitialTabRef.current = initialTab;
-    if (!visible) return;
-    if (justOpened || initialTabChanged) {
+    if (!active) return;
+    if (justFocused || initialTabChanged) {
       const requested = initialTab as TabId | null | undefined;
       if (requested && TABS.some((t) => t.id === requested)) setTab(requested);
-      else if (justOpened) setTab("about");
+      else if (justFocused) setTab("about");
     }
   });
 
   return (
     <div
-      className={`${styles.osLayer} ${visible ? styles.visible : ""}`}
-      aria-hidden={!visible}
+      className={styles.osFrame}
+      role="dialog"
+      aria-label="BingranOS — bingranyou.com on the monitor"
+      aria-modal={active}
     >
-      <div
-        className={styles.osFrame}
-        role="dialog"
-        aria-label="BingranOS — bingranyou.com on the monitor"
-        aria-modal="true"
-      >
-        <div className={styles.osBar}>
-          <button
-            type="button"
-            className={styles.osBarClose}
-            onClick={onClose}
-            aria-label="Close BingranOS and return to room"
-          />
-          <div className={styles.osBarTitle}>
-            BingranOS — bingranyou.com
+      <div className={styles.osBar}>
+        <button
+          type="button"
+          className={styles.osBarClose}
+          onClick={onClose}
+          aria-label="Close BingranOS and return to room"
+          tabIndex={active ? 0 : -1}
+        />
+        <div className={styles.osBarTitle}>BingranOS — bingranyou.com</div>
+      </div>
+
+      <div className={styles.osBody}>
+        <nav className={styles.osSide} aria-label="BingranOS sections">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`${styles.osIcon} ${tab === t.id ? styles.active : ""}`}
+              onClick={() => setTab(t.id)}
+              aria-current={tab === t.id ? "page" : undefined}
+              tabIndex={active ? 0 : -1}
+            >
+              <span className={styles.glyph} aria-hidden>
+                {t.glyph}
+              </span>
+              {t.label}
+            </button>
+          ))}
+        </nav>
+
+        <section className={styles.osWindow}>
+          <header className={styles.osWindowBar}>
+            <span>{TABS.find((t) => t.id === tab)?.label} — open</span>
+            <span aria-hidden>↑ ↓ scroll · esc close</span>
+          </header>
+          <div className={styles.osContent}>
+            {tab === "about" && <AboutTab data={data} />}
+            {tab === "projects" && <ProjectsTab data={data} />}
+            {tab === "papers" && <PapersTab data={data} />}
+            {tab === "blog" && <BlogTab data={data} />}
+            {tab === "posts" && <PostsTab data={data} />}
+            {tab === "skills" && <SkillsTab />}
+            {tab === "tetris" && <Tetris active={active && tab === "tetris"} />}
+            {tab === "snake" && <Snake active={active && tab === "snake"} />}
+            {tab === "contact" && <ContactTab data={data} />}
           </div>
-        </div>
-
-        <div className={styles.osBody}>
-          <nav className={styles.osSide} aria-label="BingranOS sections">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                className={`${styles.osIcon} ${tab === t.id ? styles.active : ""}`}
-                onClick={() => setTab(t.id)}
-                aria-current={tab === t.id ? "page" : undefined}
-              >
-                <span className={styles.glyph} aria-hidden>
-                  {t.glyph}
-                </span>
-                {t.label}
-              </button>
-            ))}
-          </nav>
-
-          <section className={styles.osWindow}>
-            <header className={styles.osWindowBar}>
-              <span>{TABS.find((t) => t.id === tab)?.label} — open</span>
-              <span aria-hidden>↑ ↓ scroll · esc close</span>
-            </header>
-            <div className={styles.osContent}>
-              {tab === "about" && <AboutTab data={data} />}
-              {tab === "projects" && <ProjectsTab data={data} />}
-              {tab === "papers" && <PapersTab data={data} />}
-              {tab === "blog" && <BlogTab data={data} />}
-              {tab === "posts" && <PostsTab data={data} />}
-              {tab === "skills" && <SkillsTab />}
-              {tab === "tetris" && <Tetris active={visible && tab === "tetris"} />}
-              {tab === "snake" && <Snake active={visible && tab === "snake"} />}
-              {tab === "contact" && <ContactTab data={data} />}
-            </div>
-          </section>
-        </div>
+        </section>
       </div>
     </div>
   );

@@ -187,7 +187,11 @@ export default class MonitorScreen extends EventEmitter {
         // No trailing slash — Vercel 308-redirects /palace/os/ → /palace/os and
         // the intermediate text/plain response leaves the iframe in a broken
         // state. Hit the rewrite target directly.
-        iframe.src = '/palace/os';
+        // Cache-bust the URL so returning visitors don't keep using a stale
+        // HTTP-cached response from before the COOP / X-Frame-Options
+        // relaxation rolled out (Chrome held the old headers and kept
+        // treating the same-origin iframe as cross-origin).
+        iframe.src = '/palace/os?cb=' + Date.now();
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('dev')) {
             iframe.src = 'http://localhost:3000/';

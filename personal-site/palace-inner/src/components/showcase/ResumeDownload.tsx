@@ -1,10 +1,10 @@
 import React from 'react';
 import printer from '../../assets/resume/printer.gif';
 
-// Resume PDF lives in the host Next.js public dir so it's reachable from
-// inside the iframe sandbox at /palace/resume.pdf. Drop a new PDF in
-// personal-site/public/ to swap it.
-const RESUME_HREF = '/resume.pdf';
+// Don't leak a real CV PDF. Send people to the text-version homepage on the
+// parent site instead. `target="_top"` breaks out of the inner iframe so the
+// browser navigates the whole window to bingranyou.com/.
+const TEXT_SITE_HREF = '/';
 
 export interface ResumeDownloadProps {
     altText?: string;
@@ -15,9 +15,9 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({ altText }) => {
         <div style={styles.resumeContainer}>
             <img style={styles.resumePrinter} alt="" src={printer} />
             <div style={styles.resumeContainerText}>
-                <h3>{altText ? altText : 'Looking for my resume?'}</h3>
-                <a rel="noreferrer" target="_blank" href={RESUME_HREF}>
-                    <p>Click here to download it!</p>
+                <h3>{altText ? altText : 'Prefer the plain-text version?'}</h3>
+                <a rel="noreferrer" target="_top" href={TEXT_SITE_HREF}>
+                    <p>Open the regular bingranyou.com homepage</p>
                 </a>
             </div>
         </div>

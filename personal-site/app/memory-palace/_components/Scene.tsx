@@ -1,559 +1,130 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Html, RoundedBox } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
+import { Html, useTexture } from "@react-three/drei";
+import { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { BakedGLB, preloadBakedAssets } from "./BakedGLB";
 import { HUD } from "./HUD";
 
-// ============================================================================
-//  Room — warm beige walls, dark wood floor with crimson carpet under the desk.
-//  All surfaces are PBR (roughness >0.6 so the room doesn't feel like plastic).
-// ============================================================================
-
-function Room() {
-  return (
-    <group>
-      {/* Floor */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#1a1108" roughness={0.95} metalness={0} />
-      </mesh>
-
-      {/* Crimson rug under the desk */}
-      <mesh
-        rotation={[-Math.PI / 2, 0, 0]}
-        position={[0, 0.005, 0.3]}
-        receiveShadow
-      >
-        <planeGeometry args={[5, 4]} />
-        <meshStandardMaterial color="#5a1818" roughness={0.92} metalness={0} />
-      </mesh>
-
-      {/* Back wall */}
-      <mesh position={[0, 3, -3]} receiveShadow>
-        <planeGeometry args={[14, 6]} />
-        <meshStandardMaterial color="#a8916c" roughness={0.96} metalness={0} />
-      </mesh>
-
-      {/* Left wall */}
-      <mesh
-        rotation={[0, Math.PI / 2, 0]}
-        position={[-5, 3, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[10, 6]} />
-        <meshStandardMaterial color="#947d5a" roughness={0.96} metalness={0} />
-      </mesh>
-
-      {/* Right wall */}
-      <mesh
-        rotation={[0, -Math.PI / 2, 0]}
-        position={[5, 3, 0]}
-        receiveShadow
-      >
-        <planeGeometry args={[10, 6]} />
-        <meshStandardMaterial color="#947d5a" roughness={0.96} metalness={0} />
-      </mesh>
-
-      {/* Ceiling — sits high, never seen directly but bounces light */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 6, 0]}>
-        <planeGeometry args={[14, 10]} />
-        <meshStandardMaterial color="#b89d75" roughness={1} metalness={0} />
-      </mesh>
-    </group>
-  );
+// preload the three GLB + JPG pairs in module scope so they hit the cache
+// before Canvas mounts. Henry's repo does this through his Resources manager;
+// drei's useGLTF.preload is the r3f equivalent.
+if (typeof window !== "undefined") {
+  preloadBakedAssets();
 }
 
 // ============================================================================
-//  Desk — black wood with subtle anisotropy. Top + 4 legs, slight bevel.
+//  World scale. The MIT-licensed GLBs from henryjeff/portfolio-website export
+//  with large native units (computer_setup is 2.24m wide as-is, environment
+//  is 80m × 80m); Henry's runtime then multiplies by 900 in BakedModel and
+//  works in mm-ish world coords (camera at y=1800, z=5500). We work in r3f's
+//  standard meter scale, so we apply scale ≈ 0.15 on load so the Mac sits at
+//  ~34cm (real Macintosh Classic dimensions) and the room is ~12m wide.
 // ============================================================================
 
-function Desk() {
-  return (
-    <group position={[0, 0, 0]}>
-      {/* Top surface */}
-      <RoundedBox
-        args={[2.6, 0.05, 1.2]}
-        radius={0.01}
-        smoothness={4}
-        position={[0, 0.78, 0]}
-        castShadow
-        receiveShadow
-      >
-        <meshStandardMaterial color="#1a1410" roughness={0.55} metalness={0.1} />
-      </RoundedBox>
-
-      {/* Skirt under top */}
-      <RoundedBox
-        args={[2.55, 0.08, 0.6]}
-        radius={0.005}
-        smoothness={3}
-        position={[0, 0.72, -0.25]}
-        castShadow
-        receiveShadow
-      >
-        <meshStandardMaterial color="#15100c" roughness={0.7} metalness={0.05} />
-      </RoundedBox>
-
-      {/* 4 legs */}
-      {[
-        [-1.25, -0.55],
-        [1.25, -0.55],
-        [-1.25, 0.55],
-        [1.25, 0.55],
-      ].map(([x, z], i) => (
-        <RoundedBox
-          key={i}
-          args={[0.06, 0.78, 0.06]}
-          radius={0.005}
-          smoothness={3}
-          position={[x, 0.39, z]}
-          castShadow
-          receiveShadow
-        >
-          <meshStandardMaterial color="#15100c" roughness={0.7} metalness={0.1} />
-        </RoundedBox>
-      ))}
-    </group>
-  );
-}
+const MODEL_SCALE = 0.15;
 
 // ============================================================================
-//  Macintosh Classic — the 1990 all-in-one. Cream beige body, recessed CRT.
-//  Real dimensions: 245mm × 343mm × 274mm. We scale to ~0.42m tall on the desk.
+//  Multi-layer CRT screen — sits in front of the Mac monitor mesh from the
+//  computer_setup.glb. iframe (drei <Html transform>) is the live layer; the
+//  smudge JPG, inner-shadow PNG, and scanline MP4 are all stacked at small
+//  z-offsets to give the "physical glass" feel Henry's monitor has.
 // ============================================================================
 
-const MAC = {
-  bodyColor: "#e6d9b8",        // beige plastic
-  bodyColorWarm: "#e0d0a8",    // shaded tone
-  bezelColor: "#0a0a0a",       // CRT bezel
-  screenColor: "#0d2640",      // dim CRT phosphor blue when off
-  monitorPosition: new THREE.Vector3(0, 0.805 + 0.22, -0.05),
-  bodyWidth: 0.32,
-  bodyHeight: 0.42,
-  bodyDepth: 0.36,
+const SCREEN = {
+  // Screen plane size at MODEL_SCALE=0.15 — covers the CRT face of the Mac
+  width: 0.24,
+  height: 0.18,
+  // Position of the screen plane in world space. The Mac face in the baked
+  // computer_setup.glb sits centered around (0, 0.2, 0.25) at scale 0.15.
+  position: new THREE.Vector3(0, 0.22, 0.27),
+  rotation: new THREE.Euler(0, 0, 0),
 };
 
-function MacintoshClassic({
-  onEnterScreen,
-}: {
-  onEnterScreen?: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
+function ScreenLayers(_: { visible: boolean }) {
+  // v2 baked workflow: keep the screen layers minimal during this calibration
+  // pass to keep GPU memory pressure low. The CRT iframe (drei <Html transform>)
+  // and the smudge/scanline layers are added back in v2.1 once the camera +
+  // model placement is locked in.
+  return (
+    <mesh position={SCREEN.position} rotation={SCREEN.rotation}>
+      <planeGeometry args={[SCREEN.width, SCREEN.height]} />
+      <meshBasicMaterial color="#0a1518" />
+    </mesh>
+  );
+}
+
+// ============================================================================
+//  Audio — tiny on-demand sample player using the Web Audio API. Loaded lazily
+//  so the page paint isn't blocked. Triggered by mouse / monitor interactions.
+//  Samples are Henry's MIT-licensed mp3s.
+// ============================================================================
+
+function useDeskAudio() {
+  const ctxRef = useRef<AudioContext | null>(null);
+  const buffersRef = useRef<Record<string, AudioBuffer>>({});
 
   useEffect(() => {
-    document.body.style.cursor = hovered ? "pointer" : "default";
-    return () => {
-      document.body.style.cursor = "default";
+    // Lazy-init on first user gesture (browsers block AudioContext otherwise)
+    const init = async () => {
+      if (ctxRef.current) return;
+      const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!Ctx) return;
+      ctxRef.current = new Ctx();
+
+      const load = async (key: string, url: string) => {
+        const r = await fetch(url);
+        const buf = await r.arrayBuffer();
+        buffersRef.current[key] = await ctxRef.current!.decodeAudioData(buf);
+      };
+
+      await Promise.all([
+        load("mouseDown", "/memory-palace/audio/mouse/mouse_down.mp3"),
+        load("mouseUp", "/memory-palace/audio/mouse/mouse_up.mp3"),
+        load("startup", "/memory-palace/audio/startup.mp3"),
+      ]);
     };
-  }, [hovered]);
 
-  // Body sits on the desk top (y=0.805 = desk top + tiny gap)
-  const baseY = 0.805;
+    const onFirst = () => {
+      init();
+      window.removeEventListener("pointerdown", onFirst);
+    };
+    window.addEventListener("pointerdown", onFirst, { once: true });
+    return () => window.removeEventListener("pointerdown", onFirst);
+  }, []);
 
-  return (
-    <group position={[0, baseY, -0.1]}>
-      {/* Main body — single rounded cube */}
-      <RoundedBox
-        args={[MAC.bodyWidth, MAC.bodyHeight, MAC.bodyDepth]}
-        radius={0.015}
-        smoothness={5}
-        creaseAngle={0.4}
-        position={[0, MAC.bodyHeight / 2, 0]}
-        castShadow
-        receiveShadow
-      >
-        <meshStandardMaterial
-          color={MAC.bodyColor}
-          roughness={0.55}
-          metalness={0.05}
-        />
-      </RoundedBox>
+  const play = (key: string, volume = 0.4) => {
+    const ctx = ctxRef.current;
+    const buf = buffersRef.current[key];
+    if (!ctx || !buf) return;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const gain = ctx.createGain();
+    gain.gain.value = volume;
+    src.connect(gain).connect(ctx.destination);
+    src.start();
+  };
 
-      {/* CRT bezel — recessed black frame around screen */}
-      <RoundedBox
-        args={[0.24, 0.2, 0.005]}
-        radius={0.005}
-        smoothness={3}
-        position={[0, MAC.bodyHeight - 0.16, MAC.bodyDepth / 2 + 0.001]}
-      >
-        <meshStandardMaterial color={MAC.bezelColor} roughness={0.4} metalness={0.2} />
-      </RoundedBox>
-
-      {/* Screen surface — slightly recessed (z back from bezel) */}
-      <mesh
-        position={[0, MAC.bodyHeight - 0.16, MAC.bodyDepth / 2 - 0.003]}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-        onClick={(e) => {
-          e.stopPropagation();
-          onEnterScreen?.();
-        }}
-      >
-        <planeGeometry args={[0.215, 0.175]} />
-        <meshStandardMaterial
-          color={MAC.screenColor}
-          roughness={0.05}
-          metalness={0.1}
-          emissive="#0d2640"
-          emissiveIntensity={0.3}
-        />
-      </mesh>
-
-      {/* Power LED — tiny green dot */}
-      <mesh position={[-0.085, MAC.bodyHeight - 0.27, MAC.bodyDepth / 2 + 0.002]}>
-        <circleGeometry args={[0.003, 16]} />
-        <meshStandardMaterial
-          color="#7ef5a8"
-          emissive="#4ade80"
-          emissiveIntensity={2}
-        />
-      </mesh>
-
-      {/* Apple logo dot — small accent above screen */}
-      <mesh position={[0.085, MAC.bodyHeight - 0.05, MAC.bodyDepth / 2 + 0.002]}>
-        <circleGeometry args={[0.004, 16]} />
-        <meshStandardMaterial color="#c93030" roughness={0.4} />
-      </mesh>
-
-      {/* Floppy slot — horizontal black slit lower on body */}
-      <mesh position={[0.05, MAC.bodyHeight - 0.34, MAC.bodyDepth / 2 + 0.002]}>
-        <planeGeometry args={[0.13, 0.005]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.6} />
-      </mesh>
-
-      {/* Vent grille — bottom front, horizontal lines */}
-      <mesh position={[0, MAC.bodyHeight - 0.27, MAC.bodyDepth / 2 + 0.001]}>
-        <planeGeometry args={[0.22, 0.005]} />
-        <meshStandardMaterial color="#0a0a0a" />
-      </mesh>
-    </group>
-  );
+  return play;
 }
 
 // ============================================================================
-//  Multi-layer screen content — when zoomed in, the iframe is rendered via
-//  drei <Html transform> which is r3f's wrapper around CSS3DRenderer.
-//  Layered with smudge + scanline + dimming planes for CRT authenticity.
-// ============================================================================
-
-function ScreenContent({ visible }: { visible: boolean }) {
-  if (!visible) return null;
-  return (
-    <group position={[0, 0.805 + MAC.bodyHeight - 0.16, -0.1 + MAC.bodyDepth / 2 + 0.001]}>
-      {/* iframe via CSS3D — sits at z=0 relative to screen */}
-      <Html
-        transform
-        distanceFactor={0.85}
-        position={[0, 0, 0.001]}
-        style={{
-          width: "260px",
-          height: "212px",
-          background: "#08090B",
-          overflow: "hidden",
-          border: "1px solid #1B1F25",
-        }}
-      >
-        <iframe
-          src="/"
-          title="bingran.you inside the CRT"
-          style={{
-            border: 0,
-            display: "block",
-            transform: "scale(0.42)",
-            transformOrigin: "top left",
-            width: "238%",
-            height: "238%",
-          }}
-        />
-      </Html>
-
-      {/* Scanline overlay — additive blend, fixed-resolution noise */}
-      <mesh position={[0, 0, 0.004]}>
-        <planeGeometry args={[0.215, 0.175]} />
-        <meshBasicMaterial
-          color="#4ade80"
-          transparent
-          opacity={0.04}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Desk lamp — black metal arm with white cone shade. Houses a real area light.
-// ============================================================================
-
-function DeskLamp() {
-  return (
-    <group position={[1.05, 0.805, -0.15]}>
-      {/* Base disc */}
-      <mesh position={[0, 0.01, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.07, 0.08, 0.02, 32]} />
-        <meshStandardMaterial color="#0a0a0a" roughness={0.4} metalness={0.7} />
-      </mesh>
-
-      {/* Vertical pole */}
-      <mesh position={[0, 0.35, 0]} castShadow>
-        <cylinderGeometry args={[0.008, 0.008, 0.68, 16]} />
-        <meshStandardMaterial color="#0a0a0a" roughness={0.4} metalness={0.7} />
-      </mesh>
-
-      {/* Pivot ball */}
-      <mesh position={[0, 0.68, 0]} castShadow>
-        <sphereGeometry args={[0.018, 16, 16]} />
-        <meshStandardMaterial color="#0a0a0a" roughness={0.4} metalness={0.7} />
-      </mesh>
-
-      {/* Angled arm to shade */}
-      <mesh position={[-0.06, 0.7, 0.04]} rotation={[0, 0.3, -0.4]} castShadow>
-        <cylinderGeometry args={[0.006, 0.006, 0.14, 12]} />
-        <meshStandardMaterial color="#0a0a0a" roughness={0.4} metalness={0.7} />
-      </mesh>
-
-      {/* Cone shade — tip toward arm, open end down/forward */}
-      <mesh
-        position={[-0.13, 0.73, 0.09]}
-        rotation={[Math.PI * 0.32, 0.4, 0]}
-        castShadow
-        receiveShadow
-      >
-        <coneGeometry args={[0.075, 0.13, 24, 1, true]} />
-        <meshStandardMaterial
-          color="#f5f0e6"
-          roughness={0.7}
-          metalness={0.05}
-          side={THREE.DoubleSide}
-          emissive="#ffd9a8"
-          emissiveIntensity={0.5}
-        />
-      </mesh>
-
-      {/* Bulb proxy — small emissive sphere inside the shade */}
-      <mesh position={[-0.13, 0.72, 0.09]}>
-        <sphereGeometry args={[0.025, 16, 16]} />
-        <meshBasicMaterial color="#ffd9a8" />
-      </mesh>
-
-      {/* The actual point light from inside the shade — warm, no shadow cast */}
-      {/* (we rely on the directional shadow + ambient occlusion in post) */}
-      <pointLight
-        position={[-0.13, 0.72, 0.09]}
-        intensity={1.5}
-        distance={3}
-        decay={2}
-        color="#ffd1a0"
-      />
-    </group>
-  );
-}
-
-// ============================================================================
-//  Wall picture frame — empty beige canvas, thin dark border.
-// ============================================================================
-
-function PictureFrame({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Frame border */}
-      <RoundedBox args={[0.46, 0.36, 0.02]} radius={0.003} smoothness={2} castShadow>
-        <meshStandardMaterial color="#1a1a1a" roughness={0.5} metalness={0.15} />
-      </RoundedBox>
-      {/* Canvas inset */}
-      <mesh position={[0, 0, 0.011]}>
-        <planeGeometry args={[0.42, 0.32]} />
-        <meshStandardMaterial color="#9c8865" roughness={0.95} />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Wall shelf with 4 books — staggered colors matching the screenshot
-//  (maroon, navy, beige, dark chocolate).
-// ============================================================================
-
-function Shelf({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Shelf plank */}
-      <RoundedBox args={[1.4, 0.025, 0.18]} radius={0.005} smoothness={3} castShadow receiveShadow>
-        <meshStandardMaterial color="#0e0a07" roughness={0.55} metalness={0.1} />
-      </RoundedBox>
-
-      {/* Books */}
-      {[
-        { color: "#5a1a1a", w: 0.18, h: 0.16, x: -0.5 },
-        { color: "#1c2a4a", w: 0.16, h: 0.2, x: -0.27 },
-        { color: "#d8c8a4", w: 0.17, h: 0.18, x: -0.05 },
-        { color: "#2a1810", w: 0.19, h: 0.17, x: 0.2 },
-      ].map((b, i) => (
-        <RoundedBox
-          key={i}
-          args={[b.w, b.h, 0.14]}
-          radius={0.004}
-          smoothness={2}
-          position={[b.x, b.h / 2 + 0.013, 0]}
-          castShadow
-          receiveShadow
-        >
-          <meshStandardMaterial color={b.color} roughness={0.85} metalness={0} />
-        </RoundedBox>
-      ))}
-    </group>
-  );
-}
-
-// ============================================================================
-//  Books stack on the desk + a red cone on top.
-// ============================================================================
-
-function BookStack({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      <RoundedBox args={[0.24, 0.03, 0.18]} radius={0.003} smoothness={2} position={[0, 0.015, 0]} castShadow receiveShadow>
-        <meshStandardMaterial color="#5a1818" roughness={0.85} />
-      </RoundedBox>
-      <RoundedBox args={[0.23, 0.025, 0.17]} radius={0.003} smoothness={2} position={[0.005, 0.043, 0.005]} castShadow receiveShadow>
-        <meshStandardMaterial color="#1c2a4a" roughness={0.85} />
-      </RoundedBox>
-      <RoundedBox args={[0.22, 0.02, 0.16]} radius={0.003} smoothness={2} position={[-0.005, 0.066, -0.005]} castShadow receiveShadow>
-        <meshStandardMaterial color="#e8dcc0" roughness={0.85} />
-      </RoundedBox>
-
-      {/* Red cone on top */}
-      <mesh position={[0, 0.105, 0]} castShadow>
-        <coneGeometry args={[0.025, 0.06, 24]} />
-        <meshStandardMaterial color="#c93030" roughness={0.4} metalness={0.1} />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Coffee cup — small white ceramic.
-// ============================================================================
-
-function CoffeeCup({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      <mesh castShadow receiveShadow>
-        <cylinderGeometry args={[0.035, 0.03, 0.07, 32]} />
-        <meshStandardMaterial color="#f8f4ec" roughness={0.35} metalness={0.05} />
-      </mesh>
-      {/* Inside dark — coffee */}
-      <mesh position={[0, 0.025, 0]}>
-        <cylinderGeometry args={[0.031, 0.026, 0.005, 32]} />
-        <meshStandardMaterial color="#2a1208" roughness={0.2} metalness={0.3} />
-      </mesh>
-      {/* Handle — simple torus segment */}
-      <mesh position={[0.04, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[0.015, 0.005, 8, 16, Math.PI]} />
-        <meshStandardMaterial color="#f8f4ec" roughness={0.35} metalness={0.05} />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Plant — pot + 5 cone leaves.
-// ============================================================================
-
-function Plant({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      {/* Terracotta pot */}
-      <mesh castShadow receiveShadow>
-        <cylinderGeometry args={[0.08, 0.065, 0.12, 32]} />
-        <meshStandardMaterial color="#a64938" roughness={0.85} metalness={0.05} />
-      </mesh>
-      {/* Soil */}
-      <mesh position={[0, 0.06, 0]}>
-        <cylinderGeometry args={[0.075, 0.075, 0.005, 24]} />
-        <meshStandardMaterial color="#2a1a10" roughness={1} />
-      </mesh>
-      {/* Leaves cluster */}
-      {Array.from({ length: 7 }).map((_, i) => {
-        const angle = (i / 7) * Math.PI * 2;
-        const r = 0.04;
-        const tilt = 0.3 + Math.random() * 0.15;
-        return (
-          <mesh
-            key={i}
-            position={[Math.cos(angle) * r, 0.13, Math.sin(angle) * r]}
-            rotation={[
-              Math.cos(angle) * tilt,
-              angle,
-              Math.sin(angle) * tilt,
-            ]}
-            castShadow
-          >
-            <coneGeometry args={[0.05, 0.13, 12]} />
-            <meshStandardMaterial color="#3a5c2a" roughness={0.85} metalness={0} />
-          </mesh>
-        );
-      })}
-    </group>
-  );
-}
-
-// ============================================================================
-//  Paper + red square pad — desk left side.
-// ============================================================================
-
-function PaperPad({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0.06]}>
-        <planeGeometry args={[0.22, 0.16]} />
-        <meshStandardMaterial color="#f5efe2" roughness={0.95} />
-      </mesh>
-      <mesh receiveShadow position={[0, 0.0005, 0]} rotation={[-Math.PI / 2, 0, 0.06]}>
-        <planeGeometry args={[0.09, 0.09]} />
-        <meshStandardMaterial color="#9a2828" roughness={0.85} />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Mouse — small ergonomic blob with a wire vanishing under the Mac.
-// ============================================================================
-
-function Mouse({ position }: { position: [number, number, number] }) {
-  return (
-    <group position={position}>
-      <mesh castShadow receiveShadow rotation={[0, 0.3, 0]}>
-        <boxGeometry args={[0.05, 0.018, 0.08]} />
-        <meshStandardMaterial color="#e6d9b8" roughness={0.5} metalness={0.05} />
-      </mesh>
-    </group>
-  );
-}
-
-// ============================================================================
-//  Camera rig — subtle mouse-driven parallax around a base position +
-//  click-to-zoom keyframe to the screen.
+//  Camera rig. Default is a "desk view" 3/4 ish angle. Click on the monitor
+//  hitbox → tween to "monitor view" centered on screen. Mouse parallax drifts
+//  the camera around the keyframe (±15cm of lateral float).
 // ============================================================================
 
 const VIEWS = {
   default: {
-    pos: new THREE.Vector3(0, 1.55, 2.4),
-    look: new THREE.Vector3(0, 1.0, -0.3),
-    fov: 42,
+    pos: new THREE.Vector3(0, 0.55, 1.6),
+    look: new THREE.Vector3(0, 0.15, 0),
+    fov: 36,
   },
   monitor: {
-    pos: new THREE.Vector3(0, 1.05, 0.6),
-    look: new THREE.Vector3(0, 1.05, -0.1),
-    fov: 22,
+    pos: new THREE.Vector3(0, 0.22, 0.7),
+    look: new THREE.Vector3(0, 0.22, 0.27),
+    fov: 24,
   },
 };
 
@@ -571,16 +142,15 @@ function CameraRig({ view }: { view: keyof typeof VIEWS }) {
   }, [view, camera]);
 
   useFrame(() => {
-    // Mouse parallax — gentle drift around the base position (max ±15cm)
-    const parallaxX = mouse.x * 0.22;
-    const parallaxY = mouse.y * 0.12;
+    const px = mouse.x * 0.25;
+    const py = mouse.y * 0.12;
 
     const desired = target.current
       .clone()
-      .add(new THREE.Vector3(parallaxX, parallaxY, 0));
+      .add(new THREE.Vector3(px, py, 0));
 
-    camera.position.lerp(desired, 0.06);
-    currentLook.current.lerp(lookTarget.current, 0.06);
+    camera.position.lerp(desired, 0.05);
+    currentLook.current.lerp(lookTarget.current, 0.05);
     camera.lookAt(currentLook.current);
   });
 
@@ -588,44 +158,38 @@ function CameraRig({ view }: { view: keyof typeof VIEWS }) {
 }
 
 // ============================================================================
-//  Lighting — HDRI environment for soft bounce + warm key from window + lamp's
-//  own pointLight (defined inside DeskLamp) + small cool fill from front.
+//  Invisible hitbox in front of the monitor — picks up clicks and dispatches
+//  the camera transition. Sits at the screen plane.
 // ============================================================================
 
-function Lighting() {
+function MonitorHitbox({ onClick }: { onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? "pointer" : "default";
+    return () => {
+      document.body.style.cursor = "default";
+    };
+  }, [hovered]);
+
   return (
-    <>
-      {/* Hemisphere fill — warm sky / cool floor; cheap, no shadow cost */}
-      <hemisphereLight args={["#f5d6a8", "#1a1408", 0.7]} />
-
-      {/* Warm key from upper-right (lamp direction). Shadow-casting at 1024 — */}
-      {/* big enough to look right, small enough to fit constrained GPUs. */}
-      <directionalLight
-        position={[2.2, 3.5, 1.5]}
-        intensity={1.4}
-        color="#ffd9a8"
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-        shadow-camera-left={-3}
-        shadow-camera-right={3}
-        shadow-camera-top={3}
-        shadow-camera-bottom={-1}
-        shadow-camera-near={0.5}
-        shadow-camera-far={8}
-        shadow-bias={-0.0005}
-      />
-
-      {/* Cool fill from the opposite side — adds depth to shadow side */}
-      <directionalLight
-        position={[-3, 2.5, 2]}
-        intensity={0.35}
-        color="#5e7a9c"
-      />
-
-      {/* Subtle ambient — Three's PBR materials look dead without it */}
-      <ambientLight intensity={0.2} color="#3a2818" />
-    </>
+    <mesh
+      position={SCREEN.position}
+      rotation={SCREEN.rotation}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+      }}
+      onPointerOut={() => setHovered(false)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      visible={false}
+    >
+      <planeGeometry args={[SCREEN.width * 1.05, SCREEN.height * 1.05]} />
+      <meshBasicMaterial transparent opacity={0} />
+    </mesh>
   );
 }
 
@@ -635,11 +199,10 @@ function Lighting() {
 
 export function Scene() {
   const [view, setView] = useState<keyof typeof VIEWS>("default");
+  const play = useDeskAudio();
 
-  // r3f under Next 16 + Turbopack sometimes misses its first paint until a
-  // resize event nudges the ResizeObserver. Kick one ourselves on mount + on
-  // a short delay (the second covers async font / iframe layout shifts that
-  // can otherwise leave the canvas blank).
+  // r3f under Next 16 + Turbopack occasionally misses its first paint; nudge
+  // the ResizeObserver to kick the frameloop.
   useEffect(() => {
     const fire = () => window.dispatchEvent(new Event("resize"));
     fire();
@@ -651,6 +214,12 @@ export function Scene() {
     };
   }, []);
 
+  const handleMonitorClick = () => {
+    play("mouseDown", 0.35);
+    setTimeout(() => play("mouseUp", 0.35), 80);
+    setView((v) => (v === "monitor" ? "default" : "monitor"));
+  };
+
   return (
     <div
       style={{
@@ -660,39 +229,45 @@ export function Scene() {
       }}
     >
       <Canvas
-        shadows
         frameloop="always"
-        camera={{ position: [0, 1.55, 2.4], fov: 42 }}
+        camera={{ position: [0, 0.55, 1.6], fov: 36 }}
         gl={{
           antialias: true,
           alpha: false,
-          preserveDrawingBuffer: true,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.1,
+          toneMappingExposure: 1.05,
           outputColorSpace: THREE.SRGBColorSpace,
         }}
         dpr={[1, 1.5]}
         onCreated={({ gl, scene }) => {
-          gl.setClearColor("#1a1208", 1);
-          scene.background = new THREE.Color("#1a1208");
+          gl.setClearColor("#0a0805", 1);
+          scene.background = new THREE.Color("#0a0805");
         }}
       >
-        <color attach="background" args={["#1a1208"]} />
+        <color attach="background" args={["#0a0805"]} />
 
-        <Lighting />
+        {/* Baked scene — no lights; shading + GI + AO are painted into the JPGs.
+            Wrap in Suspense so the GLB/JPG loads don't crash on first render. */}
+        <Suspense fallback={null}>
+          <BakedGLB
+            url="/memory-palace/models/environment.glb"
+            textureUrl="/memory-palace/models/baked_environment.jpg"
+            scale={MODEL_SCALE}
+          />
+          <BakedGLB
+            url="/memory-palace/models/computer_setup.glb"
+            textureUrl="/memory-palace/models/baked_computer.jpg"
+            scale={MODEL_SCALE}
+          />
+          <BakedGLB
+            url="/memory-palace/models/decor.glb"
+            textureUrl="/memory-palace/models/baked_decor.jpg"
+            scale={MODEL_SCALE}
+          />
 
-        <Room />
-        <Desk />
-        <MacintoshClassic onEnterScreen={() => setView("monitor")} />
-        <ScreenContent visible={view === "monitor"} />
-        <DeskLamp />
-        <PictureFrame position={[-1.7, 1.6, -2.99]} />
-        <Shelf position={[2.1, 1.8, -2.91]} />
-        <BookStack position={[-0.85, 0.805, 0.1]} />
-        <CoffeeCup position={[0.6, 0.805 + 0.035, 0.1]} />
-        <Plant position={[1.55, 0.805, 0.18]} />
-        <PaperPad position={[-0.55, 0.806, 0.32]} />
-        <Mouse position={[0.35, 0.812, 0.28]} />
+          <ScreenLayers visible={view === "monitor"} />
+        </Suspense>
+        <MonitorHitbox onClick={handleMonitorClick} />
 
         <CameraRig view={view} />
       </Canvas>
@@ -700,7 +275,7 @@ export function Scene() {
       <HUD
         viewMode={view}
         onBack={() => setView("default")}
-        onEnter={() => setView("monitor")}
+        onEnter={handleMonitorClick}
       />
     </div>
   );

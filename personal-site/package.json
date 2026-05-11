@@ -34,6 +34,9 @@
     "shiki": "^4.0.2",
     "three": "^0.184.0"
   },
+  "overrides": {
+    "three": "^0.184.0"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

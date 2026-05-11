@@ -124,6 +124,66 @@ describe("buildSkillsViewModel", () => {
     expect(flat.map((s) => s.slug)).toEqual(["playwright"]);
   });
 
+  it("splits the query on whitespace so users can type a hyphenated slug naturally", () => {
+    // "memory palace" must find a skill slugged "memory-palace" — the literal
+    // substring "memory palace" doesn't exist anywhere.
+    const palaceFixtures: Skill[] = [
+      ...fixtures,
+      makeSkill({
+        slug: "memory-palace",
+        category: "Other",
+        name: "memory-palace",
+        description: "Apply Henry Heffernan's portfolio template.",
+      }),
+    ];
+    const vm = buildSkillsViewModel(palaceFixtures, allCategories, {
+      query: "memory palace",
+      activeCategory: "All",
+    });
+    const flat = vm.groups.flatMap(([, list]) => list);
+    expect(flat.map((s) => s.slug)).toEqual(["memory-palace"]);
+  });
+
+  it("AND-combines tokens across different fields", () => {
+    // "henry frontend" matches frontend-slides by name AND a skill whose
+    // description mentions Henry — only the skill that hits BOTH should win.
+    const mixed: Skill[] = [
+      makeSkill({
+        slug: "frontend-slides",
+        category: "Slides & Decks",
+        name: "Frontend Slides",
+        description: "stunning animation rich slides",
+      }),
+      makeSkill({
+        slug: "henry-template",
+        category: "Other",
+        name: "henry-template",
+        description: "frontend portfolio template",
+      }),
+      makeSkill({
+        slug: "playwright",
+        category: "Browser & Testing",
+        name: "Playwright",
+        description: "browser automation",
+      }),
+    ];
+    const vm = buildSkillsViewModel(mixed, allCategories, {
+      query: "henry frontend",
+      activeCategory: "All",
+    });
+    const flat = vm.groups.flatMap(([, list]) => list);
+    expect(flat.map((s) => s.slug)).toEqual(["henry-template"]);
+  });
+
+  it("collapses multiple internal whitespace runs", () => {
+    const vm = buildSkillsViewModel(fixtures, allCategories, {
+      query: "  deep    research  ",
+      activeCategory: "All",
+    });
+    const flat = vm.groups.flatMap(([, list]) => list);
+    expect(flat.map((s) => s.slug)).toEqual(["deep-research"]);
+  });
+
   it("restricts to active category", () => {
     const vm = buildSkillsViewModel(fixtures, allCategories, {
       query: "",

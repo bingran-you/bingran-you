@@ -7,11 +7,9 @@
   <meta name="theme-color" content="#000000" />
   <meta name="description" content="BingranOS — the inner Windows-98-style desktop served inside the /palace memory palace." />
   <base target="_parent">
-  <!-- Display serif for h1 (chunky retro). Replaces upstream Henry's
-       Typekit kit (llo2eru) which is domain-locked to his own sites. -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" />
+  <!-- h1 display font (Alfa Slab One, OFL) is self-hosted from
+       src/assets/fonts/ via @font-face in src/index.css — no third-party
+       font CDN. webpack emits the hashed woff2 into static/media/. -->
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" type="image/x-icon">
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>BingranOS</title>

@@ -33,25 +33,73 @@ const MODEL_SCALE = 0.15;
 // ============================================================================
 
 const SCREEN = {
-  // Screen plane size at MODEL_SCALE=0.15 — covers the CRT face of the Mac
-  width: 0.24,
-  height: 0.18,
-  // Position of the screen plane in world space. The Mac face in the baked
-  // computer_setup.glb sits centered around (0, 0.2, 0.25) at scale 0.15.
-  position: new THREE.Vector3(0, 0.22, 0.27),
+  // Screen plane size at MODEL_SCALE=0.15 — covers the monitor face.
+  width: 0.27,
+  height: 0.2,
+  // Position of the screen plane in world space. The monitor face in the baked
+  // computer_setup.glb sits centered around y=0.22, z=0.0 at scale 0.15.
+  position: new THREE.Vector3(0, 0.22, 0.005),
   rotation: new THREE.Euler(0, 0, 0),
 };
 
-function ScreenLayers(_: { visible: boolean }) {
-  // v2 baked workflow: keep the screen layers minimal during this calibration
-  // pass to keep GPU memory pressure low. The CRT iframe (drei <Html transform>)
-  // and the smudge/scanline layers are added back in v2.1 once the camera +
-  // model placement is locked in.
+function ScreenLayers({ visible }: { visible: boolean }) {
+  // Multi-layer CRT effect (Henry's pattern):
+  //   1. Backdrop OR iframe (when zoomed in)
+  //   2. Smudge JPG layer on top, additive blend, very low opacity
+  // Video scanline texture removed in v2 — it caused Context Lost when
+  // combined with the baked GLB load. Static smudge alone keeps the glass
+  // glassy without burning GPU memory.
+  const smudge = useTexture("/memory-palace/textures/monitor-smudge.jpg");
+
   return (
-    <mesh position={SCREEN.position} rotation={SCREEN.rotation}>
-      <planeGeometry args={[SCREEN.width, SCREEN.height]} />
-      <meshBasicMaterial color="#0a1518" />
-    </mesh>
+    <group position={SCREEN.position} rotation={SCREEN.rotation}>
+      {visible ? (
+        <Html
+          transform
+          distanceFactor={0.4}
+          position={[0, 0, 0.002]}
+          style={{
+            width: "320px",
+            height: "240px",
+            background: "#08090B",
+            overflow: "hidden",
+            border: "1px solid #1B1F25",
+            pointerEvents: "auto",
+          }}
+        >
+          <iframe
+            src="/"
+            title="bingran.you inside the CRT"
+            style={{
+              border: 0,
+              display: "block",
+              width: "238%",
+              height: "238%",
+              transform: "scale(0.42)",
+              transformOrigin: "top left",
+            }}
+          />
+        </Html>
+      ) : (
+        // Idle: dim phosphor backdrop so the screen isn't dead-black
+        <mesh position={[0, 0, 0.001]}>
+          <planeGeometry args={[SCREEN.width, SCREEN.height]} />
+          <meshBasicMaterial color="#0d1a1d" />
+        </mesh>
+      )}
+
+      {/* Smudge + fingerprints — additive, low opacity */}
+      <mesh position={[0, 0, 0.012]}>
+        <planeGeometry args={[SCREEN.width, SCREEN.height]} />
+        <meshBasicMaterial
+          map={smudge}
+          transparent
+          opacity={0.12}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -117,14 +165,14 @@ function useDeskAudio() {
 
 const VIEWS = {
   default: {
-    pos: new THREE.Vector3(0, 0.55, 1.6),
-    look: new THREE.Vector3(0, 0.15, 0),
-    fov: 36,
+    pos: new THREE.Vector3(0, 0.8, 2.4),
+    look: new THREE.Vector3(0, 0.05, -0.15),
+    fov: 42,
   },
   monitor: {
-    pos: new THREE.Vector3(0, 0.22, 0.7),
-    look: new THREE.Vector3(0, 0.22, 0.27),
-    fov: 24,
+    pos: new THREE.Vector3(0, 0.22, 0.55),
+    look: new THREE.Vector3(0, 0.22, 0.0),
+    fov: 22,
   },
 };
 
@@ -230,7 +278,7 @@ export function Scene() {
     >
       <Canvas
         frameloop="always"
-        camera={{ position: [0, 0.55, 1.6], fov: 36 }}
+        camera={{ position: [0, 0.8, 2.4], fov: 42 }}
         gl={{
           antialias: true,
           alpha: false,

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="BingranOS — the inner Windows-98-style desktop served inside the /palace memory palace." />
+  <base target="_parent">
+  <link rel="stylesheet" href="https://use.typekit.net/llo2eru.css" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" type="image/x-icon">
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <title>BingranOS</title>
+  <script>
+    window.onload = () => {
+      addEventListener('mousemove', (event) => {
+        window.parent.postMessage({ clientX: event.clientX, clientY: event.clientY, type: 'mousemove' }, '*');
+      });
+      addEventListener('mousedown', () => { window.parent.postMessage({ type: 'mousedown' }, '*'); });
+      addEventListener('mouseup', () => { window.parent.postMessage({ type: 'mouseup' }, '*'); });
+      addEventListener('keydown', (event) => { window.parent.postMessage({ type: 'keydown', key: event.key }, '*'); });
+      addEventListener('keyup', (event) => { window.parent.postMessage({ type: 'keyup', key: event.key }, '*'); });
+    };
+  </script>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- Font preloader: forces the browser to load the Win98 fonts up front. -->
+  <div class="font_preload" style="opacity: 0; position: absolute; pointer-events: none;">
+    <span style="font-family: 'MSSerif', Arial, sans-serif;">abcdefghijklmnopqrstuvwxzy</span>
+    <span style="font-family: 'Millennium', Arial, sans-serif;">abcdefghijklmnopqrstuvwxzy</span>
+    <span style="font-family: 'MillenniumBold', Arial, sans-serif;">abcdefghijklmnopqrstuvwxzy</span>
+    <span style="font-family: 'Terminal', Arial, sans-serif;">abcdefghijklmnopqrstuvwxzy</span>
+  </div>
+  <div id="root"></div>
+</body>
+
+</html>

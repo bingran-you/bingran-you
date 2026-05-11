@@ -20,6 +20,14 @@
 # production
 /build
 
+# palace vendored sub-apps — install + build outputs are generated, not committed
+/palace-outer/node_modules
+/palace-outer/public
+/palace-inner/node_modules
+/palace-inner/build
+# the merged static output that ships under /palace is built from the two sub-apps
+/public/palace
+
 # misc
 .DS_Store
 *.pem

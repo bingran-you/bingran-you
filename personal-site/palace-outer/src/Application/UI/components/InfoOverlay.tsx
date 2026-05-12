@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import BackToTextSite from './BackToTextSite';
 import FreeCamToggle from './FreeCamToggle';
 import MuteToggle from './MuteToggle';
 
@@ -20,6 +21,7 @@ const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
     const [textDone, setTextDone] = useState(false);
     const [volumeVisible, setVolumeVisible] = useState(false);
     const [freeCamVisible, setFreeCamVisible] = useState(false);
+    const [backLinkVisible, setBackLinkVisible] = useState(false);
 
     const typeText = (
         i: number,
@@ -83,6 +85,9 @@ const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
                 setVolumeVisible(true);
                 setTimeout(() => {
                     setFreeCamVisible(true);
+                    setTimeout(() => {
+                        setBackLinkVisible(true);
+                    }, 250);
                 }, 250);
             }, 250);
         }
@@ -139,6 +144,7 @@ const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
                     )}
                 </div>
             )}
+            {backLinkVisible && <BackToTextSite />}
         </div>
     );
 };

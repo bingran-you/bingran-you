@@ -33,6 +33,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          # Full history needed for `git log -1` on each SKILL.md, used by
+          # the personal-site generator to derive a deterministic
+          # `updatedAt` timestamp per skill.
+          fetch-depth: 0
 
       - name: Initialize public submodules
         run: |

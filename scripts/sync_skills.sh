@@ -7,11 +7,11 @@ REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd -P)"
 
 SOURCE_ROOTS=(
   "repo-skills"
-  "trusted-external-repos/open-design/skills"
   "trusted-external-repos/marketingskills/skills"
   "trusted-external-repos/gstack"
   "trusted-external-repos/gstack/browser-skills"
   "trusted-external-repos/gstack/openclaw/skills"
+  "trusted-external-repos/open-design/skills"
 )
 
 MANAGED_SUBMODULES=(
@@ -66,8 +66,8 @@ register_skill() {
   local source_label="$3"
 
   if [[ -n "${LINK_SOURCES[$skill_name]-}" ]]; then
-    echo "Skill name conflict: '$skill_name' appears in both '${LINK_SOURCES[$skill_name]}' and '$source_label'." >&2
-    exit 1
+    echo "Skill name conflict: '$skill_name' kept from '${LINK_SOURCES[$skill_name]}', shadowing duplicate in '$source_label'." >&2
+    return 0
   fi
 
   LINK_NAMES+=("$skill_name")

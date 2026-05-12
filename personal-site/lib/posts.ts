@@ -1,42 +1,43 @@
-import { readdir, stat } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-const POSTS_DIR = path.join(process.cwd(), "content", "posts");
+export type Platform =
+  | "youtube"
+  | "x"
+  | "xiaohongshu"
+  | "bilibili"
+  | "linkedin"
+  | "other";
 
-export type PostMetadata = {
+export type Post = {
+  id: string;
+  platform: Platform;
+  url: string;
   title: string;
   description?: string;
+  thumbnail?: string;
   date: string;
+  addedVia: "auto" | "manual";
 };
 
-export async function getPostSlugs(): Promise<string[]> {
-  const entries = await readdir(POSTS_DIR);
-  return entries
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""))
-    .sort();
+const POSTS_FILE = path.join(
+  process.cwd(),
+  "content",
+  "posts",
+  "posts.json",
+);
+
+export async function getAllPosts(): Promise<Post[]> {
+  const raw = await readFile(POSTS_FILE, "utf8");
+  const arr = JSON.parse(raw) as Post[];
+  return arr.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export async function getPostMetadata(slug: string): Promise<PostMetadata> {
-  const mod = await import(`@/content/posts/${slug}.mdx`);
-  return mod.metadata as PostMetadata;
-}
-
-export async function getAllPostsMetadata(): Promise<
-  Array<PostMetadata & { slug: string }>
-> {
-  const slugs = await getPostSlugs();
-  const all = await Promise.all(
-    slugs.map(async (slug) => ({
-      slug,
-      ...(await getPostMetadata(slug)),
-    })),
-  );
-  return all.sort((a, b) => (a.date < b.date ? 1 : -1));
-}
-
-export async function getPostLastModified(slug: string) {
-  const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
-  const { mtime } = await stat(filePath);
-  return mtime;
-}
+export const PLATFORM_LABEL: Record<Platform, string> = {
+  youtube: "YouTube",
+  x: "X",
+  xiaohongshu: "Xiaohongshu",
+  bilibili: "Bilibili",
+  linkedin: "LinkedIn",
+  other: "Link",
+};

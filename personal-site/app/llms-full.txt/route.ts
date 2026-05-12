@@ -1,18 +1,18 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { papers, projects, education } from "@/lib/content";
-import { getAllPostsMetadata } from "@/lib/posts";
+import { getAllBlogPosts } from "@/lib/blog";
 import { SITE_URL as SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 
 async function readPostMdx(slug: string): Promise<string> {
-  const path = join(process.cwd(), "content", "posts", `${slug}.mdx`);
+  const path = join(process.cwd(), "content", "blog", `${slug}.mdx`);
   return readFile(path, "utf8");
 }
 
 export async function GET() {
-  const posts = await getAllPostsMetadata();
+  const posts = await getAllBlogPosts();
   const postBodies = await Promise.all(
     posts.map(async (post) => {
       const raw = await readPostMdx(post.slug);

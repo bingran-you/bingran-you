@@ -3,10 +3,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import "katex/dist/katex.min.css";
 import {
-  getPostLastModified,
-  getPostMetadata,
-  getPostSlugs,
-} from "@/lib/posts";
+  getBlogPostLastModified,
+  getBlogPostMetadata,
+  getBlogPostSlugs,
+} from "@/lib/blog";
 import {
   blogPostingJsonLd,
   jsonLdScriptContent,
@@ -19,7 +19,7 @@ import {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const slugs = await getPostSlugs();
+  const slugs = await getBlogPostSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -31,10 +31,10 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const slugs = await getPostSlugs();
+  const slugs = await getBlogPostSlugs();
   if (!slugs.includes(slug)) return {};
-  const metadata = await getPostMetadata(slug);
-  const modifiedTime = (await getPostLastModified(slug)).toISOString();
+  const metadata = await getBlogPostMetadata(slug);
+  const modifiedTime = (await getBlogPostLastModified(slug)).toISOString();
   const description = metadata.description ?? SITE_DESCRIPTION;
 
   return {
@@ -63,12 +63,12 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: { params: Params }) {
   const { slug } = await params;
-  const slugs = await getPostSlugs();
+  const slugs = await getBlogPostSlugs();
   if (!slugs.includes(slug)) notFound();
   const { default: Post, metadata } = await import(
-    `@/content/posts/${slug}.mdx`
+    `@/content/blog/${slug}.mdx`
   );
-  const modifiedTime = (await getPostLastModified(slug)).toISOString();
+  const modifiedTime = (await getBlogPostLastModified(slug)).toISOString();
   const jsonLd = jsonLdScriptContent(
     blogPostingJsonLd({
       slug,

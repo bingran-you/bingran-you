@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllPostsMetadata } from "@/lib/posts";
+import { getAllBlogPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogPage() {
-  const posts = await getAllPostsMetadata();
+  const posts = await getAllBlogPosts();
 
   return (
     <div className="space-y-12">

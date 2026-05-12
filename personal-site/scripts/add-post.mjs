@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Add a social-media post to content/social/posts.json by extracting
+// Add a post (social-media link) to content/posts/posts.json by extracting
 // metadata from the given URL. Usage:
-//   node scripts/add-social-post.mjs <url>
-//   node scripts/add-social-post.mjs <url> --title "Custom" --date 2026-05-01
+//   node scripts/add-post.mjs <url>
+//   node scripts/add-post.mjs <url> --title "Custom" --date 2026-05-01
 //
 // Detects platform from the URL, runs the platform extractor, falls back to
 // generic OpenGraph parsing. Edits posts.json idempotently (skip duplicates by URL/id).
@@ -18,7 +18,7 @@ import process from "node:process";
 const POSTS_FILE = path.join(
   process.cwd(),
   "content",
-  "social",
+  "posts",
   "posts.json",
 );
 
@@ -316,7 +316,7 @@ async function main() {
   const argv = process.argv.slice(2);
   if (argv.length === 0 || argv[0] === "-h" || argv[0] === "--help") {
     console.error(
-      "Usage: node scripts/add-social-post.mjs <url> [--title S] [--description S] [--date YYYY-MM-DD] [--thumbnail URL] [--platform NAME]",
+      "Usage: node scripts/add-post.mjs <url> [--title S] [--description S] [--date YYYY-MM-DD] [--thumbnail URL] [--platform NAME]",
     );
     process.exit(1);
   }

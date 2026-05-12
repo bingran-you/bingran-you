@@ -35,9 +35,9 @@ Everything you'd reach for when handling these tasks. The skill is the single so
 
 | Asset | Where it lives | Why it isn't inside this skill dir |
 |---|---|---|
-| `add-social-post.mjs` — URL → metadata → JSON-append script | `personal-site/scripts/add-social-post.mjs` | Wired into `personal-site/package.json` as `npm run post:add`; moving it would break that workflow. Treat *this* SKILL.md as the docs of record; `--help` in the script is intentionally terse. |
-| `posts.json` — the data | `personal-site/content/social/posts.json` | It's the personal-site's content, not a skill artifact. |
-| `social-post-card.tsx` — render component | `personal-site/components/social-post-card.tsx` | Same — site code. |
+| `add-post.mjs` — URL → metadata → JSON-append script | `personal-site/scripts/add-post.mjs` | Wired into `personal-site/package.json` as `npm run post:add`; moving it would break that workflow. Treat *this* SKILL.md as the docs of record; `--help` in the script is intentionally terse. |
+| `posts.json` — the data | `personal-site/content/posts/posts.json` | It's the personal-site's content, not a skill artifact. |
+| `post-card.tsx` — render component | `personal-site/components/post-card.tsx` | Same — site code. |
 | Thumbnail bucket | `personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg` | Public site assets. |
 | Account / pacing / threat-model rules | this file, §§ Part 1–2 | — |
 | Per-platform extractor recipes & XHS fallback | this file, §§ 3.3–3.4 | — |
@@ -294,11 +294,11 @@ If you got here because the user pasted such a phrase, **do not improvise.** Fol
 
 ```
 personal-site/
-├── content/social/posts.json          # the data — single JSON array, sorted desc by date
-├── lib/social-posts.ts                # types + loader (SocialPost, SocialPlatform, getAllSocialPosts)
-├── components/social-post-card.tsx    # card rendering — image OR text-as-visual fallback
+├── content/posts/posts.json          # the data — single JSON array, sorted desc by date
+├── lib/posts.ts                       # types + loader (Post, Platform, getAllPosts)
+├── components/post-card.tsx    # card rendering — image OR text-as-visual fallback
 ├── app/(personal)/posts/page.tsx      # the page (CSS-columns masonry)
-└── scripts/add-social-post.mjs        # the URL → metadata → JSON-append script
+└── scripts/add-post.mjs        # the URL → metadata → JSON-append script
 ```
 
 **Schema** of one entry in `posts.json`:
@@ -329,7 +329,7 @@ X is intentionally minimal — `react-tweet` fetches everything (text, author, a
 
 ### 3.2 The script: `npm run post:add -- <url>`
 
-`scripts/add-social-post.mjs` is the one entry point. Detects platform from URL, runs the right extractor, dedupes by `id` / `url`, appends to `posts.json`, re-sorts.
+`scripts/add-post.mjs` is the one entry point. Detects platform from URL, runs the right extractor, dedupes by `id` / `url`, appends to `posts.json`, re-sorts.
 
 Override flags (when extraction misses something or you want to curate):
 - `--title "Custom"` / `--description "..."` — override extracted text
@@ -363,7 +363,7 @@ curl -s "https://www.xiaohongshu.com/explore/<id>?xsec_token=<token>&xsec_source
 ```
 The xsec_token is what XHS calls "share-link auth" — tied to the note ID, doesn't expire on a session timer, doesn't burn the account. Get it from the profile page DOM (the `<a>` href on each note tile carries it) or from a real "复制链接" share action on mobile.
 
-🚨 **Reality update (observed 2026-05-07)**: fresh desktop-share `xsec_token` URLs now redirect server-side fetches (Node/`curl`/Claude `WebFetch`) to `/404?errorCode=-510001` even with a proper Chrome UA. The page exists — opening the same URL in the user's logged-in Chrome works fine. So `add-social-post.mjs` falls through to the OG tags of the 404 page and writes a poisoned entry: `id: "xiaohongshu-aHR0cHM6Ly93"` (base64 fallback because the `/404` path doesn't match the `/explore/<id>` regex), `title: "小红书 - 你访问的页面不见了"`, plus a 4 KB cached "page not found" graphic in `public/posts-thumbs/xiaohongshu/`. Treat that title and that id prefix as the canary.
+🚨 **Reality update (observed 2026-05-07)**: fresh desktop-share `xsec_token` URLs now redirect server-side fetches (Node/`curl`/Claude `WebFetch`) to `/404?errorCode=-510001` even with a proper Chrome UA. The page exists — opening the same URL in the user's logged-in Chrome works fine. So `add-post.mjs` falls through to the OG tags of the 404 page and writes a poisoned entry: `id: "xiaohongshu-aHR0cHM6Ly93"` (base64 fallback because the `/404` path doesn't match the `/explore/<id>` regex), `title: "小红书 - 你访问的页面不见了"`, plus a 4 KB cached "page not found" graphic in `public/posts-thumbs/xiaohongshu/`. Treat that title and that id prefix as the canary.
 
 When the script returns the canary, fall back to the **logged-in browser path** — this is the canonical recipe, last verified 2026-05-09:
 
@@ -419,7 +419,7 @@ Hard rules:
 
 XHS bonus: the **first 8 hex chars of the note ID are a unix timestamp** — `Date(parseInt(noteId.slice(0,8), 16) * 1000)` gives you the post date without any extra request.
 
-XHS thumbnail caveat: the `og:image` URL is signed with a timestamp (`/2026MMDDHHMM/...`) and **expires within hours**. The `add-social-post.mjs` script handles this — it downloads the image immediately into `public/posts-thumbs/xiaohongshu/<note-id>.jpg` and rewrites `thumbnail` to the local path. See § 3.4 for why and how.
+XHS thumbnail caveat: the `og:image` URL is signed with a timestamp (`/2026MMDDHHMM/...`) and **expires within hours**. The `add-post.mjs` script handles this — it downloads the image immediately into `public/posts-thumbs/xiaohongshu/<note-id>.jpg` and rewrites `thumbnail` to the local path. See § 3.4 for why and how.
 
 **X / Twitter — the simple one.** No metadata fetch. The `extractX` function in the script just parses the tweet id from `status/(\d+)` and writes a 4-field stub: `{platform, id, url, date}`. Everything visible (text, author, avatar, embedded media, like/repost counts, original post date) is fetched at render time by `<Tweet id={id}>` from the `react-tweet` library hitting `https://cdn.syndication.twimg.com/tweet-result?id=<id>`. **Do not** restore the old `publish.twitter.com/oembed` path — it added 80 lines of HTML-entity decoding and footer-regex parsing for data that's now redundant. If `--date` isn't passed and the tweet was back-dated, sort order will be off until you edit the JSON.
 
@@ -427,7 +427,7 @@ XHS thumbnail caveat: the `og:image` URL is signed with a timestamp (`/2026MMDDH
 
 Goal: every card has visual content, and that content survives forever (no broken images six months later).
 
-The card component (`components/social-post-card.tsx`) routes by platform:
+The card component (`components/post-card.tsx`) routes by platform:
 
 1. **`platform === "x"`** → render `<Tweet id={tweetId}>` from `react-tweet`. Server component, fetches from `cdn.syndication.twimg.com` at build/request time. No `posts.json` thumbnail involved. Deleted tweets degrade to a built-in `<TweetNotFound>` tombstone.
 2. **Has `thumbnail`** (other platforms) → `<img src={post.thumbnail}>` inside an aspect-ratio-locked container, with title + date below.
@@ -436,7 +436,7 @@ The card component (`components/social-post-card.tsx`) routes by platform:
 **Where the thumbnail comes from:**
 - **YouTube** → oembed `thumbnail_url` (e.g., `i.ytimg.com/vi/<id>/hqdefault.jpg`). Stable forever, leave remote.
 - **Bilibili** → API `pic` field (e.g., `i0.hdslb.com/...`). Stable, leave remote.
-- **Xiaohongshu** → 🚨 **download to local.** XHS CDN URLs are signed with a timestamp embedded in the path (`/2026MMDDHHMM/...`) and expire — leaving a `?` placeholder where the cover used to be. The `add-social-post.mjs` script downloads the `og:image` immediately to `public/posts-thumbs/xiaohongshu/<note-id>.jpg` (HTTP fetch with `Referer: https://www.xiaohongshu.com/` header — required, otherwise the CDN 403s) and rewrites `thumbnail` to `/posts-thumbs/xiaohongshu/<note-id>.jpg` so the page references the local copy. Total cost is ~135 KB per card. When the script's server-side path is blocked (see § 3.3 reality update) and you fall back to the DOM-extracted cover, the image is usually a `webp` despite the `.jpg` filename — convert with `sips -s format jpeg <id>.jpg --out /tmp/<id>.jpg && mv /tmp/<id>.jpg <id>.jpg` to keep the bucket JPEG-only and avoid extension/MIME mismatch.
+- **Xiaohongshu** → 🚨 **download to local.** XHS CDN URLs are signed with a timestamp embedded in the path (`/2026MMDDHHMM/...`) and expire — leaving a `?` placeholder where the cover used to be. The `add-post.mjs` script downloads the `og:image` immediately to `public/posts-thumbs/xiaohongshu/<note-id>.jpg` (HTTP fetch with `Referer: https://www.xiaohongshu.com/` header — required, otherwise the CDN 403s) and rewrites `thumbnail` to `/posts-thumbs/xiaohongshu/<note-id>.jpg` so the page references the local copy. Total cost is ~135 KB per card. When the script's server-side path is blocked (see § 3.3 reality update) and you fall back to the DOM-extracted cover, the image is usually a `webp` despite the `.jpg` filename — convert with `sips -s format jpeg <id>.jpg --out /tmp/<id>.jpg && mv /tmp/<id>.jpg <id>.jpg` to keep the bucket JPEG-only and avoid extension/MIME mismatch.
 - **X** → no thumbnail; `<Tweet>` handles all media inline.
 
 **Why `react-tweet` for X (not the older text-as-visual path):**
@@ -464,7 +464,7 @@ CSS columns + variable-height children + async-loading images = different layout
    Reserves vertical space → no reflow when the image network arrives. `object-fit: cover` on the inner `<img>` handles cropping.
 2. **Triple-property break-inside avoidance** on every grid child:
    ```css
-   .social-post-grid > * {
+   .post-grid > * {
      break-inside: avoid;
      page-break-inside: avoid;
      -webkit-column-break-inside: avoid;
@@ -473,8 +473,8 @@ CSS columns + variable-height children + async-loading images = different layout
    Old Safari needs the `-webkit-` prefix; old Firefox respects the `page-break-` legacy name better than the modern one.
 3. **react-tweet CSS overrides** (kill the lib's default 550px max-width and outer margin so the embed fills its column):
    ```css
-   .social-tweet > div { margin: 0 !important; }
-   .social-tweet .react-tweet-theme { max-width: 100% !important; }
+   .post-tweet > div { margin: 0 !important; }
+   .post-tweet .react-tweet-theme { max-width: 100% !important; }
    ```
 
 Together these three things turn a jagged masonry that reflows visibly on first paint into a stable grid that's identical in all three browsers.
@@ -497,7 +497,7 @@ This is the default path when the user pastes a single post URL.
    --thumbnail overrides are available but rarely needed for the four primary platforms.
 5. npm run lint && npm run build                    # verify; /posts is statically generated
 6. Open localhost:3000/posts to spot-check the card across viewport sizes
-7. git add personal-site/content/social/posts.json
+7. git add personal-site/content/posts/posts.json
    git add personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg   # only for XHS
 8. git commit -m "personal-site: add post — <one-line summary>"
 9. git push + gh pr create + (if Bingran says ship) gh pr merge --squash
@@ -554,7 +554,7 @@ Older videos beyond the RSS window: must be added via `npm run post:add -- <watc
 
 - **XHS bare `/explore/<id>` 404s** — always use the share URL with `xsec_token`. Profile-page hrefs include the token; copy them whole.
 - **XHS share URL still 404s server-side** (observed 2026-05-07) — even with token + UA, anonymous fetches from Node/`curl`/Claude `WebFetch` hit `/404?errorCode=-510001`. The script does not detect this; it scrapes the 404 page's OG tags and writes a poisoned entry (id `xiaohongshu-aHR0cHM6Ly93`, title `小红书 - 你访问的页面不见了`, 4 KB "page not found" graphic in `posts-thumbs/xiaohongshu/`). Always sanity-check the script's printed JSON before committing. When you see the canary, follow the logged-in browser fallback in § 3.3 (Chrome MCP for title + cover URL, `curl` with Referer for the image, `sips` to convert webp→jpg, hand-edit `posts.json`).
-- **`add-social-post.mjs` resort-on-add inflates the diff** — the script calls `arr.sort((a,b)=> a.date<b.date?1:-1)` after appending. Sort is unstable for equal-date entries, so adding one post can shuffle every same-day sibling and produce a hundred-line diff for one logical change. For one-off adds (especially the manual XHS path above), use `git show HEAD:personal-site/content/social/posts.json` + a small node `unshift`-and-write-back snippet so the diff stays at +9 / -0.
+- **`add-post.mjs` resort-on-add inflates the diff** — the script calls `arr.sort((a,b)=> a.date<b.date?1:-1)` after appending. Sort is unstable for equal-date entries, so adding one post can shuffle every same-day sibling and produce a hundred-line diff for one logical change. For one-off adds (especially the manual XHS path above), use `git show HEAD:personal-site/content/posts/posts.json` + a small node `unshift`-and-write-back snippet so the diff stays at +9 / -0.
 - **XHS thumbnail 403 cross-origin** — even when the URL is fresh, fetching it from a non-XHS origin (or without a Referer header) returns 403. The script sets `Referer: https://www.xiaohongshu.com/`. If you need to download by hand, the same header makes `curl` work.
 - **XHS DOM cover is webp, not jpeg** — the first `<img>` you read out of the SPA via Chrome MCP returns a `*_webp_3` URL. Saving it as `.jpg` works in browsers (they sniff magic bytes) but breaks the JPEG-only convention of existing thumbs and may serve with the wrong `Content-Type`. Convert with `sips -s format jpeg` before committing.
 - **XHS thumbnail expiry** — signed timestamp in the path; valid for hours, not days. Always cache locally on add. If you spot a `?` placeholder on `/posts`, the URL has rotted — re-add the post or copy a fresh share URL.
@@ -565,7 +565,7 @@ Older videos beyond the RSS window: must be added via `npm run post:add -- <watc
 - **react-tweet build-time fetch** — `<Tweet>` calls the syndication API during `next build`. If the build server has no internet (rare in CI but possible), tweets fail to render. Vercel build env has internet; local builds offline will get tombstones.
 - **`react-tweet` light theme by default** — looks fine on the cream Berkeley palette, slightly off in dark mode. Wrap in `<div data-theme="dark">` based on `prefers-color-scheme` if it matters.
 - **Chrome MCP `[BLOCKED: Cookie/query string data]`** — the safety filter sometimes strips JS-tool returns when the value mixes a tokened `location.href` with other strings. Workaround: omit `location.href`, return only the specific values you need, wrap in `JSON.stringify({...})`. If still blocked, server-side `fetch` + `og:image` parse, or Chrome MCP `find` for DOM hrefs.
-- **Account isolation for the script** — `add-social-post.mjs` only does anonymous server-side `fetch` (YouTube oembed, Bilibili API, XHS share URL, XHS image CDN). Doesn't touch Bingran's account cookies on any platform. § Part 2 risk applies only when a workflow uses `claude-in-chrome` against the live X / XHS UI.
+- **Account isolation for the script** — `add-post.mjs` only does anonymous server-side `fetch` (YouTube oembed, Bilibili API, XHS share URL, XHS image CDN). Doesn't touch Bingran's account cookies on any platform. § Part 2 risk applies only when a workflow uses `claude-in-chrome` against the live X / XHS UI.
 
 ### 3.8 Decision tree for "add this to /posts"
 
@@ -595,7 +595,7 @@ For YouTube / Bilibili / X, the happy path is one command + `--date` if needed. 
 
 The `/posts` pipeline mostly stays out of § Part 2 risk because:
 
-- **Server-side `fetch` from add-social-post.mjs** uses no Bingran-account cookies. Doesn't count against any account's risk score. Free.
+- **Server-side `fetch` from add-post.mjs** uses no Bingran-account cookies. Doesn't count against any account's risk score. Free.
 - **YouTube oembed, Bilibili JSON, XHS image CDN, Twitter syndication (via react-tweet)** are unauthenticated public endpoints. ToS-fine for personal use. (XHS share-URL HTML *was* one too; as of 2026-05-07 it's blocking anonymous fetches — see § 3.3.)
 - The browser-driven steps are the **bulk harvest** (§ 3.6) and now the **per-post XHS fallback** when the script's server-side path 404s. Both touch Bingran's logged-in Chrome session, so apply § Part 2 budgets: stay under 50 items / 10 min / 6 navs/min on X, under 30 / 8 / 4 on XHS. A single fallback add (one navigate, one JS read, one image download) is well under any budget; don't queue ten of them in a tight loop.
 - **Don't rebuild the harvest just to "refresh" data.** New posts come in trickle; use the paste-a-link flow per post. Re-running a full harvest is the kind of pattern that flips a yellow signal.
@@ -606,7 +606,7 @@ Bingran's standing rule for these tasks: **one PR contains the complete change.*
 
 A complete /posts add is:
 
-1. ✅ The post entry in `personal-site/content/social/posts.json` (correct id, url, title, date, `addedVia: "manual"`).
+1. ✅ The post entry in `personal-site/content/posts/posts.json` (correct id, url, title, date, `addedVia: "manual"`).
 2. ✅ The thumbnail file present at `personal-site/public/posts-thumbs/xiaohongshu/<note-id>.jpg` (for XHS) or the remote URL verified loadable (YouTube/Bilibili).
 3. ✅ The `thumbnail` field set in the JSON entry, pointing at #2.
 4. ✅ Diff = +8/-0 in `posts.json`, +1 binary thumbnail file. No regenerated `skills.generated.json`, no other unrelated files.

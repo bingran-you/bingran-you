@@ -51,7 +51,7 @@ export default function Home() {
 
           <Link
             href="/palace"
-            className="mt-7 inline-flex items-center gap-3 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent-strong)] transition hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]"
+            className="palace-cta mt-7 inline-flex items-center gap-3 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent-strong)] transition hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]"
           >
             <span aria-hidden className="relative inline-flex h-2 w-2">
               <span className="absolute inset-0 rounded-full bg-[var(--accent)]" />

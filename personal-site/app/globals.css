@@ -1,14 +1,74 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* ──────────────────────────────────────────────────────────────────────
+   Win98 paper theme — applied globally on every route.
+   Mirrors the typography and palette of /palace's About / Experience
+   pages so the entire site speaks the same OS dialect as the desktop
+   interior.
+
+   Fonts are copied from palace-inner/src/assets/fonts into
+   personal-site/public/fonts/win98. The smudge texture is copied from
+   palace-outer/static/textures/monitor/layers/compressed/smudges.jpg
+   into personal-site/public/textures/paper-smudges.jpg. CJK glyphs
+   aren't covered by Millennium / Alfa Slab One, so the font stack
+   falls through to Noto Serif SC (loaded by next/font in
+   app/layout.tsx).
+   ────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Millennium";
+  src: url("/fonts/win98/Millennium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Millennium";
+  src: url("/fonts/win98/Millennium-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Palace's CSS uses "MillenniumBold" as a distinct family name, so
+   register that alias too. */
+@font-face {
+  font-family: "MillenniumBold";
+  src: url("/fonts/win98/Millennium-Bold.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MSSerif";
+  src: url("/fonts/win98/MSSansSerif.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Alfa Slab One";
+  src: url("/fonts/win98/AlfaSlabOne-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  /* Berkeley dusk × lab notebook palette */
-  --background: #f4ead7;        /* aged lab-notebook paper */
-  --foreground: #1f1a14;        /* pine-soot ink */
-  --muted: #6b6055;             /* warm gray, AA on background */
-  --border: rgba(31, 26, 20, 0.12);
-  --accent: #a8431c;            /* Sather Tower terracotta */
-  --accent-strong: #7d2e10;     /* deeper terracotta for hover/emphasis */
+  /* Palace paper palette — derived from the rendered CRT-through-shader
+     view: mint base + classic Win98 violet links + black ink. */
+  --paper-bg: #dbe3cf;
+  --paper-ink: #0a0a0a;
+  --paper-muted: #2b2b2b;
+  --paper-link: #551a8b;
+  --paper-link-visited: #2f0a52;
+  --paper-rule: #1a1a1a;
+
+  --background: var(--paper-bg);
+  --foreground: var(--paper-ink);
+  --muted: var(--paper-muted);
+  --border: rgba(10, 10, 10, 0.55);
+  --accent: var(--paper-link);
+  --accent-strong: var(--paper-link-visited);
 }
 
 @theme inline {
@@ -18,26 +78,14 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
-  /* Per-glyph fallback: Latin → Geist/Newsreader, Han → Noto Serif SC for
-     display contexts, system Han sans (PingFang/Hiragino/YaHei) for body.
-     The browser walks the stack per glyph, so mixed Latin+Han text inside
-     a single element is rendered with the right typeface for each script. */
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-display: var(--font-newsreader), var(--font-noto-serif-sc),
-    "Songti SC", "STSong", "Source Han Serif SC", serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1a1610;      /* warm desk-lamp ink */
-    --foreground: #ece4d4;      /* warm off-white */
-    --muted: #9a8d76;           /* warm gray */
-    --border: rgba(236, 228, 212, 0.12);
-    --accent: #e89968;          /* lit terracotta */
-    --accent-strong: #f0b687;   /* highlighted terracotta */
-  }
+  /* Per-glyph fallback: Latin → Millennium, Han → Noto Serif SC.
+     Browsers walk the stack per glyph, so mixed Latin+Han paragraphs
+     render each script with the correct typeface. */
+  --font-sans: "Millennium", "Times New Roman", Times,
+    var(--font-noto-serif-sc), "Songti SC", serif;
+  --font-mono: "MSSerif", "Millennium", "Times New Roman", monospace;
+  --font-display: "Alfa Slab One", Georgia, "Times New Roman",
+    var(--font-noto-serif-sc), "Songti SC", serif;
 }
 
 html {
@@ -52,26 +100,55 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "ss01", "ss02", "cv01", "cv11";
+  position: relative;
+  isolation: isolate;
+  background: var(--paper-bg);
+  color: var(--paper-ink);
+  font-family: "Millennium", "Times New Roman", Times,
+    var(--font-noto-serif-sc), "Songti SC", serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
 }
 
-::selection {
-  background: var(--accent);
-  color: var(--background);
+/* Solid mint base painted behind everything. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-color: var(--paper-bg);
+  pointer-events: none;
 }
 
-/* Han typography: square ideographs need slightly looser tracking than the
-   Latin defaults, and the Newsreader text-feature settings (ss01/ss02/cv01/
-   cv11 from `body`) target Latin glyphs only — Noto Serif SC ignores them
-   but inheriting them is harmless. Apply a small letter-spacing nudge so
-   inline Han inside Latin paragraphs reads as a deliberate inset, not a
-   jam-up. */
+/* Paper smudge overlay — replicates palace's MonitorScreen recipe
+   exactly: smudges.jpg, additive blending, opacity 0.12 (palace-outer
+   MonitorScreen.ts:272). Additive ≈ `mix-blend-mode: plus-lighter` in
+   CSS, which performs `src + dst` per channel and matches
+   THREE.AdditiveBlending. A 2px blur softens the brush strokes so they
+   read as haze — palace gets the same softening for free from the CRT
+   shader's scanlines and the camera-to-screen distance. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/textures/paper-smudges.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: blur(2px) hue-rotate(45deg) saturate(0.2) brightness(0.95);
+  opacity: 0.12;
+  mix-blend-mode: plus-lighter;
+  pointer-events: none;
+}
+
+::selection {
+  background: #000080;
+  color: #ffffff;
+}
+
+/* Han typography: square ideographs need slightly looser tracking than
+   the Latin defaults. */
 :lang(zh-Hans),
 :lang(zh-Hant),
 :lang(zh) {
@@ -79,9 +156,6 @@ body {
   font-feature-settings: normal;
 }
 
-/* Display Han (h1 byline, future zh display headings) — open up tracking
-   and sit at the regular Noto Serif SC weight so the glyphs feel airy
-   alongside Newsreader's modulated Latin contours. */
 .font-display:lang(zh-Hans),
 .font-display:lang(zh-Hant),
 .font-display:lang(zh) {
@@ -89,47 +163,127 @@ body {
   font-weight: 400;
 }
 
-/* Map Tailwind Typography to the Berkeley-dusk palette so prose pages
-   (blog posts, SKILL.md bodies) stay warm instead of cool zinc. */
-.prose {
-  --tw-prose-body: var(--foreground);
-  --tw-prose-headings: var(--foreground);
-  --tw-prose-lead: var(--foreground);
-  --tw-prose-links: var(--accent);
-  --tw-prose-bold: var(--foreground);
-  --tw-prose-counters: var(--muted);
-  --tw-prose-bullets: var(--border);
-  --tw-prose-hr: var(--border);
-  --tw-prose-quotes: var(--foreground);
-  --tw-prose-quote-borders: var(--accent);
-  --tw-prose-captions: var(--muted);
-  --tw-prose-code: var(--foreground);
-  --tw-prose-pre-code: var(--foreground);
-  --tw-prose-pre-bg: rgba(31, 26, 20, 0.04);
-  --tw-prose-th-borders: var(--border);
-  --tw-prose-td-borders: var(--border);
-  --tw-prose-invert-body: var(--foreground);
-  --tw-prose-invert-headings: var(--foreground);
-  --tw-prose-invert-lead: var(--foreground);
-  --tw-prose-invert-links: var(--accent);
-  --tw-prose-invert-bold: var(--foreground);
-  --tw-prose-invert-counters: var(--muted);
-  --tw-prose-invert-bullets: var(--border);
-  --tw-prose-invert-hr: var(--border);
-  --tw-prose-invert-quotes: var(--foreground);
-  --tw-prose-invert-quote-borders: var(--accent);
-  --tw-prose-invert-captions: var(--muted);
-  --tw-prose-invert-code: var(--foreground);
-  --tw-prose-invert-pre-code: var(--foreground);
-  --tw-prose-invert-pre-bg: rgba(236, 228, 212, 0.04);
-  --tw-prose-invert-th-borders: var(--border);
-  --tw-prose-invert-td-borders: var(--border);
+/* Headings — palace measurements (palace-inner/src/index.css:93-118).
+   h1 = Alfa Slab One; h2/h3/h4 = MillenniumBold. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--paper-ink);
+  letter-spacing: 0;
 }
 
-/* react-tweet embeds: strip the default 550px max-width and the outer
-   margin so the card fills its masonry column. Same idea skillsbench
-   uses; without these the card renders at its native width and breaks
-   the column layout. */
+h1 {
+  font-family: "Alfa Slab One", Georgia, "Times New Roman", serif;
+  letter-spacing: 0.5px;
+}
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "MillenniumBold", "Times New Roman", Times, serif;
+}
+
+p,
+li {
+  font-family: "Millennium", "Times New Roman", Times, serif;
+}
+
+p b,
+p strong,
+li b,
+li strong,
+span b,
+span strong {
+  font-family: "MillenniumBold", "Times New Roman", Times, serif;
+  font-weight: 400;
+}
+
+/* Win98/Netscape violet hyperlinks. */
+a {
+  color: var(--paper-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+a:visited {
+  color: var(--paper-link-visited);
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Tailwind's `font-mono` slots (used for section eyebrow labels)
+   resolve to MSSerif — palace's pixel-aliased Win98 control font. */
+.font-mono {
+  font-family: "MSSerif", "Millennium", "Times New Roman", monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Hairlines: solid black ink at paper weight. */
+.divide-y > * + *,
+.border-y,
+.border-t,
+.border-b {
+  border-color: var(--paper-rule) !important;
+}
+
+/* Justified body copy with auto hyphenation — matches palace's About /
+   Experience / Projects page text blocks (`.text-block` rule,
+   palace-inner index.css:282). Scoped to long-form contexts so
+   navigation menus and card grids stay flush-left. */
+.prose p,
+.prose li,
+.text-block,
+.text-block p,
+.text-block li {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Map Tailwind Typography to the paper palette so .prose pages (blog
+   posts, SKILL.md bodies) inherit black ink on mint paper. */
+.prose {
+  --tw-prose-body: var(--paper-ink);
+  --tw-prose-headings: var(--paper-ink);
+  --tw-prose-lead: var(--paper-ink);
+  --tw-prose-links: var(--paper-link);
+  --tw-prose-bold: var(--paper-ink);
+  --tw-prose-counters: var(--paper-muted);
+  --tw-prose-bullets: var(--paper-rule);
+  --tw-prose-hr: var(--paper-rule);
+  --tw-prose-quotes: var(--paper-ink);
+  --tw-prose-quote-borders: var(--paper-link);
+  --tw-prose-captions: var(--paper-muted);
+  --tw-prose-code: var(--paper-ink);
+  --tw-prose-pre-code: var(--paper-ink);
+  --tw-prose-pre-bg: rgba(10, 10, 10, 0.04);
+  --tw-prose-th-borders: var(--paper-rule);
+  --tw-prose-td-borders: var(--paper-rule);
+  --tw-prose-invert-body: var(--paper-ink);
+  --tw-prose-invert-headings: var(--paper-ink);
+  --tw-prose-invert-lead: var(--paper-ink);
+  --tw-prose-invert-links: var(--paper-link);
+  --tw-prose-invert-bold: var(--paper-ink);
+  --tw-prose-invert-counters: var(--paper-muted);
+  --tw-prose-invert-bullets: var(--paper-rule);
+  --tw-prose-invert-hr: var(--paper-rule);
+  --tw-prose-invert-quotes: var(--paper-ink);
+  --tw-prose-invert-quote-borders: var(--paper-link);
+  --tw-prose-invert-captions: var(--paper-muted);
+  --tw-prose-invert-code: var(--paper-ink);
+  --tw-prose-invert-pre-code: var(--paper-ink);
+  --tw-prose-invert-pre-bg: rgba(10, 10, 10, 0.04);
+  --tw-prose-invert-th-borders: var(--paper-rule);
+  --tw-prose-invert-td-borders: var(--paper-rule);
+}
+
+/* react-tweet embeds: strip the default 550px max-width and outer
+   margin so the card fills its masonry column. */
 .post-tweet > div {
   margin: 0 !important;
 }
@@ -137,14 +291,56 @@ body {
   max-width: 100% !important;
 }
 
-/* Cross-browser masonry stability. Safari and Firefox honor
-   `break-inside: avoid` more reliably when the child is also marked
-   page-break-inside, and inline-block prevents the rare case of a
-   card being split across columns. */
+/* Cross-browser masonry stability. */
 .post-grid > * {
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
   display: block;
   width: 100%;
+}
+
+/* "Enter the Memory Palace" CTA — raised Win98 button (palace-inner
+   index.css:228). Applied via the .palace-cta class on the homepage
+   hero link. */
+.palace-cta {
+  background: #c0c0c0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 6px 18px !important;
+  font-family: "Millennium", "Times New Roman", Times, serif !important;
+  font-weight: 700;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--paper-ink) !important;
+  text-decoration: none !important;
+  box-shadow:
+    inset -1px -1px #2b2b2b,
+    inset 1px 1px #ffffff,
+    inset -2px -2px #808080,
+    inset 2px 2px #c0c0c0;
+}
+.palace-cta:hover {
+  background: #cfcfcf !important;
+  text-decoration: none !important;
+}
+.palace-cta:active {
+  box-shadow:
+    inset -1px -1px #ffffff,
+    inset 1px 1px #2b2b2b,
+    inset -2px -2px #c0c0c0,
+    inset 2px 2px #808080;
+}
+
+/* Win98 had no dark mode and the smudge texture only reads at light
+   values. Hold the palette flat. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper-bg: #dbe3cf;
+    --paper-ink: #0a0a0a;
+    --paper-muted: #2b2b2b;
+    --background: var(--paper-bg);
+    --foreground: var(--paper-ink);
+    --muted: var(--paper-muted);
+  }
 }

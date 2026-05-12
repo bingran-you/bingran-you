@@ -1,11 +1,11 @@
 import { papers, projects } from "@/lib/content";
-import { getAllPostsMetadata } from "@/lib/posts";
+import { getAllBlogPosts } from "@/lib/blog";
 import { SITE_URL as SITE } from "@/lib/site";
 
 export const dynamic = "force-static";
 
 export async function GET() {
-  const posts = await getAllPostsMetadata();
+  const posts = await getAllBlogPosts();
 
   const body = `# Bingran You
 

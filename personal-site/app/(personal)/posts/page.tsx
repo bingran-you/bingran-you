@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { getAllSocialPosts } from "@/lib/social-posts";
-import { SocialPostCard } from "@/components/social-post-card";
+import { getAllPosts } from "@/lib/posts";
+import { PostCard } from "@/components/post-card";
 
 export const metadata: Metadata = {
   title: "Posts",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PostsPage() {
-  const posts = await getAllSocialPosts();
+  const posts = await getAllPosts();
 
   return (
     <div className="space-y-12">
@@ -25,9 +25,9 @@ export default async function PostsPage() {
       {posts.length === 0 ? (
         <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
       ) : (
-        <div className="social-post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
+        <div className="post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
           {posts.map((post) => (
-            <SocialPostCard key={post.id} post={post} />
+            <PostCard key={post.id} post={post} />
           ))}
         </div>
       )}

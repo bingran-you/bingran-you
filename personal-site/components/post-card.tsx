@@ -1,9 +1,9 @@
 import { Tweet } from "react-tweet";
 import {
   PLATFORM_LABEL,
-  type SocialPlatform,
-  type SocialPost,
-} from "@/lib/social-posts";
+  type Platform,
+  type Post,
+} from "@/lib/posts";
 
 type IconProps = { className?: string };
 
@@ -58,7 +58,7 @@ function LinkIcon({ className }: IconProps) {
 }
 
 const PLATFORM_ICON: Record<
-  SocialPlatform,
+  Platform,
   (props: IconProps) => React.ReactElement
 > = {
   youtube: YouTubeIcon,
@@ -69,7 +69,7 @@ const PLATFORM_ICON: Record<
   other: LinkIcon,
 };
 
-const PLATFORM_ACCENT: Record<SocialPlatform, string> = {
+const PLATFORM_ACCENT: Record<Platform, string> = {
   youtube: "text-red-500",
   x: "text-foreground",
   xiaohongshu: "text-rose-500",
@@ -81,7 +81,7 @@ const PLATFORM_ACCENT: Record<SocialPlatform, string> = {
 // Per-platform aspect ratios for thumbnail slots. Locking the aspect at the
 // container level reserves space *before* the image loads, eliminating the
 // reflow flicker that breaks the masonry layout in Safari and Firefox.
-const THUMB_ASPECT: Partial<Record<SocialPlatform, string>> = {
+const THUMB_ASPECT: Partial<Record<Platform, string>> = {
   youtube: "16 / 9",
   xiaohongshu: "4 / 5", // most XHS notes are portrait; cover-fit handles outliers
   bilibili: "16 / 10",
@@ -99,7 +99,7 @@ function formatDate(date: string) {
 
 // Pull the numeric tweet id out of either the stored id (`x-<digits>`) or
 // the post URL (`/status/<digits>`). Returns null when neither yields one.
-function extractTweetId(post: SocialPost): string | null {
+function extractTweetId(post: Post): string | null {
   const fromId = post.id.match(/^x-(\d+)$/);
   if (fromId) return fromId[1];
   const fromUrl = post.url.match(/status\/(\d+)/);
@@ -107,7 +107,7 @@ function extractTweetId(post: SocialPost): string | null {
   return null;
 }
 
-export function SocialPostCard({ post }: { post: SocialPost }) {
+export function PostCard({ post }: { post: Post }) {
   // X / Twitter: defer to react-tweet, which fetches the tweet from the
   // public syndication API at render time and emits a fully styled card —
   // no manual title/thumbnail bookkeeping, deleted tweets degrade to a
@@ -116,7 +116,7 @@ export function SocialPostCard({ post }: { post: SocialPost }) {
     const tweetId = extractTweetId(post);
     if (tweetId) {
       return (
-        <div className="social-tweet mb-6 break-inside-avoid">
+        <div className="post-tweet mb-6 break-inside-avoid">
           <Tweet id={tweetId} />
         </div>
       );

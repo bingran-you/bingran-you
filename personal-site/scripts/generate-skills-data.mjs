@@ -9,10 +9,36 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 import { marked } from "marked";
+
+// Returns the ISO timestamp of the last git commit that touched `absoluteFile`,
+// or null if the path has no committed history. Runs `git log` with cwd set
+// to the file's directory so it autodetects the enclosing repo — including
+// submodules, which have their own history independent of the super-repo.
+//
+// Using commit time instead of filesystem mtime keeps the generator's output
+// deterministic across machines and CI checkouts (where every file's mtime
+// is the time of `git clone`).
+function gitCommitTime(absoluteFile) {
+  try {
+    const out = execFileSync(
+      "git",
+      ["log", "-1", "--format=%cI", "--", path.basename(absoluteFile)],
+      {
+        cwd: path.dirname(absoluteFile),
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      },
+    ).trim();
+    return out ? new Date(out) : null;
+  } catch {
+    return null;
+  }
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PERSONAL_SITE = path.join(__dirname, "..");
@@ -227,7 +253,8 @@ for (const slug of entries) {
   let mtime;
   try {
     raw = readFileSync(skillFile, "utf8");
-    mtime = statSync(skillFile).mtime;
+    const realFile = realpathSync(skillFile);
+    mtime = gitCommitTime(realFile) ?? statSync(skillFile).mtime;
   } catch {
     continue;
   }

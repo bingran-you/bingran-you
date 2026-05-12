@@ -2,9 +2,9 @@ import { stat } from "node:fs/promises";
 import path from "node:path";
 import type { MetadataRoute } from "next";
 import {
-  getAllPostsMetadata,
-  getPostLastModified,
-} from "@/lib/posts";
+  getAllBlogPosts,
+  getBlogPostLastModified,
+} from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
 import { getAllSkills, getSkillsLastModified } from "@/lib/skills";
 
@@ -24,11 +24,11 @@ async function getLatestLastModified(relativePaths: string[]) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllPostsMetadata();
+  const posts = await getAllBlogPosts();
   const postEntries = await Promise.all(
     posts.map(async (post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: await getPostLastModified(post.slug),
+      lastModified: await getBlogPostLastModified(post.slug),
       changeFrequency: "yearly" as const,
       priority: 0.6,
     })),
@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       (
         await getLatestLastModified([
           "app/(personal)/blog/page.tsx",
-          "lib/posts.ts",
+          "lib/blog.ts",
         ])
       ).getTime(),
       ...postEntries.map((entry) => entry.lastModified.getTime()),
@@ -92,7 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/posts`,
       lastModified: await getLatestLastModified([
         "app/(personal)/posts/page.tsx",
-        "content/social/posts.json",
+        "content/posts/posts.json",
       ]),
       changeFrequency: "weekly",
       priority: 0.7,

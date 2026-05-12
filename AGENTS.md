@@ -47,7 +47,9 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 └── memory/                       # Daily logs + heartbeat state
 ```
 
-Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Mirror them into `.agents/skills` and `.claude/skills` via `scripts/sync_skills.sh` instead of editing the entrypoints by hand.
+Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Three layers must stay aligned: **sources** → mirrored entrypoints in `.agents/skills` and `.claude/skills` → personal-site generator output (`personal-site/lib/skills.generated.json` and `personal-site/public/skill-files/`).
+
+**After bumping any `trusted-external-repos/*` submodule pointer, or adding / renaming / editing any skill, run `make sync` from the repo root and commit the resulting diff in the same PR.** `make sync` runs `scripts/sync_skills.sh refresh` followed by `npm run skills:generate` in `personal-site/`. The `skills-sync-check` GitHub Action enforces this on every PR — any drift between sources and committed artifacts fails CI.
 
 ### Submodules (see `.gitmodules`)
 

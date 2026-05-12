@@ -1,0 +1,63 @@
+name: skills-sync-check
+
+# Fails any PR that bumps a trusted-external-repos submodule, edits a
+# skill source, or modifies the sync script / generator, without
+# committing the corresponding refresh of:
+#   - .agents/skills/
+#   - .claude/skills/
+#   - personal-site/lib/skills.generated.json
+#   - personal-site/public/skill-files/
+
+on:
+  pull_request:
+    paths:
+      - 'repo-skills/**'
+      - 'trusted-external-repos/open-design'
+      - 'trusted-external-repos/marketingskills'
+      - 'trusted-external-repos/gstack'
+      - '.gitmodules'
+      - 'scripts/sync_skills.sh'
+      - 'personal-site/scripts/generate-skills-data.mjs'
+      - 'personal-site/package.json'
+      - 'personal-site/package-lock.json'
+      - '.agents/skills/**'
+      - '.claude/skills/**'
+      - 'personal-site/lib/skills.generated.json'
+      - 'personal-site/public/skill-files/**'
+      - 'Makefile'
+      - '.github/workflows/skills-sync-check.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          # Full history needed for `git log -1` on each SKILL.md, used by
+          # the personal-site generator to derive a deterministic
+          # `updatedAt` timestamp per skill.
+          fetch-depth: 0
+
+      - name: Initialize public submodules
+        run: |
+          git submodule update --init \
+            trusted-external-repos/open-design \
+            trusted-external-repos/marketingskills \
+            trusted-external-repos/gstack
+
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -y zsh
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: personal-site/package-lock.json
+
+      - name: Install personal-site dependencies
+        run: cd personal-site && npm ci
+
+      - name: Run sync and verify no drift
+        run: make sync-check

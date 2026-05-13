@@ -76,7 +76,7 @@ export default async function SkillDetailPage({
           <a
             href={skill.downloadUrl}
             download={`${skill.slug}.md`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-foreground bg-foreground px-3.5 py-1.5 text-xs text-[var(--background)] transition hover:opacity-90"
+            className="inline-flex items-center gap-1.5 rounded-full border border-foreground bg-foreground px-3.5 py-1.5 text-xs text-[var(--background)]! no-underline! transition hover:opacity-90"
           >
             <DownloadIcon className="h-3 w-3" />
             Download SKILL.md

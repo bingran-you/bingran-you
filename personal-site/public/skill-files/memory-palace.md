@@ -9,6 +9,8 @@ license: MIT
 
 **Live demo:** [bingranyou.com/palace](https://bingranyou.com/palace) — what you're aiming for.
 
+**Sibling skill:** [`win98-paper-theme`](../win98-paper-theme/SKILL.md) makes the *rest* of your site (front door, blog, every other route) speak the same OS dialect as `/palace`, so the hand-off between the 3D scene and the docs / posts feels like the same machine. Ship that one after this one if you want full visual cohesion.
+
 ## What this skill ships
 
 A complete, copy-paste-ready kit for cloning [henryjeff/portfolio-website](https://github.com/henryjeff/portfolio-website) (the outer 3D CRT room) + [henryjeff/portfolio-inner-site](https://github.com/henryjeff/portfolio-inner-site) (the inner Win98 desktop) and mounting them under `/palace` on your own Next.js site, with your own content.

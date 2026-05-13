@@ -137,6 +137,10 @@ In order of visibility — all paths relative to your vendored copy:
 | `assets/content/Home.tsx` etc. | Placeholder showcase pages | `palace-inner/src/components/showcase/` |
 | `assets/content/VerticalNavbar.tsx` | Placeholder showcase navbar with PLAYBOOK §L fix (`react-router-dom` everywhere) | `palace-inner/src/components/showcase/VerticalNavbar.tsx` |
 | `assets/content/ShutdownSequence.tsx` | Minimal "Rebooting…" replacement | `palace-inner/src/components/os/ShutdownSequence.tsx` |
+| `assets/content/branding/*.md` (6 files) | Before/after examples for every Henry-specific branding string | LoadingScreen / InfoOverlay / Toolbar / ShowcaseExplorer / MonitorScreen / Desktop |
+| `assets/content/public/index.html.template.html` + `manifest.json.template.json` | Inner-OS public templates | `palace-inner/public/` |
+| `assets/content/personal-assets-checklist.md` | Walk-through for replacing Henry's photos / resume / favicon | image / PDF / icon files |
+| `assets/fonts/AlfaSlabOne-Regular.woff2` + `AlfaSlabOne-OFL.txt` | Self-hosted display font (OFL) | `palace-inner/src/assets/fonts/` |
 | `assets/notice/NOTICE.outer.template.md` | MIT vendor notice | `palace-outer/NOTICE.md` |
 | `assets/notice/NOTICE.inner.template.md` | Permission notice | `palace-inner/NOTICE.md` |
 | `assets/verification/devtools.js` | Post-deploy verification | paste into DevTools at `/palace` |

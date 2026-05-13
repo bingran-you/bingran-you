@@ -34,6 +34,17 @@ Convention used in this table:
 | `content/Contact.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/Contact.tsx` | — |
 | `content/VerticalNavbar.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/VerticalNavbar.tsx` | §L (`react-router-dom` import) |
 | `content/ShutdownSequence.tsx` | Drop in (or delete the route) | `palace-inner/src/components/os/ShutdownSequence.tsx` | — |
+| `content/branding/LoadingScreen.examples.md` | Reference + manual edit | `palace-outer/src/Application/UI/components/LoadingScreen.tsx` | — |
+| `content/branding/InfoOverlay.examples.md` | Reference + manual edit | `palace-outer/src/Application/UI/components/InfoOverlay.tsx` (L10-11) | — |
+| `content/branding/Toolbar.examples.md` | Reference + manual edit | `palace-inner/src/components/os/Toolbar.tsx` (~L99) | — |
+| `content/branding/ShowcaseExplorer.examples.md` | Reference + manual edit | `palace-inner/src/components/applications/ShowcaseExplorer.tsx` | — |
+| `content/branding/MonitorScreen.examples.md` | Reference + manual edit | `palace-outer/src/Application/World/MonitorScreen.ts` (~L207, after iframe.src) | — |
+| `content/branding/Desktop.applications.md` | Reference + manual curation | `palace-inner/src/components/os/Desktop.tsx` (`APPLICATIONS` map + imports + delete apps) | — |
+| `content/public/index.html.template.html` | Drop in + replace placeholders | `palace-inner/public/index.html` | — |
+| `content/public/manifest.json.template.json` | Drop in + replace placeholders | `palace-inner/public/manifest.json` | — |
+| `content/personal-assets-checklist.md` | Reference + manual asset swaps | photos, resume, favicon, audio | — (so you don't ship Henry's face / PDF) |
+| `fonts/AlfaSlabOne-Regular.woff2` | Drop in (binary) | `palace-inner/src/assets/fonts/AlfaSlabOne-Regular.woff2` | §M |
+| `fonts/AlfaSlabOne-OFL.txt` | Drop in (alongside woff2) | `palace-inner/src/assets/fonts/AlfaSlabOne-OFL.txt` | §M |
 | `notice/NOTICE.outer.template.md` | Drop in + edit | `palace-outer/NOTICE.md` | §A |
 | `notice/NOTICE.inner.template.md` | Drop in + edit | `palace-inner/NOTICE.md` | §A |
 | `verification/devtools.js` | Paste into DevTools | console at `/palace` after deploy | §H §I §J §K |
@@ -60,19 +71,31 @@ Convention used in this table:
    Also edit the existing global `/(.*)` rule per the `_globalAdjustments`
    note (set `X-Frame-Options: SAMEORIGIN`, CSP `frame-ancestors 'self'`).
 10. Append `patches/font-and-li.snippet.css` to `palace-inner/src/index.css`,
-    then download Alfa Slab One (OFL) woff2 + `OFL.txt` and drop both
-    into `palace-inner/src/assets/fonts/`.
+    then `cp fonts/AlfaSlabOne-Regular.woff2 fonts/AlfaSlabOne-OFL.txt
+    palace-inner/src/assets/fonts/` (both files are bundled in this
+    skill — don't try `palace-inner/public/fonts/`, CRA's css-loader
+    will fail on absolute font URLs).
 11. Apply `patches/monitor-iframe-src.snippet.ts` to `MonitorScreen.ts`.
 12. Copy all `content/*.tsx` into `palace-inner/src/components/showcase/`
     (and `ShutdownSequence.tsx` into `palace-inner/src/components/os/`).
     Edit each with your own content.
 13. Copy both `notice/*.template.md` to the respective vendor roots and
     fill in the placeholders.
-14. Wire host `package.json` scripts: `"palace:build": "node
+14. Walk every `content/branding/*.examples.md` and apply the matching
+    edits — these are the 6 branding text swaps (LoadingScreen BIOS,
+    InfoOverlay HUD, Toolbar OS name, ShowcaseExplorer window chrome,
+    MonitorScreen iframe.title, Desktop APPLICATIONS map curation).
+15. Drop `content/public/index.html.template.html` and
+    `content/public/manifest.json.template.json` into
+    `palace-inner/public/`, swap placeholders.
+16. Walk `content/personal-assets-checklist.md` — replace Henry's
+    photos, resume PDF, favicon / icons. Don't ship to prod with
+    Henry's face on your About page.
+17. Wire host `package.json` scripts: `"palace:build": "node
     scripts/build-palace.mjs"` and prefix `"build"`.
-15. `npm run build`, then visit `http://localhost:3000/palace`.
-16. Deploy. Paste `verification/devtools.js` into DevTools at the deployed
+18. `npm run build`, then visit `http://localhost:3000/palace`.
+19. Deploy. Paste `verification/devtools.js` into DevTools at the deployed
     `/palace` URL.
 
-If a check in step 16 fails, the matching gotcha in `../PLAYBOOK.md`
+If a check in step 19 fails, the matching gotcha in `../PLAYBOOK.md`
 explains why.

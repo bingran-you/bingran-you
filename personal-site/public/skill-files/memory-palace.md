@@ -132,7 +132,10 @@ In order of visibility — all paths relative to your vendored copy:
 | `assets/patches/vercel.headers.snippet.json` | Per-path COOP + cache headers (PLAYBOOK §H §I §J) | host `vercel.json` |
 | `assets/patches/font-and-li.snippet.css` | Self-hosted Alfa Slab One + `<li>` typography (PLAYBOOK §M §N) | `palace-inner/src/index.css` |
 | `assets/patches/monitor-iframe-src.snippet.ts` | Iframe `src = '/palace/os?cb=' + Date.now()` (PLAYBOOK §I §J §K) | `palace-outer/src/Application/World/MonitorScreen.ts` |
+| `assets/patches/sources.ts.template.ts` | Full replacement with `/palace/` prefix on every runtime asset path | `palace-outer/src/Application/sources.ts` |
+| `assets/patches/palace-outer.package.json.example.md` | Reference: move build-time devDeps → deps (PLAYBOOK §B) | `palace-outer/package.json` (manual edit) |
 | `assets/content/Home.tsx` etc. | Placeholder showcase pages | `palace-inner/src/components/showcase/` |
+| `assets/content/VerticalNavbar.tsx` | Placeholder showcase navbar with PLAYBOOK §L fix (`react-router-dom` everywhere) | `palace-inner/src/components/showcase/VerticalNavbar.tsx` |
 | `assets/content/ShutdownSequence.tsx` | Minimal "Rebooting…" replacement | `palace-inner/src/components/os/ShutdownSequence.tsx` |
 | `assets/notice/NOTICE.outer.template.md` | MIT vendor notice | `palace-outer/NOTICE.md` |
 | `assets/notice/NOTICE.inner.template.md` | Permission notice | `palace-inner/NOTICE.md` |

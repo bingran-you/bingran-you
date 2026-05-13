@@ -1,0 +1,26 @@
+{
+  "_comment_short_name": "Replace short_name (max 12 chars, shown under PWA icons) and name with your branding.",
+  "short_name": "YOUR_OS",
+  "name": "YOUR_NAME — YOUR_OS_NAME",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/palace/os",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#008080"
+}

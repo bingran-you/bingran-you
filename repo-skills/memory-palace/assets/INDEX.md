@@ -25,11 +25,14 @@ Convention used in this table:
 | `patches/vercel.headers.snippet.json` | Merge into | host `vercel.json` → `headers` (+ global edit notes) | §H §I §J |
 | `patches/font-and-li.snippet.css` | Append to | `palace-inner/src/index.css` | §M §N |
 | `patches/monitor-iframe-src.snippet.ts` | Apply at | `palace-outer/src/Application/World/MonitorScreen.ts` (~L207) | §I §J §K |
+| `patches/sources.ts.template.ts` | Drop in (full replacement) | `palace-outer/src/Application/sources.ts` | — (runtime asset 404 fix) |
+| `patches/palace-outer.package.json.example.md` | Reference + manual edit | `palace-outer/package.json` (move devDeps → deps) | §B |
 | `content/Home.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/Home.tsx` | — |
 | `content/About.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/About.tsx` | — |
 | `content/Projects.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/Projects.tsx` | — |
 | `content/Experience.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/Experience.tsx` | — |
 | `content/Contact.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/Contact.tsx` | — |
+| `content/VerticalNavbar.tsx` | Drop in (rewrite copy) | `palace-inner/src/components/showcase/VerticalNavbar.tsx` | §L (`react-router-dom` import) |
 | `content/ShutdownSequence.tsx` | Drop in (or delete the route) | `palace-inner/src/components/os/ShutdownSequence.tsx` | — |
 | `notice/NOTICE.outer.template.md` | Drop in + edit | `palace-outer/NOTICE.md` | §A |
 | `notice/NOTICE.inner.template.md` | Drop in + edit | `palace-inner/NOTICE.md` | §A |
@@ -42,30 +45,34 @@ Convention used in this table:
 2. `cp scripts/build-palace.mjs <host>/scripts/`.
 3. Apply the two `patches/webpack.*.snippet.js` to
    `palace-outer/bundler/webpack.common.js`.
-4. Replace `palace-inner/tsconfig.json` with `patches/palace-inner.tsconfig.json`.
-5. Merge `patches/host.tsconfig.exclude.snippet.json` into host
+4. Replace `palace-outer/src/Application/sources.ts` with
+   `patches/sources.ts.template.ts` (every asset path gets the `/palace/`
+   prefix — without this, 3D models / textures / audio 404 at runtime).
+5. Edit `palace-outer/package.json` per
+   `patches/palace-outer.package.json.example.md` (move every
+   `devDependencies` entry into `dependencies`, regenerate the lockfile,
+   force-add it).
+6. Replace `palace-inner/tsconfig.json` with `patches/palace-inner.tsconfig.json`.
+7. Merge `patches/host.tsconfig.exclude.snippet.json` into host
    `tsconfig.json`.
-6. Apply `patches/next.rewrites.snippet.ts` to host `next.config.ts`.
-7. Merge `patches/vercel.headers.snippet.json` into host `vercel.json`.
+8. Apply `patches/next.rewrites.snippet.ts` to host `next.config.ts`.
+9. Merge `patches/vercel.headers.snippet.json` into host `vercel.json`.
    Also edit the existing global `/(.*)` rule per the `_globalAdjustments`
    note (set `X-Frame-Options: SAMEORIGIN`, CSP `frame-ancestors 'self'`).
-8. Append `patches/font-and-li.snippet.css` to `palace-inner/src/index.css`,
-   then download Alfa Slab One (OFL) woff2 + `OFL.txt` and drop both
-   into `palace-inner/src/assets/fonts/`.
-9. Apply `patches/monitor-iframe-src.snippet.ts` to `MonitorScreen.ts`.
-10. Copy all `content/*.tsx` into `palace-inner/src/components/showcase/`
+10. Append `patches/font-and-li.snippet.css` to `palace-inner/src/index.css`,
+    then download Alfa Slab One (OFL) woff2 + `OFL.txt` and drop both
+    into `palace-inner/src/assets/fonts/`.
+11. Apply `patches/monitor-iframe-src.snippet.ts` to `MonitorScreen.ts`.
+12. Copy all `content/*.tsx` into `palace-inner/src/components/showcase/`
     (and `ShutdownSequence.tsx` into `palace-inner/src/components/os/`).
     Edit each with your own content.
-11. Copy both `notice/*.template.md` to the respective vendor roots and
+13. Copy both `notice/*.template.md` to the respective vendor roots and
     fill in the placeholders.
-12. Move `@babel/preset-typescript` and `@types/*` from `devDependencies`
-    to `dependencies` in `palace-outer/package.json` (manual edit — varies
-    per upstream version).
-13. Wire host `package.json` scripts: `"palace:build": "node
+14. Wire host `package.json` scripts: `"palace:build": "node
     scripts/build-palace.mjs"` and prefix `"build"`.
-14. `npm run build`, then visit `http://localhost:3000/palace`.
-15. Deploy. Paste `verification/devtools.js` into DevTools at the deployed
+15. `npm run build`, then visit `http://localhost:3000/palace`.
+16. Deploy. Paste `verification/devtools.js` into DevTools at the deployed
     `/palace` URL.
 
-If a check in step 15 fails, the matching gotcha in `../PLAYBOOK.md`
+If a check in step 16 fails, the matching gotcha in `../PLAYBOOK.md`
 explains why.

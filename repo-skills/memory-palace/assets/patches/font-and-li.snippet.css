@@ -1,0 +1,56 @@
+/* SNIPPET — append to palace-inner/src/index.css.
+ *
+ * Three fixes bundled together:
+ *
+ * 1. PLAYBOOK §M — self-hosted display font.
+ *    Upstream uses Adobe Typekit "gastromond" which is domain-locked to
+ *    Henry's domains and silently falls back elsewhere. Google Fonts edges
+ *    also 503 occasionally. Self-host Alfa Slab One (OFL, free) as the
+ *    nearest free look-alike. Drop AlfaSlabOne-Regular.woff2 + OFL.txt into
+ *    palace-inner/src/assets/fonts/ (NOT public/fonts/ — CRA's css-loader
+ *    tries to resolve absolute paths like /palace/os/fonts/... as modules
+ *    and fails).
+ *
+ * 2. PLAYBOOK §M — h1 uses the self-hosted font with safe fallbacks.
+ *
+ * 3. PLAYBOOK §N — <li> typography. Upstream styles <p> and headings with
+ *    Millennium / MillenniumBold but leaves <li> falling back to the body's
+ *    system sans-serif, which reads as un-Win98 next to the Millennium
+ *    headings. Match <p>.
+ */
+
+@font-face {
+    font-family: 'Alfa Slab One';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(./assets/fonts/AlfaSlabOne-Regular.woff2) format('woff2');
+}
+
+h1 {
+    font-family: 'Alfa Slab One', Georgia, 'Times New Roman', serif;
+    font-size: 64px;
+    letter-spacing: 0.5px;
+}
+
+li {
+    margin-bottom: 16px;
+    font-family: Millennium, 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+li b,
+li strong {
+    font-family: MillenniumBold, 'Times New Roman', Times, serif;
+}
+
+/* Catch-all for any generic <span> inside page content (e.g. role-period
+   labels in Experience / Projects) that would otherwise inherit system sans. */
+.site-page-content span {
+    font-family: Millennium, 'Times New Roman', Times, serif;
+}
+
+.site-page-content span b,
+.site-page-content span strong {
+    font-family: MillenniumBold, 'Times New Roman', Times, serif;
+}

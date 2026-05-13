@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "//": "typeRoots + types pins TS lookup to palace-inner's own @types only.",
+    "//2": "Without it, palace-inner's tsc walks UP into host node_modules and hits",
+    "//3": "newer @types/three using TS 5+ generics that CRA's TS 4.6 can't parse.",
+    "//4": "See PLAYBOOK §E.",
+    "typeRoots": ["./node_modules/@types"],
+    "types": []
+  },
+  "include": [
+    "src"
+  ]
+}

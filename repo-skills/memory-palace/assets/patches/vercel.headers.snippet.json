@@ -1,0 +1,29 @@
+{
+  "_comment": "SNIPPET — merge these three entries into your host vercel.json `headers` array. Order matters: a per-path entry overrides the global wildcard for that path. PLAYBOOK §H/§I/§J.",
+
+  "_globalAdjustments": "Also in your existing global '/(.*)' rule: set X-Frame-Options to SAMEORIGIN (not DENY) and CSP frame-ancestors to 'self' (not 'none'). Otherwise even same-origin framing is blocked.",
+
+  "headers": [
+    {
+      "_why": "PLAYBOOK §I — relaxed COOP for the whole /palace tree. The outer 3D scene reads iframe state and forwards events; under strict COOP same-origin, Chrome treats same-origin frames as cross-origin for window-object access. unsafe-none stops the agent-cluster isolation. Rest of the site keeps strict global COOP.",
+      "source": "/palace(/.*)?",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "unsafe-none" }
+      ]
+    },
+    {
+      "_why": "PLAYBOOK §J — HTML entry for /palace is ~1.7KB; turning off caching for the document itself means security-header changes take effect on first reload after deploy. Asset files (bundle.*.js, models/, etc.) still cache normally.",
+      "source": "/palace",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    },
+    {
+      "_why": "Same as above, for the inner OS entry document.",
+      "source": "/palace/os",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    }
+  ]
+}

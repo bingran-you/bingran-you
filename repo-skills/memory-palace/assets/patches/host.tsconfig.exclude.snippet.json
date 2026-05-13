@@ -1,0 +1,17 @@
+// SNIPPET — merge into your host tsconfig.json `exclude` array.
+//
+// Why (PLAYBOOK §D):
+// Next.js's `next build` type-checks every TS file it can reach, which by
+// default includes the vendored sub-apps. palace-inner ships an older csstype
+// inside its own node_modules; host has a newer csstype; the two
+// React.CSSProperties types diverge and `Link.tsx` blows up. The vendor
+// sub-apps have their own tsconfig + build pipeline — Next.js root has no
+// business type-checking them.
+
+{
+  "exclude": [
+    "node_modules",
+    "palace-outer",
+    "palace-inner"
+  ]
+}

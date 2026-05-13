@@ -48,6 +48,9 @@ Convention used in this table:
 | `notice/NOTICE.outer.template.md` | Drop in + edit | `palace-outer/NOTICE.md` | §A |
 | `notice/NOTICE.inner.template.md` | Drop in + edit | `palace-inner/NOTICE.md` | §A |
 | `verification/devtools.js` | Paste into DevTools | console at `/palace` after deploy | §H §I §J §K |
+| `reference/README.md` | Live demo URL + what `/palace` should look like + screenshot capture recipe | — |
+| `reference/audio-cleanup.md` | Silence outer ambient `office.mp3` autoplay + drop / replace inner music | — |
+| `reference/baked-texture-replacement.md` | Replace "Heffernan henry inc" baked into the CRT chassis (3 options) | `palace-outer/static/models/Computer/baked_computer.jpg` |
 
 ## Recommended order
 

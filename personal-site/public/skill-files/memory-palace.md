@@ -7,6 +7,8 @@ license: MIT
 
 # Memory Palace — copy-paste kit + production playbook
 
+**Live demo:** [bingranyou.com/palace](https://bingranyou.com/palace) — what you're aiming for.
+
 ## What this skill ships
 
 A complete, copy-paste-ready kit for cloning [henryjeff/portfolio-website](https://github.com/henryjeff/portfolio-website) (the outer 3D CRT room) + [henryjeff/portfolio-inner-site](https://github.com/henryjeff/portfolio-inner-site) (the inner Win98 desktop) and mounting them under `/palace` on your own Next.js site, with your own content.
@@ -144,6 +146,9 @@ In order of visibility — all paths relative to your vendored copy:
 | `assets/notice/NOTICE.outer.template.md` | MIT vendor notice | `palace-outer/NOTICE.md` |
 | `assets/notice/NOTICE.inner.template.md` | Permission notice | `palace-inner/NOTICE.md` |
 | `assets/verification/devtools.js` | Post-deploy verification | paste into DevTools at `/palace` |
+| `assets/reference/README.md` | What `/palace` should look like + live demo URL | — |
+| `assets/reference/audio-cleanup.md` | Silence Henry's ambient `office.mp3` + drop / replace inner music tracks | — |
+| `assets/reference/baked-texture-replacement.md` | Three options for the "Heffernan henry inc" debossed CRT chassis | `palace-outer/static/models/Computer/baked_computer.jpg` |
 
 The full per-file rationale lives in `assets/INDEX.md`.
 

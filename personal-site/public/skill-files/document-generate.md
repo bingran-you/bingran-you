@@ -1,15 +1,14 @@
 ---
-name: document-release
+name: document-generate
 preamble-tier: 2
 version: 1.0.0
 description: |
-  Post-ship documentation update. Reads all project docs, cross-references the
-  diff, builds a Diataxis coverage map (reference/how-to/tutorial/explanation),
-  updates README/ARCHITECTURE/CONTRIBUTING/CLAUDE.md to match what shipped,
-  detects architecture diagram drift, polishes CHANGELOG voice with a sell-test
-  rubric, cleans up TODOS, and optionally bumps VERSION. Surfaces documentation
-  debt in the PR body. Use when asked to "update the docs", "sync documentation",
-  or "post-ship docs". Proactively suggest after a PR is merged or code is shipped. (gstack)
+  Generate missing documentation from scratch for a feature, module, or entire project.
+  Uses the Diataxis framework (tutorial / how-to / reference / explanation) to produce
+  complete, structured documentation. Can be invoked standalone or called by
+  /document-release when it finds coverage gaps. Use when asked to "write docs",
+  "generate documentation", "document this feature", "create a tutorial", or
+  "explain this module". (gstack)
 allowed-tools:
   - Bash
   - Read
@@ -19,9 +18,13 @@ allowed-tools:
   - Glob
   - AskUserQuestion
 triggers:
-  - update docs after ship
-  - document what changed
-  - post-ship docs
+  - write docs for this
+  - generate documentation
+  - document this feature
+  - create a tutorial
+  - write a how-to
+  - explain this module
+  - docs for this project
 ---
 <!-- AUTO-GENERATED from SKILL.md.tmpl — do not edit directly -->
 <!-- Regenerate: bun run gen:skill-docs -->
@@ -61,7 +64,7 @@ _QUESTION_TUNING=$(~/.claude/skills/gstack/bin/gstack-config get question_tuning
 echo "QUESTION_TUNING: $_QUESTION_TUNING"
 mkdir -p ~/.gstack/analytics
 if [ "$_TEL" != "off" ]; then
-echo '{"skill":"document-release","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "unknown")'"}'  >> ~/.gstack/analytics/skill-usage.jsonl 2>/dev/null || true
+echo '{"skill":"document-generate","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "unknown")'"}'  >> ~/.gstack/analytics/skill-usage.jsonl 2>/dev/null || true
 fi
 for _PF in $(find ~/.gstack/analytics -maxdepth 1 -name '.pending-*' 2>/dev/null); do
   if [ -f "$_PF" ]; then
@@ -83,7 +86,7 @@ if [ -f "$_LEARN_FILE" ]; then
 else
   echo "LEARNINGS: 0"
 fi
-~/.claude/skills/gstack/bin/gstack-timeline-log '{"skill":"document-release","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
+~/.claude/skills/gstack/bin/gstack-timeline-log '{"skill":"document-generate","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
 _HAS_ROUTING="no"
 if [ -f CLAUDE.md ] && grep -q "## Skill routing" CLAUDE.md 2>/dev/null; then
   _HAS_ROUTING="yes"
@@ -679,7 +682,7 @@ Before each AskUserQuestion, choose `question_id` from `scripts/question-registr
 
 After answer, log best-effort:
 ```bash
-~/.claude/skills/gstack/bin/gstack-question-log '{"skill":"document-release","question_id":"<id>","question_summary":"<short>","category":"<approval|clarification|routing|cherry-pick|feedback-loop>","door_type":"<one-way|two-way>","options_count":N,"user_choice":"<key>","recommended":"<key>","session_id":"'"$_SESSION_ID"'"}' 2>/dev/null || true
+~/.claude/skills/gstack/bin/gstack-question-log '{"skill":"document-generate","question_id":"<id>","question_summary":"<short>","category":"<approval|clarification|routing|cherry-pick|feedback-loop>","door_type":"<one-way|two-way>","options_count":N,"user_choice":"<key>","recommended":"<key>","session_id":"'"$_SESSION_ID"'"}' 2>/dev/null || true
 ```
 
 For two-way questions, offer: "Tune this question? Reply `tune: never-ask`, `tune: always-ask`, or free-form."
@@ -787,308 +790,362 @@ branch name wherever the instructions say "the base branch" or `<default>`.
 
 ---
 
-# Document Release: Post-Ship Documentation Update
+# Document Generate: Diataxis Documentation Writer
 
-You are running the `/document-release` workflow. This runs **after `/ship`** (code committed, PR
-exists or about to exist) but **before the PR merges**. Your job: ensure every documentation file
-in the project is accurate, up to date, and written in a friendly, user-forward voice.
+You are running the `/document-generate` workflow. Your job: produce **high-quality,
+structured documentation** for features, modules, or an entire project. You research
+the code thoroughly before writing a single line of documentation.
 
-You are mostly automated. Make obvious factual updates directly. Stop and ask only for risky or
-subjective decisions.
+This skill can be invoked two ways:
+1. **Standalone** — the user points you at a feature, module, or project and says "document this"
+2. **From /document-release** — the coverage map identified gaps; you fill them
 
-**Only stop for:**
-- Risky/questionable doc changes (narrative, philosophy, security, removals, large rewrites)
-- VERSION bump decision (if not already bumped)
-- New TODOS items to add
-- Cross-doc contradictions that are narrative (not factual)
+You follow the **Diataxis framework** — four quadrants of documentation, each serving a
+different reader need:
+- **Tutorial** — learning-oriented, walks a newcomer through a working example step-by-step
+- **How-to** — task-oriented, shows how to accomplish a specific goal (assumes basic familiarity)
+- **Reference** — information-oriented, complete and accurate technical description
+- **Explanation** — understanding-oriented, explains why things work the way they do
 
-**Never stop for:**
-- Factual corrections clearly from the diff
-- Adding items to tables/lists
-- Updating paths, counts, version numbers
-- Fixing stale cross-references
-- CHANGELOG voice polish (minor wording adjustments)
-- Marking TODOS complete
-- Cross-doc factual inconsistencies (e.g., version number mismatch)
-
-**NEVER do:**
-- Overwrite, replace, or regenerate CHANGELOG entries — polish wording only, preserve all content
-- Bump VERSION without asking — always use AskUserQuestion for version changes
-- Use `Write` tool on CHANGELOG.md — always use `Edit` with exact `old_string` matches
+**Philosophy: research the whole, then write the parts.** Like an architect who surveys the
+entire site before drawing a single room, you read the full codebase surface before writing
+any documentation. This prevents the "documentation that describes half the feature" failure mode.
 
 ---
 
-## Step 1: Pre-flight & Diff Analysis
+## Step 0: Scope & Intent
 
-1. Check the current branch. If on the base branch, **abort**: "You're on the base branch. Run from a feature branch."
+1. Determine what to document:
+   - **If invoked with a specific target** (feature, module, file, skill): scope is that target
+   - **If invoked for an entire project**: scope is the full project
+   - **If called from /document-release with gaps**: scope is the specific entities from the coverage map
 
-2. Gather context about what changed:
+2. Use AskUserQuestion to confirm scope and ask about documentation target:
+
+   - A) Write documentation inline in existing files (README, ARCHITECTURE, etc.)
+   - B) Create standalone documentation files (e.g., `docs/` directory)
+   - C) Both — inline summaries in existing files + deep docs in standalone files
+
+   RECOMMENDATION: Choose C because it maximizes both discoverability and depth.
+
+3. Determine the output format:
+   - If the project already has a `docs/` directory, follow its conventions
+   - If the project uses a doc framework (Nextra, Docusaurus, MkDocs, VitePress), follow its format
+   - Otherwise, use plain Markdown files in `docs/`
+
+---
+
+## Step 1: Codebase Archaeology (Research Phase)
+
+**This is the most important step.** Do not skip or rush it. The quality of your documentation
+is directly proportional to how well you understand the code.
+
+1. **Map the project structure:**
 
 ```bash
-git diff <base>...HEAD --stat
+find . -type f -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.gstack/*" -not -path "./dist/*" -not -path "./build/*" -not -path "./.next/*" | head -200
 ```
+
+2. **Read the entry points.** Identify and read:
+   - README.md, ARCHITECTURE.md, CONTRIBUTING.md, CLAUDE.md / AGENTS.md
+   - package.json / Cargo.toml / pyproject.toml / go.mod (understand the project type)
+   - Main entry files (index.ts, main.rs, app.py, cmd/main.go)
+   - Configuration files and examples
+
+3. **Read the source code for each target entity.** For each feature/module you're documenting:
+   - Read the implementation files end-to-end (not just signatures)
+   - Read the tests — they reveal intended behavior, edge cases, and usage patterns
+   - Read related modules that the target depends on or is depended upon by
+   - Read any existing inline comments, especially `// NOTE:`, `// DESIGN:`, `// WHY:`
+
+4. **Build a concept map.** Before writing, produce an internal outline:
+
+```
+Target: [feature/module name]
+Purpose: [one sentence — what problem does it solve?]
+Key concepts: [list the 3-5 concepts a reader must understand]
+Public surface: [commands, functions, config options, API endpoints]
+Dependencies: [what it needs from other modules]
+Dependents: [what relies on it]
+Edge cases: [from reading tests and code]
+Design decisions: [any non-obvious "why" choices]
+```
+
+5. Output: "Researched N files, identified K public surface items, M concepts, and J design decisions."
+
+---
+
+## Step 2: Diataxis Partitioning
+
+For each target entity, decide which Diataxis quadrants to produce. Not every entity needs all four.
+
+**Decision matrix:**
+
+| Entity type | Tutorial? | How-to? | Reference? | Explanation? |
+|---|---|---|---|---|
+| New feature a user interacts with | ✅ | ✅ | ✅ | Maybe |
+| CLI command or flag | Maybe | ✅ | ✅ | No |
+| Internal module/architecture | No | No | ✅ | ✅ |
+| Config option | No | ✅ | ✅ | No |
+| Design pattern / philosophy | No | No | No | ✅ |
+| API endpoint | Maybe | ✅ | ✅ | No |
+| Workflow (multi-step process) | ✅ | ✅ | No | Maybe |
+
+Output the partition plan:
+
+```
+Documentation plan:
+  [entity]              [tutorial] [how-to] [reference] [explanation]
+  Widget system         ✅ new     ✅ new   ✅ new      ✅ new
+  --verbose flag        ❌        ✅ new   ✅ inline   ❌
+  Bayesian scheduler    ❌        ❌       ✅ new      ✅ new
+```
+
+If the plan has more than 5 documents to create, use AskUserQuestion to confirm before proceeding.
+For smaller scopes, proceed directly.
+
+---
+
+## Step 3: Write Reference Documentation First
+
+Reference docs are the foundation. They are factual, complete, and derived directly from code.
+Write these before tutorials or how-tos because they establish the vocabulary.
+
+**Reference doc template:**
+
+```markdown
+# [Entity Name]
+
+[One paragraph: what it is, what it does, when you'd use it.]
+
+## API / Interface
+
+[Complete listing of public surface: functions, commands, config options, parameters.
+Include types, defaults, and constraints. Pull directly from code — do not paraphrase
+loosely.]
+
+## Options / Configuration
+
+[If applicable: every option with its type, default, and effect.]
+
+## Examples
+
+[2-3 concrete examples showing actual usage. Prefer real command output or code that
+would actually compile/run.]
+
+## Related
+
+[Links to other reference docs, how-tos, or explanations that provide context.]
+```
+
+**Rules for reference docs:**
+- Accuracy over elegance. Every claim must be traceable to code.
+- Include types, defaults, and constraints. "Accepts a string" is insufficient — "Accepts a
+  string (max 256 chars, must match `^[a-z-]+$`)" is reference-grade.
+- Show real examples that would actually work if copy-pasted.
+- Do not explain *why* — that belongs in explanation docs.
+
+---
+
+## Step 4: Write Explanation Documentation
+
+Explanation docs answer "why does this work this way?" They are the design rationale.
+
+**Explanation doc template:**
+
+```markdown
+# [Concept / Design Decision]
+
+[Opening paragraph: the problem this design solves, stated in terms a smart reader
+who hasn't seen the code would understand.]
+
+## The problem
+
+[Concrete description of what goes wrong without this design. Real failure modes,
+not abstract risks.]
+
+## The approach
+
+[How the design solves the problem. Include diagrams (ASCII or Mermaid) for
+architectural concepts.]
+
+## Trade-offs
+
+[What was given up. Every design decision trades something — name it explicitly.]
+
+## Alternatives considered
+
+[If discoverable from code comments, ADRs, or git history: what was tried or
+rejected and why.]
+```
+
+**Rules for explanation docs:**
+- Lead with the problem, not the solution.
+- Use ASCII diagrams for architecture. They're grep-able, diff-friendly, and render everywhere.
+- Name trade-offs explicitly. "We chose X over Y because Z" is the gold standard.
+- Do not repeat reference material — link to it.
+
+---
+
+## Step 5: Write How-To Guides
+
+How-tos are task-oriented. They assume the reader knows the basics and wants to accomplish
+something specific.
+
+**How-to doc template:**
+
+```markdown
+# How to [accomplish specific task]
+
+[One sentence: what you'll accomplish and the end result.]
+
+## Prerequisites
+
+[What the reader needs before starting. Be specific — versions, installed tools,
+config state.]
+
+## Steps
+
+1. [Action verb] [specific instruction]
+
+   ```bash
+   [exact command]
+   ```
+
+   [Expected output or result, if non-obvious.]
+
+2. [Next step...]
+
+## Verification
+
+[How to confirm it worked. A command, a URL to visit, a test to run.]
+
+## Troubleshooting
+
+[Common failure modes and their fixes. Pull from tests and error handling code.]
+```
+
+**Rules for how-to docs:**
+- Title starts with "How to" — no exceptions. This is the reader's entry point.
+- Every step must be actionable. No "consider whether..." — instead "Run X" or "Add Y to Z".
+- Include verification. The reader should never wonder "did it work?"
+- Troubleshooting section is mandatory if the task can fail.
+
+---
+
+## Step 6: Write Tutorials
+
+Tutorials are learning-oriented. They take a newcomer from zero to a working example.
+These are the hardest to write well and the most valuable.
+
+**Tutorial doc template:**
+
+```markdown
+# [Tutorial title — describes what you'll build/learn]
+
+[Opening paragraph: what you'll build, why it's useful, and what you'll understand
+by the end. Keep it concrete — "You'll build a working X that does Y" not
+"This tutorial covers X".]
+
+## What you'll need
+
+[Prerequisites: tools, versions, prior knowledge. Link to installation guides.]
+
+## Step 1: [Set up the foundation]
+
+[Start from a clean state. Show every command. Explain what each does on first
+encounter — but briefly, not a lecture.]
 
 ```bash
-git log <base>..HEAD --oneline
+[exact command]
 ```
 
-```bash
-git diff <base>...HEAD --name-only
+[Brief explanation of what just happened.]
+
+## Step 2: [Build the first working piece]
+
+[Get to a working, visible result as fast as possible. The reader should see
+something happen within the first 3 steps.]
+
+...
+
+## Step N: [Final step]
+
+## What you built
+
+[Recap: what the reader now has and what it can do. Link to reference docs
+for deeper exploration. Suggest next steps.]
 ```
 
-3. Discover all documentation files in the repo:
-
-```bash
-find . -maxdepth 2 -name "*.md" -not -path "./.git/*" -not -path "./node_modules/*" -not -path "./.gstack/*" -not -path "./.context/*" | sort
-```
-
-4. Classify the changes into categories relevant to documentation:
-   - **New features** — new files, new commands, new skills, new capabilities
-   - **Changed behavior** — modified services, updated APIs, config changes
-   - **Removed functionality** — deleted files, removed commands
-   - **Infrastructure** — build system, test infrastructure, CI
-
-5. Output a brief summary: "Analyzing N files changed across M commits. Found K documentation files to review."
+**Rules for tutorials:**
+- **Time to first result < 3 steps.** If the reader hasn't seen something work by step 3,
+  the tutorial is too slow.
+- Every step must produce a visible change or output. No "now configure X" without showing
+  what changes.
+- Use the exact commands the reader will type. No "run the appropriate command" abstractions.
+- Error paths: if a step commonly fails, show the error and the fix inline.
+- End with "What you built" — connect the tutorial back to the real use case.
 
 ---
 
-## Step 1.5: Coverage Map (Blast-Radius Analysis)
+## Step 7: Cross-Document Linking & Discoverability
 
-Before touching any documentation file, build a **coverage map** of what shipped vs what's
-documented. This is inspired by the Diataxis framework (tutorial / how-to / reference / explanation)
-— but applied as an audit lens, not a generation tool.
+After writing all documents:
 
-1. **Extract public surface changes from the diff.** Scan `git diff <base>...HEAD` for:
-   - New exported functions, classes, commands, CLI flags, config options, API endpoints
-   - New skills, workflows, or user-facing capabilities
-   - Renamed or removed public surface (modules, commands, features)
-   - New environment variables, feature flags, or configuration knobs
+1. **Add cross-links between quadrants.** Every reference doc should link to its how-to.
+   Every how-to should link to its reference. Tutorials should link to both.
 
-2. **For each new/changed public surface item, assess documentation coverage:**
+2. **Update entry-point files.** Add references to new docs in:
+   - README.md — add to documentation section or table of contents
+   - CLAUDE.md / AGENTS.md — add to project structure if relevant
+   - Any existing docs index or sidebar config
 
-```
-Coverage map:
-  [entity]         [reference?] [how-to?] [tutorial?] [explanation?]
-  /new-skill       ✅ AGENTS.md  ❌        ❌          ❌
-  --new-flag       ✅ README     ✅ README  ❌          ❌
-  FooProcessor     ❌            ❌        ❌          ❌
-```
+3. **Verify discoverability.** Every new document must be reachable within 2 clicks from
+   README.md. If a docs framework is in use, add to the sidebar/nav config.
 
-Use these definitions:
-- **Reference** — factual description of what it is, its API, its options (README tables, AGENTS.md skill lists, API docs)
-- **How-to** — task-oriented: "how to do X with this" (README examples, CONTRIBUTING workflows)
-- **Tutorial** — learning-oriented: step-by-step walkthrough for newcomers (getting started guides)
-- **Explanation** — understanding-oriented: "why this works this way" (ARCHITECTURE decisions, design rationale)
-
-3. **Output the coverage map.** Items with zero coverage are **critical gaps** — flag them for
-   Step 3. Items with reference-only coverage are **common gaps** — note them for the PR body.
-
-4. **Architecture diagram drift detection.** If ARCHITECTURE.md (or any doc) contains ASCII
-   diagrams or Mermaid blocks, extract entity names (modules, services, data flows) from the
-   diagrams. Cross-reference against the diff. Flag any diagram entities that were renamed,
-   split, removed, or moved in the code.
-
-The coverage map feeds into Steps 2-3 (what to audit and fix) and Step 9 (documentation debt
-summary in the PR body). Do NOT auto-generate missing documentation pages — flag gaps only.
-When significant gaps are found, suggest running `/document-generate` to fill them.
+4. **Check for broken links.** Grep for any `](` references that point to files that don't exist.
 
 ---
 
-## Step 2: Per-File Documentation Audit
+## Step 8: Quality Self-Review
 
-Read each documentation file and cross-reference it against the diff. Use these generic heuristics
-(adapt to whatever project you're in — these are not gstack-specific):
+Before committing, review each document against these criteria:
 
-**README.md:**
-- Does it describe all features and capabilities visible in the diff?
-- Are install/setup instructions consistent with the changes?
-- Are examples, demos, and usage descriptions still valid?
-- Are troubleshooting steps still accurate?
+**Accuracy gate:**
+- [ ] Every code example compiles / runs / passes if copy-pasted
+- [ ] Every API description matches the actual code signature
+- [ ] Every command shown produces the output described
+- [ ] No stale references to renamed/removed entities
 
-**ARCHITECTURE.md:**
-- Do ASCII diagrams and component descriptions match the current code?
-- Are design decisions and "why" explanations still accurate?
-- Be conservative — only update things clearly contradicted by the diff. Architecture docs
-  describe things unlikely to change frequently.
+**Completeness gate:**
+- [ ] Reference docs cover 100% of public surface
+- [ ] How-tos cover the top 3 tasks a user would attempt
+- [ ] Tutorials get to a working result in ≤3 steps
+- [ ] Explanation docs name trade-offs, not just choices
 
-**CONTRIBUTING.md — New contributor smoke test:**
-- Walk through the setup instructions as if you are a brand new contributor.
-- Are the listed commands accurate? Would each step succeed?
-- Do test tier descriptions match the current test infrastructure?
-- Are workflow descriptions (dev setup, operational learnings, etc.) current?
-- Flag anything that would fail or confuse a first-time contributor.
+**Voice gate:**
+- [ ] Written for a smart person who hasn't seen the code
+- [ ] No jargon without brief inline gloss on first use
+- [ ] Active voice, concrete nouns, short sentences
+- [ ] "You can now..." not "The system provides..."
 
-**CLAUDE.md / project instructions:**
-- Does the project structure section match the actual file tree?
-- Are listed commands and scripts accurate?
-- Do build/test instructions match what's in package.json (or equivalent)?
-
-**Any other .md files:**
-- Read the file, determine its purpose and audience.
-- Cross-reference against the diff to check if it contradicts anything the file says.
-
-For each file, classify needed updates as:
-
-- **Auto-update** — Factual corrections clearly warranted by the diff: adding an item to a
-  table, updating a file path, fixing a count, updating a project structure tree.
-- **Ask user** — Narrative changes, section removal, security model changes, large rewrites
-  (more than ~10 lines in one section), ambiguous relevance, adding entirely new sections.
-
----
-
-## Step 3: Apply Auto-Updates
-
-Make all clear, factual updates directly using the Edit tool.
-
-For each file modified, output a one-line summary describing **what specifically changed** — not
-just "Updated README.md" but "README.md: added /new-skill to skills table, updated skill count
-from 9 to 10."
-
-**Never auto-update:**
-- README introduction or project positioning
-- ARCHITECTURE philosophy or design rationale
-- Security model descriptions
-- Do not remove entire sections from any document
-
----
-
-## Step 4: Ask About Risky/Questionable Changes
-
-For each risky or questionable update identified in Step 2, use AskUserQuestion with:
-- Context: project name, branch, which doc file, what we're reviewing
-- The specific documentation decision
-- `RECOMMENDATION: Choose [X] because [one-line reason]`
-- Options including C) Skip — leave as-is
-
-Apply approved changes immediately after each answer.
-
----
-
-## Step 5: CHANGELOG Voice Polish
-
-**CRITICAL — NEVER CLOBBER CHANGELOG ENTRIES.**
-
-This step polishes voice. It does NOT rewrite, replace, or regenerate CHANGELOG content.
-
-A real incident occurred where an agent replaced existing CHANGELOG entries when it should have
-preserved them. This skill must NEVER do that.
-
-**Rules:**
-1. Read the entire CHANGELOG.md first. Understand what is already there.
-2. Only modify wording within existing entries. Never delete, reorder, or replace entries.
-3. Never regenerate a CHANGELOG entry from scratch. The entry was written by `/ship` from the
-   actual diff and commit history. It is the source of truth. You are polishing prose, not
-   rewriting history.
-4. If an entry looks wrong or incomplete, use AskUserQuestion — do NOT silently fix it.
-5. Use Edit tool with exact `old_string` matches — never use Write to overwrite CHANGELOG.md.
-
-**If CHANGELOG was not modified in this branch:** skip this step.
-
-**If CHANGELOG was modified in this branch**, review the entry for voice:
-
-- **Sell test (Diataxis rubric):** Score each CHANGELOG entry 0-3:
-  - **1 point** — answers "What changed?" (reference: names the feature/fix)
-  - **1 point** — answers "Why should I care?" (explanation: user impact, pain removed)
-  - **1 point** — answers "How do I use it?" (how-to: command, flag, or link to docs)
-  - Entries scoring <2 need a rewrite. Entries scoring 3 are gold.
-- Lead with what the user can now **do** — not implementation details.
-- "You can now..." not "Refactored the..."
-- Flag and rewrite any entry that reads like a commit message.
-- Internal/contributor changes belong in a separate "### For contributors" subsection.
-- Auto-fix minor voice adjustments. Use AskUserQuestion if a rewrite would alter meaning.
-
----
-
-## Step 6: Cross-Doc Consistency & Discoverability Check
-
-After auditing each file individually, do a cross-doc consistency pass:
-
-1. Does the README's feature/capability list match what CLAUDE.md (or project instructions) describes?
-2. Does ARCHITECTURE's component list match CONTRIBUTING's project structure description?
-3. Does CHANGELOG's latest version match the VERSION file?
-4. **Discoverability:** Is every documentation file reachable from README.md or CLAUDE.md? If
-   ARCHITECTURE.md exists but neither README nor CLAUDE.md links to it, flag it. Every doc
-   should be discoverable from one of the two entry-point files.
-5. Flag any contradictions between documents. Auto-fix clear factual inconsistencies (e.g., a
-   version mismatch). Use AskUserQuestion for narrative contradictions.
-
----
-
-## Step 7: TODOS.md Cleanup
-
-This is a second pass that complements `/ship`'s Step 5.5. Read `review/TODOS-format.md` (if
-available) for the canonical TODO item format.
-
-If TODOS.md does not exist, skip this step.
-
-1. **Completed items not yet marked:** Cross-reference the diff against open TODO items. If a
-   TODO is clearly completed by the changes in this branch, move it to the Completed section
-   with `**Completed:** vX.Y.Z.W (YYYY-MM-DD)`. Be conservative — only mark items with clear
-   evidence in the diff.
-
-2. **Items needing description updates:** If a TODO references files or components that were
-   significantly changed, its description may be stale. Use AskUserQuestion to confirm whether
-   the TODO should be updated, completed, or left as-is.
-
-3. **New deferred work:** Check the diff for `TODO`, `FIXME`, `HACK`, and `XXX` comments. For
-   each one that represents meaningful deferred work (not a trivial inline note), use
-   AskUserQuestion to ask whether it should be captured in TODOS.md.
-
----
-
-## Step 8: VERSION Bump Question
-
-**CRITICAL — NEVER BUMP VERSION WITHOUT ASKING.**
-
-1. **If VERSION does not exist:** Skip silently.
-
-2. Check if VERSION was already modified on this branch:
-
-```bash
-git diff <base>...HEAD -- VERSION
-```
-
-3. **If VERSION was NOT bumped:** Use AskUserQuestion:
-   - RECOMMENDATION: Choose C (Skip) because docs-only changes rarely warrant a version bump
-   - A) Bump PATCH (X.Y.Z+1) — if doc changes ship alongside code changes
-   - B) Bump MINOR (X.Y+1.0) — if this is a significant standalone release
-   - C) Skip — no version bump needed
-
-4. **If VERSION was already bumped:** Do NOT skip silently. Instead, check whether the bump
-   still covers the full scope of changes on this branch:
-
-   a. Read the CHANGELOG entry for the current VERSION. What features does it describe?
-   b. Read the full diff (`git diff <base>...HEAD --stat` and `git diff <base>...HEAD --name-only`).
-      Are there significant changes (new features, new skills, new commands, major refactors)
-      that are NOT mentioned in the CHANGELOG entry for the current version?
-   c. **If the CHANGELOG entry covers everything:** Skip — output "VERSION: Already bumped to
-      vX.Y.Z, covers all changes."
-   d. **If there are significant uncovered changes:** Use AskUserQuestion explaining what the
-      current version covers vs what's new, and ask:
-      - RECOMMENDATION: Choose A because the new changes warrant their own version
-      - A) Bump to next patch (X.Y.Z+1) — give the new changes their own version
-      - B) Keep current version — add new changes to the existing CHANGELOG entry
-      - C) Skip — leave version as-is, handle later
-
-   The key insight: a VERSION bump set for "feature A" should not silently absorb "feature B"
-   if feature B is substantial enough to deserve its own version entry.
+Fix any failures before proceeding.
 
 ---
 
 ## Step 9: Commit & Output
 
-**Empty check first:** Run `git status` (never use `-uall`). If no documentation files were
-modified by any previous step, output "All documentation is up to date." and exit without
-committing.
+1. Stage new documentation files by name (never `git add -A` or `git add .`).
 
-**Commit:**
-
-1. Stage modified documentation files by name (never `git add -A` or `git add .`).
-2. Create a single commit:
+2. Create a commit:
 
 ```bash
 git commit -m "$(cat <<'EOF'
-docs: update project documentation for vX.Y.Z.W
+docs: generate [scope] documentation (Diataxis)
+
+[One-line summary of what was documented]
+
+Quadrants: [list which quadrants were produced]
 
 Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 EOF
@@ -1101,163 +1158,48 @@ EOF
 git push
 ```
 
-**PR/MR body update (idempotent, race-safe):**
-
-1. Read the existing PR/MR body into a PID-unique tempfile (use the platform detected in Step 0):
-
-**If GitHub:**
-```bash
-gh pr view --json body -q .body > /tmp/gstack-pr-body-$$.md
-```
-
-**If GitLab:**
-```bash
-glab mr view -F json 2>/dev/null | python3 -c "import sys,json; print(json.load(sys.stdin).get('description',''))" > /tmp/gstack-pr-body-$$.md
-```
-
-2. If the tempfile already contains a `## Documentation` section, replace that section with the
-   updated content. If it does not contain one, append a `## Documentation` section at the end.
-
-3. The Documentation section should include:
-
-   a. **Doc diff preview** — for each file modified, describe what specifically changed (e.g.,
-      "README.md: added /document-release to skills table, updated skill count from 9 to 10").
-
-   b. **Documentation debt** — if the coverage map from Step 1.5 found gaps, append a
-      `### Documentation Debt` subsection listing:
-      - Critical gaps: new public surface with zero documentation coverage
-      - Common gaps: features with reference-only coverage (no how-to or tutorial)
-      - Stale diagrams: architecture diagrams with entity names that drifted from the code
-      - Each item should include a one-line description of what's missing and which Diataxis
-        quadrant would fill it (e.g., "⚠️ `/new-skill` — has reference in AGENTS.md but no
-        how-to example in README")
-
-   If there are any documentation debt items, suggest adding a `docs-debt` label to the PR.
-
-4. Write the updated body back:
-
-**If GitHub:**
-```bash
-gh pr edit --body-file /tmp/gstack-pr-body-$$.md
-```
-
-**If GitLab:**
-Read the contents of `/tmp/gstack-pr-body-$$.md` using the Read tool, then pass it to `glab mr update` using a heredoc to avoid shell metacharacter issues:
-```bash
-glab mr update -d "$(cat <<'MRBODY'
-<paste the file contents here>
-MRBODY
-)"
-```
-
-5. Clean up the tempfile:
-
-```bash
-rm -f /tmp/gstack-pr-body-$$.md
-```
-
-6. If `gh pr view` / `glab mr view` fails (no PR/MR exists): skip with message "No PR/MR found — skipping body update."
-7. If `gh pr edit` / `glab mr update` fails: warn "Could not update PR/MR body — documentation changes are in the
-   commit." and continue.
-
-**PR/MR title sync (idempotent, always-on):**
-
-PR titles must always start with `v<VERSION>` — same rule as `/ship`. If Step 8 bumped VERSION after `/ship` had already created the PR, the title is now stale. This sub-step fixes it.
-
-1. Read the current VERSION:
-
-```bash
-V=$(cat VERSION 2>/dev/null | tr -d '[:space:]')
-```
-
-If `VERSION` does not exist or is empty, skip this sub-step entirely.
-
-2. Read the current PR/MR title:
-
-**If GitHub:**
-```bash
-CURRENT_TITLE=$(gh pr view --json title -q .title 2>/dev/null || true)
-```
-
-**If GitLab:**
-```bash
-CURRENT_TITLE=$(glab mr view -F json 2>/dev/null | jq -r .title 2>/dev/null || true)
-```
-
-If `CURRENT_TITLE` is empty (no open PR/MR), skip with message "No PR/MR found — skipping title sync."
-
-3. Compute the corrected title using the shared helper (single source of truth — same one `/ship` uses):
-
-```bash
-NEW_TITLE=$(~/.claude/skills/gstack/bin/gstack-pr-title-rewrite.sh "$V" "$CURRENT_TITLE")
-```
-
-The helper handles three cases: title already correct (no-op), title has a different `v<X.Y.Z.W>` prefix (replace it), or title has no version prefix (prepend one).
-
-4. If `NEW_TITLE` differs from `CURRENT_TITLE`, update it:
-
-**If GitHub:**
-```bash
-gh pr edit --title "$NEW_TITLE"
-```
-
-**If GitLab:**
-```bash
-glab mr update -t "$NEW_TITLE"
-```
-
-5. If the edit command fails: warn "Could not update PR/MR title — documentation changes are still in the commit." and continue. Do not block on title sync failure.
-
-**Structured doc health summary (final output):**
-
-Output a scannable summary showing every documentation file's status:
+4. **If a PR exists**, update the PR body with a `## Documentation Generated` section listing
+   every new file with its Diataxis quadrant and a one-line description:
 
 ```
-Documentation health:
-  README.md       [status] ([details])
-  ARCHITECTURE.md [status] ([details])
-  CONTRIBUTING.md [status] ([details])
-  CHANGELOG.md    [status] ([details])
-  TODOS.md        [status] ([details])
-  VERSION         [status] ([details])
+## Documentation Generated
+
+| File | Quadrant | Description |
+|------|----------|-------------|
+| docs/tutorial-getting-started.md | Tutorial | Walk-through from install to first working example |
+| docs/reference-widget-api.md | Reference | Complete widget API with types, defaults, examples |
+| docs/explanation-bayesian-scheduler.md | Explanation | Why the scheduler uses Bayesian inference |
+| docs/howto-custom-widgets.md | How-to | Creating and registering custom widgets |
 ```
 
-Where status is one of:
-- Updated — with description of what changed
-- Current — no changes needed
-- Voice polished — wording adjusted
-- Not bumped — user chose to skip
-- Already bumped — version was set by /ship
-- Skipped — file does not exist
-
-If the coverage map from Step 1.5 identified any gaps, append:
+5. Output a structured summary:
 
 ```
-Documentation coverage:
-  [entity]         [reference] [how-to] [tutorial] [explanation]
-  /new-skill       ✅          ❌       ❌         ❌
-  --new-flag       ✅          ✅       ❌         ❌
-
-Diagram drift:
-  ARCHITECTURE.md: "FooProcessor" renamed to "BarProcessor" in code — diagram may be stale
+Documentation generated:
+  Scope: [what was documented]
+  Files: [N] new, [M] updated
+  Coverage:
+    Tutorials:    [count] ([list])
+    How-tos:      [count] ([list])
+    Reference:    [count] ([list])
+    Explanation:  [count] ([list])
+  Quality: [pass/fail on each gate]
 ```
-
-If all coverage is complete and no diagrams drifted, output: "Coverage: all shipped features have adequate documentation."
 
 ---
 
 ## Important Rules
 
-- **Read before editing.** Always read the full content of a file before modifying it.
-- **Never clobber CHANGELOG.** Polish wording only. Never delete, replace, or regenerate entries.
-- **Never bump VERSION silently.** Always ask. Even if already bumped, check whether it covers the full scope of changes.
-- **Be explicit about what changed.** Every edit gets a one-line summary.
-- **Generic heuristics, not project-specific.** The audit checks work on any repo.
-- **Discoverability matters.** Every doc file should be reachable from README or CLAUDE.md.
-- **Coverage map informs, never generates.** The Diataxis coverage map flags gaps for the PR body
-  and future work. It does NOT auto-generate missing documentation pages or sections. When gaps
-  are found, suggest `/document-generate` as the follow-up skill.
-- **Diagram drift is advisory.** Flag stale architecture diagrams in the PR body but do not
-  auto-edit ASCII art or Mermaid blocks — they require human judgment to update correctly.
-- **Voice: friendly, user-forward, not obscure.** Write like you're explaining to a smart person
-  who hasn't seen the code.
+- **Research before writing.** Step 1 is not optional. Read the code, read the tests, read the
+  existing docs. Insufficient research produces surface-level documentation.
+- **Accuracy is non-negotiable.** Every code example must work. Every API description must match
+  the actual code. If you're unsure about a detail, read the source again — do not guess.
+- **Diataxis quadrants serve different readers.** Do not mix tutorial content into reference docs
+  or reference content into how-tos. Each quadrant has a specific reader in a specific mode.
+- **Time to first result in tutorials.** If a reader can't see something working by step 3,
+  restructure the tutorial.
+- **Cross-link everything.** Isolated docs are undiscoverable docs.
+- **Voice: friendly, concrete, user-forward.** Write like you're explaining to a smart person
+  who hasn't seen the code. Never corporate, never academic.
+- **Completeness over minimalism.** AI makes comprehensive documentation cheap. Don't write
+  "minimal viable docs" — write complete docs. Boil the lake.

@@ -66,6 +66,11 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "/",
+    types: {
+      "application/rss+xml": [
+        { url: "/feed.xml", title: `${SITE_NAME} — Blog` },
+      ],
+    },
   },
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,

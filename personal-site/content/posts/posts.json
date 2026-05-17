@@ -1,5 +1,12 @@
 [
   {
+    "id": "x-2055929896409448612",
+    "platform": "x",
+    "url": "https://x.com/xdotli/status/2055929896409448612",
+    "date": "2026-05-17",
+    "addedVia": "manual"
+  },
+  {
     "id": "xhs-6a08ea53000000003700e2ca",
     "platform": "xiaohongshu",
     "url": "https://www.xiaohongshu.com/explore/6a08ea53000000003700e2ca?xsec_token=AB0m7Grv99j285q1ymIWJlBqm-YfSBmkuOBFSBihRQtqI=&xsec_source=pc_user",
@@ -20,6 +27,13 @@
     "addedVia": "manual"
   },
   {
+    "id": "x-2054776060978319796",
+    "platform": "x",
+    "url": "https://x.com/xdotli/status/2054776060978319796",
+    "date": "2026-05-14",
+    "addedVia": "manual"
+  },
+  {
     "id": "xhs-6a04d33e000000003601e115",
     "platform": "xiaohongshu",
     "url": "https://www.xiaohongshu.com/discovery/item/6a04d33e000000003601e115?app_platform=ios&app_version=9.29&share_from_user_hidden=true&xsec_source=app_share&type=normal&xsec_token=CBZxEuDdN3TBgVp-oA8Y_6DHQrElYeF7i3YKhCZsvuMu4=&author_share=1&xhsshare=CopyLink&shareRedId=ODZEMkc7SDk2NzUyOTgwNjY0OTc6SkhA&apptime=1778706905&share_id=57ab8e83c1244f3e85e0acd0f43c38b6",
@@ -27,6 +41,13 @@
     "date": "2026-05-13",
     "addedVia": "manual",
     "thumbnail": "/posts-thumbs/xiaohongshu/6a04d33e000000003601e115.jpg"
+  },
+  {
+    "id": "x-2053354857759957061",
+    "platform": "x",
+    "url": "https://x.com/bingran_bry/status/2053354857759957061",
+    "date": "2026-05-10",
+    "addedVia": "manual"
   },
   {
     "id": "xhs-69fff197000000003601bfa5",

@@ -71,6 +71,7 @@ describe("inferCategory", () => {
     expect(inferCategory("careful")).toBe("Engineering");
     expect(inferCategory("vercel-deploy")).toBe("Engineering");
     expect(inferCategory("gh-fix-ci")).toBe("Engineering");
+    expect(inferCategory("overleaf-paper-sync")).toBe("Engineering");
   });
 
   it("falls back to Other for unknown slugs", () => {

@@ -1,6 +1,6 @@
 ---
 name: overleaf-paper-sync
-description: Manage a LaTeX paper hosted on Overleaf via a GitHub mirror with bidirectional auto-sync through GitHub Actions. Use this skill whenever the user mentions Overleaf, paper version control, syncing a LaTeX project, a GitHub mirror of an Overleaf project, divergence or merge conflicts between Overleaf and Git, the Overleaf git authentication token, or is working in a repo that contains `.github/workflows/sync-overleaf.yml`, `pull-from-overleaf.yml`, or a `sync.ps1` / `sync.sh` helper. Also use it when onboarding a collaborator (or a collaborator's agent) to an existing Overleaf-backed paper repo. The skill covers initial setup of a brand-new paper, the daily editing ritual, the divergence-resolution playbook, and the gotchas the author hit while building this pattern — enough that an agent with no prior context can pick it up cold.
+description: Manage a LaTeX paper hosted on Overleaf via a GitHub mirror with bidirectional auto-sync through GitHub Actions. Use this skill whenever the user mentions Overleaf, paper version control, syncing a LaTeX project, a GitHub mirror of an Overleaf project, divergence or merge conflicts between Overleaf and Git, the Overleaf git authentication token, or is working in a repo that contains `.github/workflows/sync-overleaf.yml`, `pull-from-overleaf.yml`, or a `sync.ps1` / `sync.sh` helper. Also use it when onboarding a collaborator (or a collaborator's agent) to an existing Overleaf-backed paper repo. The skill covers initial setup of a brand-new paper, the daily editing ritual, the divergence-resolution playbook, and the gotchas the author hit while building this pattern — enough that an agent with no prior context can pick it up cold. Specific papers wired up with this pattern (e.g., `multiplexed-ion-photon`) are catalogued in `references/instances.md` with their per-paper config and pending action items — trigger this skill when the user mentions one of those papers by name, even without saying "Overleaf".
 author: Bingran You (@bingran-you)
 license: MIT
 ---
@@ -160,6 +160,12 @@ Overleaf tokens leak. Rotate them periodically and immediately if exposed:
    ```
 4. No workflow file changes needed. The next push will also exercise the token via `sync-overleaf`.
 
+## Papers already set up with this pattern
+
+This skill doubles as a memory for the author's own paper instances. Before treating a paper as "new", check [`references/instances.md`](references/instances.md) — it lists each paper repo wired up with this pattern, the per-paper config that differs from the defaults, and any pending action items (e.g., tokens scheduled for rotation).
+
+If the user mentions a paper by name and it's already listed there, you already know its Overleaf project ID, GitHub repo, parent-submodule path, and collaboration mode — skip the discovery questions and go straight to the daily-workflow guidance. When a new paper joins the pattern, append a section to `instances.md` so the next session inherits the context.
+
 ## What this skill explicitly does NOT do
 
 - It does **not** build the PDF in CI. If the user wants Actions to compile `paper.pdf` on every push, add a separate workflow using `xu-cheng/latex-action@v3`. Not in scope here.
@@ -173,6 +179,7 @@ Overleaf tokens leak. Rotate them periodically and immediately if exposed:
 - [`references/setup-new-paper.md`](references/setup-new-paper.md) — full procedure for setting up sync on a paper not yet in this pattern
 - [`references/conflict-resolution.md`](references/conflict-resolution.md) — divergence playbook
 - [`references/troubleshooting.md`](references/troubleshooting.md) — common errors and fixes
+- [`references/instances.md`](references/instances.md) — author's living log of papers using this pattern + pending action items
 - [`assets/sync-overleaf.yml`](assets/sync-overleaf.yml) — push-direction workflow template
 - [`assets/pull-from-overleaf.yml`](assets/pull-from-overleaf.yml) — pull-direction workflow template
 - [`assets/sync.ps1`](assets/sync.ps1) — PowerShell pre-session helper (Windows)

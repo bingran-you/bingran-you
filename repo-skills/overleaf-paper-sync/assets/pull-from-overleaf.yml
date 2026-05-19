@@ -1,0 +1,70 @@
+name: Pull from Overleaf
+
+# Pull direction: hourly cron + manual trigger.
+# Fetches Overleaf master, compares to GitHub master, and:
+#   - fast-forwards GitHub if Overleaf has new commits,
+#   - does nothing if GitHub is ahead (sync-overleaf will push),
+#   - fails with instructions if branches have diverged.
+#
+# Replace __OVERLEAF_PROJECT_ID__ with your Overleaf project ID before committing.
+# Set the OVERLEAF_TOKEN secret on the repo.
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # hourly. Adjust if you want different cadence.
+  workflow_dispatch:
+
+concurrency:
+  group: sync-overleaf
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch from Overleaf and reconcile
+        env:
+          OVERLEAF_TOKEN: ${{ secrets.OVERLEAF_TOKEN }}
+        run: |
+          set -euo pipefail
+          git fetch "https://git:${OVERLEAF_TOKEN}@git.overleaf.com/__OVERLEAF_PROJECT_ID__" \
+            master:refs/remotes/overleaf/master
+
+          LOCAL=$(git rev-parse HEAD)
+          REMOTE=$(git rev-parse refs/remotes/overleaf/master)
+          BASE=$(git merge-base HEAD refs/remotes/overleaf/master)
+
+          echo "GitHub master:   $LOCAL"
+          echo "Overleaf master: $REMOTE"
+          echo "Merge base:      $BASE"
+
+          if [ "$LOCAL" = "$REMOTE" ]; then
+            echo "Already in sync."
+          elif [ "$LOCAL" = "$BASE" ]; then
+            echo "Overleaf is ahead; fast-forwarding GitHub master."
+            git merge --ff-only refs/remotes/overleaf/master
+            git push origin master
+          elif [ "$REMOTE" = "$BASE" ]; then
+            echo "GitHub is ahead; sync-overleaf.yml will push to Overleaf."
+          else
+            echo "::error::Branches have diverged. Manual resolution required."
+            echo "Locally:"
+            echo "  git fetch origin master                    # origin = Overleaf"
+            echo "  git checkout master && git pull github master"
+            echo "  git merge origin/master                    # resolve conflicts"
+            echo "  git push github master"
+            exit 1
+          fi

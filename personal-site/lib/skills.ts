@@ -125,7 +125,7 @@ export function inferCategory(slug: string): SkillCategory {
   }
 
   if (
-    /^(careful|freeze|unfreeze|guard|ship|land-and-deploy|vercel-deploy|setup-deploy|setup-gbrain|gh-address-comments|gh-fix-ci|cli-creator|codex|plugin-creator|skill-creator|skill-installer|mcp-builder|simplify|fewer-permission-prompts|update-config|keybindings-help|loop|schedule|context-save|context-restore|hatch-pet|health|pair-agent)$/.test(
+    /^(careful|freeze|unfreeze|guard|ship|land-and-deploy|vercel-deploy|setup-deploy|setup-gbrain|gh-address-comments|gh-fix-ci|cli-creator|codex|plugin-creator|skill-creator|skill-installer|mcp-builder|simplify|fewer-permission-prompts|update-config|keybindings-help|loop|schedule|context-save|context-restore|hatch-pet|health|pair-agent|overleaf-paper-sync)$/.test(
       slug,
     )
   ) {

@@ -1,0 +1,29 @@
+name: Sync to Overleaf
+
+# Push direction: every commit on master goes to Overleaf.
+# Replace __OVERLEAF_PROJECT_ID__ with your Overleaf project ID before committing.
+# Set the OVERLEAF_TOKEN secret on the repo.
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-overleaf
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Overleaf
+        env:
+          OVERLEAF_TOKEN: ${{ secrets.OVERLEAF_TOKEN }}
+        run: |
+          set -euo pipefail
+          git push "https://git:${OVERLEAF_TOKEN}@git.overleaf.com/__OVERLEAF_PROJECT_ID__" "HEAD:master"

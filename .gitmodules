@@ -42,3 +42,6 @@
 	path = trusted-external-repos/marketingskills
 	url = https://github.com/bingran-you/marketingskills.git
 	branch = main
+[submodule "papers/multiplexed-ion-photon"]
+	path = papers/multiplexed-ion-photon
+	url = https://github.com/bingran-you/multiplexed-ion-photon.git

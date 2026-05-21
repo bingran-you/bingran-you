@@ -1,6 +1,10 @@
 ---
 name: win98-paper-theme
-description: Apply the bingranyou.com "Win98 paper" site-wide theme to your Next.js + Tailwind site so every route shares the same OS dialect as `/palace`. Ships a drop-in `globals.css` with the mint-paper palette, Win98 violet hyperlinks, Alfa Slab One display headings + Millennium body serif + MSSerif eyebrow labels, an additive-blended paper-smudge overlay that recreates `/palace`'s CRT shader recipe in CSS (`mix-blend-mode: plus-lighter`, opacity 0.12), per-glyph CJK fallback to Noto Serif SC, and a raised Win98 `.palace-cta` button. Pairs with the `memory-palace` skill — that one stages `/palace` itself; this one makes the front door, About, blog, and every other route speak the same visual language. Use when the user wants their existing Next.js site to feel cohesive with a `/palace` rollout, when porting palace typography to non-palace routes, or when re-expressing a Three.js shader effect in plain CSS.
+description: >-
+  Apply the bingranyou.com Win98 paper site-wide theme to a Next.js + Tailwind
+  site so non-palace routes share the same visual language as /palace. Use when
+  porting palace typography, palette, CJK fallback, paper-smudge overlay, or
+  raised Win98 CTA styling to the front door, About, blog, or other routes.
 author: Bingran You (@bingran-you)
 license: MIT
 ---

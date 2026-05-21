@@ -1,4 +1,9 @@
-import { Tweet } from "react-tweet";
+import { EmbeddedTweet } from "react-tweet";
+import {
+  getTweet,
+  type QuotedTweet,
+  type Tweet as TweetData,
+} from "react-tweet/api";
 import {
   PLATFORM_LABEL,
   type Platform,
@@ -107,22 +112,52 @@ function extractTweetId(post: Post): string | null {
   return null;
 }
 
-export function PostCard({ post }: { post: Post }) {
-  // X / Twitter: defer to react-tweet, which fetches the tweet from the
-  // public syndication API at render time and emits a fully styled card —
-  // no manual title/thumbnail bookkeeping, deleted tweets degrade to a
-  // built-in tombstone, and identical heights stabilize the masonry grid.
-  if (post.platform === "x") {
-    const tweetId = extractTweetId(post);
-    if (tweetId) {
-      return (
-        <div className="post-tweet mb-6 break-inside-avoid">
-          <Tweet id={tweetId} />
-        </div>
-      );
-    }
+function normalizeTweetBase<T extends TweetData | QuotedTweet>(tweet: T): T {
+  const textLength = Array.from(tweet.text ?? "").length;
+  return {
+    ...tweet,
+    display_text_range: tweet.display_text_range ?? [0, textLength],
+    entities: {
+      ...(tweet.entities ?? {}),
+      hashtags: tweet.entities?.hashtags ?? [],
+      urls: tweet.entities?.urls ?? [],
+      user_mentions: tweet.entities?.user_mentions ?? [],
+      symbols: tweet.entities?.symbols ?? [],
+    },
+  };
+}
+
+function normalizeTweet(tweet: TweetData): TweetData {
+  const normalized = normalizeTweetBase(tweet);
+
+  if (tweet.quoted_tweet) {
+    normalized.quoted_tweet = normalizeTweetBase(tweet.quoted_tweet);
   }
 
+  return normalized;
+}
+
+async function SafeTweetCard({ id, post }: { id: string; post: Post }) {
+  let tweet: TweetData | undefined;
+
+  try {
+    tweet = await getTweet(id, { next: { revalidate: 86400 } });
+  } catch (error) {
+    console.warn(`Falling back to local X post card for ${id}`, error);
+  }
+
+  if (tweet) {
+    return (
+      <div className="post-tweet mb-6 break-inside-avoid">
+        <EmbeddedTweet tweet={normalizeTweet(tweet)} />
+      </div>
+    );
+  }
+
+  return <PostLinkCard post={post} />;
+}
+
+function PostLinkCard({ post }: { post: Post }) {
   const Icon = PLATFORM_ICON[post.platform];
   const accent = PLATFORM_ACCENT[post.platform];
   const hasThumb = Boolean(post.thumbnail);
@@ -190,4 +225,18 @@ export function PostCard({ post }: { post: Post }) {
       </div>
     </a>
   );
+}
+
+export function PostCard({ post }: { post: Post }) {
+  // X / Twitter: prefer react-tweet, but keep static builds independent of the
+  // live syndication API. Some responses omit empty entity arrays, which
+  // react-tweet assumes are iterable.
+  if (post.platform === "x") {
+    const tweetId = extractTweetId(post);
+    if (tweetId) {
+      return <SafeTweetCard id={tweetId} post={post} />;
+    }
+  }
+
+  return <PostLinkCard post={post} />;
 }

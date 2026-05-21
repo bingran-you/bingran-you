@@ -57,7 +57,7 @@ export function renderRssFeed(
       <link>${escapeXml(url)}</link>
       <guid isPermaLink="true">${escapeXml(url)}</guid>
       <pubDate>${pubDateOf(item)}</pubDate>
-      <atom:updated>${item.lastModified.toUTCString()}</atom:updated>
+      <atom:updated>${item.lastModified.toISOString()}</atom:updated>
       <description><![CDATA[${escapeCdata(description)}]]></description>${creatorLine}
     </item>`;
     })

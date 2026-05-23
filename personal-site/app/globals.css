@@ -102,7 +102,7 @@ html {
 body {
   position: relative;
   isolation: isolate;
-  background: var(--paper-bg);
+  background-color: var(--paper-bg);
   color: var(--paper-ink);
   font-family: "Millennium", "Times New Roman", Times,
     var(--font-noto-serif-sc), "Songti SC", serif;
@@ -111,34 +111,78 @@ body {
   overflow-x: clip;
 }
 
-/* Solid mint base painted behind everything. */
-body::before {
+/* Halftone portrait — light touch only. Keeps the photo in colour and
+   just lays a fine dot grid over the top with `mix-blend-mode:
+   multiply` so the image reads as printed on textured paper instead
+   of being processed into a black-and-white halftone. The wrapper
+   handles clipping (rounded-full) so the dot layer follows the same
+   circular mask as the image. */
+.halftone-portrait {
+  position: relative;
+  isolation: isolate;
+}
+.halftone-portrait::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: -2;
-  background-color: var(--paper-bg);
+  /* Same dot geometry as the site-wide background (3px grid, 0.55px
+     dot) so the print texture reads as one continuous halftone screen
+     across portrait and page. Opacity is bumped because the portrait
+     is denser visual data than the open background. */
+  background-image: radial-gradient(
+    circle,
+    var(--paper-ink) 0.55px,
+    transparent 0.9px
+  );
+  background-size: 3px 3px;
+  background-position: 0 0;
+  mix-blend-mode: multiply;
+  opacity: 0.22;
   pointer-events: none;
 }
 
-/* Paper smudge overlay — replicates palace's MonitorScreen recipe
-   exactly: smudges.jpg, additive blending, opacity 0.12 (palace-outer
-   MonitorScreen.ts:272). Additive ≈ `mix-blend-mode: plus-lighter` in
-   CSS, which performs `src + dst` per channel and matches
-   THREE.AdditiveBlending. A 2px blur softens the brush strokes so they
-   read as haze — palace gets the same softening for free from the CRT
-   shader's scanlines and the camera-to-screen distance. */
+/* Paper smudge overlay — sits at z:-2 (lowest), replicates palace's
+   MonitorScreen recipe exactly: smudges.jpg, additive blending,
+   opacity 0.12 (palace-outer MonitorScreen.ts:272). Additive ≈
+   `mix-blend-mode: plus-lighter` in CSS, which performs `src + dst`
+   per channel and matches THREE.AdditiveBlending. A 2px blur softens
+   the brush strokes so they read as haze — palace gets the same
+   softening for free from the CRT shader's scanlines and the
+   camera-to-screen distance. */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   background-image: url("/textures/paper-smudges.jpg");
   background-size: cover;
   background-position: center;
   filter: blur(2px) hue-rotate(45deg) saturate(0.2) brightness(0.95);
   opacity: 0.12;
   mix-blend-mode: plus-lighter;
+  pointer-events: none;
+}
+
+/* Newsprint halftone overlay — fixed grid of black ink dots layered
+   above the mint base and smudge wash, beneath all content. The
+   `multiply` blend turns each dot into a real ink mark on the paper
+   instead of being washed out by the plus-lighter smudge layer
+   underneath. Sits at z:-1 so it covers the open background but stays
+   below cards, prose and other content surfaces. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(
+    circle,
+    var(--paper-ink) 0.55px,
+    transparent 0.9px
+  );
+  background-size: 3px 3px;
+  background-position: 0 0;
+  mix-blend-mode: multiply;
+  opacity: 0.13;
   pointer-events: none;
 }
 

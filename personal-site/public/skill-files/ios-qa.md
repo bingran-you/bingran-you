@@ -1,27 +1,32 @@
 ---
-name: sync-gbrain
-preamble-tier: 2
+name: ios-qa
+preamble-tier: 3
 version: 1.0.0
 description: |
-  Keep gbrain current with this repo's code and refresh agent search
-  guidance in CLAUDE.md. Wraps the gstack-gbrain-sync orchestrator with
-  state probing, native code-surface registration, capability checks,
-  and a verdict block. Re-runnable, idempotent. Use when: "sync gbrain",
-  "refresh gbrain", "re-index this repo", "gbrain search isn't finding
-  things". (gstack)
-triggers:
-  - sync gbrain
-  - refresh gbrain
-  - reindex repo
-  - update gbrain
+  Live-device iOS QA for SwiftUI apps. Connects to a real iPhone via USB
+  CoreDevice IPv6 tunnel, reads Swift source to understand every screen, then
+  runs a vision-driven agent loop: screenshot → analyze → decide → act →
+  verify → repeat. All interaction happens via HTTP to an embedded
+  StateServer in the app under test. Optionally exposes the device over
+  Tailscale so remote agents (OpenClaw, Codex, any HTTP-capable agent) can
+  run iOS QA from anywhere without touching the hardware.
+  Use when asked to "ios qa", "test my iPhone app", "find bugs on the device",
+  or "qa the iOS app". (gstack)
+  Voice triggers (speech-to-text aliases): "iOS quality check", "test the iPhone app", "run iOS QA".
 allowed-tools:
   - Bash
   - Read
   - Write
   - Edit
-  - Glob
   - Grep
+  - Glob
   - AskUserQuestion
+triggers:
+  - ios qa
+  - test the iphone app
+  - test my ios app
+  - find bugs on the device
+  - qa the ios app
 ---
 <!-- AUTO-GENERATED from SKILL.md.tmpl — do not edit directly -->
 <!-- Regenerate: bun run gen:skill-docs -->
@@ -61,7 +66,7 @@ _QUESTION_TUNING=$(~/.claude/skills/gstack/bin/gstack-config get question_tuning
 echo "QUESTION_TUNING: $_QUESTION_TUNING"
 mkdir -p ~/.gstack/analytics
 if [ "$_TEL" != "off" ]; then
-echo '{"skill":"sync-gbrain","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "unknown")'"}'  >> ~/.gstack/analytics/skill-usage.jsonl 2>/dev/null || true
+echo '{"skill":"ios-qa","ts":"'$(date -u +%Y-%m-%dT%H:%M:%SZ)'","repo":"'$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "unknown")'"}'  >> ~/.gstack/analytics/skill-usage.jsonl 2>/dev/null || true
 fi
 for _PF in $(find ~/.gstack/analytics -maxdepth 1 -name '.pending-*' 2>/dev/null); do
   if [ -f "$_PF" ]; then
@@ -83,7 +88,7 @@ if [ -f "$_LEARN_FILE" ]; then
 else
   echo "LEARNINGS: 0"
 fi
-~/.claude/skills/gstack/bin/gstack-timeline-log '{"skill":"sync-gbrain","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
+~/.claude/skills/gstack/bin/gstack-timeline-log '{"skill":"ios-qa","event":"started","branch":"'"$_BRANCH"'","session":"'"$_SESSION_ID"'"}' 2>/dev/null &
 _HAS_ROUTING="no"
 if [ -f CLAUDE.md ] && grep -q "## Skill routing" CLAUDE.md 2>/dev/null; then
   _HAS_ROUTING="yes"
@@ -679,7 +684,7 @@ Before each AskUserQuestion, choose `question_id` from `scripts/question-registr
 
 After answer, log best-effort:
 ```bash
-~/.claude/skills/gstack/bin/gstack-question-log '{"skill":"sync-gbrain","question_id":"<id>","question_summary":"<short>","category":"<approval|clarification|routing|cherry-pick|feedback-loop>","door_type":"<one-way|two-way>","options_count":N,"user_choice":"<key>","recommended":"<key>","session_id":"'"$_SESSION_ID"'"}' 2>/dev/null || true
+~/.claude/skills/gstack/bin/gstack-question-log '{"skill":"ios-qa","question_id":"<id>","question_summary":"<short>","category":"<approval|clarification|routing|cherry-pick|feedback-loop>","door_type":"<one-way|two-way>","options_count":N,"user_choice":"<key>","recommended":"<key>","session_id":"'"$_SESSION_ID"'"}' 2>/dev/null || true
 ```
 
 For two-way questions, offer: "Tune this question? Reply `tune: never-ask`, `tune: always-ask`, or free-form."
@@ -692,6 +697,24 @@ Write (only after confirmation for free-form):
 ```
 
 Exit code 2 = rejected as not user-originated; do not retry. On success: "Set `<id>` → `<preference>`. Active immediately."
+
+## Repo Ownership — See Something, Say Something
+
+`REPO_MODE` controls how to handle issues outside your branch:
+- **`solo`** — You own everything. Investigate and offer to fix proactively.
+- **`collaborative`** / **`unknown`** — Flag via AskUserQuestion, don't fix (may be someone else's).
+
+Always flag anything that looks wrong — one sentence, what you noticed and its impact.
+
+## Search Before Building
+
+Before building anything unfamiliar, **search first.** See `~/.claude/skills/gstack/ETHOS.md`.
+- **Layer 1** (tried and true) — don't reinvent. **Layer 2** (new and popular) — scrutinize. **Layer 3** (first principles) — prize above all.
+
+**Eureka:** When first-principles reasoning contradicts conventional wisdom, name it and log:
+```bash
+jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> ~/.gstack/analytics/eureka.jsonl 2>/dev/null || true
+```
 
 ## Completion Status Protocol
 
@@ -746,311 +769,188 @@ Replace `SKILL_NAME`, `OUTCOME`, and `USED_BROWSE` before running.
 
 Skills that run plan reviews (`/plan-*-review`, `/codex review`) include the EXIT PLAN MODE GATE blocking checklist at the end of the skill, which verifies the plan file ends with `## GSTACK REVIEW REPORT` before ExitPlanMode is called. Skills that don't run plan reviews (operational skills like `/ship`, `/qa`, `/review`) typically don't operate in plan mode and have no review report to verify; this footer is a no-op for them. Writing the plan file is the one edit allowed in plan mode.
 
-# /sync-gbrain — Keep gbrain current and teach the agent to use it
+# Live-device iOS QA
 
-You are running the canonical "keep this brain up to date" verb. /setup-gbrain
-installs gbrain once; /sync-gbrain runs every time the user wants the brain
-refreshed against this repo's current state, and refreshes the agent-side
-guidance in CLAUDE.md so the coding agent knows when to prefer `gbrain`
-search over Grep.
+This skill drives a real iPhone via USB. The agent reads your Swift source,
+generates typed state accessors, deploys a debug bridge, and runs a closed
+find→fix→verify loop. No simulator, no XCTest, no WebDriverAgent.
 
-**Architecture (post-codex review):** This skill uses gbrain v0.20.0+'s
-**native code surfaces** (`gbrain sources add`, `gbrain sync --strategy code`,
-`gbrain reindex-code`, `gbrain code-def/code-refs/code-callers/code-callees`).
-It does NOT use `gbrain import` (that path is for markdown directories).
-It does NOT touch `~/.gstack/` indexing (the existing `gstack-gbrain-source-wireup`
-owns that — never double-store).
+## Architecture
 
-## User-invocable
-
-When the user types `/sync-gbrain`, run this skill. Argument modes (parsed by
-the skill itself, not a dispatcher binary):
-
-- `/sync-gbrain` — incremental sync (default; mtime fast-path; ~50ms steady-state)
-- `/sync-gbrain --full` — full code reindex via `gbrain reindex-code` (~25-35 min on a big repo)
-- `/sync-gbrain --code-only` — only run the code stage; skip memory + brain-sync
-- `/sync-gbrain --dry-run` — preview what would sync; no writes anywhere
-- `/sync-gbrain --no-memory` / `--no-brain-sync` — selectively skip stages
-- `/sync-gbrain --quiet` — suppress per-stage output
-
-Pass-through args go straight to the orchestrator at
-`~/.claude/skills/gstack/bin/gstack-gbrain-sync.ts`.
-
----
-
-## Step 1: State probe
-
-Before doing anything, check that /setup-gbrain has been run on this Mac.
-
-```bash
-~/.claude/skills/gstack/bin/gstack-gbrain-detect 2>/dev/null
+```
+       ┌──────────────────────┐   USB CoreDevice (IPv6)   ┌──────────────────┐
+       │ gstack-ios-qa daemon │ ────────────────────────▶ │ iOS app          │
+       │ (Mac, bun/TS)        │   bearer + X-Session-Id   │ StateServer      │
+       │                      │                           │ (loopback only)  │
+       │ - boot token rotate  │                           │ - /tap /swipe    │
+       │ - session minting    │                           │ - /type /state   │
+       │ - audit + redact     │                           │ - /snapshot      │
+       └──────────────────────┘                           └──────────────────┘
+                ▲
+                │ Tailscale (optional, --tailnet)
+                │
+       ┌──────────────────────┐
+       │ Remote agent         │
+       │ (OpenClaw, etc.)     │
+       └──────────────────────┘
 ```
 
-**Split-engine model (v1.34.0.0+).** Code stage runs locally against the
-per-machine gbrain engine (PGLite or whatever `gbrain config` points to),
-with each worktree of a repo registered as its own source. **Memory stage
-also runs locally** in local-stdio MCP mode — `gstack-memory-ingest` shells
-out to `gbrain import` against the same local engine. In remote-http MCP
-mode (Path 4), the memory stage instead persists staged markdown to
-`~/.gstack/transcripts/<run-id>/` and the artifacts pipeline pushes it to
-the brain admin's pull job (plan D11). Brain-sync (the `gstack-brain-sync`
-push to git) is the one stage that never touches local engine and runs
-regardless of mode.
+The iOS app's `StateServer` binds loopback only (`::1` + `127.0.0.1`). Tailnet
+ingress is exclusively the Mac daemon's job. The daemon validates Tailscale
+identities via the local `tailscaled` socket and mints short-lived session
+tokens (default 1h) for remote agents.
 
-Practically: local PGLite stays code-only on remote-http machines; the
-remote brain holds everything else. Local-stdio machines mix code +
-transcripts in one local engine, as they always have.
+## Prerequisites
 
-Also check the per-repo trust policy. If `gstack-gbrain-repo-policy get` for
-this repo returns `deny`, STOP:
+- macOS (the daemon uses `devicectl` from Xcode).
+- iPhone connected via USB, paired and trusted.
+- Xcode + Swift toolchain installed (`swift --version` reports >= 5.9).
+- App source available on disk, with at least one `@Observable` class.
+- For remote-control mode: Tailscale installed and the user logged in.
 
-> "This repo's gbrain trust policy is `deny`. Run `/setup-gbrain --repo` to
-> change it before syncing."
+## Phase 0: Session warm-start (optional)
 
----
+If `~/.gstack/ios-qa-session.json` exists and the device is still connected,
+skip Phase 1-2 and jump to Phase 3. The session cache holds the rotated token,
+UDID, tunnel address, and accessor hash. Invalidate the cache when:
 
-## Step 1.5: Local engine pre-flight (plan D12)
-
-Read `gbrain_local_status` from the Step 1 detect output. Branch as follows
-BEFORE invoking the orchestrator:
-
-- **`ok`**: proceed to Step 2 normally.
-- **`no-cli`**: STOP. "Local gbrain CLI not installed. Run `/setup-gbrain`
-  first."
-- **`missing-config`** AND `gbrain_mcp_mode == "remote-http"`: tell the user
-  "Your brain queries (the `mcp__gbrain__*` tools) work via remote MCP, but
-  symbol code search needs a local PGLite. Run `/setup-gbrain` and pick
-  'Yes' at the new 'local code index' prompt (Step 4.5), or run
-  `gbrain init --pglite --json --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024`
-  directly (drop the voyage flags if `VOYAGE_API_KEY` isn't set). Continuing
-  without code stage."
-  Then proceed to Step 2 — the orchestrator's `runCodeImport()` and
-  `runMemoryIngest()` will return SKIP per plan D12; only `runBrainSyncPush()`
-  will run. Do NOT abort.
-- **`missing-config`** AND `gbrain_mcp_mode != "remote-http"`: STOP. "Local
-  gbrain CLI is installed but no engine config. Run `/setup-gbrain` first."
-- **`broken-config`** OR **`broken-db`**: STOP with a clear message:
-  ```
-  Local gbrain config at ~/.gbrain/config.json points at an unreachable
-  engine (status: {gbrain_local_status}). Two options:
-    1. Re-run /setup-gbrain — Step 1.5 offers Retry / Switch to PGLite /
-       Switch brain mode / Quit (plan D4).
-    2. Repair manually: mv ~/.gbrain/config.json ~/.gbrain/config.json.bak
-       && gbrain init --pglite --json --embedding-model voyage:voyage-code-3 \
-          --embedding-dimensions 1024   (drop voyage flags if VOYAGE_API_KEY unset)
-  Re-run /sync-gbrain after.
-  ```
-  Do NOT continue — the orchestrator would skip code+memory and only run
-  brain-sync, which is a degraded state the user should fix explicitly.
-
-This pre-flight short-circuits the orchestrator before it spends ~80ms
-probing the engine again. The orchestrator independently runs the same
-classifier for defense-in-depth, but Step 1.5's STOP is where the user
-gets the actionable remediation message.
-
----
-
-## Step 2: Run the orchestrator
-
-Pass user args to the orchestrator. Do not paraphrase them — pass through
-as-is.
+- The user passes `--cold` to force a full bootstrap.
+- The accessor hash mismatch is detected on first state query.
+- The daemon reports the cached UDID is no longer connected.
 
 ```bash
-bun run ~/.claude/skills/gstack/bin/gstack-gbrain-sync.ts <user-args>
-```
-
-The orchestrator runs three stages: code → memory → brain-sync (per the
-plan's storage tiering). Each stage failure is non-fatal; subsequent stages
-still run. State is persisted to `~/.gstack/.gbrain-sync-state.json` via
-tmp-file + atomic rename. Concurrent runs are blocked by a lock file at
-`~/.gstack/.sync-gbrain.lock` (5-min stale-takeover).
-
----
-
-## Step 3: Code-index health check
-
-After the sync run, query gbrain for the cwd source's page_count:
-
-```bash
-SOURCE_ID=$(grep -o '"source_id":"[^"]*"' ~/.gstack/.gbrain-sync-state.json 2>/dev/null \
-  | head -1 | sed 's/.*"source_id":"//;s/".*//')
-PAGES=$(gbrain sources list --json 2>/dev/null \
-  | jq -r --arg id "$SOURCE_ID" '.sources[] | select(.id==$id) | .page_count' 2>/dev/null \
-  || echo 0)
-echo "cwd source: $SOURCE_ID, page_count: $PAGES"
-```
-
-If `PAGES` is 0 or empty AND the user did NOT pass `--no-code` AND mode was
-not `--full`, AskUserQuestion via the format in the preamble:
-
-> D1 — This repo has 0 indexed pages in gbrain. Run a full code reindex now?
->
-> ELI10: gbrain hasn't indexed this repo's code yet. The semantic search
-> tools (`gbrain search`, `code-def`, `code-refs`) will return nothing
-> until we run a full pass. Takes ~25-35 minutes on a big Mac.
->
-> Recommendation: A — the brain is unusable for code search until indexed,
-> and Step 2 of this skill already verified gbrain is configured correctly.
->
-> Note: options differ in kind, not coverage — no completeness score.
->
-> A) Run /sync-gbrain --full now (recommended)
-> B) Skip — I'll run it later
-
-If A: re-invoke the orchestrator with `--full --code-only`.
-If B: continue to Step 4 with the empty-corpus state recorded.
-
----
-
-## Step 4: Refresh `## GBrain Search Guidance` block in CLAUDE.md
-
-Capability check (per /plan-eng-review §6):
-
-```bash
-SLUG="_capability_check_$$"
-CAPABILITY_OK=0
-if [ -f ~/.gbrain/config.json ] && \
-   gbrain --version 2>/dev/null | grep -q '^gbrain '; then
-  # GBRAIN_PREPARE=true ensures prepared statements stay enabled when
-  # connecting through a PgBouncer transaction-mode pooler (port 6543).
-  # Without it, search silently returns no results (#1435).
-  export GBRAIN_PREPARE=true
-  if echo "ping" | gbrain put "$SLUG" >/dev/null 2>&1; then
-    # Retry search up to 3 times with 1s delay — under transaction-mode
-    # pooling the search index may not be visible on the next connection
-    # immediately after the put.
-    for _attempt in 1 2 3; do
-      if gbrain search "ping" 2>/dev/null | grep -q "$SLUG"; then
-        CAPABILITY_OK=1
-        break
-      fi
-      sleep 1
-    done
+SESSION="$HOME/.gstack/ios-qa-session.json"
+if [ -f "$SESSION" ] && [ "$COLD" != "1" ]; then
+  CACHED_UDID=$(python3 -c "import json,os; d=json.load(open(os.path.expanduser('$SESSION'))); print(d['udid'])")
+  CACHED_PORT=$(python3 -c "import json,os; d=json.load(open(os.path.expanduser('$SESSION'))); print(d['daemon_port'])")
+  if curl -sf "http://127.0.0.1:$CACHED_PORT/healthz" > /dev/null; then
+    echo "Warm start: daemon alive, device $CACHED_UDID connected"
   fi
 fi
-gbrain delete "$SLUG" 2>/dev/null || true
 ```
 
-Then update CLAUDE.md based on capability state:
+## Phase 1: Read source, plan codegen
 
-**If `CAPABILITY_OK=1`** — write or update the block. Idempotent: find the
-HTML-comment-delimited block; replace its body if it exists; append at the
-end of CLAUDE.md if it doesn't. NEVER duplicate. Block is machine-AGNOSTIC
-(no engine, no page counts, no last-sync time — those are in the existing
-`## GBrain Configuration` block).
+1. Walk the app source (passed as `--source <dir>`) and identify all `@Observable`
+   classes. Note any property marked with the `@Snapshotable` wrapper — those
+   are the snapshot-eligible fields.
+2. Run `swift run --package-path $GSTACK_HOME/ios-qa/scripts/gen-accessors-tool gen-accessors --input <source-dir>`.
+   First invocation builds the swift-syntax dependency tree (cold: 2-5 min).
+   Subsequent runs are content-hash-cached and finish in ~50ms.
+3. Show the user the accessor list and ask whether to install the DebugBridge
+   SPM dependency into their `Package.swift` (one AskUserQuestion).
 
-Verbatim block content (copy exactly):
+## Phase 2: Bootstrap the device bridge
 
-```markdown
-## GBrain Search Guidance (configured by /sync-gbrain)
-<!-- gstack-gbrain-search-guidance:start -->
+1. Add the `DebugBridge` SPM dependency to the app's `Package.swift`. The package
+   ships three Debug-config-only library products:
+   - `DebugBridgeCore` (Swift, cross-platform) — StateServer + bridge protocols.
+   - `DebugBridgeTouch` (Objective-C, iOS-only) — KIF-derived in-process touch
+     synthesis with iOS 18+ `_UIHitTestContext` SwiftUI hit-testing.
+   - `DebugBridgeUI` (Swift, iOS-only) — Screenshot / Elements / Mutation
+     bridge implementations.
+   The app target depends on `DebugBridgeUI` with `.when(configuration: .debug)`
+   (transitively pulls in Core + Touch). Release builds refuse to link these
+   targets.
+2. Wire the bridges from the `@main` App init, gated on `#if DEBUG`:
+   ```swift
+   #if DEBUG
+   import DebugBridgeCore
+   StateServer.shared.start()
+   #if canImport(UIKit)
+   import DebugBridgeUI
+   DebugBridgeUIWiring.installAll()
+   #endif
+   #endif
+   ```
+3. Build + deploy to the device with `xcodebuild -scheme <SchemeName>
+   -destination 'platform=iOS,id=<UDID>' build install`.
+4. Launch via `devicectl device process launch --device <UDID> --console <bundle-id>`.
+   Capture the boot token printed to `os_log` on first run.
+5. Spawn the Mac-side daemon (on-demand) — `gstack-ios-qa-daemon`. Daemon
+   acquires an exclusive flock on `~/.gstack/ios-qa-daemon.pid`. If another
+   daemon is alive, the second invocation discovers its port and connects.
+6. Daemon immediately calls `POST /auth/rotate` on the iOS StateServer with a
+   fresh in-memory-only token. The boot token becomes useless ~5s later.
+   Anything scraping `os_log` past this point sees a dead credential.
 
-GBrain is set up and synced on this machine. The agent should prefer gbrain
-over Grep when the question is semantic or when you don't know the exact
-identifier yet.
+## Phase 3: Vision-driven agent loop
 
-**This worktree is pinned to a worktree-scoped code source** via the
-`.gbrain-source` file in the repo root (kubectl-style context). Any
-`gbrain code-def`, `code-refs`, `code-callers`, `code-callees`, or `query`
-call from anywhere under this worktree routes to that source by default —
-no `--source` flag needed. Conductor sibling worktrees of the same repo
-each have their own pin and their own indexed pages, so semantic results
-match the actual code on disk in this worktree.
+Each iteration:
 
-Two indexed corpora available via the `gbrain` CLI:
-- This worktree's code (auto-pinned via `.gbrain-source`).
-- `~/.gstack/` curated memory (registered as `gstack-brain-<user>` source via
-  the existing federation pipeline).
+1. `GET /screenshot` (via daemon) → save PNG.
+2. `GET /elements` → accessibility tree.
+3. `GET /state/snapshot` (only `@Snapshotable` fields) → current state.
+4. Decide next action based on what's on the screen vs the test goal.
+5. `POST /session/acquire` to grab the device lock.
+6. Execute `POST /tap`, `/swipe`, `/type`, or `POST /state/<key>` write.
+7. Re-screenshot; compare; record finding if buggy.
+8. `POST /session/release` once the iteration is done.
 
-Prefer gbrain when:
-- "Where is X handled?" / semantic intent, no exact string yet:
-    `gbrain search "<terms>"` or `gbrain query "<question>"`
-- "Where is symbol Y defined?" / symbol-based code questions:
-    `gbrain code-def <symbol>` or `gbrain code-refs <symbol>`
-- "What calls Y?" / "What does Y depend on?":
-    `gbrain code-callers <symbol>` / `gbrain code-callees <symbol>`
-- "What did we decide last time?" / past plans, retros, learnings:
-    `gbrain search "<terms>" --source gstack-brain-<user>`
+Each authenticated mutating request through the tailnet listener (if remote
+mode is active) writes an audit row to
+`~/.gstack/security/ios-qa-audit.jsonl`.
 
-Grep is still right for known exact strings, regex, multiline patterns, and
-file globs. Run `/sync-gbrain` after meaningful code changes; for ongoing
-auto-sync across all worktrees, run `gbrain autopilot --install` once per
-machine — gbrain's daemon handles incremental refresh on a schedule.
+## Modes
 
-<!-- gstack-gbrain-search-guidance:end -->
-```
+**Local-USB mode (default).** Daemon binds loopback only; no Tailscale
+required. The spawning skill gets full-surface access. Best for solo
+development.
 
-Use the Read + Edit tools. The find-and-replace target is the entire region
-from `<!-- gstack-gbrain-search-guidance:start -->` through
-`<!-- gstack-gbrain-search-guidance:end -->`. If those markers are missing,
-search for `## GBrain Search Guidance (configured by /sync-gbrain)` heading
-and replace from there to the next `## ` or EOF. If no heading exists, append
-the entire block at the end of CLAUDE.md.
+**Tailnet mode (`--tailnet`).** Daemon additionally binds the Tailscale
+interface (never `0.0.0.0`). Requires `tailscaled` to be running locally and
+the daemon to be able to read `/var/run/tailscale.sock`. Fails closed if the
+socket is missing, permission-denied, or returns an unparseable WhoIs
+response. Remote agents hit `POST /auth/mint` over tailnet, daemon
+canonicalizes identity via WhoIs, checks the allowlist file, mints a
+session token. See `ios-qa/docs/tailscale-acl-example.md`.
 
-**Atomic write:** write the new CLAUDE.md content to a tmp file alongside it
-(e.g., `CLAUDE.md.sync-gbrain.tmp`) then `mv` to atomic-rename, so a crash
-mid-write never leaves the file half-modified.
+**Capability tiers (tailnet mode).** Minted tokens default to `interact`
+(taps, swipes, types). Higher tiers require explicit owner mint:
 
-**If `CAPABILITY_OK=0`** — REMOVE the block entirely if present. Use the same
-Edit tool to strip the start/end-marker region. The `## GBrain Configuration`
-block stays in place (it's a record of the install, not a capability claim).
+- **observe:** `/screenshot`, `/elements`, `GET /state/*`, `/healthz`,
+  `/session/heartbeat`.
+- **interact:** observe + `/tap`, `/swipe`, `/type`.
+- **mutate:** interact + `POST /state/<key>`.
+- **restore:** mutate + `POST /state/restore`.
 
-Do NOT crash if CLAUDE.md is missing or unwritable — log a warning and
-continue.
+Owner mints via `gstack-ios-qa-mint --remote <identity> --capability <tier>`
+on the Mac. Self-service mint over tailnet only succeeds for already-allowlisted
+identities.
 
----
+**Recording mode (`--recording`).** DebugOverlay renders a small diagonal
+"AGENT DEMO" watermark in a corner so screencasts are unambiguous about the
+device being agent-driven.
 
-## Step 5: Verdict block (idempotent doctor output)
+## Demo mode
 
-Print a status block matching `/setup-gbrain` Step 10 conventions. Each row
-is `[OK]/[FIX]/[WARN]/[ERR]`. Reuse `gbrain doctor --json --fast` for
-informational rows but DO NOT gate the guidance block on doctor (per
-/plan-eng-review §6 — doctor is too strict for unrelated reasons).
+If the user says "demo", "demo mode", "show me", or "I want to see it
+working", run in **DEMO MODE**. This changes how the agent interacts with
+the app:
 
-```
-gbrain status: GREEN
+**DEMO MODE OVERRIDES ALL OTHER RULES.** When demo mode is active, the
+agent MUST drive every action through visible UI (`/tap`, `/swipe`, `/type`)
+and NEVER use `POST /state/*` writes to skip steps. Viewers see the agent
+type every key, tap every button. The on-device DebugOverlay attribution
+chip shows "Driven by Claude Code (demo)" or the remote agent identity.
 
-  CLI ............. OK   <gbrain version>
-  Engine .......... OK   <pglite|supabase>
-  Capability ...... OK   write+search round-trip
-  CWD source ...... OK   <gstack-code-{repo_slug}> (page_count=<N>)
-  ~/.gstack source. OK   <gstack-brain-{user}> (page_count=<N>) — managed by /setup-gbrain
-  Memory sync ..... OK   <artifacts_sync_mode>
-  CLAUDE.md ....... OK   ## GBrain Search Guidance present
-  Last sync ....... OK   <last_sync from state file>
+In demo mode, the screencap rate is bumped to 4fps so the recording feels
+live.
 
-Run `/sync-gbrain` again any time gbrain feels off; safe and idempotent.
-```
+## Failure modes + recovery
 
-If any row is YELLOW or RED, the verdict line says so and the failing rows
-surface a one-line "next action" (e.g., `Capability ...... ERR  capability
-check failed; CLAUDE.md guidance block REMOVED — run /setup-gbrain to repair`).
+| Symptom | Likely cause | Action |
+|---|---|---|
+| `curl: connection refused` to daemon | daemon crashed | Re-run `/ios-qa`; spawn-race lock will fail closed |
+| `403 identity_not_allowed` from `/auth/mint` | identity missing from allowlist | Run `gstack-ios-qa-mint --remote <identity>` on the Mac |
+| `409 schema_mismatch` on `/state/restore` | snapshot from older app build | Discard the snapshot; re-capture |
+| `503 device_disconnected` from proxy | USB tunnel dropped | Reconnect device; daemon auto-reconnects within 30s |
+| `429 rate_limited` from `/auth/mint` | >10 mints/min from one identity | Wait 60s; check audit log for anomalies |
+| `413 body_too_large` on `/state/restore` | snapshot >1MB | Increase `--max-body` or trim snapshot |
 
----
+## Cleanup
 
-## Concurrency note
-
-This skill is safe to run concurrently from multiple terminals on the same
-Mac. The orchestrator acquires a lock at `~/.gstack/.sync-gbrain.lock` before
-any state-file or CLAUDE.md mutation and exits with code 2 if another sync is
-in flight. Stale locks (process died) auto-clear after 5 minutes.
-
-## Cross-machine note
-
-The `## GBrain Search Guidance` block is committed to the repo's CLAUDE.md
-and travels with `git push`/`git pull` — NOT through `~/.gstack/.brain-allowlist`
-(which is for `~/.gstack/` brain-sync only). On a different Mac with a synced
-CLAUDE.md but no local gbrain, /sync-gbrain detects the mismatch via the
-capability check and REMOVES the block (the local agent shouldn't be told to
-use a tool that isn't installed).
-
-## Status reporting
-
-End with a Completion Status (per the preamble protocol):
-- **DONE** — all stages green, CLAUDE.md guidance block present, verdict GREEN.
-- **DONE_WITH_CONCERNS** — sync ran but at least one stage failed or capability
-  check failed. List which.
-- **BLOCKED** — could not acquire lock, gbrain not on PATH, or per-repo policy
-  is deny. State the blocker.
-- **NEEDS_CONTEXT** — /setup-gbrain has not been run, or `gbrain doctor` shows
-  a state that requires user decision (e.g., engine migration).
+Use `/ios-clean` to remove the DebugBridge SPM dependency and all `#if DEBUG`
+wiring before a Release build. This is a convenience flow; the structural
+Release-build guard (Package.swift `.when(configuration: .debug)` + CI
+`swift build -c release` check) is the safety-critical path.

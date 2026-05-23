@@ -62,7 +62,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">
+        <div className="halftone-portrait relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">
           <Image
             src="/images/profile/bingran-you-portrait.jpg"
             alt="Bingran You"

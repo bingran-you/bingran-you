@@ -25,6 +25,14 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 `AGENTS.md` is the single source of truth. `CLAUDE.md` is a symlink to `AGENTS.md` so Claude Code picks up the same content. **Edit `AGENTS.md` only** — never write to `CLAUDE.md` directly, never replace the symlink with a copy.
 
+## Code Modification Skills
+
+Before making any code modification, read and follow both `.agents/skills/karpathy-guidelines/SKILL.md` and `.agents/skills/thermo-nuclear-code-quality-review/SKILL.md`.
+
+- Use `karpathy-guidelines` to keep changes simple, surgical, assumption-aware, and verifiable.
+- Use `thermo-nuclear-code-quality-review` as the maintainability approval bar: avoid structural regressions, unjustified file-size growth, ad-hoc branching, unnecessary wrappers, type-boundary muddiness, and logic drifting away from its canonical layer.
+- If the two skills appear to pull in different directions, choose the smallest change that still passes the stricter structural-quality bar.
+
 ## Workspace Layout
 
 ```

@@ -17,6 +17,7 @@ export const SITE_KEYWORDS = [
   "AI agents",
   "reliable AI systems",
   "agent evaluation",
+  "BenchFlow",
   "SkillsBench",
   "first-tree",
   "DoWhiz",

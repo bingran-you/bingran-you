@@ -32,6 +32,10 @@ function pubDateOf(item: FeedItem) {
   return new Date(item.date).toUTCString();
 }
 
+function updatedDateOf(item: FeedItem) {
+  return item.lastModified.toUTCString();
+}
+
 export function renderRssFeed(
   items: ReadonlyArray<FeedItem>,
   channel: FeedChannel,
@@ -57,7 +61,7 @@ export function renderRssFeed(
       <link>${escapeXml(url)}</link>
       <guid isPermaLink="true">${escapeXml(url)}</guid>
       <pubDate>${pubDateOf(item)}</pubDate>
-      <atom:updated>${item.lastModified.toISOString()}</atom:updated>
+      <atom:updated>${updatedDateOf(item)}</atom:updated>
       <description><![CDATA[${escapeCdata(description)}]]></description>${creatorLine}
     </item>`;
     })

@@ -1,7 +1,5 @@
 import React from 'react';
 
-export interface ProjectsProps {}
-
 interface ProjectEntry {
     title: string;
     blurb: string;
@@ -10,6 +8,13 @@ interface ProjectEntry {
 }
 
 const PROJECTS: ProjectEntry[] = [
+    {
+        title: 'BenchFlow',
+        blurb:
+            'Frontier environment lab building the runtime and benchmarks AI agents learn in.',
+        href: 'https://www.benchflow.ai/',
+        tag: 'Agent',
+    },
     {
         title: 'SkillsBench',
         blurb: 'Benchmark for evaluating how well AI agents use skills.',
@@ -97,7 +102,7 @@ const ProjectRow: React.FC<ProjectEntry> = ({ title, blurb, href, tag }) => (
     </a>
 );
 
-const Projects: React.FC<ProjectsProps> = () => {
+const Projects = () => {
     return (
         <div className="site-page-content">
             <h1>Projects</h1>

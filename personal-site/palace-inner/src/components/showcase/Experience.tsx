@@ -1,8 +1,6 @@
 import React from 'react';
 import ResumeDownload from './ResumeDownload';
 
-export interface ExperienceProps {}
-
 interface RoleEntry {
     org: string;
     role: string;
@@ -29,6 +27,7 @@ const ROLES: RoleEntry[] = [
         role: 'Independent / collaborative work on agent infrastructure',
         period: 'Ongoing',
         lines: [
+            'Frontier environment lab for AI-agent runtime and benchmark infrastructure (BenchFlow).',
             'Skills-based benchmarking for AI agents (SkillsBench).',
             'Deterministic mock environments for long-horizon agent tasks (smolclaw, SBTI CLI).',
             'Git-native context layer for team decisions and ownership (first-tree).',
@@ -71,7 +70,7 @@ const PAPERS = [
     },
 ];
 
-const Experience: React.FC<ExperienceProps> = () => {
+const Experience = () => {
     return (
         <div className="site-page-content">
             <ResumeDownload />

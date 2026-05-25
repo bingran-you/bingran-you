@@ -26,6 +26,14 @@ export type Education = {
 
 export const projects: Project[] = [
   {
+    name: "BenchFlow",
+    href: "https://www.benchflow.ai/",
+    description:
+      "A frontier environment lab building the runtime and benchmarks AI agents learn in.",
+    emoji: "🌊",
+    track: "ai",
+  },
+  {
     name: "SkillsBench",
     href: "https://github.com/benchflow-ai/skillsbench",
     description: "A benchmark for evaluating how well AI agents use skills.",

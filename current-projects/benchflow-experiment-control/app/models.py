@@ -8,6 +8,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATA_DIR = PROJECT_ROOT / "data"
+DEFAULT_ENV_FILE = "/Users/bingran_you/Downloads/GitHub/bingran-you/.env"
 
 
 def now_iso() -> str:
@@ -20,10 +21,11 @@ class ExperimentConfig:
     run_target: str = "gcp_ssh"
     benchflow_root: str = ""
     tasks_dir: str = ""
-    env_file: str = ""
-    jobs_root: str = str(DEFAULT_DATA_DIR / "benchflow-jobs")
+    env_file: str = DEFAULT_ENV_FILE
+    jobs_root: str = "/Users/bingran_you/Downloads/GitHub/bingran-you/workspace/experiment"
     remote_host: str = ""
     remote_user: str = ""
+    remote_run_user: str = ""
     remote_port: int = 22
     remote_ssh_key: str = ""
     remote_benchflow_root: str = ""
@@ -33,6 +35,7 @@ class ExperimentConfig:
     model: str = "gemini-3-flash-preview"
     sandbox: str = "docker"
     concurrency: int = 4
+    skills_profile: str = "with-skills"
     skills_mode: str = "default"
     skills_dir: str = ""
     include_tasks: list[str] = field(default_factory=list)
@@ -47,15 +50,23 @@ class ExperimentConfig:
                 return split_names(value)
             return [str(item).strip() for item in value if str(item).strip()]
 
+        def string_field(snake: str, camel: str, default: str) -> str:
+            if snake in raw:
+                return str(raw.get(snake) or "")
+            if camel in raw:
+                return str(raw.get(camel) or "")
+            return default
+
         return cls(
             name=str(raw.get("name") or "experiment").strip() or "experiment",
             run_target=str(raw.get("run_target") or raw.get("runTarget") or cls.run_target),
             benchflow_root=str(raw.get("benchflow_root") or raw.get("benchflowRoot") or ""),
             tasks_dir=str(raw.get("tasks_dir") or raw.get("tasksDir") or ""),
-            env_file=str(raw.get("env_file") or raw.get("envFile") or ""),
-            jobs_root=str(raw.get("jobs_root") or raw.get("jobsRoot") or DEFAULT_DATA_DIR / "benchflow-jobs"),
+            env_file=string_field("env_file", "envFile", cls.env_file),
+            jobs_root=str(raw.get("jobs_root") or raw.get("jobsRoot") or cls.jobs_root),
             remote_host=str(raw.get("remote_host") or raw.get("remoteHost") or ""),
             remote_user=str(raw.get("remote_user") or raw.get("remoteUser") or ""),
+            remote_run_user=str(raw.get("remote_run_user") or raw.get("remoteRunUser") or ""),
             remote_port=int(raw.get("remote_port") or raw.get("remotePort") or cls.remote_port),
             remote_ssh_key=str(raw.get("remote_ssh_key") or raw.get("remoteSshKey") or ""),
             remote_benchflow_root=str(raw.get("remote_benchflow_root") or raw.get("remoteBenchflowRoot") or ""),
@@ -65,6 +76,9 @@ class ExperimentConfig:
             model=str(raw.get("model") or ""),
             sandbox=str(raw.get("sandbox") or cls.sandbox),
             concurrency=max(1, int(raw.get("concurrency") or cls.concurrency)),
+            skills_profile=str(
+                raw.get("skills_profile") or raw.get("skillsProfile") or cls.skills_profile
+            ),
             skills_mode=str(raw.get("skills_mode") or raw.get("skillsMode") or cls.skills_mode),
             skills_dir=str(raw.get("skills_dir") or raw.get("skillsDir") or ""),
             include_tasks=list_field("include_tasks") or list_field("includeTasks"),
@@ -88,6 +102,10 @@ class RunRecord:
     remote_log_path: str = ""
     remote_pid: int | None = None
     remote_exit_code_path: str = ""
+    tasks_dir_for_run: str = ""
+    selected_tasks: list[str] = field(default_factory=list)
+    synced_at: str | None = None
+    sync_error: str | None = None
     pid: int | None = None
     return_code: int | None = None
     created_at: str = field(default_factory=now_iso)
@@ -96,17 +114,37 @@ class RunRecord:
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> "RunRecord":
+        config = ExperimentConfig.from_dict(raw.get("config") or {})
+        command = [str(part) for part in raw.get("command") or []]
+        selected_tasks = [
+            str(item)
+            for item in (raw.get("selected_tasks") or raw.get("selectedTasks") or [])
+            if str(item)
+        ]
+        if not selected_tasks and config.include_tasks:
+            selected_tasks = [
+                task for task in config.include_tasks if task not in set(config.exclude_tasks)
+            ]
         return cls(
             id=str(raw["id"]),
             status=str(raw.get("status") or "created"),
-            config=ExperimentConfig.from_dict(raw.get("config") or {}),
+            config=config,
             jobs_dir=str(raw.get("jobs_dir") or raw.get("jobsDir") or ""),
             log_path=str(raw.get("log_path") or raw.get("logPath") or ""),
-            command=[str(part) for part in raw.get("command") or []],
+            command=command,
             remote_jobs_dir=str(raw.get("remote_jobs_dir") or raw.get("remoteJobsDir") or ""),
             remote_log_path=str(raw.get("remote_log_path") or raw.get("remoteLogPath") or ""),
             remote_pid=raw.get("remote_pid") or raw.get("remotePid"),
             remote_exit_code_path=str(raw.get("remote_exit_code_path") or raw.get("remoteExitCodePath") or ""),
+            tasks_dir_for_run=str(
+                raw.get("tasks_dir_for_run")
+                or raw.get("tasksDirForRun")
+                or command_value(command, "--tasks-dir")
+                or ""
+            ),
+            selected_tasks=selected_tasks,
+            synced_at=raw.get("synced_at") or raw.get("syncedAt"),
+            sync_error=raw.get("sync_error") or raw.get("syncError"),
             pid=raw.get("pid"),
             return_code=raw.get("return_code"),
             created_at=str(raw.get("created_at") or now_iso()),
@@ -122,3 +160,12 @@ class RunRecord:
 
 def split_names(text: str) -> list[str]:
     return [item.strip() for item in text.replace("\n", ",").split(",") if item.strip()]
+
+
+def command_value(command: list[str], flag: str) -> str | None:
+    try:
+        index = command.index(flag)
+    except ValueError:
+        return None
+    next_index = index + 1
+    return command[next_index] if next_index < len(command) else None

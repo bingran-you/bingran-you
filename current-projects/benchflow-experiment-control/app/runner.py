@@ -8,14 +8,18 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from .models import DEFAULT_DATA_DIR, ExperimentConfig, RunRecord, now_iso
+from .archive import DEFAULT_EXPERIMENT_ROOT, local_run_dir, remote_run_dir
+from .models import DEFAULT_ENV_FILE, ExperimentConfig, RunRecord, now_iso
 from .remote import (
+    prepare_remote_task_selection,
     read_remote_exit_code,
     start_remote_process,
     stop_remote_run,
+    sync_remote_results,
     upload_env_file,
 )
 from .store import StateStore
+from .task_selection import prepare_local_task_selection
 
 
 _PROCESSES: dict[str, subprocess.Popen] = {}
@@ -45,8 +49,12 @@ def parse_env_file(path: str) -> dict[str, str]:
     return values
 
 
-def build_command(config: ExperimentConfig, jobs_dir: str) -> list[str]:
-    tasks_dir = config.remote_tasks_dir if config.run_target == "gcp_ssh" else config.tasks_dir
+def build_command(
+    config: ExperimentConfig, jobs_dir: str, *, tasks_dir: str | None = None
+) -> list[str]:
+    effective_tasks_dir = tasks_dir or (
+        config.remote_tasks_dir if config.run_target == "gcp_ssh" else config.tasks_dir
+    )
     cmd = [
         "uv",
         "run",
@@ -54,7 +62,7 @@ def build_command(config: ExperimentConfig, jobs_dir: str) -> list[str]:
         "eval",
         "create",
         "--tasks-dir",
-        tasks_dir,
+        effective_tasks_dir,
         "--agent",
         config.agent,
         "--sandbox",
@@ -70,10 +78,6 @@ def build_command(config: ExperimentConfig, jobs_dir: str) -> list[str]:
         cmd.extend(["--skills-dir", config.skills_dir])
     if config.skills_mode and config.skills_mode != "default":
         cmd.extend(["--skill-mode", config.skills_mode])
-    for task_name in config.include_tasks:
-        cmd.extend(["--include", task_name])
-    for task_name in config.exclude_tasks:
-        cmd.extend(["--exclude", task_name])
     if config.extra_args:
         cmd.extend(shlex.split(config.extra_args))
     return cmd
@@ -88,10 +92,11 @@ def start_run(config: ExperimentConfig, store: StateStore) -> RunRecord:
     if config.run_target == "gcp_ssh":
         return start_remote_run(config, store, run_id, safe_name, log_path)
 
-    jobs_dir = str(Path(config.jobs_root).expanduser() / safe_name / run_id)
+    jobs_dir = str(local_run_dir(config, safe_name, run_id))
     Path(jobs_dir).mkdir(parents=True, exist_ok=True)
+    selection = prepare_local_task_selection(config, jobs_dir)
 
-    command = build_command(config, jobs_dir)
+    command = build_command(config, jobs_dir, tasks_dir=selection.effective_tasks_dir)
     run = RunRecord(
         id=f"{safe_name}-{run_id}",
         status="running",
@@ -99,12 +104,20 @@ def start_run(config: ExperimentConfig, store: StateStore) -> RunRecord:
         jobs_dir=jobs_dir,
         log_path=log_path,
         command=command,
+        tasks_dir_for_run=selection.effective_tasks_dir,
+        selected_tasks=selection.selected_tasks,
         started_at=now_iso(),
     )
     store.upsert_run(run)
 
     env = os.environ.copy()
-    env.update(parse_env_file(config.env_file))
+    if config.env_file:
+        env["BENCHFLOW_DOTENV_PATH"] = str(Path(config.env_file).expanduser())
+        env.update(parse_env_file(config.env_file))
+    else:
+        local_dotenv = Path(jobs_dir) / ".env"
+        local_dotenv.touch(mode=0o600, exist_ok=True)
+        env["BENCHFLOW_DOTENV_PATH"] = str(local_dotenv)
     log_file = Path(log_path).open("ab", buffering=0)
     process = subprocess.Popen(
         command,
@@ -127,21 +140,24 @@ def start_remote_run(
     safe_name: str,
     log_path: str,
 ) -> RunRecord:
-    remote_jobs_dir = posixpath.join(config.remote_jobs_root.rstrip("/"), safe_name, run_id)
+    remote_jobs_dir = remote_run_dir(config, safe_name, run_id)
     remote_log_path = posixpath.join(remote_jobs_dir, "run.log")
     remote_env_path = posixpath.join(remote_jobs_dir, ".env")
     remote_exit_code_path = posixpath.join(remote_jobs_dir, "exit-code.txt")
-    command = build_command(config, remote_jobs_dir)
+    selection = prepare_remote_task_selection(config, remote_jobs_dir)
+    command = build_command(config, remote_jobs_dir, tasks_dir=selection.effective_tasks_dir)
     run = RunRecord(
         id=f"{safe_name}-{run_id}",
         status="running",
         config=config,
-        jobs_dir=str(Path(config.jobs_root).expanduser() / safe_name / run_id),
+        jobs_dir=str(local_run_dir(config, safe_name, run_id)),
         log_path=log_path,
         command=command,
         remote_jobs_dir=remote_jobs_dir,
         remote_log_path=remote_log_path,
         remote_exit_code_path=remote_exit_code_path,
+        tasks_dir_for_run=selection.effective_tasks_dir,
+        selected_tasks=selection.selected_tasks,
         started_at=now_iso(),
     )
     store.upsert_run(run)
@@ -164,12 +180,21 @@ def refresh_processes(store: StateStore) -> None:
             return_code = read_remote_exit_code(run)
             if return_code is None:
                 continue
-            store.update_run(
+            run = store.update_run(
                 run.id,
                 status="completed" if return_code == 0 else "failed",
                 return_code=return_code,
                 finished_at=now_iso(),
             )
+            if run is not None:
+                sync_finished_remote_run(run, store)
+        elif (
+            run.config.run_target == "gcp_ssh"
+            and run.status in {"completed", "failed", "stopped"}
+            and not run.synced_at
+            and not run.sync_error
+        ):
+            sync_finished_remote_run(run, store)
 
     for run_id, process in list(_PROCESSES.items()):
         return_code = process.poll()
@@ -182,6 +207,15 @@ def refresh_processes(store: StateStore) -> None:
             return_code=return_code,
             finished_at=now_iso(),
         )
+
+
+def sync_finished_remote_run(run: RunRecord, store: StateStore) -> None:
+    try:
+        sync_remote_results(run)
+    except Exception as exc:
+        store.update_run(run.id, sync_error=str(exc))
+    else:
+        store.update_run(run.id, synced_at=now_iso(), sync_error=None)
 
 
 def stop_run(run_id: str, store: StateStore) -> RunRecord | None:
@@ -216,12 +250,15 @@ def validate_config(config: ExperimentConfig) -> None:
     else:
         if not config.remote_host:
             raise ValueError("remote host is required")
+        if config.remote_ssh_key and not Path(config.remote_ssh_key).expanduser().exists():
+            raise FileNotFoundError(f"remote SSH key does not exist: {config.remote_ssh_key}")
         if not config.remote_benchflow_root:
             raise ValueError("remote BenchFlow root is required")
         if not config.remote_tasks_dir:
             raise ValueError("remote tasks dir is required")
     if config.env_file and not Path(config.env_file).expanduser().exists():
         raise FileNotFoundError(f"env file does not exist: {config.env_file}")
+    Path(config.jobs_root).expanduser().mkdir(parents=True, exist_ok=True)
     if config.concurrency < 1:
         raise ValueError("concurrency must be >= 1")
 
@@ -235,14 +272,21 @@ def default_paths() -> dict[str, str]:
     workspace = Path("/Users/bingran_you/Downloads/GitHub/BenchFlow.ai")
     return {
         "run_target": "gcp_ssh",
+        "env_file": DEFAULT_ENV_FILE,
         "benchflow_root": str(workspace / "benchflow"),
         "tasks_dir": str(workspace / "skillsbench" / "tasks"),
-        "jobs_root": str(DEFAULT_DATA_DIR / "benchflow-jobs"),
-        "remote_benchflow_root": "BenchFlow.ai/benchflow",
-        "remote_tasks_dir": "BenchFlow.ai/skillsbench/tasks",
-        "remote_jobs_root": "benchflow-experiment-runs",
-        "agent": "gemini",
-        "model": "gemini-3-flash-preview",
+        "jobs_root": str(DEFAULT_EXPERIMENT_ROOT),
+        "remote_host": "34.58.166.203",
+        "remote_user": "bingran_you",
+        "remote_run_user": "benchflow",
+        "remote_port": "22",
+        "remote_ssh_key": "~/.ssh/google_compute_engine",
+        "remote_benchflow_root": "/opt/benchflow/benchflow",
+        "remote_tasks_dir": "/opt/benchflow/skillsbench/tasks",
+        "remote_jobs_root": "/mnt/benchflow/jobs/experiment-control",
+        "agent": "pi-acp",
+        "model": "vllm/minimax-m2.5",
         "concurrency": "4",
         "sandbox": "docker",
+        "skills_profile": "with-skills",
     }

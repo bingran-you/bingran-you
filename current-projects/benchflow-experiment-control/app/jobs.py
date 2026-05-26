@@ -38,19 +38,30 @@ def discover_tasks(tasks_dir: str) -> list[str]:
 
 def scan_run(run: RunRecord) -> dict[str, Any]:
     if run.config.run_target == "gcp_ssh":
-        snapshot = remote_snapshot(run)
-        rows = [_task_row_from_remote(item, run.status) for item in snapshot.get("trials", [])]
+        local_root = Path(run.jobs_dir).expanduser()
+        if run.status != "running" and local_root.is_dir():
+            rows = [_task_row(path, local_root, run.status) for path in find_trial_dirs(local_root)]
+            log_tail = tail_file(str(local_root / "run.log"))
+            snapshot_error = None
+        else:
+            snapshot = remote_snapshot(run)
+            rows = [_task_row_from_remote(item, run.status) for item in snapshot.get("trials", [])]
+            log_tail = remote_log_tail(run)
+            snapshot_error = snapshot.get("error")
+        rows = add_expected_task_rows(rows, run.selected_tasks, run.status)
         rows.sort(key=lambda item: (status_order(item.status), item.task_name, item.trial_name))
         return {
             "run": run.to_dict(),
             "summary": summarize(rows),
             "tasks": [row.to_dict() for row in rows],
-            "log_tail": remote_log_tail(run),
-            "snapshot_error": snapshot.get("error"),
+            "log_tail": log_tail,
+            "snapshot_error": snapshot_error,
+            "sync_error": run.sync_error,
         }
 
     root = Path(run.jobs_dir).expanduser()
     rows = [_task_row(path, root, run.status) for path in find_trial_dirs(root)]
+    rows = add_expected_task_rows(rows, run.selected_tasks, run.status)
     rows.sort(key=lambda item: (status_order(item.status), item.task_name, item.trial_name))
     summary = summarize(rows)
     return {
@@ -96,6 +107,34 @@ def summarize(rows: list[TaskRow]) -> dict[str, Any]:
         "pending": counts.get("pending", 0),
         "mean_reward": reward_sum / reward_count if reward_count else None,
     }
+
+
+def add_expected_task_rows(
+    rows: list[TaskRow], expected_tasks: list[str], run_status: str
+) -> list[TaskRow]:
+    if not expected_tasks:
+        return rows
+    seen = {row.task_name for row in rows}
+    missing_status = "running" if run_status == "running" else "pending"
+    additions = [
+        TaskRow(
+            task_name=task_name,
+            trial_name="",
+            status=missing_status,
+            reward=None,
+            duration_sec=None,
+            agent="",
+            model="",
+            error=None,
+            result_path=None,
+            config_path=None,
+            trial_path="",
+            updated_at=None,
+        )
+        for task_name in expected_tasks
+        if task_name not in seen
+    ]
+    return [*rows, *additions]
 
 
 def _task_row(trial_dir: Path, root: Path, run_status: str) -> TaskRow:
@@ -163,7 +202,7 @@ def task_status(
 ) -> str:
     if not result:
         return "running" if run_status == "running" else "pending"
-    if error:
+    if error and reward is None:
         return "error"
     if reward is None:
         return "fail"
@@ -190,13 +229,20 @@ def read_json(path: Path) -> dict[str, Any]:
 
 
 def read_artifact(run: RunRecord, relative: str) -> dict[str, Any]:
+    local_root = Path(run.jobs_dir).expanduser().resolve()
+    local_target = (local_root / relative).resolve()
+    if local_target.is_file() and is_within(local_target, local_root):
+        return read_local_artifact(local_target, relative)
+
     if run.config.run_target == "gcp_ssh":
         return read_remote_artifact(run, relative)
 
-    root = Path(run.jobs_dir).expanduser().resolve()
-    target = (root / relative).resolve()
-    if not target.is_file() or not is_within(target, root):
+    if not local_target.is_file() or not is_within(local_target, local_root):
         raise FileNotFoundError(relative)
+    return read_local_artifact(local_target, relative)
+
+
+def read_local_artifact(target: Path, relative: str) -> dict[str, Any]:
     if target.stat().st_size > 2_000_000:
         return {"path": relative, "too_large": True, "content": ""}
     return {"path": relative, "too_large": False, "content": target.read_text(errors="replace")}

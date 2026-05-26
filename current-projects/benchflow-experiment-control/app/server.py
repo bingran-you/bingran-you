@@ -7,10 +7,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
-from .jobs import discover_tasks, read_artifact, scan_run
-from .models import DEFAULT_DATA_DIR, ExperimentConfig
-from .runner import default_paths, refresh_processes, start_run, stop_run
-from .store import StateStore
+from .manager import ExperimentManager
+from .models import DEFAULT_DATA_DIR
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -19,7 +17,7 @@ STATIC_ROOT = PROJECT_ROOT / "app" / "static"
 
 class AppContext:
     def __init__(self, data_dir: Path = DEFAULT_DATA_DIR):
-        self.store = StateStore(data_dir)
+        self.manager = ExperimentManager(data_dir)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -40,14 +38,12 @@ class Handler(BaseHTTPRequestHandler):
     def route_get(self) -> None:
         parsed = urlparse(self.path)
         if parsed.path == "/api/defaults":
-            self.json_response(default_paths())
+            self.json_response(self.context.manager.defaults())
         elif parsed.path == "/api/state":
-            refresh_processes(self.context.store)
-            runs = [scan_run(run) for run in reversed(self.context.store.list_runs())]
-            self.json_response({"runs": runs})
+            self.json_response(self.context.manager.state())
         elif parsed.path == "/api/tasks":
             query = parse_qs(parsed.query)
-            self.json_response({"tasks": discover_tasks(query.get("tasks_dir", [""])[0])})
+            self.json_response(self.context.manager.tasks(query.get("tasks_dir", [""])[0]))
         elif parsed.path.startswith("/api/runs/"):
             self.handle_run_get(parsed.path, parsed.query)
         else:
@@ -57,12 +53,11 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/api/runs":
             payload = self.read_json_body()
-            run = start_run(ExperimentConfig.from_dict(payload), self.context.store)
-            self.json_response({"run": scan_run(run)}, status=201)
+            self.json_response(self.context.manager.start(payload), status=201)
         elif parsed.path.startswith("/api/runs/") and parsed.path.endswith("/stop"):
             run_id = parsed.path.split("/")[3]
-            run = stop_run(run_id, self.context.store)
-            self.json_response({"run": scan_run(run)} if run else {"error": "run not found"}, status=200 if run else 404)
+            payload = self.context.manager.stop(run_id)
+            self.json_response(payload if payload else {"error": "run not found"}, status=200 if payload else 404)
         else:
             self.json_response({"error": "not found"}, status=404)
 
@@ -71,17 +66,18 @@ class Handler(BaseHTTPRequestHandler):
         if len(parts) < 3:
             self.json_response({"error": "not found"}, status=404)
             return
-        run = self.context.store.get_run(parts[2])
+        run = self.context.manager.run(parts[2])
         if run is None:
             self.json_response({"error": "run not found"}, status=404)
             return
         if len(parts) == 3:
-            self.json_response(scan_run(run))
+            self.json_response(run)
         elif len(parts) == 4 and parts[3] == "log":
-            self.json_response({"log": scan_run(run)["log_tail"]})
+            self.json_response({"log": run["log_tail"]})
         elif len(parts) == 4 and parts[3] == "artifact":
             rel = parse_qs(query).get("path", [""])[0]
-            self.json_response(read_artifact(run, unquote(rel)))
+            payload = self.context.manager.artifact(parts[2], unquote(rel))
+            self.json_response(payload if payload else {"error": "run not found"}, status=200 if payload else 404)
         else:
             self.json_response({"error": "not found"}, status=404)
 
@@ -128,4 +124,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

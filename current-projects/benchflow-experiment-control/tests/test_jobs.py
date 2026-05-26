@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from app import remote
 from app.archive import local_run_dir
 from app.jobs import discover_tasks, scan_run
 from app.models import ExperimentConfig, RunRecord
@@ -154,6 +155,55 @@ class JobsScanTest(unittest.TestCase):
         config = ExperimentConfig.from_dict({"name": "test", "env_file": ""})
 
         self.assertEqual(config.env_file, "")
+
+    def test_remote_start_uses_nohup_runner_for_pid_capture(self) -> None:
+        """Guards this PR's SSH launch fix against hanging before PID capture."""
+        captured: dict[str, object] = {}
+
+        def fake_remote_shell(
+            config: ExperimentConfig,
+            script: str,
+            *,
+            input_text: str | None = None,
+            timeout: int = 30,
+            as_run_user: bool = False,
+        ):
+            captured["script"] = script
+            captured["timeout"] = timeout
+            captured["as_run_user"] = as_run_user
+
+            class Result:
+                returncode = 0
+                stdout = "12345\n"
+                stderr = ""
+
+            return Result()
+
+        original = remote.remote_shell
+        try:
+            remote.remote_shell = fake_remote_shell
+            pid = remote.start_remote_process(
+                ExperimentConfig(
+                    name="test",
+                    run_target="gcp_ssh",
+                    remote_benchflow_root="/opt/benchflow/benchflow",
+                    env_file="/tmp/.env",
+                ),
+                ["uv", "run", "bench", "eval", "create"],
+                remote_jobs_dir="/jobs/run",
+                remote_log_path="/jobs/run/run.log",
+                remote_env_path="/jobs/run/.env",
+                remote_exit_code_path="/jobs/run/exit-code.txt",
+            )
+        finally:
+            remote.remote_shell = original
+
+        script = str(captured["script"])
+        self.assertEqual(pid, 12345)
+        self.assertTrue(captured["as_run_user"])
+        self.assertIn("run-remote.sh", script)
+        self.assertIn("nohup bash /jobs/run/run-remote.sh", script)
+        self.assertIn("printf '%s\\n' \"$status\" > /jobs/run/exit-code.txt", script)
 
 
 if __name__ == "__main__":

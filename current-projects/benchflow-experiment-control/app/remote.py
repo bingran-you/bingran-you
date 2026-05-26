@@ -157,16 +157,31 @@ def start_remote_process(
     remote_exit_code_path: str,
 ) -> int:
     quoted_cmd = shlex.join(command)
+    remote_runner_path = f"{remote_jobs_dir.rstrip('/')}/run-remote.sh"
     dotenv_line = f"export BENCHFLOW_DOTENV_PATH={shlex.quote(remote_env_path)};"
     env_line = (
         f"{dotenv_line} set -a; . {shlex.quote(remote_env_path)}; set +a;"
         if config.env_file
         else dotenv_line
     )
+    runner_script = "\n".join(
+        [
+            "#!/usr/bin/env bash",
+            "set +e",
+            f"cd {shlex.quote(config.remote_benchflow_root)}",
+            f"{env_line} {quoted_cmd}",
+            "status=$?",
+            f"printf '%s\\n' \"$status\" > {shlex.quote(remote_exit_code_path)}",
+            "exit \"$status\"",
+        ]
+    )
     script = (
         f"mkdir -p {shlex.quote(remote_jobs_dir)} {shlex.quote(str(Path(remote_log_path).parent))}; "
-        f"cd {shlex.quote(config.remote_benchflow_root)} && "
-        f"( {env_line} {quoted_cmd}; echo $? > {shlex.quote(remote_exit_code_path)} ) "
+        f"cat > {shlex.quote(remote_runner_path)} <<'BENCHFLOW_REMOTE_RUN'\n"
+        f"{runner_script}\n"
+        "BENCHFLOW_REMOTE_RUN\n"
+        f"chmod 700 {shlex.quote(remote_runner_path)}; "
+        f"nohup bash {shlex.quote(remote_runner_path)} "
         f"> {shlex.quote(remote_log_path)} 2>&1 < /dev/null & echo $!"
     )
     result = remote_shell(config, script, timeout=30, as_run_user=True)

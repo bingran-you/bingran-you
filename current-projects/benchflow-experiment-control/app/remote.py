@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+import re
 import shlex
 import subprocess
 from pathlib import Path
 from typing import Any
 
 from .models import ExperimentConfig, RunRecord
+from .task_selection import TaskSelection
 
 
 def ssh_base(config: ExperimentConfig) -> list[str]:
@@ -34,7 +36,10 @@ def remote_shell(
     *,
     input_text: str | None = None,
     timeout: int = 30,
+    as_run_user: bool = False,
 ) -> subprocess.CompletedProcess[str]:
+    if as_run_user:
+        script = wrap_run_user(config, script)
     return subprocess.run(
         [*ssh_base(config), script],
         input=input_text,
@@ -45,15 +50,101 @@ def remote_shell(
     )
 
 
+def wrap_run_user(config: ExperimentConfig, script: str) -> str:
+    user = config.remote_run_user.strip()
+    if not user:
+        return script
+    if not re.match(r"^[a-z_][a-z0-9_-]*$", user):
+        raise ValueError(f"invalid remote run user: {user!r}")
+    return f"sudo -n -u {shlex.quote(user)} bash -lc {shlex.quote(script)}"
+
+
 def upload_env_file(config: ExperimentConfig, remote_path: str) -> None:
     if not config.env_file:
         return
     local_path = Path(config.env_file).expanduser()
     content = local_path.read_text()
     script = f"umask 077; mkdir -p {shlex.quote(str(Path(remote_path).parent))}; cat > {shlex.quote(remote_path)}"
-    result = remote_shell(config, script, input_text=content, timeout=30)
+    result = remote_shell(config, script, input_text=content, timeout=30, as_run_user=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "failed to upload env file")
+
+
+def prepare_remote_task_selection(
+    config: ExperimentConfig, remote_jobs_dir: str
+) -> TaskSelection:
+    payload = {
+        "tasks_dir": config.remote_tasks_dir,
+        "jobs_dir": remote_jobs_dir,
+        "include_tasks": config.include_tasks,
+        "exclude_tasks": config.exclude_tasks,
+    }
+    script = r'''
+import json
+import os
+import shutil
+from pathlib import Path
+
+payload = json.loads(os.environ["TASK_SELECTION"])
+source = Path(payload["tasks_dir"]).expanduser()
+jobs_dir = Path(payload["jobs_dir"]).expanduser()
+include = [name for name in payload.get("include_tasks", []) if name]
+exclude = [name for name in payload.get("exclude_tasks", []) if name]
+
+if not source.is_dir():
+    raise SystemExit(f"tasks dir does not exist: {source}")
+
+available = sorted(child.name for child in source.iterdir() if (child / "task.toml").is_file())
+available_set = set(available)
+missing_include = sorted(set(include) - available_set)
+missing_exclude = sorted(set(exclude) - available_set)
+if missing_include:
+    raise SystemExit("include task(s) not found: " + ", ".join(missing_include))
+if missing_exclude:
+    raise SystemExit("exclude task(s) not found: " + ", ".join(missing_exclude))
+
+selected = include if include else available
+excluded = set(exclude)
+selected = [name for name in selected if name not in excluded]
+filtered = bool(include or exclude)
+effective = source
+
+jobs_dir.mkdir(parents=True, exist_ok=True)
+if filtered:
+    effective = jobs_dir / ".benchflow-selected-tasks"
+    if effective.exists():
+        shutil.rmtree(effective)
+    effective.mkdir(parents=True)
+    for task_name in selected:
+        (effective / task_name).symlink_to(source / task_name, target_is_directory=True)
+    (effective / "selection-manifest.json").write_text(json.dumps({
+        "source_tasks_dir": str(source),
+        "selected_tasks": selected,
+        "include_tasks": include,
+        "exclude_tasks": exclude,
+    }, indent=2) + "\n")
+
+print(json.dumps({
+    "source_tasks_dir": str(source),
+    "effective_tasks_dir": str(effective),
+    "selected_tasks": selected,
+    "filtered": filtered,
+}))
+'''
+    shell = f"TASK_SELECTION={shlex.quote(json.dumps(payload))} python3 -"
+    result = remote_shell(config, shell, input_text=script, timeout=30, as_run_user=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "failed to prepare task selection")
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"could not parse remote task selection: {result.stdout!r}") from exc
+    return TaskSelection(
+        source_tasks_dir=str(data["source_tasks_dir"]),
+        effective_tasks_dir=str(data["effective_tasks_dir"]),
+        selected_tasks=[str(item) for item in data.get("selected_tasks") or []],
+        filtered=bool(data.get("filtered")),
+    )
 
 
 def start_remote_process(
@@ -66,14 +157,19 @@ def start_remote_process(
     remote_exit_code_path: str,
 ) -> int:
     quoted_cmd = shlex.join(command)
-    env_line = f"set -a; . {shlex.quote(remote_env_path)}; set +a;" if config.env_file else ""
+    dotenv_line = f"export BENCHFLOW_DOTENV_PATH={shlex.quote(remote_env_path)};"
+    env_line = (
+        f"{dotenv_line} set -a; . {shlex.quote(remote_env_path)}; set +a;"
+        if config.env_file
+        else dotenv_line
+    )
     script = (
         f"mkdir -p {shlex.quote(remote_jobs_dir)} {shlex.quote(str(Path(remote_log_path).parent))}; "
         f"cd {shlex.quote(config.remote_benchflow_root)} && "
         f"( {env_line} {quoted_cmd}; echo $? > {shlex.quote(remote_exit_code_path)} ) "
         f"> {shlex.quote(remote_log_path)} 2>&1 < /dev/null & echo $!"
     )
-    result = remote_shell(config, script, timeout=30)
+    result = remote_shell(config, script, timeout=30, as_run_user=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "failed to start remote run")
     try:
@@ -86,7 +182,7 @@ def read_remote_exit_code(run: RunRecord) -> int | None:
     if not run.remote_exit_code_path:
         return None
     script = f"test -f {shlex.quote(run.remote_exit_code_path)} && cat {shlex.quote(run.remote_exit_code_path)} || true"
-    result = remote_shell(run.config, script, timeout=10)
+    result = remote_shell(run.config, script, timeout=10, as_run_user=True)
     text = result.stdout.strip()
     return int(text) if text.isdigit() else None
 
@@ -95,14 +191,14 @@ def stop_remote_run(run: RunRecord) -> None:
     if not run.remote_pid:
         return
     script = f"kill -TERM {int(run.remote_pid)} 2>/dev/null || true"
-    remote_shell(run.config, script, timeout=10)
+    remote_shell(run.config, script, timeout=10, as_run_user=True)
 
 
 def remote_log_tail(run: RunRecord, limit: int = 16_000) -> str:
     if not run.remote_log_path:
         return ""
     script = f"test -f {shlex.quote(run.remote_log_path)} && tail -c {limit} {shlex.quote(run.remote_log_path)} || true"
-    return remote_shell(run.config, script, timeout=10).stdout
+    return remote_shell(run.config, script, timeout=10, as_run_user=True).stdout
 
 
 def remote_snapshot(run: RunRecord) -> dict[str, Any]:
@@ -143,7 +239,7 @@ if root.is_dir():
 print(json.dumps({"trials": trials}))
 '''
     shell = f"JOBS_DIR={shlex.quote(run.remote_jobs_dir)} python3 -"
-    result = remote_shell(run.config, shell, input_text=script, timeout=30)
+    result = remote_shell(run.config, shell, input_text=script, timeout=30, as_run_user=True)
     if result.returncode != 0:
         return {"trials": [], "error": result.stderr.strip()}
     try:
@@ -175,8 +271,37 @@ else:
         f"JOBS_DIR={shlex.quote(run.remote_jobs_dir)} "
         f"REL_PATH={shlex.quote(relative)} python3 -"
     )
-    result = remote_shell(run.config, shell, input_text=script, timeout=20)
+    result = remote_shell(run.config, shell, input_text=script, timeout=20, as_run_user=True)
     try:
         return json.loads(result.stdout)
     except json.JSONDecodeError:
         return {"error": result.stderr.strip() or "could not read remote artifact"}
+
+
+def sync_remote_results(run: RunRecord) -> None:
+    if not run.remote_jobs_dir:
+        return
+    local_dir = Path(run.jobs_dir).expanduser()
+    local_dir.mkdir(parents=True, exist_ok=True)
+    script = (
+        f"test -d {shlex.quote(run.remote_jobs_dir)} && "
+        f"cd {shlex.quote(run.remote_jobs_dir)} && "
+        "tar --exclude=.env --exclude=./.env -cf - ."
+    )
+    result = subprocess.run(
+        [*ssh_base(run.config), wrap_run_user(run.config, script)],
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        message = result.stderr.decode(errors="replace").strip()
+        raise RuntimeError(message or "failed to archive remote results")
+    extract = subprocess.run(
+        ["tar", "-xf", "-", "-C", str(local_dir)],
+        input=result.stdout,
+        capture_output=True,
+        check=False,
+    )
+    if extract.returncode != 0:
+        message = extract.stderr.decode(errors="replace").strip()
+        raise RuntimeError(message or "failed to extract remote results")

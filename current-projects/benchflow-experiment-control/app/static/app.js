@@ -14,6 +14,7 @@ const fields = [
   "jobs_root",
   "remote_host",
   "remote_user",
+  "remote_run_user",
   "remote_port",
   "remote_ssh_key",
   "remote_benchflow_root",
@@ -23,6 +24,7 @@ const fields = [
   "model",
   "sandbox",
   "concurrency",
+  "skills_profile",
   "skills_mode",
   "skills_dir",
   "include_tasks",
@@ -216,7 +218,8 @@ function renderActiveRun() {
   const run = item.run;
   const summary = item.summary || {};
   $("#activeRunTitle").textContent = run.config.name || run.id;
-  $("#activeRunMeta").textContent = `${run.id} · ${run.config.run_target} · ${run.remote_jobs_dir || run.jobs_dir}`;
+  const syncText = run.synced_at ? ` · synced ${run.synced_at}` : run.sync_error ? " · sync error" : "";
+  $("#activeRunMeta").textContent = `${run.id} · ${run.config.run_target} · ${run.jobs_dir}${syncText}`;
   $("#stopRun").disabled = run.status !== "running";
   $("#summaryStrip").innerHTML = metricHtml(summary);
   $("#logOutput").textContent = item.log_tail || "暂无日志";

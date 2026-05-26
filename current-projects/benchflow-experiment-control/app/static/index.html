@@ -63,6 +63,10 @@
               Key / env 文件本地路径
               <input name="env_file" placeholder="/Users/.../.env" autocomplete="off" />
             </label>
+            <label class="wide">
+              本地结果 root
+              <input name="jobs_root" placeholder="/Users/.../workspace/experiment" autocomplete="off" />
+            </label>
 
             <div class="group wide remote-fields">
               <div class="group-title">GCP VM</div>
@@ -73,6 +77,10 @@
               <label>
                 User
                 <input name="remote_user" placeholder="留空使用 ssh 默认用户" autocomplete="off" />
+              </label>
+              <label>
+                Run user
+                <input name="remote_run_user" placeholder="benchflow" autocomplete="off" />
               </label>
               <label>
                 Port
@@ -106,12 +114,16 @@
                 本地 tasks dir
                 <input name="tasks_dir" autocomplete="off" />
               </label>
-              <label class="wide">
-                本地 jobs root
-                <input name="jobs_root" autocomplete="off" />
-              </label>
             </div>
 
+            <label>
+              Skills label
+              <input name="skills_profile" list="skillsProfileOptions" autocomplete="off" />
+              <datalist id="skillsProfileOptions">
+                <option value="with-skills"></option>
+                <option value="without-skills"></option>
+              </datalist>
+            </label>
             <label>
               Skills mode
               <select name="skills_mode">

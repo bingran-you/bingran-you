@@ -110,7 +110,7 @@ async function loadState({ silent = false } = {}) {
       state.selectedRunId = state.runs[0]?.run.id || null;
     }
     render();
-    $("#lastUpdated").textContent = `同步于 ${new Date().toLocaleTimeString()}`;
+    $("#lastUpdated").textContent = `Synced at ${new Date().toLocaleTimeString()}`;
     if (!silent) setMessage("");
   } catch (error) {
     if (!silent) setMessage(error.message, "error");
@@ -121,14 +121,14 @@ async function loadState({ silent = false } = {}) {
 
 async function startRun(event) {
   event.preventDefault();
-  setMessage("正在启动...");
+  setMessage("Starting...");
   try {
     const payload = await api("/api/runs", {
       method: "POST",
       body: JSON.stringify(formPayload()),
     });
     state.selectedRunId = payload.run.run.id;
-    setMessage(`已启动 ${payload.run.run.id}`, "ok");
+    setMessage(`Started ${payload.run.run.id}`, "ok");
     await loadState({ silent: true });
   } catch (error) {
     setMessage(error.message, "error");
@@ -138,10 +138,10 @@ async function startRun(event) {
 async function stopActiveRun() {
   const run = activeRun();
   if (!run) return;
-  setMessage(`正在停止 ${run.run.id}...`);
+  setMessage(`Stopping ${run.run.id}...`);
   try {
     await api(`/api/runs/${encodeURIComponent(run.run.id)}/stop`, { method: "POST" });
-    setMessage(`已停止 ${run.run.id}`, "ok");
+    setMessage(`Stopped ${run.run.id}`, "ok");
     await loadState({ silent: true });
   } catch (error) {
     setMessage(error.message, "error");
@@ -173,7 +173,7 @@ function renderRuns() {
   const list = $("#runsList");
   if (!state.runs.length) {
     list.className = "runs-list empty";
-    list.textContent = "暂无运行记录";
+    list.textContent = "No runs yet";
     return;
   }
   list.className = "runs-list";
@@ -204,13 +204,13 @@ function renderRuns() {
 function renderActiveRun() {
   const item = activeRun();
   if (!item) {
-    $("#activeRunTitle").textContent = "未选择 run";
-    $("#activeRunMeta").textContent = "启动一个实验后会自动显示最新 run";
+    $("#activeRunTitle").textContent = "No run selected";
+    $("#activeRunMeta").textContent = "Start an experiment to show the latest run";
     $("#stopRun").disabled = true;
     $("#summaryStrip").innerHTML = "";
-    $("#tasksBody").innerHTML = '<tr><td colspan="7" class="empty-cell">暂无 task 结果</td></tr>';
-    $("#logOutput").textContent = "暂无日志";
-    $("#artifactOutput").textContent = "选择 result.json 或 config.json";
+    $("#tasksBody").innerHTML = '<tr><td colspan="7" class="empty-cell">No task results yet</td></tr>';
+    $("#logOutput").textContent = "No logs yet";
+    $("#artifactOutput").textContent = "Select result.json or config.json";
     $("#artifactPath").textContent = "";
     return;
   }
@@ -222,7 +222,7 @@ function renderActiveRun() {
   $("#activeRunMeta").textContent = `${run.id} · ${run.config.run_target} · ${run.jobs_dir}${syncText}`;
   $("#stopRun").disabled = run.status !== "running";
   $("#summaryStrip").innerHTML = metricHtml(summary);
-  $("#logOutput").textContent = item.log_tail || "暂无日志";
+  $("#logOutput").textContent = item.log_tail || "No logs yet";
   $("#logHint").textContent = run.remote_log_path || run.log_path || "";
   renderTasks(item.tasks || []);
 }
@@ -253,7 +253,7 @@ function renderTasks(tasks) {
   });
 
   if (!filtered.length) {
-    body.innerHTML = '<tr><td colspan="7" class="empty-cell">暂无匹配 task</td></tr>';
+    body.innerHTML = '<tr><td colspan="7" class="empty-cell">No matching tasks</td></tr>';
     return;
   }
 
@@ -291,7 +291,7 @@ async function viewArtifact(path) {
   const run = activeRun();
   if (!run || !path) return;
   $("#artifactPath").textContent = path;
-  $("#artifactOutput").textContent = "读取中...";
+  $("#artifactOutput").textContent = "Loading...";
   try {
     const payload = await api(
       `/api/runs/${encodeURIComponent(run.run.id)}/artifact?path=${encodeURIComponent(path)}`,
@@ -299,7 +299,7 @@ async function viewArtifact(path) {
     if (payload.error) {
       $("#artifactOutput").textContent = payload.error;
     } else if (payload.too_large) {
-      $("#artifactOutput").textContent = "文件超过 2 MB，未加载";
+      $("#artifactOutput").textContent = "File is larger than 2 MB and was not loaded";
     } else {
       $("#artifactOutput").textContent = payload.content || "";
     }
@@ -312,7 +312,7 @@ function renderTaskIndex(tasks) {
   const box = $("#taskIndex");
   if (!tasks.length) {
     box.className = "task-index-list empty";
-    box.textContent = "没有读取到 task.toml";
+    box.textContent = "No task.toml files found";
     return;
   }
   box.className = "task-index-list";

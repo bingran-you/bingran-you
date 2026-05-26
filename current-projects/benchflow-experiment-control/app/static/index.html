@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,8 +13,8 @@
         <p id="connectionLine">GCP SSH · Docker · BenchFlow tasks</p>
       </div>
       <div class="top-actions">
-        <span id="lastUpdated">未同步</span>
-        <button id="refreshState" type="button">刷新</button>
+        <span id="lastUpdated">Not synced</span>
+        <button id="refreshState" type="button">Refresh</button>
       </div>
     </header>
 
@@ -22,16 +22,16 @@
       <aside class="sidebar">
         <section class="panel launch-panel">
           <div class="panel-head">
-            <h2>启动实验</h2>
-            <button id="startRun" form="runForm" type="submit">启动</button>
+            <h2>Launch Experiment</h2>
+            <button id="startRun" form="runForm" type="submit">Start</button>
           </div>
           <form id="runForm" class="form-grid">
             <label>
-              名称
+              Name
               <input name="name" value="skillsbench-batch" autocomplete="off" />
             </label>
             <label>
-              运行位置
+              Run target
               <select name="run_target" id="runTarget">
                 <option value="gcp_ssh">GCP VM via SSH</option>
                 <option value="local">Local</option>
@@ -56,15 +56,15 @@
               </select>
             </label>
             <label>
-              并发
+              Concurrency
               <input name="concurrency" type="number" min="1" max="256" value="4" />
             </label>
             <label class="wide">
-              Key / env 文件本地路径
+              Key / env file path
               <input name="env_file" placeholder="/Users/.../.env" autocomplete="off" />
             </label>
             <label class="wide">
-              本地结果 root
+              Local results root
               <input name="jobs_root" placeholder="/Users/.../workspace/experiment" autocomplete="off" />
             </label>
 
@@ -72,11 +72,11 @@
               <div class="group-title">GCP VM</div>
               <label>
                 Host
-                <input name="remote_host" placeholder="34.x.x.x 或 vm alias" autocomplete="off" />
+                <input name="remote_host" placeholder="34.x.x.x or VM alias" autocomplete="off" />
               </label>
               <label>
                 User
-                <input name="remote_user" placeholder="留空使用 ssh 默认用户" autocomplete="off" />
+                <input name="remote_user" placeholder="Leave empty for the default SSH user" autocomplete="off" />
               </label>
               <label>
                 Run user
@@ -91,15 +91,15 @@
                 <input name="remote_ssh_key" placeholder="~/.ssh/google_compute_engine" autocomplete="off" />
               </label>
               <label class="wide">
-                远端 BenchFlow root
+                Remote BenchFlow root
                 <input name="remote_benchflow_root" autocomplete="off" />
               </label>
               <label class="wide">
-                远端 tasks dir
+                Remote tasks dir
                 <input name="remote_tasks_dir" autocomplete="off" />
               </label>
               <label class="wide">
-                远端 jobs root
+                Remote jobs root
                 <input name="remote_jobs_root" autocomplete="off" />
               </label>
             </div>
@@ -107,11 +107,11 @@
             <div class="group wide local-fields">
               <div class="group-title">Local</div>
               <label class="wide">
-                本地 BenchFlow root
+                Local BenchFlow root
                 <input name="benchflow_root" autocomplete="off" />
               </label>
               <label class="wide">
-                本地 tasks dir
+                Local tasks dir
                 <input name="tasks_dir" autocomplete="off" />
               </label>
             </div>
@@ -153,10 +153,10 @@
 
         <section class="panel task-index">
           <div class="panel-head">
-            <h2>任务索引</h2>
-            <button id="loadTasks" type="button">读取</button>
+            <h2>Task Index</h2>
+            <button id="loadTasks" type="button">Load</button>
           </div>
-          <div id="taskIndex" class="task-index-list empty">尚未读取本地 tasks dir</div>
+          <div id="taskIndex" class="task-index-list empty">No local tasks directory loaded</div>
         </section>
 
         <section class="panel runs-panel">
@@ -164,7 +164,7 @@
             <h2>Runs</h2>
             <span id="runCount">0</span>
           </div>
-          <div id="runsList" class="runs-list empty">暂无运行记录</div>
+          <div id="runsList" class="runs-list empty">No runs yet</div>
         </section>
       </aside>
 
@@ -172,10 +172,10 @@
         <section class="panel monitor-panel">
           <div class="panel-head">
             <div>
-              <h2 id="activeRunTitle">未选择 run</h2>
-              <p id="activeRunMeta">启动一个实验后会自动显示最新 run</p>
+              <h2 id="activeRunTitle">No run selected</h2>
+              <p id="activeRunMeta">Start an experiment to show the latest run</p>
             </div>
-            <button id="stopRun" type="button" disabled>停止</button>
+            <button id="stopRun" type="button" disabled>Stop</button>
           </div>
           <div id="summaryStrip" class="summary-strip"></div>
         </section>
@@ -185,14 +185,14 @@
             <h2>Tasks</h2>
             <div class="table-tools">
               <select id="statusFilter">
-                <option value="">全部状态</option>
+                <option value="">All statuses</option>
                 <option value="running">running</option>
                 <option value="error">error</option>
                 <option value="fail">fail</option>
                 <option value="pending">pending</option>
                 <option value="pass">pass</option>
               </select>
-              <input id="taskFilter" placeholder="过滤 task" autocomplete="off" />
+              <input id="taskFilter" placeholder="Filter task" autocomplete="off" />
             </div>
           </div>
           <div class="table-wrap">
@@ -209,7 +209,7 @@
                 </tr>
               </thead>
               <tbody id="tasksBody">
-                <tr><td colspan="7" class="empty-cell">暂无 task 结果</td></tr>
+                <tr><td colspan="7" class="empty-cell">No task results yet</td></tr>
               </tbody>
             </table>
           </div>
@@ -221,14 +221,14 @@
               <h2>Log</h2>
               <span id="logHint"></span>
             </div>
-            <pre id="logOutput">暂无日志</pre>
+            <pre id="logOutput">No logs yet</pre>
           </section>
           <section class="panel artifact-panel">
             <div class="panel-head">
               <h2>Artifact</h2>
               <span id="artifactPath"></span>
             </div>
-            <pre id="artifactOutput">选择 result.json 或 config.json</pre>
+            <pre id="artifactOutput">Select result.json or config.json</pre>
           </section>
         </section>
       </section>

@@ -147,6 +147,30 @@ print(json.dumps({
     )
 
 
+def list_remote_tasks(config: ExperimentConfig) -> list[str]:
+    payload = {"tasks_dir": config.remote_tasks_dir}
+    script = r'''
+import json
+import os
+from pathlib import Path
+
+payload = json.loads(os.environ["TASK_INDEX"])
+root = Path(payload["tasks_dir"]).expanduser()
+if not root.is_dir():
+    raise SystemExit(f"tasks dir does not exist: {root}")
+print(json.dumps(sorted(child.name for child in root.iterdir() if (child / "task.toml").is_file())))
+'''
+    shell = f"TASK_INDEX={shlex.quote(json.dumps(payload))} python3 -"
+    result = remote_shell(config, shell, input_text=script, timeout=30, as_run_user=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "failed to list remote tasks")
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"could not parse remote task list: {result.stdout!r}") from exc
+    return [str(item) for item in data]
+
+
 def start_remote_process(
     config: ExperimentConfig,
     command: list[str],
@@ -203,10 +227,26 @@ def read_remote_exit_code(run: RunRecord) -> int | None:
 
 
 def stop_remote_run(run: RunRecord) -> None:
-    process_script = ""
     if run.remote_pid:
-        pid = int(run.remote_pid)
-        process_script = f"""
+        remote_shell(
+            run.config,
+            process_group_stop_script(int(run.remote_pid)),
+            timeout=10,
+            as_run_user=True,
+        )
+
+    if not run.remote_jobs_dir:
+        return
+    remote_shell(
+        run.config,
+        container_cleanup_script(run.remote_jobs_dir),
+        timeout=180,
+        as_run_user=False,
+    )
+
+
+def process_group_stop_script(pid: int) -> str:
+    return f"""
 pid={pid}
 if kill -0 "$pid" 2>/dev/null; then
     pgid=$(ps -o pgid= -p "$pid" | tr -d ' ')
@@ -221,13 +261,12 @@ if kill -0 "$pid" 2>/dev/null; then
     fi
 fi
 """
-        remote_shell(run.config, process_script, timeout=10, as_run_user=True)
 
-    if not run.remote_jobs_dir:
-        return
-    cleanup_script = f"""
+
+def container_cleanup_script(remote_jobs_dir: str) -> str:
+    return f"""
 set +e
-run_dir={shlex.quote(run.remote_jobs_dir.rstrip('/'))}
+run_dir={shlex.quote(remote_jobs_dir.rstrip('/'))}
 containers=$(sudo -n docker ps -aq --filter label=benchflow.owned=true)
 if [ -n "$containers" ]; then
     matched=""
@@ -241,7 +280,6 @@ if [ -n "$containers" ]; then
     fi
 fi
 """
-    remote_shell(run.config, cleanup_script, timeout=60, as_run_user=False)
 
 
 def remote_log_tail(run: RunRecord, limit: int = 16_000) -> str:

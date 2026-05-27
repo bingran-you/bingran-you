@@ -181,7 +181,7 @@ def start_remote_process(
         f"{runner_script}\n"
         "BENCHFLOW_REMOTE_RUN\n"
         f"chmod 700 {shlex.quote(remote_runner_path)}; "
-        f"nohup bash {shlex.quote(remote_runner_path)} "
+        f"nohup setsid bash {shlex.quote(remote_runner_path)} "
         f"> {shlex.quote(remote_log_path)} 2>&1 < /dev/null & echo $!"
     )
     result = remote_shell(config, script, timeout=30, as_run_user=True)
@@ -203,10 +203,45 @@ def read_remote_exit_code(run: RunRecord) -> int | None:
 
 
 def stop_remote_run(run: RunRecord) -> None:
-    if not run.remote_pid:
+    process_script = ""
+    if run.remote_pid:
+        pid = int(run.remote_pid)
+        process_script = f"""
+pid={pid}
+if kill -0 "$pid" 2>/dev/null; then
+    pgid=$(ps -o pgid= -p "$pid" | tr -d ' ')
+    if [ -n "$pgid" ]; then
+        kill -TERM -- "-$pgid" 2>/dev/null || true
+        sleep 2
+        kill -KILL -- "-$pgid" 2>/dev/null || true
+    else
+        kill -TERM "$pid" 2>/dev/null || true
+        sleep 2
+        kill -KILL "$pid" 2>/dev/null || true
+    fi
+fi
+"""
+        remote_shell(run.config, process_script, timeout=10, as_run_user=True)
+
+    if not run.remote_jobs_dir:
         return
-    script = f"kill -TERM {int(run.remote_pid)} 2>/dev/null || true"
-    remote_shell(run.config, script, timeout=10, as_run_user=True)
+    cleanup_script = f"""
+set +e
+run_dir={shlex.quote(run.remote_jobs_dir.rstrip('/'))}
+containers=$(sudo -n docker ps -aq --filter label=benchflow.owned=true)
+if [ -n "$containers" ]; then
+    matched=""
+    for container in $containers; do
+        if sudo -n docker inspect "$container" --format '{{{{json .Mounts}}}}' | grep -Fq "$run_dir/"; then
+            matched="$matched $container"
+        fi
+    done
+    if [ -n "$matched" ]; then
+        sudo -n docker rm -f $matched >/dev/null
+    fi
+fi
+"""
+    remote_shell(run.config, cleanup_script, timeout=60, as_run_user=False)
 
 
 def remote_log_tail(run: RunRecord, limit: int = 16_000) -> str:

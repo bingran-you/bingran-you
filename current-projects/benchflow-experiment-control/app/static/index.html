@@ -150,6 +150,29 @@
               Extra args
               <input name="extra_args" placeholder="--agent-idle-timeout 600" autocomplete="off" />
             </label>
+            <div class="group wide">
+              <div class="group-title">Google Sheet Pool</div>
+              <label class="wide">
+                Spreadsheet ID
+                <input name="sheet_id" placeholder="Leave empty for task-only pool" autocomplete="off" />
+              </label>
+              <label>
+                Tab
+                <input name="sheet_tab" value="PR2_PR3_HF_VM_Clean5" autocomplete="off" />
+              </label>
+              <label>
+                Configuration
+                <input name="sheet_configuration" placeholder="agent__model__skills-label" autocomplete="off" />
+              </label>
+              <label>
+                Owner
+                <input name="sheet_owner" placeholder="me@bingranyou.com" autocomplete="off" />
+              </label>
+              <label>
+                Lease TTL min
+                <input name="sheet_lease_ttl_minutes" type="number" min="1" value="240" />
+              </label>
+            </div>
           </form>
           <div id="formMessage" class="message"></div>
         </section>

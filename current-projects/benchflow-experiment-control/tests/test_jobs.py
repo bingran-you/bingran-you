@@ -258,10 +258,47 @@ class JobsScanTest(unittest.TestCase):
         self.assertIn("kill -TERM -- \"-$pgid\"", process_script)
         self.assertIn("kill -KILL -- \"-$pgid\"", process_script)
         self.assertIn("docker ps -aq)", cleanup_script)
+        self.assertIn("set -e", cleanup_script)
         self.assertIn("run_dir=/mnt/jobs/run", cleanup_script)
         self.assertIn("grep -Fq \"$run_dir/\"", cleanup_script)
         self.assertIn("com.docker.compose.project", cleanup_script)
         self.assertIn("xargs -r sudo -n docker rm -f", cleanup_script)
+
+    def test_remote_cleanup_raises_on_docker_failure(self) -> None:
+        """Guards this PR against refilling a remote slot after Docker cleanup failed."""
+
+        def fake_remote_shell(
+            config: ExperimentConfig,
+            script: str,
+            *,
+            input_text: str | None = None,
+            timeout: int = 30,
+            as_run_user: bool = False,
+        ):
+            class Result:
+                returncode = 1
+                stdout = ""
+                stderr = "docker daemon unavailable"
+
+            return Result()
+
+        original = remote.remote_shell
+        try:
+            remote.remote_shell = fake_remote_shell
+            with self.assertRaisesRegex(RuntimeError, "docker daemon unavailable"):
+                remote.cleanup_remote_run_containers(
+                    RunRecord(
+                        id="test-run",
+                        status="completed",
+                        config=ExperimentConfig(name="test", run_target="gcp_ssh"),
+                        jobs_dir="/local/jobs",
+                        log_path="/local/run.log",
+                        command=[],
+                        remote_jobs_dir="/mnt/jobs/run",
+                    )
+                )
+        finally:
+            remote.remote_shell = original
 
 
 if __name__ == "__main__":

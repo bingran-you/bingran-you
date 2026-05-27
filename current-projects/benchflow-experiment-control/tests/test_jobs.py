@@ -202,8 +202,65 @@ class JobsScanTest(unittest.TestCase):
         self.assertEqual(pid, 12345)
         self.assertTrue(captured["as_run_user"])
         self.assertIn("run-remote.sh", script)
-        self.assertIn("nohup bash /jobs/run/run-remote.sh", script)
+        self.assertIn("nohup setsid bash /jobs/run/run-remote.sh", script)
         self.assertIn("printf '%s\\n' \"$status\" > /jobs/run/exit-code.txt", script)
+
+    def test_remote_stop_kills_process_group_and_run_containers(self) -> None:
+        """Guards the fix from PR #286 against leaving remote Docker tasks running after stop."""
+        calls: list[dict[str, object]] = []
+
+        def fake_remote_shell(
+            config: ExperimentConfig,
+            script: str,
+            *,
+            input_text: str | None = None,
+            timeout: int = 30,
+            as_run_user: bool = False,
+        ):
+            calls.append(
+                {
+                    "script": script,
+                    "timeout": timeout,
+                    "as_run_user": as_run_user,
+                }
+            )
+
+            class Result:
+                returncode = 0
+                stdout = ""
+                stderr = ""
+
+            return Result()
+
+        original = remote.remote_shell
+        try:
+            remote.remote_shell = fake_remote_shell
+            remote.stop_remote_run(
+                RunRecord(
+                    id="test-run",
+                    status="running",
+                    config=ExperimentConfig(name="test", run_target="gcp_ssh"),
+                    jobs_dir="/local/jobs",
+                    log_path="/local/run.log",
+                    command=[],
+                    remote_pid=12345,
+                    remote_jobs_dir="/mnt/jobs/run",
+                )
+            )
+        finally:
+            remote.remote_shell = original
+
+        self.assertEqual(len(calls), 2)
+        process_script = str(calls[0]["script"])
+        cleanup_script = str(calls[1]["script"])
+        self.assertTrue(calls[0]["as_run_user"])
+        self.assertFalse(calls[1]["as_run_user"])
+        self.assertIn("kill -TERM -- \"-$pgid\"", process_script)
+        self.assertIn("kill -KILL -- \"-$pgid\"", process_script)
+        self.assertIn("--filter label=benchflow.owned=true", cleanup_script)
+        self.assertIn("run_dir=/mnt/jobs/run", cleanup_script)
+        self.assertIn("grep -Fq \"$run_dir/\"", cleanup_script)
+        self.assertIn("docker rm -f $matched", cleanup_script)
 
 
 if __name__ == "__main__":

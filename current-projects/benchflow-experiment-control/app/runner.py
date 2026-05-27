@@ -5,6 +5,7 @@ import posixpath
 import shlex
 import signal
 import subprocess
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -23,6 +24,7 @@ from .task_selection import prepare_local_task_selection
 
 
 _PROCESSES: dict[str, subprocess.Popen] = {}
+REMOTE_REFRESH_WORKERS = 32
 
 
 def parse_env_file(path: str) -> dict[str, str]:
@@ -175,20 +177,50 @@ def start_remote_run(
 
 
 def refresh_processes(store: StateStore) -> None:
-    for run in store.list_runs():
-        if run.status == "running" and run.config.run_target == "gcp_ssh":
-            return_code = read_remote_exit_code(run)
-            if return_code is None:
-                continue
-            run = store.update_run(
-                run.id,
-                status="completed" if return_code == 0 else "failed",
-                return_code=return_code,
-                finished_at=now_iso(),
-            )
-            if run is not None:
-                sync_finished_remote_run(run, store)
-        elif (
+    runs = store.list_runs()
+    refresh_running_remote_runs(runs, store)
+    refresh_finished_remote_runs(store.list_runs(), store)
+    refresh_local_processes(store)
+
+
+def refresh_running_remote_runs(runs: list[RunRecord], store: StateStore) -> None:
+    running = [
+        run
+        for run in runs
+        if run.status == "running" and run.config.run_target == "gcp_ssh"
+    ]
+    for run_id, return_code in read_remote_exit_codes(running).items():
+        if return_code is None:
+            continue
+        run = store.update_run(
+            run_id,
+            status="completed" if return_code == 0 else "failed",
+            return_code=return_code,
+            finished_at=now_iso(),
+        )
+        if run is not None:
+            sync_finished_remote_run(run, store)
+
+
+def read_remote_exit_codes(runs: list[RunRecord]) -> dict[str, int | None]:
+    if not runs:
+        return {}
+    worker_count = min(REMOTE_REFRESH_WORKERS, len(runs))
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        futures = {executor.submit(read_remote_exit_code, run): run.id for run in runs}
+        exit_codes: dict[str, int | None] = {}
+        for future in as_completed(futures):
+            run_id = futures[future]
+            try:
+                exit_codes[run_id] = future.result()
+            except Exception:
+                exit_codes[run_id] = None
+    return exit_codes
+
+
+def refresh_finished_remote_runs(runs: list[RunRecord], store: StateStore) -> None:
+    for run in runs:
+        if (
             run.config.run_target == "gcp_ssh"
             and run.status in {"completed", "failed", "stopped"}
             and not run.synced_at
@@ -196,6 +228,8 @@ def refresh_processes(store: StateStore) -> None:
         ):
             sync_finished_remote_run(run, store)
 
+
+def refresh_local_processes(store: StateStore) -> None:
     for run_id, process in list(_PROCESSES.items()):
         return_code = process.poll()
         if return_code is None:

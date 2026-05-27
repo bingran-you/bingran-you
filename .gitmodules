@@ -8,7 +8,7 @@
 	branch = main
 [submodule "trusted-external-repos/gstack"]
 	path = trusted-external-repos/gstack
-	url = https://github.com/bingran-you/gstack.git
+	url = https://github.com/garrytan/gstack.git
 	branch = main
 [submodule "trusted-external-repos/gbrain"]
 	path = trusted-external-repos/gbrain
@@ -36,11 +36,11 @@
 	branch = main
 [submodule "trusted-external-repos/open-design"]
 	path = trusted-external-repos/open-design
-	url = https://github.com/bingran-you/open-design.git
+	url = https://github.com/nexu-io/open-design.git
 	branch = main
 [submodule "trusted-external-repos/marketingskills"]
 	path = trusted-external-repos/marketingskills
-	url = https://github.com/bingran-you/marketingskills.git
+	url = https://github.com/coreyhaines31/marketingskills.git
 	branch = main
 [submodule "papers/multiplexed-ion-photon"]
 	path = papers/multiplexed-ion-photon

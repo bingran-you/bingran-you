@@ -25,6 +25,8 @@ class HealthAuditTest(unittest.TestCase):
                         "partial_trajectory": False,
                         "agent_result": {
                             "usage_source": "provider_response",
+                            "n_input_tokens": 100,
+                            "n_output_tokens": 23,
                             "total_tokens": 123,
                         },
                     }
@@ -32,6 +34,9 @@ class HealthAuditTest(unittest.TestCase):
             )
             (trial / "trajectory" / "acp_trajectory.jsonl").write_text(
                 json.dumps({"type": "user_message"}) + "\n"
+            )
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text(
+                json.dumps({"type": "response"}) + "\n"
             )
 
             audit = audit_trial_dir(trial, tmp)
@@ -51,6 +56,8 @@ class HealthAuditTest(unittest.TestCase):
                         "partial_trajectory": False,
                         "agent_result": {
                             "usage_source": "provider_response",
+                            "n_input_tokens": 100,
+                            "n_output_tokens": 23,
                             "total_tokens": 123,
                         },
                     }
@@ -59,11 +66,100 @@ class HealthAuditTest(unittest.TestCase):
             (trial / "trajectory" / "acp_trajectory.jsonl").write_text(
                 json.dumps({"type": "user_message"}) + "\n"
             )
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text(
+                json.dumps({"type": "response"}) + "\n"
+            )
 
             audit = audit_trial_dir(trial, tmp)
 
             self.assertFalse(audit.usable)
             self.assertIn("missing numeric reward", audit.reason)
+
+    def test_missing_llm_trajectory_is_invalid(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            trial = Path(tmp) / "alpha__001"
+            (trial / "trajectory").mkdir(parents=True)
+            (trial / "result.json").write_text(
+                json.dumps(
+                    {
+                        "task_name": "alpha",
+                        "rewards": {"reward": 1.0},
+                        "trajectory_source": "acp",
+                        "partial_trajectory": False,
+                        "agent_result": {
+                            "usage_source": "provider_response",
+                            "n_input_tokens": 10,
+                            "n_output_tokens": 5,
+                            "total_tokens": 15,
+                        },
+                    }
+                )
+            )
+            (trial / "trajectory" / "acp_trajectory.jsonl").write_text(
+                json.dumps({"type": "agent_message"}) + "\n"
+            )
+
+            audit = audit_trial_dir(trial, tmp)
+
+            self.assertFalse(audit.usable)
+            self.assertIn("missing llm trajectory", audit.reason)
+
+    def test_zero_usage_tokens_are_invalid(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            trial = Path(tmp) / "alpha__001"
+            (trial / "trajectory").mkdir(parents=True)
+            (trial / "result.json").write_text(
+                json.dumps(
+                    {
+                        "task_name": "alpha",
+                        "rewards": {"reward": 1.0},
+                        "trajectory_source": "acp",
+                        "partial_trajectory": False,
+                        "agent_result": {
+                            "usage_source": "provider_response",
+                            "n_input_tokens": 0,
+                            "n_output_tokens": 0,
+                            "total_tokens": 0,
+                        },
+                    }
+                )
+            )
+            (trial / "trajectory" / "acp_trajectory.jsonl").write_text("{}\n")
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text("{}\n")
+
+            audit = audit_trial_dir(trial, tmp)
+
+            self.assertFalse(audit.usable)
+            self.assertIn("non-positive total_tokens", audit.reason)
+
+    def test_cleanup_error_is_invalid(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            trial = Path(tmp) / "alpha__001"
+            (trial / "trajectory").mkdir(parents=True)
+            (trial / "result.json").write_text(
+                json.dumps(
+                    {
+                        "task_name": "alpha",
+                        "rewards": {"reward": 1.0},
+                        "trajectory_source": "acp",
+                        "partial_trajectory": False,
+                        "cleanup_error": "sandbox delete failed",
+                        "agent_result": {
+                            "usage_source": "provider_response",
+                            "n_input_tokens": 10,
+                            "n_output_tokens": 5,
+                            "total_tokens": 15,
+                        },
+                    }
+                )
+            )
+            (trial / "trajectory" / "acp_trajectory.jsonl").write_text("{}\n")
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text("{}\n")
+
+            audit = audit_trial_dir(trial, tmp)
+
+            self.assertFalse(audit.usable)
+            self.assertIn("cleanup error", audit.reason)
 
 
 class PoolSchedulerTest(unittest.TestCase):
@@ -121,6 +217,8 @@ class PoolSchedulerTest(unittest.TestCase):
                         "partial_trajectory": False,
                         "agent_result": {
                             "usage_source": "provider_response",
+                            "n_input_tokens": 400,
+                            "n_output_tokens": 56,
                             "total_tokens": 456,
                         },
                     }
@@ -128,6 +226,9 @@ class PoolSchedulerTest(unittest.TestCase):
             )
             (trial / "trajectory" / "acp_trajectory.jsonl").write_text(
                 json.dumps({"type": "agent_message"}) + "\n"
+            )
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text(
+                json.dumps({"type": "response"}) + "\n"
             )
             store.upsert_run(
                 RunRecord(
@@ -229,6 +330,87 @@ class PoolSchedulerTest(unittest.TestCase):
             self.assertEqual(record.active_runs, {"beta": "run-beta"})
             self.assertFalse(record.attempts[0].usable)
             self.assertIn("sync failed", record.attempts[0].reason)
+
+    def test_step_pool_cleans_remote_containers_before_refilling_slot(self) -> None:
+        """Guards this PR against refilling a pool slot before remote Docker cleanup."""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            store = StateStore(root / "state")
+            finished_dir = root / "finished"
+            trial = finished_dir / "alpha__001"
+            (trial / "trajectory").mkdir(parents=True)
+            (trial / "result.json").write_text(
+                json.dumps(
+                    {
+                        "task_name": "alpha",
+                        "rewards": {"reward": 1.0},
+                        "trajectory_source": "acp",
+                        "partial_trajectory": False,
+                        "agent_result": {
+                            "usage_source": "provider_response",
+                            "n_input_tokens": 12,
+                            "n_output_tokens": 3,
+                            "total_tokens": 15,
+                        },
+                    }
+                )
+            )
+            (trial / "trajectory" / "acp_trajectory.jsonl").write_text("{}\n")
+            (trial / "trajectory" / "llm_trajectory.jsonl").write_text("{}\n")
+            store.upsert_run(
+                RunRecord(
+                    id="run-alpha",
+                    status="completed",
+                    config=ExperimentConfig(name="alpha", run_target="gcp_ssh"),
+                    jobs_dir=str(finished_dir),
+                    log_path=str(root / "alpha.log"),
+                    command=[],
+                    remote_jobs_dir="/remote/alpha",
+                    synced_at="synced",
+                )
+            )
+            store.upsert_pool(
+                PoolRecord(
+                    id="pool-1",
+                    status="running",
+                    config=ExperimentConfig(name="test", run_target="local", concurrency=1),
+                    capacity=1,
+                    queue=["beta"],
+                    active_runs={"alpha": "run-alpha"},
+                )
+            )
+            events: list[str] = []
+
+            def fake_cleanup(run: RunRecord) -> None:
+                events.append(f"cleanup:{run.id}")
+
+            def fake_start_run(config: ExperimentConfig, store: StateStore) -> RunRecord:
+                events.append(f"start:{config.include_tasks[0]}")
+                run = RunRecord(
+                    id="run-beta",
+                    status="running",
+                    config=config,
+                    jobs_dir=str(root / "beta"),
+                    log_path=str(root / "beta.log"),
+                    command=[],
+                    selected_tasks=["beta"],
+                )
+                store.upsert_run(run)
+                return run
+
+            original_cleanup = pool.cleanup_remote_run_containers
+            original_start_run = pool.start_run
+            try:
+                pool.cleanup_remote_run_containers = fake_cleanup
+                pool.start_run = fake_start_run
+                record = pool.step_pool("pool-1", store)
+            finally:
+                pool.cleanup_remote_run_containers = original_cleanup
+                pool.start_run = original_start_run
+
+            self.assertIsNotNone(record)
+            self.assertEqual(events, ["cleanup:run-alpha", "start:beta"])
+            self.assertEqual(record.active_runs, {"beta": "run-beta"})
 
 
 if __name__ == "__main__":

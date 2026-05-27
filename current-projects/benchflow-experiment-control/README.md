@@ -78,10 +78,13 @@ GCP VM:
 5. Optionally set include/exclude task lists. Commas and newlines are accepted.
 6. Click "Start". The right side shows run status, task status, remote logs,
    and artifacts.
-7. Click "Start Pool" when you want task-level continuous scheduling. The pool
-   keeps up to `Concurrency` single-task runs active, audits each completed
-   run after its artifacts sync, then starts the next queued task when a slot
-   opens.
+7. Click "Start Pool" when you want task-level continuous scheduling. Without
+   a spreadsheet ID, the pool keeps up to `Concurrency` single-task runs active
+   from the selected task list. With a spreadsheet ID, the pool treats the
+   existing sheet rows as the shared queue: it claims empty run slots, starts
+   one fresh sandbox run per claim, clears that run's remote Docker containers
+   after artifact sync, audits and archives the artifacts, updates that same
+   sheet slot, and only then claims the next slot.
 
 The generated remote command has this shape:
 
@@ -162,6 +165,17 @@ Remote paths may be absolute or relative to the SSH login home.
 - `Skills dir`: passed to `--skills-dir`.
 - `Skills mode`: passed to `--skill-mode` when not `default`.
 - `Extra args`: appended to the `bench eval create` command.
+- `Spreadsheet ID`: enables sheet-backed pool mode. The sheet's existing
+  columns and run slots are used as-is; no new sheet structure is created.
+- `Tab`: sheet tab to read and update.
+- The shared status spreadsheet's `PR2_PR3_HF_VM_Clean5` tab is an imported
+  view and is refused as a write target. Use the writable source spreadsheet
+  for sheet-backed pooling.
+- `Configuration`: optional explicit configuration key. When empty, the
+  manager uses `<agent>__<model>__<skills-label>`.
+- `Owner`: local operator label for pool state and claim ids.
+- `Lease TTL min`: stale `running` sheet slots older than this can be claimed
+  again.
 
 ## Result Archive Layout
 
@@ -211,8 +225,17 @@ python3 -m app.cli stop <run-id> --pretty
 BenchFlow run with one selected task and `concurrency=1`, so existing artifact
 sync, archive layout, run inspection, and stop semantics stay canonical. A
 pool attempt becomes usable only after the synced run has a numeric reward,
-complete ACP trajectory JSONL, `partial_trajectory=false`, and provider token
-usage with `total_tokens`.
+complete ACP trajectory JSONL, complete LLM trajectory JSONL,
+`partial_trajectory=false`, successful sandbox cleanup, and provider token
+usage with positive `total_tokens`.
+
+In sheet-backed mode, `pool-start` does not append rows or create new columns.
+It claims the first available existing `run_N_*` slot for each task, preferring
+empty slots before expired claims or invalid historical slots. It writes a
+temporary running marker, runs the task in a fresh sandbox, cleans up the
+sandbox, writes `benchflow-experiment-manifest.json` with artifact hashes beside
+the trial, and then updates that same slot with the final reward, status,
+trajectory, usage, cost, and artifact paths.
 
 `start` accepts a JSON config. Use `--set key=value` to override top-level
 fields:

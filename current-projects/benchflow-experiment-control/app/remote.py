@@ -237,12 +237,21 @@ def stop_remote_run(run: RunRecord) -> None:
 
     if not run.remote_jobs_dir:
         return
-    remote_shell(
+    cleanup_remote_run_containers(run)
+
+
+def cleanup_remote_run_containers(run: RunRecord) -> None:
+    if not run.remote_jobs_dir:
+        return
+    result = remote_shell(
         run.config,
         container_cleanup_script(run.remote_jobs_dir),
         timeout=180,
         as_run_user=False,
     )
+    if result.returncode != 0:
+        message = result.stderr.strip() or result.stdout.strip() or "failed to clean remote Docker containers"
+        raise RuntimeError(message)
 
 
 def process_group_stop_script(pid: int) -> str:
@@ -265,7 +274,7 @@ fi
 
 def container_cleanup_script(remote_jobs_dir: str) -> str:
     return f"""
-set +e
+set -e
 run_dir={shlex.quote(remote_jobs_dir.rstrip('/'))}
 containers=$(sudo -n docker ps -aq)
 if [ -n "$containers" ]; then

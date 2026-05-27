@@ -41,6 +41,11 @@ class ExperimentConfig:
     include_tasks: list[str] = field(default_factory=list)
     exclude_tasks: list[str] = field(default_factory=list)
     extra_args: str = ""
+    sheet_id: str = ""
+    sheet_tab: str = "PR2_PR3_HF_VM_Clean5"
+    sheet_configuration: str = ""
+    sheet_owner: str = ""
+    sheet_lease_ttl_minutes: int = 240
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> "ExperimentConfig":
@@ -84,6 +89,20 @@ class ExperimentConfig:
             include_tasks=list_field("include_tasks") or list_field("includeTasks"),
             exclude_tasks=list_field("exclude_tasks") or list_field("excludeTasks"),
             extra_args=str(raw.get("extra_args") or raw.get("extraArgs") or ""),
+            sheet_id=str(raw.get("sheet_id") or raw.get("sheetId") or ""),
+            sheet_tab=str(raw.get("sheet_tab") or raw.get("sheetTab") or cls.sheet_tab),
+            sheet_configuration=str(
+                raw.get("sheet_configuration") or raw.get("sheetConfiguration") or ""
+            ),
+            sheet_owner=str(raw.get("sheet_owner") or raw.get("sheetOwner") or ""),
+            sheet_lease_ttl_minutes=max(
+                1,
+                int(
+                    raw.get("sheet_lease_ttl_minutes")
+                    or raw.get("sheetLeaseTtlMinutes")
+                    or cls.sheet_lease_ttl_minutes
+                ),
+            ),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -170,6 +189,9 @@ class PoolAttempt:
     trajectory_events: int | None = None
     result_path: str = ""
     trial_path: str = ""
+    sheet_row: int | None = None
+    sheet_slot: int | None = None
+    manifest_path: str = ""
     started_at: str | None = None
     finished_at: str | None = None
     audited_at: str | None = None
@@ -187,6 +209,9 @@ class PoolAttempt:
             trajectory_events=raw.get("trajectory_events") or raw.get("trajectoryEvents"),
             result_path=str(raw.get("result_path") or raw.get("resultPath") or ""),
             trial_path=str(raw.get("trial_path") or raw.get("trialPath") or ""),
+            sheet_row=raw.get("sheet_row") or raw.get("sheetRow"),
+            sheet_slot=raw.get("sheet_slot") or raw.get("sheetSlot"),
+            manifest_path=str(raw.get("manifest_path") or raw.get("manifestPath") or ""),
             started_at=raw.get("started_at") or raw.get("startedAt"),
             finished_at=raw.get("finished_at") or raw.get("finishedAt"),
             audited_at=raw.get("audited_at") or raw.get("auditedAt"),
@@ -202,8 +227,10 @@ class PoolRecord:
     status: str
     config: ExperimentConfig
     capacity: int
+    source: str = "tasks"
     queue: list[str] = field(default_factory=list)
     active_runs: dict[str, str] = field(default_factory=dict)
+    active_claims: list[PoolClaim] = field(default_factory=list)
     attempts: list[PoolAttempt] = field(default_factory=list)
     created_at: str = field(default_factory=now_iso)
     started_at: str | None = None
@@ -217,12 +244,18 @@ class PoolRecord:
             status=str(raw.get("status") or "created"),
             config=ExperimentConfig.from_dict(raw.get("config") or {}),
             capacity=max(1, int(raw.get("capacity") or 1)),
+            source=str(raw.get("source") or "tasks"),
             queue=[str(item) for item in raw.get("queue") or [] if str(item)],
             active_runs={
                 str(task): str(run_id)
                 for task, run_id in (raw.get("active_runs") or raw.get("activeRuns") or {}).items()
                 if str(task) and str(run_id)
             },
+            active_claims=[
+                PoolClaim.from_dict(item)
+                for item in raw.get("active_claims") or raw.get("activeClaims") or []
+                if isinstance(item, dict)
+            ],
             attempts=[
                 PoolAttempt.from_dict(item)
                 for item in raw.get("attempts") or []
@@ -237,8 +270,37 @@ class PoolRecord:
     def to_dict(self) -> dict[str, Any]:
         data = asdict(self)
         data["config"] = self.config.to_dict()
+        data["active_claims"] = [claim.to_dict() for claim in self.active_claims]
         data["attempts"] = [attempt.to_dict() for attempt in self.attempts]
         return data
+
+
+@dataclass
+class PoolClaim:
+    id: str
+    task_name: str
+    sheet_row: int
+    sheet_slot: int
+    run_id: str = ""
+    status: str = "claimed"
+    claimed_at: str = field(default_factory=now_iso)
+    finalized_at: str | None = None
+
+    @classmethod
+    def from_dict(cls, raw: dict[str, Any]) -> "PoolClaim":
+        return cls(
+            id=str(raw.get("id") or ""),
+            task_name=str(raw.get("task_name") or raw.get("taskName") or ""),
+            sheet_row=int(raw.get("sheet_row") or raw.get("sheetRow") or 0),
+            sheet_slot=int(raw.get("sheet_slot") or raw.get("sheetSlot") or 0),
+            run_id=str(raw.get("run_id") or raw.get("runId") or ""),
+            status=str(raw.get("status") or "claimed"),
+            claimed_at=str(raw.get("claimed_at") or raw.get("claimedAt") or now_iso()),
+            finalized_at=raw.get("finalized_at") or raw.get("finalizedAt"),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
 
 def split_names(text: str) -> list[str]:

@@ -31,6 +31,11 @@ const fields = [
   "include_tasks",
   "exclude_tasks",
   "extra_args",
+  "sheet_id",
+  "sheet_tab",
+  "sheet_configuration",
+  "sheet_owner",
+  "sheet_lease_ttl_minutes",
 ];
 
 function $(selector) {
@@ -66,6 +71,7 @@ function formPayload() {
   }
   payload.concurrency = Number(payload.concurrency || 1);
   payload.remote_port = Number(payload.remote_port || 22);
+  payload.sheet_lease_ttl_minutes = Number(payload.sheet_lease_ttl_minutes || 240);
   return payload;
 }
 

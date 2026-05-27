@@ -23,7 +23,10 @@
         <section class="panel launch-panel">
           <div class="panel-head">
             <h2>Launch Experiment</h2>
-            <button id="startRun" form="runForm" type="submit">Start</button>
+            <div class="button-row">
+              <button id="startPool" type="button">Start Pool</button>
+              <button id="startRun" form="runForm" type="submit">Start</button>
+            </div>
           </div>
           <form id="runForm" class="form-grid">
             <label>
@@ -165,6 +168,14 @@
             <span id="runCount">0</span>
           </div>
           <div id="runsList" class="runs-list empty">No runs yet</div>
+        </section>
+
+        <section class="panel pools-panel">
+          <div class="panel-head">
+            <h2>Pools</h2>
+            <span id="poolCount">0</span>
+          </div>
+          <div id="poolsList" class="runs-list empty">No pools yet</div>
         </section>
       </aside>
 

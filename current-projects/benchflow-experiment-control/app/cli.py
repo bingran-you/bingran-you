@@ -69,6 +69,25 @@ def build_parser() -> argparse.ArgumentParser:
     artifact = sub.add_parser("artifact", help="Read one artifact from a run.")
     artifact.add_argument("run_id")
     artifact.add_argument("--path", required=True)
+
+    pool_start = sub.add_parser("pool-start", help="Start a continuous task pool.")
+    pool_start.add_argument("--config", required=True, help="JSON config path, or '-' for stdin.")
+    pool_start.add_argument(
+        "--set",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="Override a top-level config field.",
+    )
+
+    pool = sub.add_parser("pool", help="Refresh and print one pool snapshot by id.")
+    pool.add_argument("pool_id")
+
+    pool_step = sub.add_parser("pool-step", help="Advance one pool scheduler tick.")
+    pool_step.add_argument("pool_id")
+
+    pool_stop = sub.add_parser("pool-stop", help="Stop scheduling new tasks for a pool.")
+    pool_stop.add_argument("pool_id")
     return parser
 
 
@@ -97,6 +116,14 @@ def main(argv: list[str] | None = None) -> int:
             payload = manager.run(args.run_id) or {"error": "run not found"}
         elif args.command == "artifact":
             payload = manager.artifact(args.run_id, args.path) or {"error": "run not found"}
+        elif args.command == "pool-start":
+            payload = manager.start_pool(apply_overrides(load_config(args.config), args.set))
+        elif args.command == "pool":
+            payload = manager.pool(args.pool_id) or {"error": "pool not found"}
+        elif args.command == "pool-step":
+            payload = manager.step_pool(args.pool_id) or {"error": "pool not found"}
+        elif args.command == "pool-stop":
+            payload = manager.stop_pool(args.pool_id) or {"error": "pool not found"}
         else:
             parser.error("unknown command")
             return 2

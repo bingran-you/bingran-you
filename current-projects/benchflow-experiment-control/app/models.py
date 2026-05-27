@@ -158,6 +158,89 @@ class RunRecord:
         return data
 
 
+@dataclass
+class PoolAttempt:
+    task_name: str
+    run_id: str
+    status: str
+    usable: bool | None = None
+    reason: str = ""
+    reward: float | None = None
+    total_tokens: int | None = None
+    trajectory_events: int | None = None
+    result_path: str = ""
+    trial_path: str = ""
+    started_at: str | None = None
+    finished_at: str | None = None
+    audited_at: str | None = None
+
+    @classmethod
+    def from_dict(cls, raw: dict[str, Any]) -> "PoolAttempt":
+        return cls(
+            task_name=str(raw.get("task_name") or raw.get("taskName") or ""),
+            run_id=str(raw.get("run_id") or raw.get("runId") or ""),
+            status=str(raw.get("status") or "unknown"),
+            usable=raw.get("usable"),
+            reason=str(raw.get("reason") or ""),
+            reward=raw.get("reward"),
+            total_tokens=raw.get("total_tokens") or raw.get("totalTokens"),
+            trajectory_events=raw.get("trajectory_events") or raw.get("trajectoryEvents"),
+            result_path=str(raw.get("result_path") or raw.get("resultPath") or ""),
+            trial_path=str(raw.get("trial_path") or raw.get("trialPath") or ""),
+            started_at=raw.get("started_at") or raw.get("startedAt"),
+            finished_at=raw.get("finished_at") or raw.get("finishedAt"),
+            audited_at=raw.get("audited_at") or raw.get("auditedAt"),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class PoolRecord:
+    id: str
+    status: str
+    config: ExperimentConfig
+    capacity: int
+    queue: list[str] = field(default_factory=list)
+    active_runs: dict[str, str] = field(default_factory=dict)
+    attempts: list[PoolAttempt] = field(default_factory=list)
+    created_at: str = field(default_factory=now_iso)
+    started_at: str | None = None
+    updated_at: str | None = None
+    finished_at: str | None = None
+
+    @classmethod
+    def from_dict(cls, raw: dict[str, Any]) -> "PoolRecord":
+        return cls(
+            id=str(raw["id"]),
+            status=str(raw.get("status") or "created"),
+            config=ExperimentConfig.from_dict(raw.get("config") or {}),
+            capacity=max(1, int(raw.get("capacity") or 1)),
+            queue=[str(item) for item in raw.get("queue") or [] if str(item)],
+            active_runs={
+                str(task): str(run_id)
+                for task, run_id in (raw.get("active_runs") or raw.get("activeRuns") or {}).items()
+                if str(task) and str(run_id)
+            },
+            attempts=[
+                PoolAttempt.from_dict(item)
+                for item in raw.get("attempts") or []
+                if isinstance(item, dict)
+            ],
+            created_at=str(raw.get("created_at") or now_iso()),
+            started_at=raw.get("started_at") or raw.get("startedAt"),
+            updated_at=raw.get("updated_at") or raw.get("updatedAt"),
+            finished_at=raw.get("finished_at") or raw.get("finishedAt"),
+        )
+
+    def to_dict(self) -> dict[str, Any]:
+        data = asdict(self)
+        data["config"] = self.config.to_dict()
+        data["attempts"] = [attempt.to_dict() for attempt in self.attempts]
+        return data
+
+
 def split_names(text: str) -> list[str]:
     return [item.strip() for item in text.replace("\n", ",").split(",") if item.strip()]
 

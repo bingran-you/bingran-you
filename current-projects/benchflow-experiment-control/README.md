@@ -43,6 +43,7 @@ Use the CLI directly:
 ```bash
 python3 -m app.cli defaults --pretty
 python3 -m app.cli start --config configs/example.gcp.json --pretty
+python3 -m app.cli pool-start --config configs/example.gcp.json --pretty
 python3 -m app.cli state --pretty
 python3 -m app.cli stop <run-id> --pretty
 ```
@@ -77,6 +78,10 @@ GCP VM:
 5. Optionally set include/exclude task lists. Commas and newlines are accepted.
 6. Click "Start". The right side shows run status, task status, remote logs,
    and artifacts.
+7. Click "Start Pool" when you want task-level continuous scheduling. The pool
+   keeps up to `Concurrency` single-task runs active, audits each completed
+   run after its artifacts sync, then starts the next queued task when a slot
+   opens.
 
 The generated remote command has this shape:
 
@@ -192,11 +197,22 @@ to the local archive. `.env` is excluded from the synced artifact tree.
 python3 -m app.cli defaults --pretty
 python3 -m app.cli tasks --tasks-dir /path/to/tasks --pretty
 python3 -m app.cli start --config configs/example.gcp.json --pretty
+python3 -m app.cli pool-start --config configs/example.gcp.json --pretty
+python3 -m app.cli pool <pool-id> --pretty
+python3 -m app.cli pool-step <pool-id> --pretty
+python3 -m app.cli pool-stop <pool-id> --pretty
 python3 -m app.cli state --pretty
 python3 -m app.cli run <run-id> --pretty
 python3 -m app.cli artifact <run-id> --path '2026-.../task__id/result.json' --pretty
 python3 -m app.cli stop <run-id> --pretty
 ```
+
+`pool-start` treats `concurrency` as pool capacity. Each slot is a normal
+BenchFlow run with one selected task and `concurrency=1`, so existing artifact
+sync, archive layout, run inspection, and stop semantics stay canonical. A
+pool attempt becomes usable only after the synced run has a numeric reward,
+complete ACP trajectory JSONL, `partial_trajectory=false`, and provider token
+usage with `total_tokens`.
 
 `start` accepts a JSON config. Use `--set key=value` to override top-level
 fields:

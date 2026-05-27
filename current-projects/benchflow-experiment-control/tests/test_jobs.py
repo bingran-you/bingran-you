@@ -257,10 +257,11 @@ class JobsScanTest(unittest.TestCase):
         self.assertFalse(calls[1]["as_run_user"])
         self.assertIn("kill -TERM -- \"-$pgid\"", process_script)
         self.assertIn("kill -KILL -- \"-$pgid\"", process_script)
-        self.assertIn("--filter label=benchflow.owned=true", cleanup_script)
+        self.assertIn("docker ps -aq)", cleanup_script)
         self.assertIn("run_dir=/mnt/jobs/run", cleanup_script)
         self.assertIn("grep -Fq \"$run_dir/\"", cleanup_script)
-        self.assertIn("docker rm -f $matched", cleanup_script)
+        self.assertIn("com.docker.compose.project", cleanup_script)
+        self.assertIn("xargs -r sudo -n docker rm -f", cleanup_script)
 
 
 if __name__ == "__main__":

@@ -267,16 +267,24 @@ def container_cleanup_script(remote_jobs_dir: str) -> str:
     return f"""
 set +e
 run_dir={shlex.quote(remote_jobs_dir.rstrip('/'))}
-containers=$(sudo -n docker ps -aq --filter label=benchflow.owned=true)
+containers=$(sudo -n docker ps -aq)
 if [ -n "$containers" ]; then
     matched=""
+    projects=""
     for container in $containers; do
         if sudo -n docker inspect "$container" --format '{{{{json .Mounts}}}}' | grep -Fq "$run_dir/"; then
             matched="$matched $container"
+            project=$(sudo -n docker inspect "$container" --format '{{{{index .Config.Labels "com.docker.compose.project"}}}}')
+            if [ -n "$project" ] && [ "$project" != "<no value>" ]; then
+                projects="$projects $project"
+            fi
         fi
     done
+    for project in $projects; do
+        matched="$matched $(sudo -n docker ps -aq --filter label=com.docker.compose.project="$project")"
+    done
     if [ -n "$matched" ]; then
-        sudo -n docker rm -f $matched >/dev/null
+        printf '%s\n' $matched | sort -u | xargs -r sudo -n docker rm -f >/dev/null
     fi
 fi
 """

@@ -289,4 +289,9 @@ def default_paths() -> dict[str, str]:
         "concurrency": "4",
         "sandbox": "docker",
         "skills_profile": "with-skills",
+        "sheet_id": "",
+        "sheet_tab": "PR2_PR3_HF_VM_Clean5",
+        "sheet_configuration": "",
+        "sheet_owner": "",
+        "sheet_lease_ttl_minutes": "240",
     }

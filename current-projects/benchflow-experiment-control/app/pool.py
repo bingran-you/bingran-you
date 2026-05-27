@@ -6,13 +6,17 @@ from typing import Any
 
 from .health import audit_run_dir
 from .models import ExperimentConfig, PoolAttempt, PoolRecord, now_iso
-from .remote import list_remote_tasks
+from .remote import cleanup_remote_run_containers, list_remote_tasks
 from .runner import refresh_processes, slug, start_run, stop_run, sync_finished_remote_run, validate_config
 from .store import StateStore
 from .task_selection import available_task_names, select_task_names
 
 
 def start_pool(config: ExperimentConfig, store: StateStore) -> PoolRecord:
+    if config.sheet_id:
+        from .sheet_pool import start_sheet_pool
+
+        return start_sheet_pool(config, store)
     validate_config(config)
     capacity = config.concurrency
     selected_tasks = select_pool_tasks(config)
@@ -35,6 +39,10 @@ def step_pool(pool_id: str, store: StateStore) -> PoolRecord | None:
     pool = store.get_pool(pool_id)
     if pool is None:
         return None
+    if pool.source == "sheet":
+        from .sheet_pool import step_sheet_pool
+
+        return step_sheet_pool(pool.id, store)
     pool = collect_finished_runs(pool, store)
     pool = fill_open_slots(pool, store)
     pool.status = pool_status(pool)
@@ -49,8 +57,14 @@ def stop_pool(pool_id: str, store: StateStore) -> PoolRecord | None:
     pool = store.get_pool(pool_id)
     if pool is None:
         return None
-    for run_id in pool.active_runs.values():
+    for run_id in set(pool.active_runs.values()):
         stop_run(run_id, store)
+    if pool.source == "sheet" and pool.active_claims:
+        from .sheet_queue import SheetQueue
+
+        SheetQueue(pool.config).release_claims(pool.active_claims)
+        pool.active_claims = []
+        pool.active_runs = {}
     pool.status = "stopped"
     pool.updated_at = now_iso()
     pool.finished_at = now_iso()
@@ -59,6 +73,10 @@ def stop_pool(pool_id: str, store: StateStore) -> PoolRecord | None:
 
 
 def pool_snapshot(pool: PoolRecord, store: StateStore) -> dict[str, Any]:
+    if pool.source == "sheet":
+        from .sheet_pool import sheet_pool_snapshot
+
+        return sheet_pool_snapshot(pool, store)
     active = []
     for task, run_id in sorted(pool.active_runs.items()):
         run = store.get_run(run_id)
@@ -102,11 +120,14 @@ def collect_finished_runs(pool: PoolRecord, store: StateStore) -> PoolRecord:
         if run is None:
             continue
         if run.config.run_target == "gcp_ssh" and run.sync_error:
+            cleanup_remote_run_containers(run)
             pool.attempts.append(invalid_attempt(task_name, run, f"sync failed: {run.sync_error}"))
             active.pop(task_name)
             continue
         if run.config.run_target == "gcp_ssh" and not run.synced_at:
             continue
+        if run.config.run_target == "gcp_ssh":
+            cleanup_remote_run_containers(run)
         pool.attempts.append(attempt_from_run(task_name, run))
         active.pop(task_name)
     pool.active_runs = active
@@ -149,7 +170,7 @@ def attempt_from_run(task_name: str, run) -> PoolAttempt:
         reason=audit.reason,
         reward=audit.reward,
         total_tokens=audit.total_tokens,
-        trajectory_events=audit.trajectory_events,
+        trajectory_events=audit.acp_trajectory_events,
         result_path=audit.result_path,
         trial_path=audit.trial_path,
         started_at=run.started_at,

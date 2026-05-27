@@ -46,6 +46,8 @@ class Handler(BaseHTTPRequestHandler):
             self.json_response(self.context.manager.tasks(query.get("tasks_dir", [""])[0]))
         elif parsed.path.startswith("/api/runs/"):
             self.handle_run_get(parsed.path, parsed.query)
+        elif parsed.path.startswith("/api/pools/"):
+            self.handle_pool_get(parsed.path)
         else:
             self.static_response(parsed.path)
 
@@ -54,10 +56,21 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path == "/api/runs":
             payload = self.read_json_body()
             self.json_response(self.context.manager.start(payload), status=201)
+        elif parsed.path == "/api/pools":
+            payload = self.read_json_body()
+            self.json_response(self.context.manager.start_pool(payload), status=201)
         elif parsed.path.startswith("/api/runs/") and parsed.path.endswith("/stop"):
             run_id = parsed.path.split("/")[3]
             payload = self.context.manager.stop(run_id)
             self.json_response(payload if payload else {"error": "run not found"}, status=200 if payload else 404)
+        elif parsed.path.startswith("/api/pools/") and parsed.path.endswith("/step"):
+            pool_id = parsed.path.split("/")[3]
+            payload = self.context.manager.step_pool(pool_id)
+            self.json_response(payload if payload else {"error": "pool not found"}, status=200 if payload else 404)
+        elif parsed.path.startswith("/api/pools/") and parsed.path.endswith("/stop"):
+            pool_id = parsed.path.split("/")[3]
+            payload = self.context.manager.stop_pool(pool_id)
+            self.json_response(payload if payload else {"error": "pool not found"}, status=200 if payload else 404)
         else:
             self.json_response({"error": "not found"}, status=404)
 
@@ -80,6 +93,14 @@ class Handler(BaseHTTPRequestHandler):
             self.json_response(payload if payload else {"error": "run not found"}, status=200 if payload else 404)
         else:
             self.json_response({"error": "not found"}, status=404)
+
+    def handle_pool_get(self, path: str) -> None:
+        parts = path.strip("/").split("/")
+        if len(parts) != 3:
+            self.json_response({"error": "not found"}, status=404)
+            return
+        payload = self.context.manager.pool(parts[2])
+        self.json_response(payload if payload else {"error": "pool not found"}, status=200 if payload else 404)
 
     def static_response(self, request_path: str) -> None:
         rel = "index.html" if request_path in {"", "/"} else request_path.lstrip("/")

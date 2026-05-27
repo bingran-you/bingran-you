@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .models import DEFAULT_DATA_DIR, RunRecord
+from .models import DEFAULT_DATA_DIR, PoolRecord, RunRecord
 
 
 class StateStore:
@@ -15,13 +15,17 @@ class StateStore:
 
     def load(self) -> dict[str, Any]:
         if not self.path.exists():
-            return {"runs": []}
+            return {"runs": [], "pools": []}
         try:
             data = json.loads(self.path.read_text())
         except json.JSONDecodeError:
-            return {"runs": []}
+            return {"runs": [], "pools": []}
         runs = data.get("runs")
-        return {"runs": runs if isinstance(runs, list) else []}
+        pools = data.get("pools")
+        return {
+            "runs": runs if isinstance(runs, list) else [],
+            "pools": pools if isinstance(pools, list) else [],
+        }
 
     def save(self, state: dict[str, Any]) -> None:
         tmp = self.path.with_suffix(".tmp")
@@ -59,3 +63,23 @@ class StateStore:
         self.upsert_run(run)
         return run
 
+    def list_pools(self) -> list[PoolRecord]:
+        return [PoolRecord.from_dict(item) for item in self.load()["pools"]]
+
+    def get_pool(self, pool_id: str) -> PoolRecord | None:
+        for pool in self.list_pools():
+            if pool.id == pool_id:
+                return pool
+        return None
+
+    def upsert_pool(self, pool: PoolRecord) -> None:
+        state = self.load()
+        pools = state["pools"]
+        payload = pool.to_dict()
+        for index, item in enumerate(pools):
+            if item.get("id") == pool.id:
+                pools[index] = payload
+                self.save(state)
+                return
+        pools.append(payload)
+        self.save(state)

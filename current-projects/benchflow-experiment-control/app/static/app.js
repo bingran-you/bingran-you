@@ -1,6 +1,7 @@
 const form = document.querySelector("#runForm");
 const state = {
   runs: [],
+  pools: [],
   selectedRunId: null,
   busy: false,
 };
@@ -103,6 +104,7 @@ async function loadState({ silent = false } = {}) {
     state.busy = true;
     const payload = await api("/api/state");
     state.runs = payload.runs || [];
+    state.pools = payload.pools || [];
     if (!state.selectedRunId && state.runs.length) {
       state.selectedRunId = state.runs[0].run.id;
     }
@@ -129,6 +131,22 @@ async function startRun(event) {
     });
     state.selectedRunId = payload.run.run.id;
     setMessage(`Started ${payload.run.run.id}`, "ok");
+    await loadState({ silent: true });
+  } catch (error) {
+    setMessage(error.message, "error");
+  }
+}
+
+async function startPool() {
+  setMessage("Starting pool...");
+  try {
+    const payload = await api("/api/pools", {
+      method: "POST",
+      body: JSON.stringify(formPayload()),
+    });
+    const activeRun = payload.pool?.active?.[0]?.run_id;
+    if (activeRun) state.selectedRunId = activeRun;
+    setMessage(`Started pool ${payload.pool.pool.id}`, "ok");
     await loadState({ silent: true });
   } catch (error) {
     setMessage(error.message, "error");
@@ -164,8 +182,34 @@ function activeRun() {
 }
 
 function render() {
+  renderPools();
   renderRuns();
   renderActiveRun();
+}
+
+function renderPools() {
+  $("#poolCount").textContent = String(state.pools.length);
+  const list = $("#poolsList");
+  if (!state.pools.length) {
+    list.className = "runs-list empty";
+    list.textContent = "No pools yet";
+    return;
+  }
+  list.className = "runs-list";
+  list.innerHTML = state.pools
+    .map((item) => {
+      const pool = item.pool;
+      const summary = item.summary || {};
+      return `
+        <div class="run-item">
+          <span class="run-title">${escapeHtml(pool.config.name || pool.id)}</span>
+          <span class="status-pill status-${escapeHtml(pool.status)}">${escapeHtml(pool.status)}</span>
+          <span class="run-meta">cap ${summary.capacity || 0} · active ${summary.active || 0} · queued ${summary.queued || 0} · usable ${summary.usable || 0} · invalid ${summary.invalid || 0}</span>
+          <span class="run-command">${escapeHtml(pool.id)}</span>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 function renderRuns() {
@@ -334,6 +378,7 @@ function formatSeconds(value) {
 }
 
 form.addEventListener("submit", startRun);
+$("#startPool").addEventListener("click", startPool);
 $("#stopRun").addEventListener("click", stopActiveRun);
 $("#refreshState").addEventListener("click", () => loadState());
 $("#loadTasks").addEventListener("click", loadTaskIndex);

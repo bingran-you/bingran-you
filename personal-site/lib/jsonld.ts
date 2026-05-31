@@ -100,7 +100,7 @@ function personEntity() {
       "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en",
       "https://orcid.org/0000-0002-0316-2115",
       "https://huggingface.co/bingran-you",
-      "https://www.linkedin.com/in/bingran-you-775b4017b/",
+      "https://www.linkedin.com/in/bingran-you/",
       "https://www.youtube.com/@BingranBRY",
       "https://discord.gg/jsAnjCep",
     ],

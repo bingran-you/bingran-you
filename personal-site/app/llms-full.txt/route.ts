@@ -39,7 +39,7 @@ export async function GET() {
 - Google Scholar: https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en
 - GitHub: https://github.com/bingran-you
 - X / Twitter: https://x.com/bingran_bry
-- LinkedIn: https://www.linkedin.com/in/bingran-you-775b4017b/
+- LinkedIn: https://www.linkedin.com/in/bingran-you/
 - Hugging Face: https://huggingface.co/bingran-you
 - YouTube: https://www.youtube.com/@BingranBRY
 - Discord: https://discord.gg/jsAnjCep

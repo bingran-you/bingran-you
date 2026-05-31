@@ -20,7 +20,7 @@ const CHANNELS: ChannelEntry[] = [
     {
         label: 'LinkedIn',
         handle: 'bingran-you',
-        href: 'https://www.linkedin.com/in/bingran-you-775b4017b/',
+        href: 'https://www.linkedin.com/in/bingran-you/',
     },
     {
         label: 'Google Scholar',

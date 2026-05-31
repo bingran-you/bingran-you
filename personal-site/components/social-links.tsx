@@ -128,7 +128,7 @@ const links = [
     icon: HuggingFaceIcon,
   },
   {
-    href: "https://www.linkedin.com/in/bingran-you-775b4017b/",
+    href: "https://www.linkedin.com/in/bingran-you/",
     label: "LinkedIn",
     icon: LinkedInIcon,
   },

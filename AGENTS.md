@@ -55,7 +55,7 @@ Before making any code modification, read and follow both `.agents/skills/karpat
 └── memory/                       # Daily logs + heartbeat state
 ```
 
-Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Three layers must stay aligned: **sources** → mirrored entrypoints in `.agents/skills` and `.claude/skills` → personal-site generator output (`personal-site/lib/skills.generated.json` and `personal-site/public/skill-files/`).
+Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, `trusted-external-repos/mattpocock-skills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Three layers must stay aligned: **sources** → mirrored entrypoints in `.agents/skills` and `.claude/skills` → personal-site generator output (`personal-site/lib/skills.generated.json` and `personal-site/public/skill-files/`).
 
 **After bumping any `trusted-external-repos/*` submodule pointer, or adding / renaming / editing any skill, run `make sync` from the repo root and commit the resulting diff in the same PR.** `make sync` runs `scripts/sync_skills.sh refresh` followed by `npm run skills:generate` in `personal-site/`. The `skills-sync-check` GitHub Action enforces this on every PR — any drift between sources and committed artifacts fails CI.
 
@@ -69,6 +69,7 @@ Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-
 - `trusted-external-repos/skills` — shared skills library.
 - `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
 - `trusted-external-repos/marketingskills` — trusted external marketing skills library; mirrored into workspace skill entrypoints via `scripts/sync_skills.sh`.
+- `trusted-external-repos/mattpocock-skills` — Matt Pocock's engineering/productivity skills library; mirrored into workspace skill entrypoints via `scripts/sync_skills.sh`.
 - `trusted-external-repos/gstack` — gstack tooling.
 - `trusted-external-repos/gbrain` — gbrain tooling.
 - `trusted-external-repos/open-design` — local-first open-source design workflow / design systems repo.

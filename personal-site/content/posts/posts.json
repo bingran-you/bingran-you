@@ -1,5 +1,21 @@
 [
   {
+    "id": "x-2061530851104674223",
+    "platform": "x",
+    "url": "https://x.com/bingran_bry/status/2061530851104674223",
+    "title": "(untitled)",
+    "date": "2026-06-01",
+    "addedVia": "manual"
+  },
+  {
+    "id": "x-2061220426932789727",
+    "platform": "x",
+    "url": "https://x.com/bingran_bry/status/2061220426932789727",
+    "title": "(untitled)",
+    "date": "2026-05-31",
+    "addedVia": "manual"
+  },
+  {
     "id": "x-2060852739459223967",
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2060852739459223967",
@@ -10,6 +26,16 @@
     "id": "x-2060853139126014014",
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2060853139126014014",
+    "date": "2026-05-31",
+    "addedVia": "manual"
+  },
+  {
+    "id": "xhs-6a1cbc74000000003700f844",
+    "platform": "xiaohongshu",
+    "url": "https://www.xiaohongshu.com/explore/6a1cbc74000000003700f844?xsec_token=ABOxJxwYD6D00IMhsykNnYv4SzXOxFfN9nIPLZzbN-Edg=&xsec_source=pc_user",
+    "title": "再过一年之后会变成什么样子？",
+    "description": "#ai #ag#agents",
+    "thumbnail": "/posts-thumbs/xiaohongshu/6a1cbc74000000003700f844.jpg",
     "date": "2026-05-31",
     "addedVia": "manual"
   },
@@ -66,6 +92,16 @@
     "id": "x-2060454440507986225",
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2060454440507986225",
+    "date": "2026-05-30",
+    "addedVia": "manual"
+  },
+  {
+    "id": "xhs-6a1bdb30000000003701e3b9",
+    "platform": "xiaohongshu",
+    "url": "https://www.xiaohongshu.com/explore/6a1bdb30000000003701e3b9?xsec_token=ABGyTqrbGqmz_lfbVFkgPTIAJDotKjlUrMpaaxoCXKafc=&xsec_source=pc_user",
+    "title": "震惊，Thariq 竟然用不完100刀/月的Claude",
+    "description": "想想也非常合理，\"将帅无能，累死三军\"。但是说实话我每个月两百刀的 plan 还是会烧到 rate limit，不够用还是不够用。 #Claude #vibecoding大赏 #agent #vibecoding",
+    "thumbnail": "/posts-thumbs/xiaohongshu/6a1bdb30000000003701e3b9.jpg",
     "date": "2026-05-30",
     "addedVia": "manual"
   },

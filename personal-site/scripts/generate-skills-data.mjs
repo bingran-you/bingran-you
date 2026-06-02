@@ -103,6 +103,15 @@ const SOURCE_RULES = [
     repoSubpath: (m) => `skills/${m[1]}`,
   },
   {
+    re: /^trusted-external-repos\/mattpocock-skills\/skills\/(.+)$/,
+    collection: "mattpocock-skills",
+    displayName: "Matt Pocock",
+    owner: "mattpocock",
+    repo: "skills",
+    branch: "main",
+    repoSubpath: (m) => `skills/${m[1]}`,
+  },
+  {
     re: /^trusted-external-repos\/open-design\/skills\/(.+)$/,
     collection: "open-design",
     displayName: "open-design",

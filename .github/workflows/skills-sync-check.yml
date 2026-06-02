@@ -14,6 +14,7 @@ on:
       - 'repo-skills/**'
       - 'trusted-external-repos/open-design'
       - 'trusted-external-repos/marketingskills'
+      - 'trusted-external-repos/mattpocock-skills'
       - 'trusted-external-repos/gstack'
       - '.gitmodules'
       - 'scripts/sync_skills.sh'
@@ -44,6 +45,7 @@ jobs:
           git submodule update --init \
             trusted-external-repos/open-design \
             trusted-external-repos/marketingskills \
+            trusted-external-repos/mattpocock-skills \
             trusted-external-repos/gstack
 
       - name: Install zsh

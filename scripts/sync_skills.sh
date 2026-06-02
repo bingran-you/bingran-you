@@ -11,6 +11,12 @@ SOURCE_ROOTS=(
   "trusted-external-repos/gstack"
   "trusted-external-repos/gstack/browser-skills"
   "trusted-external-repos/gstack/openclaw/skills"
+  "trusted-external-repos/mattpocock-skills/skills/deprecated"
+  "trusted-external-repos/mattpocock-skills/skills/engineering"
+  "trusted-external-repos/mattpocock-skills/skills/in-progress"
+  "trusted-external-repos/mattpocock-skills/skills/misc"
+  "trusted-external-repos/mattpocock-skills/skills/personal"
+  "trusted-external-repos/mattpocock-skills/skills/productivity"
   "trusted-external-repos/open-design/skills"
 )
 
@@ -18,6 +24,7 @@ MANAGED_SUBMODULES=(
   "trusted-external-repos/open-design"
   "trusted-external-repos/marketingskills"
   "trusted-external-repos/gstack"
+  "trusted-external-repos/mattpocock-skills"
 )
 
 ENTRYPOINT_DIRS=(

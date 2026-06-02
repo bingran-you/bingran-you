@@ -8,7 +8,7 @@ Main-session only. Keep this file high-signal and durable.
 - `personal-site/` hosts `bingranyou.com` (Next.js 16 + MDX, deployed on Vercel from this repo with Root Directory `personal-site`). Pushes to `main` trigger production builds; the `personal-site/vercel.json` `ignoreCommand` skips builds when nothing inside `personal-site/` changes.
 - The personal site now includes `/about`, `/projects`, `/papers`, `/skills`, `/blog`, `/llms.txt`, and `/llms-full.txt`.
 - `personal-site/scripts/generate-skills-data.mjs` generates the `/skills` catalog payload (`lib/skills.generated.json`) and downloadable copies under `public/skill-files/` from mirrored `.agents/skills/`.
-- Repo-managed skills live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`).
+- Repo-managed skills live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, `trusted-external-repos/mattpocock-skills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`).
 - `scripts/sync_skills.sh` mirrors valid skill directories into `.agents/skills` and `.claude/skills`.
 - Session-start hooks in `.claude/settings.json` and `.codex/config.toml` attempt to run `scripts/sync_skills.sh init` automatically.
 

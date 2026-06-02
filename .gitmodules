@@ -45,3 +45,7 @@
 [submodule "papers/multiplexed-ion-photon"]
 	path = papers/multiplexed-ion-photon
 	url = https://github.com/bingran-you/multiplexed-ion-photon.git
+[submodule "trusted-external-repos/mattpocock-skills"]
+	path = trusted-external-repos/mattpocock-skills
+	url = https://github.com/mattpocock/skills.git
+	branch = main

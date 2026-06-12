@@ -58,7 +58,7 @@ const About: React.FC<AboutProps> = () => {
                 <br />
                 <p>
                     My day-to-day stack is heavy on AI: Codex (GPT-5.5) and
-                    Claude Code (Opus 4.7) running as dual primaries. Codex
+                    Claude Code (Fable 5) running as dual primaries. Codex
                     handles long-horizon autonomous runs; Claude Code is for
                     interactive pair work. A typical week I'm averaging ~96k
                     tokens per request with 96% prompt cache reuse — cache

@@ -10,7 +10,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 <p align="center">
   <img alt="Primary stack: Codex + GPT-5.5" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.5-111111?style=for-the-badge&logo=openai&logoColor=white" />
-  <img alt="Primary stack: Claude Code + Opus 4.7" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Opus%204.7-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img alt="Primary stack: Claude Code + Fable 5" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Fable%205-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
 </p>
 
 <p align="center">

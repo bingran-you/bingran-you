@@ -60,9 +60,11 @@ const About: React.FC<AboutProps> = () => {
                     My day-to-day stack is heavy on AI: Codex (GPT-5.5) and
                     Claude Code (Fable 5) running as dual primaries. Codex
                     handles long-horizon autonomous runs; Claude Code is for
-                    interactive pair work. A typical week I'm averaging ~96k
-                    tokens per request with 96% prompt cache reuse — cache
-                    hit rate and cost discipline matter to me.
+                    interactive pair work.
+                    {/* Token-usage stats temporarily hidden (2026-06-12):
+                    "A typical week I'm averaging ~96k tokens per request
+                    with 96% prompt cache reuse — cache hit rate and cost
+                    discipline matter to me." */}
                 </p>
                 <br />
                 <p>

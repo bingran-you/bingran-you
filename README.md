@@ -13,6 +13,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
   <img alt="Primary stack: Claude Code + Fable 5" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Fable%205-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
 </p>
 
+<!-- Token-usage stats temporarily hidden (2026-06-12) pending fresh numbers on the new stack.
 <p align="center">
   <img alt="Requests 26.98K" src="https://img.shields.io/badge/Requests-26.98K-2F81F7?style=flat-square" />
   <img alt="Total tokens 2.61B" src="https://img.shields.io/badge/Total%20tokens-2.61B-1F883D?style=flat-square" />
@@ -23,6 +24,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 <p align="center">
   <sub>Last 7 days · avg/request: 96,575 total · 95,980 prompt · 595 completion</sub>
 </p>
+-->
 
 ### Current Focus
 

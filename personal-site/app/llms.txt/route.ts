@@ -70,7 +70,12 @@ ${papers.map((p) => `- [${p.title}](${p.href}) — ${p.venue}${p.blurb ? `. ${p.
 
 ## Projects
 
-${projects.map((p) => `- [${p.name}](${p.href}) — ${p.description}`).join("\n")}
+${projects
+  .map(
+    (p) =>
+      `- [${p.name}](${p.href})${p.repoHref ? ` ([repo](${p.repoHref}))` : ""} — ${p.description}`,
+  )
+  .join("\n")}
 
 ## Blog posts
 

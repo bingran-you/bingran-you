@@ -25,7 +25,7 @@ const PROJECTS: ProjectEntry[] = [
         title: 'first-tree',
         blurb:
             'Git-native context layer for decisions, ownership, and shared team knowledge.',
-        href: 'https://github.com/agent-team-foundation/first-tree',
+        href: 'https://first-tree.ai/',
         tag: 'Agent',
     },
     {
@@ -112,7 +112,7 @@ const Projects = () => {
                 Selected open-source work. The <b>Agent</b> row is software I
                 build to make AI agents more useful and more honest. The{' '}
                 <b>Physics</b> row is code we use inside HaeffnerLab for
-                trapped-ion experiments. Click any title to open the repo.
+                trapped-ion experiments. Click any title to open the project.
             </p>
             <br />
             <div style={styles.list}>

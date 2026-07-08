@@ -65,7 +65,10 @@ ${papers
 ## Projects
 
 ${projects
-  .map((p) => `- ${p.name} (${p.href})\n  ${p.description}`)
+  .map(
+    (p) =>
+      `- ${p.name} (${p.href})${p.repoHref ? `\n  Repo: ${p.repoHref}` : ""}\n  ${p.description}`,
+  )
   .join("\n\n")}
 
 ## Defined terms

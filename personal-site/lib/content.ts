@@ -1,6 +1,7 @@
 export type Project = {
   name: string;
   href: string;
+  repoHref?: string;
   description: string;
   emoji: string;
   track: "ai" | "ion";
@@ -42,7 +43,8 @@ export const projects: Project[] = [
   },
   {
     name: "first-tree",
-    href: "https://github.com/agent-team-foundation/first-tree",
+    href: "https://first-tree.ai/",
+    repoHref: "https://github.com/agent-team-foundation/first-tree",
     description:
       "A Git-native context layer for decisions, ownership, and shared team knowledge.",
     emoji: "🌲",

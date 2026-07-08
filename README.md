@@ -36,7 +36,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 - 🌊 [BenchFlow](https://www.benchflow.ai/) - A frontier environment lab building the runtime and benchmarks AI agents learn in.
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
-- 🌲 [first-tree](https://github.com/agent-team-foundation/first-tree) - A Git-native context layer for decisions, ownership, and shared team knowledge.
+- 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/agent-team-foundation/first-tree)) - A Git-native context layer for decisions, ownership, and shared team knowledge.
 - 🥷 [DoWhiz](https://github.com/KnoWhiz/DoWhiz) - An agent-native product for getting work done across email, chat, documents, and related tools.
 - 🧠 [DeepTutor](https://deeptutor.knowhiz.us/) - An AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
 - 🐈 [mews](https://github.com/bingran-you/mews) - A local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.

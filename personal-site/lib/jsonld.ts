@@ -161,13 +161,15 @@ export function paperJsonLd(paper: Paper) {
 }
 
 export function projectJsonLd(project: Project) {
-  const isGitHub = project.href.startsWith("https://github.com/");
+  const codeRepository =
+    project.repoHref ??
+    (project.href.startsWith("https://github.com/") ? project.href : undefined);
   return {
     "@type": "SoftwareSourceCode",
     name: project.name,
     description: project.description,
     url: project.href,
-    ...(isGitHub ? { codeRepository: project.href } : {}),
+    ...(codeRepository ? { codeRepository } : {}),
     author,
   } as const;
 }

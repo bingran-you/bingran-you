@@ -117,12 +117,12 @@ export default function Home() {
         </div>
         <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
           {aiHighlights.map((p) => (
-            <li key={p.href}>
+            <li key={p.name} className="py-5">
               <a
                 href={p.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col gap-1 py-5 group"
+                className="flex flex-col gap-1 group"
               >
                 <span className="text-base font-medium group-hover:underline underline-offset-4">
                   {p.name}
@@ -131,6 +131,16 @@ export default function Home() {
                   {p.description}
                 </span>
               </a>
+              {p.repoHref ? (
+                <a
+                  href={p.repoHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex text-xs text-[var(--muted)] hover:text-foreground transition"
+                >
+                  Repo ↗
+                </a>
+              ) : null}
             </li>
           ))}
         </ul>

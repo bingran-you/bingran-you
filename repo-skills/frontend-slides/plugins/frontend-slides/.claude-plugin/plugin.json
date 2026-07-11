@@ -1,7 +1,8 @@
 {
   "name": "frontend-slides",
-  "version": "1.0.0",
-  "description": "Zero-dependency HTML presentation generator with 12 curated visual themes, PPT conversion, and anti-AI-slop design philosophy.",
+  "version": "2.1.0",
+  "description": "Zero-dependency HTML presentation generator with safe presets, bold template-library styles, PPT conversion, and anti-AI-slop design philosophy.",
+  "skills": "./skills/",
   "author": {
     "name": "zarazhangrui",
     "url": "https://github.com/zarazhangrui"
@@ -9,5 +10,5 @@
   "homepage": "https://github.com/zarazhangrui/frontend-slides",
   "repository": "https://github.com/zarazhangrui/frontend-slides",
   "license": "MIT",
-  "keywords": ["presentations", "slides", "html", "design", "powerpoint", "animations"]
+  "keywords": ["presentations", "slides", "html", "design", "powerpoint", "animations", "templates"]
 }

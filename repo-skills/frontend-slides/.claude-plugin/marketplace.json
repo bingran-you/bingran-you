@@ -9,10 +9,10 @@
   "plugins": [
     {
       "name": "frontend-slides",
-      "description": "Zero-dependency HTML presentation generator with 12 curated visual themes, PPT conversion, and anti-AI-slop design philosophy.",
+      "description": "Zero-dependency HTML presentation generator with safe presets, bold template-library styles, PPT conversion, and anti-AI-slop design philosophy.",
       "source": "./plugins/frontend-slides",
       "category": "productivity",
-      "tags": ["presentations", "slides", "html", "design", "powerpoint"]
+      "tags": ["presentations", "slides", "html", "design", "powerpoint", "templates"]
     }
   ]
 }

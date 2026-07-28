@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      {
+        source: "/projects/frontierphysics",
+        destination:
+          "https://frontierphysics.vercel.app/projects/frontierphysics",
+      },
+      {
+        source: "/projects/frontierphysics/:path*",
+        destination:
+          "https://frontierphysics.vercel.app/projects/frontierphysics/:path*",
+      },
       // /palace serves the vendored outer site (webpack build in public/palace/)
       { source: "/palace", destination: "/palace/index.html" },
       // /palace/os serves the vendored inner site (CRA build in public/palace/os/)

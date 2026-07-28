@@ -80,6 +80,10 @@ function latestPoint(series: FrontierPhysicsSeries) {
   return series.points.at(-1);
 }
 
+function formatTimestamp(value: string) {
+  return value.replace("T", " ").replace(/\.\d{3}Z$/, " UTC");
+}
+
 function Sparkline({ series }: { series: FrontierPhysicsSeries }) {
   const values = series.points.map((point) => point.value);
   const min = Math.min(...values);
@@ -224,9 +228,10 @@ export function FrontierPhysicsTelemetry({
   if (!telemetry) return null;
 
   const sourceState = telemetry.run.state.toLowerCase();
-  const observedAt = telemetry.observedAt
-    .replace("T", " ")
-    .replace(/\.\d{3}Z$/, " UTC");
+  const observedAt = formatTimestamp(telemetry.observedAt);
+  const latestAt = telemetry.latestAt
+    ? formatTimestamp(telemetry.latestAt)
+    : null;
 
   return (
     <div className="space-y-10">
@@ -244,6 +249,11 @@ export function FrontierPhysicsTelemetry({
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-[var(--muted)]">
           <span>{telemetry.series.length} metrics</span>
+          {latestAt ? (
+            <time dateTime={telemetry.latestAt ?? undefined}>
+              latest sample {latestAt}
+            </time>
+          ) : null}
           <time dateTime={telemetry.observedAt}>
             refreshed {observedAt}
           </time>

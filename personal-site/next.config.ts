@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      // Proxies an app deployed from another repository. It is deliberately
+      // absent from the project catalog and the sitemap, so keep these two
+      // rules: deleting them is the only thing that would break the URL.
       {
         source: "/projects/tasksminer",
         destination:

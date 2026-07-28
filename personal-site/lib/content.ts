@@ -27,14 +27,6 @@ export type Education = {
 
 export const projects: Project[] = [
   {
-    name: "TasksMiner",
-    href: "/projects/tasksminer",
-    description:
-      "A pipeline for mining, reviewing, and operating authentic specialist tasks, with live infrastructure monitoring.",
-    emoji: "⛏️",
-    track: "ai",
-  },
-  {
     name: "FrontierPhysics",
     href: "https://www.benchflow.ai/frontierphysics",
     description:

@@ -265,7 +265,7 @@ export function FrontierPhysicsTelemetry({
       ))}
 
       <p className="text-xs leading-relaxed text-[var(--muted)]">
-        The page refreshes once per minute. Only finite numeric infrastructure
+        Plots refresh once per minute. Only finite numeric infrastructure
         metrics are published; credentials, logs, prompts, and tmux pane
         contents stay private.{" "}
         <a

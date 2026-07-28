@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  appendFrontierPhysicsSummary,
   fetchFrontierPhysicsTelemetry,
   FrontierPhysicsTelemetryError,
   sanitizeFrontierPhysicsHistory,
@@ -41,6 +42,39 @@ describe("sanitizeFrontierPhysicsHistory", () => {
     expect(sanitizeFrontierPhysicsHistory(null)).toEqual([]);
     expect(sanitizeFrontierPhysicsHistory(["not-json"])).toEqual([]);
   });
+
+  it("ends sampled history with the latest allow-listed summary values", () => {
+    const history = sanitizeFrontierPhysicsHistory([
+      JSON.stringify({
+        _timestamp: 1_700_000_000,
+        "vm/cpu_percent": 20,
+      }),
+    ]);
+    const series = appendFrontierPhysicsSummary(
+      history,
+      JSON.stringify({
+        _timestamp: 1_700_000_060,
+        "vm/cpu_percent": 25,
+        "workload/tmux_panes": 1,
+        secret: 99,
+      }),
+    );
+
+    expect(series).toEqual([
+      {
+        key: "vm/cpu_percent",
+        points: [
+          { at: "2023-11-14T22:13:20.000Z", value: 20 },
+          { at: "2023-11-14T22:14:20.000Z", value: 25 },
+        ],
+      },
+      {
+        key: "workload/tmux_panes",
+        points: [{ at: "2023-11-14T22:14:20.000Z", value: 1 }],
+      },
+    ]);
+    expect(JSON.stringify(series)).not.toContain("secret");
+  });
 });
 
 describe("fetchFrontierPhysicsTelemetry", () => {
@@ -64,6 +98,10 @@ describe("fetchFrontierPhysicsTelemetry", () => {
                       "vm/cpu_percent": 20,
                     }),
                   ],
+                  summaryMetrics: JSON.stringify({
+                    _timestamp: 1_700_000_060,
+                    "vm/cpu_percent": 22,
+                  }),
                 },
               },
             },
@@ -85,7 +123,8 @@ describe("fetchFrontierPhysicsTelemetry", () => {
     });
     expect(JSON.stringify(result)).not.toContain("test-secret");
     expect(result.run.state).toBe("running");
-    expect(result.series[0]?.points[0]?.value).toBe(20);
+    expect(result.latestAt).toBe("2023-11-14T22:14:20.000Z");
+    expect(result.series[0]?.points.at(-1)?.value).toBe(22);
   });
 
   it("uses a generic error for missing credentials and upstream failures", async () => {

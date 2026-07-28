@@ -54,6 +54,7 @@ type WandbGraphqlResponse = {
         state?: unknown;
         createdAt?: unknown;
         history?: unknown;
+        summaryMetrics?: unknown;
       } | null;
     } | null;
   };
@@ -72,6 +73,7 @@ export type FrontierPhysicsSeries = {
 
 export type FrontierPhysicsTelemetry = {
   observedAt: string;
+  latestAt: string | null;
   run: {
     name: string;
     displayName: string;
@@ -151,6 +153,54 @@ export function sanitizeFrontierPhysicsHistory(
   });
 }
 
+export function appendFrontierPhysicsSummary(
+  series: FrontierPhysicsSeries[],
+  summary: unknown,
+): FrontierPhysicsSeries[] {
+  const row = parseHistoryRow(summary);
+  if (!row) return series;
+
+  const at = pointTimestamp(row);
+  if (!at) return series;
+
+  const pointsByKey = new Map(
+    series.map(({ key, points }) => [key, [...points]]),
+  );
+
+  for (const key of FRONTIERPHYSICS_METRICS) {
+    const value = row[key];
+    if (typeof value !== "number" || !Number.isFinite(value)) continue;
+
+    const points = pointsByKey.get(key) ?? [];
+    const existingIndex = points.findIndex((point) => point.at === at);
+    if (existingIndex >= 0) {
+      points[existingIndex] = { at, value };
+    } else {
+      const lastAt = points.at(-1)?.at;
+      if (lastAt && Date.parse(lastAt) >= Date.parse(at)) continue;
+      points.push({ at, value });
+    }
+    pointsByKey.set(key, points.slice(-MAX_SAMPLES));
+  }
+
+  return FRONTIERPHYSICS_METRICS.flatMap((key) => {
+    const points = pointsByKey.get(key) ?? [];
+    return points.length > 0 ? [{ key, points }] : [];
+  });
+}
+
+function latestSeriesTimestamp(series: FrontierPhysicsSeries[]): string | null {
+  let latest: string | null = null;
+  for (const { points } of series) {
+    for (const { at } of points) {
+      if (at && (!latest || Date.parse(at) > Date.parse(latest))) {
+        latest = at;
+      }
+    }
+  }
+  return latest;
+}
+
 function asString(value: unknown, fallback: string): string {
   return typeof value === "string" && value.length > 0 ? value : fallback;
 }
@@ -184,6 +234,7 @@ export async function fetchFrontierPhysicsTelemetry({
           state
           createdAt
           history(samples: $samples)
+          summaryMetrics
         }
       }
     }
@@ -219,13 +270,17 @@ export async function fetchFrontierPhysicsTelemetry({
       throw new FrontierPhysicsTelemetryError();
     }
 
-    const series = sanitizeFrontierPhysicsHistory(run.history);
+    const series = appendFrontierPhysicsSummary(
+      sanitizeFrontierPhysicsHistory(run.history),
+      run.summaryMetrics,
+    );
     if (series.length === 0) {
       throw new FrontierPhysicsTelemetryError();
     }
 
     return {
       observedAt: new Date().toISOString(),
+      latestAt: latestSeriesTimestamp(series),
       run: {
         name: asString(run.name, FRONTIERPHYSICS_WANDB.run),
         displayName: asString(run.displayName, FRONTIERPHYSICS_WANDB.run),

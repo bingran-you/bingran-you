@@ -10,14 +10,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: "/projects/frontierphysics",
+        source: "/projects/tasksminer",
         destination:
-          "https://frontierphysics.vercel.app/projects/frontierphysics",
+          "https://tasksminer.vercel.app/projects/tasksminer",
       },
       {
-        source: "/projects/frontierphysics/:path*",
+        source: "/projects/tasksminer/:path*",
         destination:
-          "https://frontierphysics.vercel.app/projects/frontierphysics/:path*",
+          "https://tasksminer.vercel.app/projects/tasksminer/:path*",
       },
       // /palace serves the vendored outer site (webpack build in public/palace/)
       { source: "/palace", destination: "/palace/index.html" },

@@ -12,12 +12,12 @@ const nextConfig: NextConfig = {
       {
         source: "/projects/tasksminer",
         destination:
-          "https://tasksminer.vercel.app/projects/tasksminer",
+          "https://tasksminer-benchflow.vercel.app/projects/tasksminer",
       },
       {
         source: "/projects/tasksminer/:path*",
         destination:
-          "https://tasksminer.vercel.app/projects/tasksminer/:path*",
+          "https://tasksminer-benchflow.vercel.app/projects/tasksminer/:path*",
       },
       // /palace serves the vendored outer site (webpack build in public/palace/)
       { source: "/palace", destination: "/palace/index.html" },

@@ -7,6 +7,18 @@ import {
 } from "./content";
 
 describe("getAiProjectHighlights", () => {
+  it("keeps TasksMiner and FrontierPhysics as separate destinations", () => {
+    expect(
+      projects.slice(0, 2).map(({ name, href }) => ({ name, href })),
+    ).toEqual([
+      { name: "TasksMiner", href: "/projects/tasksminer" },
+      {
+        name: "FrontierPhysics",
+        href: "https://www.benchflow.ai/frontierphysics",
+      },
+    ]);
+  });
+
   it("returns up to 5 ai-track projects by default", () => {
     const result = getAiProjectHighlights();
     expect(result.length).toBeLessThanOrEqual(5);

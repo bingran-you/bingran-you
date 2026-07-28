@@ -9,7 +9,7 @@ import Contact from '../showcase/Contact';
 import VerticalNavbar from '../showcase/VerticalNavbar';
 import useInitialWindowSize from '../../hooks/useInitialWindowSize';
 
-export interface ShowcaseExplorerProps extends WindowAppProps {}
+export type ShowcaseExplorerProps = WindowAppProps;
 
 const ShowcaseExplorer: React.FC<ShowcaseExplorerProps> = (props) => {
     const { initWidth, initHeight } = useInitialWindowSize({ margin: 100 });
@@ -27,7 +27,7 @@ const ShowcaseExplorer: React.FC<ShowcaseExplorerProps> = (props) => {
             minimizeWindow={props.onMinimize}
             bottomLeftText={'© 2026 Bingran You · template by Henry Heffernan (MIT)'}
         >
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <div className="site-page">
                     <VerticalNavbar />
                     <Routes>

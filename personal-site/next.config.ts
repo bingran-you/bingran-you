@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
       { source: "/palace", destination: "/palace/index.html" },
       // /palace/os serves the vendored inner site (CRA build in public/palace/os/)
       { source: "/palace/os", destination: "/palace/os/index.html" },
+      {
+        source: "/palace/os/:path*",
+        destination: "/palace/os/index.html",
+      },
     ];
   },
 };

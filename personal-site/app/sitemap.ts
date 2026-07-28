@@ -76,9 +76,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/projects/frontierphysics`,
       lastModified: await getLatestLastModified([
-        "app/(personal)/projects/frontierphysics/page.tsx",
-        "app/(personal)/projects/frontierphysics/_components/frontierphysics-telemetry.tsx",
-        "lib/frontierphysics.ts",
+        "lib/content.ts",
+        "next.config.ts",
       ]),
       changeFrequency: "daily",
       priority: 0.8,

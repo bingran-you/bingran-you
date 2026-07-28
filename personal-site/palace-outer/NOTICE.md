@@ -17,8 +17,8 @@ Modifications in this vendor copy (Bingran You, 2026):
   sibling `palace-inner/` directory).
 - Removed the upstream `server/` (Express) and `buildspec.yaml` (AWS
   CodeBuild). Vercel serves the static webpack output directly.
-- Personal content / 3D model textures may be swapped over time as Bingran's
-  own site evolves.
+- Page metadata and the in-monitor portfolio content are adapted to
+  `bingran.ai`; the original 3D-room implementation remains attributed here.
 
 Used here with explicit permission from Henry Heffernan beyond the MIT terms.
 Please direct any questions about the original implementation to Henry; any

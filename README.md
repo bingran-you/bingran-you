@@ -34,6 +34,8 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Work
 
+- ⛏️ [TasksMiner](https://bingran.ai/projects/tasksminer) - A pipeline for mining, reviewing, and operating authentic specialist tasks, with live infrastructure monitoring.
+- ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - Authentic specialist physics tasks for evaluating frontier agents.
 - 🌊 [BenchFlow](https://www.benchflow.ai/) - A frontier environment lab building the runtime and benchmarks AI agents learn in.
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
 - 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/agent-team-foundation/first-tree)) - A Git-native context layer for decisions, ownership, and shared team knowledge.

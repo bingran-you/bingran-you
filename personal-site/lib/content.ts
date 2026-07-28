@@ -27,6 +27,14 @@ export type Education = {
 
 export const projects: Project[] = [
   {
+    name: "FrontierPhysics",
+    href: "/projects/frontierphysics",
+    description:
+      "Authentic specialist physics tasks for evaluating frontier agents, with a live infrastructure monitor.",
+    emoji: "⚛️",
+    track: "ai",
+  },
+  {
     name: "BenchFlow",
     href: "https://www.benchflow.ai/",
     description:

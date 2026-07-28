@@ -21,11 +21,6 @@ Open [http://localhost:3000](http://localhost:3000).
 
 `npm run dev` regenerates `lib/skills.generated.json` before starting Next.js so the `/skills` catalog stays in sync with the mirrored workspace skills.
 
-The live TasksMiner monitor is maintained and deployed from the TasksMiner
-repository. This site exposes it at
-[`/projects/tasksminer`](https://bingran.ai/projects/tasksminer) through the
-rewrite in `next.config.ts`.
-
 ## Add a blog post
 
 1. Create `content/posts/{slug}.mdx` with metadata export:
@@ -57,7 +52,6 @@ app/
   (personal)/page.tsx                   home
   (personal)/about/page.tsx             about
   (personal)/projects/page.tsx          projects index
-  projects/tasksminer                   live TasksMiner monitor (external rewrite)
   (personal)/papers/page.tsx            papers index
   (personal)/skills/page.tsx            skills index
   (personal)/skills/[slug]/page.tsx     individual skill page

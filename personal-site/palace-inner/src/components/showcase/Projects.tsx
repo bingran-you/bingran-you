@@ -9,13 +9,6 @@ interface ProjectEntry {
 
 const PROJECTS: ProjectEntry[] = [
     {
-        title: 'TasksMiner',
-        blurb:
-            'Pipeline for mining, reviewing, and operating authentic specialist tasks, with live infrastructure monitoring.',
-        href: 'https://bingran.ai/projects/tasksminer',
-        tag: 'Agent',
-    },
-    {
         title: 'FrontierPhysics',
         blurb:
             'Authentic specialist physics tasks for evaluating frontier agents.',

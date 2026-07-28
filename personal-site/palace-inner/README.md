@@ -3,7 +3,6 @@
 This is the in-monitor portfolio for
 [Bingran You's Memory Palace](https://bingran.ai/palace). Its Projects and
 Experience windows mirror the public project catalog, including
-[TasksMiner](https://bingran.ai/projects/tasksminer) and
 [FrontierPhysics](https://www.benchflow.ai/frontierphysics).
 
 The app is built by the parent site's `npm run palace:build` command and served

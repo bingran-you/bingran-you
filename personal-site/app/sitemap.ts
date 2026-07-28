@@ -74,15 +74,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/projects/tasksminer`,
-      lastModified: await getLatestLastModified([
-        "lib/content.ts",
-        "next.config.ts",
-      ]),
-      changeFrequency: "daily",
-      priority: 0.8,
-    },
-    {
       url: `${SITE_URL}/papers`,
       lastModified: await getLatestLastModified([
         "app/(personal)/papers/page.tsx",

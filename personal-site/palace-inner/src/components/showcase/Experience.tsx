@@ -27,7 +27,6 @@ const ROLES: RoleEntry[] = [
         role: 'Independent / collaborative work on agent infrastructure',
         period: 'Ongoing',
         lines: [
-            'Authentic specialist task mining, review, and live fleet operations (TasksMiner).',
             'Specialist physics benchmark tasks for frontier agents (FrontierPhysics).',
             'Frontier environment lab for AI-agent runtime and benchmark infrastructure (BenchFlow).',
             'Skills-based benchmarking for AI agents (SkillsBench).',

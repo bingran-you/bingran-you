@@ -164,11 +164,14 @@ export function projectJsonLd(project: Project) {
   const codeRepository =
     project.repoHref ??
     (project.href.startsWith("https://github.com/") ? project.href : undefined);
+  const url = project.href.startsWith("/")
+    ? `${SITE_URL}${project.href}`
+    : project.href;
   return {
     "@type": "SoftwareSourceCode",
     name: project.name,
     description: project.description,
-    url: project.href,
+    url,
     ...(codeRepository ? { codeRepository } : {}),
     author,
   } as const;

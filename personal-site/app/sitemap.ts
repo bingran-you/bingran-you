@@ -74,6 +74,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${SITE_URL}/projects/frontierphysics`,
+      lastModified: await getLatestLastModified([
+        "app/(personal)/projects/frontierphysics/page.tsx",
+        "app/(personal)/projects/frontierphysics/_components/frontierphysics-telemetry.tsx",
+        "lib/frontierphysics.ts",
+      ]),
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/papers`,
       lastModified: await getLatestLastModified([
         "app/(personal)/papers/page.tsx",

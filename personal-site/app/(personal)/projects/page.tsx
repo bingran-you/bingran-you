@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { projects } from "@/lib/content";
 import { graphScriptContent, projectJsonLd } from "@/lib/jsonld";
 
@@ -48,10 +49,11 @@ function Section({
       <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
         {items.map((p) => (
           <li key={p.name} className="py-5">
-            <a
+            <Link
               href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...(p.href.startsWith("/")
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
               className="flex flex-col gap-1 group"
             >
               <span className="text-base font-medium group-hover:underline underline-offset-4">
@@ -60,7 +62,7 @@ function Section({
               <span className="text-sm text-[var(--muted)] leading-relaxed">
                 {p.description}
               </span>
-            </a>
+            </Link>
             {p.repoHref ? (
               <a
                 href={p.repoHref}

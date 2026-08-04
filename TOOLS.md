@@ -65,11 +65,31 @@ junctions — the original `~` paths still work, writes land on H::
 - `~/.codex/sessions` → `H:\WorkTrees\codex\trajectories`
 - `~/.codex/worktrees` → `H:\WorkTrees\codex\worktrees`
 
+All three verified end-to-end 2026-08-03: new Claude Code sessions (desktop +
+`claude -p`), new Codex sessions (desktop + `codex exec`), and Codex desktop
+worktrees all physically land on H: while apps keep showing the original `C:`
+paths — that's how junctions look from the app side, it is not a bug.
+
+**Claude worktrees are the exception — no junction.** Claude Code's
+EnterWorktree refuses to run when `<repo>\.claude\worktrees` is a
+link (symlink-redirect security check), so that junction was removed:
+
+- Built-in worktrees (`EnterWorktree`, desktop) live on C: under
+  `<repo>\.claude\worktrees\` — fine, they're transient.
+- For a worktree on H: (big/long-lived), create it manually and enter by path:
+  `git worktree add H:\WorkTrees\claude\worktrees\bingran-you\<name> -b <branch>`
+  then `EnterWorktree path=...`. Finish with `git worktree remove`, never `rm`.
+
 Retention: `~/.claude/settings.json` sets `"cleanupPeriodDays": 36500` so
 Claude Code never auto-deletes transcripts (default is 30 days). Codex has no
 session GC. **Don't remove these junctions or "clean up" H:\WorkTrees** —
 `*.pre-H-migration` dirs under `~/.claude` / `~/.codex` are the one-time
 migration backups, delete only with Bingran's confirmation.
+
+CLI availability: `codex` is on PATH (npm shim). `claude` CLI 2.1.221 lives at
+`%APPDATA%\npm\claude.cmd` (reinstalled 2026-08-03 — the old npm install had
+lost its shims); it is not yet logged in (desktop auth is separate), run
+`claude` + `/login` once before headless `claude -p` use.
 
 ## Task Delivery
 

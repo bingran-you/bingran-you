@@ -91,6 +91,24 @@ CLI availability: `codex` is on PATH (npm shim). `claude` CLI 2.1.221 lives at
 lost its shims); it is not yet logged in (desktop auth is separate), run
 `claude` + `/login` once before headless `claude -p` use.
 
+WSL (Ubuntu 22.04) has its own native CLIs as of 2026-08-04 — `~/.local/bin/claude`
+(official install.sh, self-updating) and `~/.local/bin/codex` (GitHub release
+musl binary; update by re-downloading `codex-x86_64-unknown-linux-musl.tar.gz`
+from the latest `rust-v*` release — there is no node/npm in WSL). WSL trajectory
+dirs are symlinked to the same H: targets (`~/.claude/projects` and
+`~/.codex/sessions` → `/mnt/h/WorkTrees/...`) with the same `cleanupPeriodDays:
+36500`. Neither WSL CLI is logged in yet.
+
+## Canonical repo location (Windows box)
+
+**This repo lives at `H:\GitHub\bingran-you`.** It moved there 2026-08-04 after
+OneDrive gutted the old checkout: the system Documents folder is redirected to
+`H:\OneDrive\Documents`, and overnight OneDrive migrated
+`C:\Users\Bingran You\Documents\GitHub\bingran-you` into the sync folder,
+splitting the tree and orphaning `.git`. **Never place a git checkout (or
+anything with submodules/symlinks) inside `H:\OneDrive\` or any other synced
+folder.** `H:\GitHub\` and `H:\WorkTrees\` are outside OneDrive's scope — safe.
+
 ## Task Delivery
 
 You are end-to-end. When Bingran gives you a task:

@@ -56,6 +56,21 @@ Other disk traps to know about on this machine:
 - **`~/Library/Application Support/Claude/vm_bundles/claudevm.bundle/` is ~10G.** That's the Claude **desktop app**'s sandbox VM, not the CLI. CLI does not depend on it — safe to delete if Bingran isn't using the desktop sandbox feature.
 - **WeChat (`~/Library/Containers/com.tencent.xinWeChat`) grows ~10–20G/month** from group chat attachments. Cleaned only via the WeChat app's storage panel — never touch the container directly.
 
+## Agent trajectory storage (Windows box)
+
+All Claude Code / Codex session trajectories live on `H:\WorkTrees` via NTFS
+junctions — the original `~` paths still work, writes land on H::
+
+- `~/.claude/projects` → `H:\WorkTrees\claude\trajectories`
+- `~/.codex/sessions` → `H:\WorkTrees\codex\trajectories`
+- `~/.codex/worktrees` → `H:\WorkTrees\codex\worktrees`
+
+Retention: `~/.claude/settings.json` sets `"cleanupPeriodDays": 36500` so
+Claude Code never auto-deletes transcripts (default is 30 days). Codex has no
+session GC. **Don't remove these junctions or "clean up" H:\WorkTrees** —
+`*.pre-H-migration` dirs under `~/.claude` / `~/.codex` are the one-time
+migration backups, delete only with Bingran's confirmation.
+
 ## Task Delivery
 
 You are end-to-end. When Bingran gives you a task:

@@ -97,7 +97,16 @@ musl binary; update by re-downloading `codex-x86_64-unknown-linux-musl.tar.gz`
 from the latest `rust-v*` release — there is no node/npm in WSL). WSL trajectory
 dirs are symlinked to the same H: targets (`~/.claude/projects` and
 `~/.codex/sessions` → `/mnt/h/WorkTrees/...`) with the same `cleanupPeriodDays:
-36500`. Neither WSL CLI is logged in yet.
+36500`. `claude` in WSL is not logged in yet.
+
+Codex auth (both systems) runs through the **Azure OpenAI provider**, not
+ChatGPT login: `config.toml` defines `[model_providers.azure]` with
+`env_key = "AZURE_API_KEY"`; the key value lives in the Windows **user
+environment variables** and in WSL `~/.profile` / `~/.bashrc` — never in the
+repo. WSL codex also needs `~/.local/bin/bwrap` (the `bwrap-x86_64-*` asset
+from the same codex release) or every sandboxed shell command fails with
+"bwrap is unavailable". Verified end-to-end 2026-08-04 on both systems,
+including sandboxed command execution.
 
 ## Canonical repo location (Windows box)
 

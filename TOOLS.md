@@ -99,7 +99,9 @@ musl binary; update by re-downloading `codex-x86_64-unknown-linux-musl.tar.gz`
 from the latest `rust-v*` release — there is no node/npm in WSL). WSL trajectory
 dirs are symlinked to the same L: targets (`~/.claude/projects` and
 `~/.codex/sessions` → `/mnt/l/Agents/...`) with the same `cleanupPeriodDays:
-36500`. `claude` in WSL is not logged in yet.
+36500`. WSL `claude` shares the Windows login: its `~/.claude/.credentials.json`
+is a copy of the Windows one (2026-08-06) — if WSL auth ever expires
+independently, re-copy the file from `/mnt/c/Users/Bingran You/.claude/`.
 
 Codex auth (both systems) runs through the **Azure OpenAI provider**, not
 ChatGPT login: `config.toml` defines `[model_providers.azure]` with

@@ -15,7 +15,6 @@ SOURCE_ROOTS=(
   "trusted-external-repos/mattpocock-skills/skills/engineering"
   "trusted-external-repos/mattpocock-skills/skills/in-progress"
   "trusted-external-repos/mattpocock-skills/skills/misc"
-  "trusted-external-repos/mattpocock-skills/skills/personal"
   "trusted-external-repos/mattpocock-skills/skills/productivity"
   "trusted-external-repos/open-design/skills"
 )

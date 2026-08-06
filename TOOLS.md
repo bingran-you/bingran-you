@@ -58,33 +58,35 @@ Other disk traps to know about on this machine:
 
 ## Agent trajectory storage (Windows box)
 
-All Claude Code / Codex session trajectories live on `H:\WorkTrees` via NTFS
-junctions — the original `~` paths still work, writes land on H::
+All Claude Code / Codex session trajectories live on `L:\Agents` via NTFS
+junctions (moved from `H:\WorkTrees` on 2026-08-06) — the original `~` paths
+still work, writes land on L::
 
-- `~/.claude/projects` → `H:\WorkTrees\claude\trajectories`
-- `~/.codex/sessions` → `H:\WorkTrees\codex\trajectories`
-- `~/.codex/worktrees` → `H:\WorkTrees\codex\worktrees`
+- `~/.claude/projects` → `L:\Agents\claude\trajectories`
+- `~/.codex/sessions` → `L:\Agents\codex\trajectories`
+- `~/.codex/worktrees` → `L:\Agents\codex\worktrees`
 
-All three verified end-to-end 2026-08-03: new Claude Code sessions (desktop +
-`claude -p`), new Codex sessions (desktop + `codex exec`), and Codex desktop
-worktrees all physically land on H: while apps keep showing the original `C:`
-paths — that's how junctions look from the app side, it is not a bug.
+Verified end-to-end 2026-08-06 after the move: live Claude Code session
+transcripts and fresh `codex exec` rollouts land on L: while apps keep showing
+the original `C:` paths — that's how junctions look from the app side, it is
+not a bug.
 
 **Claude worktrees are the exception — no junction.** Claude Code's
 EnterWorktree refuses to run when `<repo>\.claude\worktrees` is a
-link (symlink-redirect security check), so that junction was removed:
+link (symlink-redirect security check), so no junction there:
 
-- Built-in worktrees (`EnterWorktree`, desktop) live on C: under
+- Built-in worktrees (`EnterWorktree`, desktop) live under
   `<repo>\.claude\worktrees\` — fine, they're transient.
-- For a worktree on H: (big/long-lived), create it manually and enter by path:
-  `git worktree add H:\WorkTrees\claude\worktrees\bingran-you\<name> -b <branch>`
+- For a big/long-lived worktree, create it manually and enter by path:
+  `git worktree add L:\Agents\claude\worktrees\bingran-you\<name> -b <branch>`
   then `EnterWorktree path=...`. Finish with `git worktree remove`, never `rm`.
 
 Retention: `~/.claude/settings.json` sets `"cleanupPeriodDays": 36500` so
 Claude Code never auto-deletes transcripts (default is 30 days). Codex has no
-session GC. **Don't remove these junctions or "clean up" H:\WorkTrees** —
-`*.pre-H-migration` dirs under `~/.claude` / `~/.codex` are the one-time
-migration backups, delete only with Bingran's confirmation.
+session GC. **Don't remove these junctions or "clean up" L:\Agents.**
+Historical backups that only Bingran may delete: `H:\WorkTrees.migrated-to-L.2026-08-06`
+(the pre-move H: tree, frozen) and the `*.pre-H-migration` dirs under
+`~/.claude` / `~/.codex` (the original 2026-08-03 C: copies).
 
 CLI availability: `codex` is on PATH (npm shim). `claude` CLI 2.1.221 lives at
 `%APPDATA%\npm\claude.cmd` (reinstalled 2026-08-03 — the old npm install had
@@ -95,8 +97,8 @@ WSL (Ubuntu 22.04) has its own native CLIs as of 2026-08-04 — `~/.local/bin/cl
 (official install.sh, self-updating) and `~/.local/bin/codex` (GitHub release
 musl binary; update by re-downloading `codex-x86_64-unknown-linux-musl.tar.gz`
 from the latest `rust-v*` release — there is no node/npm in WSL). WSL trajectory
-dirs are symlinked to the same H: targets (`~/.claude/projects` and
-`~/.codex/sessions` → `/mnt/h/WorkTrees/...`) with the same `cleanupPeriodDays:
+dirs are symlinked to the same L: targets (`~/.claude/projects` and
+`~/.codex/sessions` → `/mnt/l/Agents/...`) with the same `cleanupPeriodDays:
 36500`. `claude` in WSL is not logged in yet.
 
 Codex auth (both systems) runs through the **Azure OpenAI provider**, not
@@ -116,7 +118,7 @@ OneDrive gutted the old checkout: the system Documents folder is redirected to
 `C:\Users\Bingran You\Documents\GitHub\bingran-you` into the sync folder,
 splitting the tree and orphaning `.git`. **Never place a git checkout (or
 anything with submodules/symlinks) inside `H:\OneDrive\` or any other synced
-folder.** `H:\GitHub\` and `H:\WorkTrees\` are outside OneDrive's scope — safe.
+folder.** `H:\GitHub\` and `L:\Agents\` are outside OneDrive's scope — safe.
 
 ## Task Delivery
 

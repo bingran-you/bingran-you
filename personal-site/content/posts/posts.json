@@ -1,5 +1,13 @@
 [
   {
+    "id": "x-2085056664328446292",
+    "platform": "x",
+    "url": "https://x.com/bingran_bry/status/2085056664328446292",
+    "title": "(untitled)",
+    "date": "2026-08-05",
+    "addedVia": "manual"
+  },
+  {
     "id": "x-2080481076179562922",
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2080481076179562922",
@@ -486,6 +494,16 @@
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2058795406990155861",
     "date": "2026-05-24",
+    "addedVia": "manual"
+  },
+  {
+    "id": "youtube-ua0ojr8im1o",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=ua0ojr8im1o",
+    "title": "个人主页变成了我的“记忆宫殿”，太爽了！",
+    "description": "最近折腾了很多个人主页的有趣玩法，把整个repo变成了我所有agents的默认工作区。所有的个性化信息、历史记录、记忆等信息全部在统一的GitHub repo管理实在是太方便了！ 视频里展示的所有内容都开源～",
+    "thumbnail": "https://i.ytimg.com/vi/ua0ojr8im1o/hqdefault.jpg",
+    "date": "2026-05-23",
     "addedVia": "manual"
   },
   {

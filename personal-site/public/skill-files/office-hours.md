@@ -711,6 +711,10 @@ When options differ in coverage, include `Completeness: X/10` (10 = all edge cas
 
 For high-stakes ambiguity (architecture, data model, destructive scope, missing context), STOP. Name it in one sentence, present 2-3 options with tradeoffs, and ask. Do not use for routine coding or obvious changes.
 
+## Claimed Limitations Need Evidence
+
+A claimed limitation or requirement ("the API can't do this", "X requires a credential", "that's impossible on this platform") is a material claim. State one only with the verbatim error, the documented statement, or a live probe in hand — pattern-matching a failure to a familiar story is not evidence. When a cheap probe settles the question, run it BEFORE asking the user anything or declaring a step blocked.
+
 ## Continuous Checkpoint Mode
 
 If `CHECKPOINT_MODE` is `"continuous"`: auto-commit completed logical units with `WIP:` prefix.
@@ -840,6 +844,20 @@ the failure occurred (if outcome is error, otherwise use empty string "").
 ## Plan Status Footer
 
 Skills that run plan reviews (`/plan-*-review`, `/codex review`) include the EXIT PLAN MODE GATE blocking checklist at the end of the skill, which verifies the plan file ends with `## GSTACK REVIEW REPORT` before ExitPlanMode is called. Skills that don't run plan reviews (operational skills like `/ship`, `/qa`, `/review`) typically don't operate in plan mode and have no review report to verify; this footer is a no-op for them. Writing the plan file is the one edit allowed in plan mode.
+
+## Third-Party Web Actions
+
+A step sometimes requires action on an external website the user controls: registering an API key, creating a vendor or developer account, configuring a dashboard, webhook, OAuth app, billing plan, or domain verification. This contract governs that moment. It grants no new browsing authority — the AskUserQuestion format and one-way-door rules remain binding, including approval before anything that spends money.
+
+1. **Never hand the user a manual step list for a third-party site without first offering to drive it.** The driver is gstack's own browser stack: `$B` headed mode with handoff/resume for the human-only moments (see the /browse skill), or GStack Browser when installed. Never install new tooling to close the gap, and never treat tooling presence as consent to browse.
+
+2. **One explicit question before any browsing.** STOP and name the exact site and the exact actions (for example "create a test-mode API token in the Duffel dashboard"), then offer: A) I drive it now in a visible browser — you take over for sign-in and approvals, B) manual instructions, C) defer. The selection is per-task consent; never persist it as standing permission and never infer it from an earlier task.
+
+3. **When driving, touch only the named site and actions.** Password entry, new-account credential choice, payment, CAPTCHA, and identity verification are user-performed: hand off (`$B handoff`) and wait instead of acting. Prefer credential flows that never expose the secret to the agent, such as password-manager autofill or the dashboard's own copy button used by the human.
+
+4. **A captured secret never appears in chat output, logs, or shell history.** Write it to a user-approved local file with owner-only permissions (0600) or the user's secret store, and keep generated destinations out of version control. Dashboard fields are often masked placeholders — verify the captured credential with ONE non-mutating API call before claiming success; a 401 here has caught a placeholder masquerading as a key.
+
+5. **If the user declines or defers, or no browser is usable,** provide the manual steps and mark the step blocked on the user. Do not recommend or install new products to close the gap.
 
 ## SETUP (run this check BEFORE any browse command)
 

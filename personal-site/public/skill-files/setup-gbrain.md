@@ -676,6 +676,10 @@ When options differ in coverage, include `Completeness: X/10` (10 = all edge cas
 
 For high-stakes ambiguity (architecture, data model, destructive scope, missing context), STOP. Name it in one sentence, present 2-3 options with tradeoffs, and ask. Do not use for routine coding or obvious changes.
 
+## Claimed Limitations Need Evidence
+
+A claimed limitation or requirement ("the API can't do this", "X requires a credential", "that's impossible on this platform") is a material claim. State one only with the verbatim error, the documented statement, or a live probe in hand — pattern-matching a failure to a familiar story is not evidence. When a cheap probe settles the question, run it BEFORE asking the user anything or declaring a step blocked.
+
 ## Continuous Checkpoint Mode
 
 If `CHECKPOINT_MODE` is `"continuous"`: auto-commit completed logical units with `WIP:` prefix.
@@ -896,22 +900,16 @@ mv "$HOME/.gbrain/config.json" "$BACKUP"
 # gstack default: voyage-code-3 (1024d) when VOYAGE_API_KEY is set — best for
 # code retrieval. Without the key, fall back to gbrain's own auto-selected
 # embedding provider chain (OpenAI 1536d when OPENAI_API_KEY is present, etc.).
+set --  # flags ride the positional params — unquoted $VAR breaks under zsh word-splitting (#1798)
 if [ -n "${VOYAGE_API_KEY:-}" ]; then
-  if ! gbrain init --pglite --json --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024; then
-    # Restore on failure
-    mv "$BACKUP" "$HOME/.gbrain/config.json"
-    echo "gbrain init failed. Your previous config was restored at $HOME/.gbrain/config.json." >&2
-    echo "PGLite directory at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` if needed before retrying." >&2
-    exit 1
-  fi
-else
-  if ! gbrain init --pglite --json; then
-    # Restore on failure
-    mv "$BACKUP" "$HOME/.gbrain/config.json"
-    echo "gbrain init failed. Your previous config was restored at $HOME/.gbrain/config.json." >&2
-    echo "PGLite directory at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` if needed before retrying." >&2
-    exit 1
-  fi
+  set -- --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024
+fi
+if ! gbrain init --pglite --json "$@"; then
+  # Restore on failure
+  mv "$BACKUP" "$HOME/.gbrain/config.json"
+  echo "gbrain init failed. Your previous config was restored at $HOME/.gbrain/config.json." >&2
+  echo "PGLite directory at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` if needed before retrying." >&2
+  exit 1
 fi
 echo "Switched to local PGLite. Previous config saved at $BACKUP — review before deleting."
 ```
@@ -928,6 +926,51 @@ Step 1.5 — fall through to Step 2 (where `no-cli` triggers Step 3 install and
 `missing-config` triggers Step 4 init).
 
 ---
+
+## Step 1.7: Code-intelligence provider choice (Step 0 of indexing)
+
+You are INSIDE /setup-gbrain: the user asked for gbrain by name, so the
+provider question is already answered. NEVER ask it here, and never let this
+step delay or derail the actual setup. Record the choice best-effort, then
+continue immediately with Step 2:
+
+```bash
+[ -f ~/.claude/skills/gstack/bin/gstack-code-intelligence ] \
+  && bun ~/.claude/skills/gstack/bin/gstack-code-intelligence select gbrain 2>/dev/null \
+  || true
+```
+
+The offer ceremony below applies ONLY when this skill is reached from another
+entry point where no provider was named (a routing skill exploring indexing
+options). Even then:
+
+- `"offer": false` with reason `bin-absent` → the installed gstack predates
+  the code-intelligence CLI. Skip this step entirely and continue with the
+  skill — the user asked for gbrain, so set up gbrain. Never block setup on
+  a missing optional gate.
+
+- `"offer": false` with reason `small-repo` → grep is already fast here; say
+  so in one line and continue with this skill only if the user asked for
+  gbrain by name.
+- `"offer": false` with reason `provider-selected` or `declined` → the
+  machine-wide question was already answered; apply it silently and continue.
+- `"offer": true` → present the returned options ONCE via AskUserQuestion:
+  **GBrain** (recommended — semantic memory + code, sends repo content to
+  YOUR gbrain DB, per-repo consent), **Sourcebot** (self-hosted whole-repo
+  search, local when on localhost), **Graphify** (local tree-sitter graph,
+  nothing leaves the machine, user installs it), or **No indexing**. Record
+  the choice: `gstack-code-intelligence select <provider|none>` — `none`
+  persists the decline so NO skill ever asks again, on any repo
+  (re-enable: `gstack-code-intelligence select <provider>`). Local-compute
+  and remote-send providers are separate consents — never bundle them.
+- Per-repo send consent (GBrain/Sourcebot) is recorded with
+  `gstack-code-intelligence consent <repo> yes|no` and is ALWAYS vetoed by a
+  `deny` tier in gstack-gbrain-repo-policy — the trust store is the single
+  authority for whether code leaves a repo.
+
+If the user picked GBrain (or asked for this skill directly), continue below.
+If they picked Sourcebot/Graphify, run `gstack-code-intelligence index <repo>`
+and stop — the rest of this skill is gbrain-specific.
 
 ## Step 2: Pick a path (AskUserQuestion)
 
@@ -1116,11 +1159,11 @@ Then follow the same secret-read + verify + init flow as Path 1.
 # gstack default: voyage-code-3 (1024d) when VOYAGE_API_KEY is set — code
 # retrieval beats general-purpose embeddings on real code queries (validated
 # A/B). Without the key, gbrain auto-selects (OpenAI 1536d when available).
+set --  # flags ride the positional params — unquoted $VAR breaks under zsh word-splitting (#1798)
 if [ -n "${VOYAGE_API_KEY:-}" ]; then
-  gbrain init --pglite --json --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024
-else
-  gbrain init --pglite --json
+  set -- --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024
 fi
+gbrain init --pglite --json "$@"
 ```
 
 Done. No network, no secrets (beyond Voyage embedding API calls during sync, if
@@ -1208,18 +1251,14 @@ fi
 # VOYAGE_API_KEY is set. It wins the A/B over voyage-4-large and OpenAI
 # text-embedding-3-large on this codebase's symbol queries. Falls back to
 # gbrain's auto-selected provider when the key isn't present.
+set --  # flags ride the positional params — unquoted $VAR breaks under zsh word-splitting (#1798)
 if [ -n "${VOYAGE_API_KEY:-}" ]; then
-  if ! gbrain init --pglite --json --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024; then
-    if [ -n "${BACKUP:-}" ] && [ -f "$BACKUP" ]; then mv "$BACKUP" "$HOME/.gbrain/config.json"; fi
-    echo "gbrain init failed. Existing config (if any) was restored. PGLite at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` to reset." >&2
-    echo "Continuing setup without local code search; you can re-run /setup-gbrain to retry." >&2
-  fi
-else
-  if ! gbrain init --pglite --json; then
-    if [ -n "${BACKUP:-}" ] && [ -f "$BACKUP" ]; then mv "$BACKUP" "$HOME/.gbrain/config.json"; fi
-    echo "gbrain init failed. Existing config (if any) was restored. PGLite at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` to reset." >&2
-    echo "Continuing setup without local code search; you can re-run /setup-gbrain to retry." >&2
-  fi
+  set -- --embedding-model voyage:voyage-code-3 --embedding-dimensions 1024
+fi
+if ! gbrain init --pglite --json "$@"; then
+  if [ -n "${BACKUP:-}" ] && [ -f "$BACKUP" ]; then mv "$BACKUP" "$HOME/.gbrain/config.json"; fi
+  echo "gbrain init failed. Existing config (if any) was restored. PGLite at ~/.gbrain/pglite/ may be in a partial state — \`rm -rf ~/.gbrain/pglite\` to reset." >&2
+  echo "Continuing setup without local code search; you can re-run /setup-gbrain to retry." >&2
 fi
 ```
 

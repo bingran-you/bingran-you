@@ -1,5 +1,6 @@
 ---
 name: pair-agent
+preamble-tier: 2
 version: 0.1.0
 description: Pair a remote AI agent with your browser. (gstack)
 triggers:
@@ -675,6 +676,10 @@ When options differ in coverage, include `Completeness: X/10` (10 = all edge cas
 
 For high-stakes ambiguity (architecture, data model, destructive scope, missing context), STOP. Name it in one sentence, present 2-3 options with tradeoffs, and ask. Do not use for routine coding or obvious changes.
 
+## Claimed Limitations Need Evidence
+
+A claimed limitation or requirement ("the API can't do this", "X requires a credential", "that's impossible on this platform") is a material claim. State one only with the verbatim error, the documented statement, or a live probe in hand — pattern-matching a failure to a familiar story is not evidence. When a cheap probe settles the question, run it BEFORE asking the user anything or declaring a step blocked.
+
 ## Continuous Checkpoint Mode
 
 If `CHECKPOINT_MODE` is `"continuous"`: auto-commit completed logical units with `WIP:` prefix.
@@ -729,24 +734,6 @@ Write (only after confirmation for free-form):
 ```
 
 Exit code 2 = rejected as not user-originated; do not retry. On success: "Set `<id>` → `<preference>`. Active immediately."
-
-## Repo Ownership — See Something, Say Something
-
-`REPO_MODE` controls how to handle issues outside your branch:
-- **`solo`** — You own everything. Investigate and offer to fix proactively.
-- **`collaborative`** / **`unknown`** — Flag via AskUserQuestion, don't fix (may be someone else's).
-
-Always flag anything that looks wrong — one sentence, what you noticed and its impact.
-
-## Search Before Building
-
-Before building anything unfamiliar, **search first.** See `~/.claude/skills/gstack/ETHOS.md`.
-- **Layer 1** (tried and true) — don't reinvent. **Layer 2** (new and popular) — scrutinize. **Layer 3** (first principles) — prize above all.
-
-**Eureka:** When first-principles reasoning contradicts conventional wisdom, name it and log:
-```bash
-jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> ~/.gstack/analytics/eureka.jsonl 2>/dev/null || true
-```
 
 ## Completion Status Protocol
 
@@ -938,7 +925,27 @@ using the generic remote flow instead.
 
 ### If different machine (option B):
 
-First, detect ngrok status:
+**Consent gate (once per machine).** The tunnel exposes this browser beyond
+the machine, so it is OFF until the user opts in — the daemon refuses
+`/tunnel/start` and `BROWSE_TUNNEL=1` otherwise. Check the standing consent:
+
+```bash
+~/.claude/skills/gstack/bin/gstack-config get pair_agent 2>/dev/null || echo "unset"
+```
+
+If the value is not `on`, ask via AskUserQuestion (one-way-door posture —
+this opens a path from the internet to the local browser):
+
+> "Remote pairing runs an ngrok tunnel from the internet to this machine's
+> browser (locked to a 26-command allowlist + scoped token, but still an
+> exposure). Enable pair-agent on this machine?"
+
+Options: A) Enable — run `~/.claude/skills/gstack/bin/gstack-config set pair_agent on`, confirm it reads back `on`, and continue. B) No — stop here; local pairing (option A above) still works.
+
+If the value is already `on`, say nothing and continue — consent stands until
+`gstack-config set pair_agent off`.
+
+Then detect ngrok status:
 
 ```bash
 which ngrok 2>/dev/null && echo "NGROK_INSTALLED" || echo "NGROK_NOT_INSTALLED"

@@ -769,6 +769,28 @@ should route through `browse` — `screenshot --selector` for visual output,
 `npm i puppeteer` and downloading a second Chromium that drifts out of version sync.
 One install to pin, one daemon's lifecycle to manage.
 
+## Session Persistence (opt-in)
+
+By default the headless daemon's cookies and tab state die with it — a crash,
+version auto-restart, or `browse stop` logs you out of everything (#778).
+Opt in to persistence with `BROWSE_PERSIST_STATE=1` in the daemon's
+environment: the daemon then snapshots cookies + per-tab
+URL/localStorage/sessionStorage to `<stateDir>/session-state.json` (0600)
+every 30 seconds and at clean shutdown, and restores it on the next launch.
+
+Facts that matter:
+- **Default OFF.** Cookies on disk are a real cost; the user opts in.
+- **Headless only.** Headed mode's persistent Chromium profile already owns
+  its state; replaying tabs would clobber the user's window.
+- **Never persisted:** loaded HTML and tab ownership — a tampered state file
+  cannot smuggle content past load-html's checks or forge ownership. Cookies
+  for localhost, `.internal`, and cloud-metadata addresses are dropped on
+  restore.
+- **Corrupt state** is moved to `session-state.json.corrupt` (kept for
+  diagnosis) and the daemon boots fresh — persistence can never block a
+  launch. The boot log says which happened: `Session state restored: N
+  cookies / M tabs` or `fresh session`.
+
 ## User Handoff
 
 When you hit something you can't handle in headless mode (CAPTCHA, complex auth, multi-factor

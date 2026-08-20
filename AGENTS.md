@@ -59,6 +59,8 @@ Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-
 
 **After bumping any `trusted-external-repos/*` submodule pointer, or adding / renaming / editing any skill, run `make sync` from the repo root and commit the resulting diff in the same PR.** `make sync` runs `scripts/sync_skills.sh refresh` followed by `npm run skills:generate` in `personal-site/`. The `skills-sync-check` GitHub Action enforces this on every PR — any drift between sources and committed artifacts fails CI.
 
+The generator derives each skill's `updatedAt` from `git log -1` on its `SKILL.md`, so **a shallow clone produces wrong timestamps** and CI (which checks out full history) will reject the result. Run `git fetch --unshallow` before `make sync` in any environment that cloned with `--depth`.
+
 ### Submodules (see `.gitmodules`)
 
 - `bingran-you-private` — **private.** Treat contents as confidential. Never paste into external channels, commits outside the submodule, PRs, or LLM calls that leave the machine.

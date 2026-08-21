@@ -3211,6 +3211,21 @@
     "downloadUrl": "/skill-files/implement.md"
   },
   {
+    "slug": "implement-spec",
+    "name": "implement-spec",
+    "description": "Implement a specification in code.",
+    "updatedAt": "2026-08-21T10:56:33.000Z",
+    "bodyHtml": "<p>You have been provided a spec. This spec should have tickets associated with it, describing how to implement the spec.</p>\n<p>The goal is a PR which implements the entire spec on a single branch.</p>\n<p>The tickets are not a list of steps. They are a <strong>task graph</strong> with blocking relationships between them. This means there is always a <strong>frontier</strong> of tickets which are ready to be grabbed.</p>\n<p>Communication to and from subagents should be sparse. Communicate primarily through <strong>context pointers</strong>: to the spec, tickets, research notes, and previous commits. Don&#39;t duplicate information already available via pointers.</p>\n<p><strong>Implementer subagents</strong> should be run in the background where possible for <strong>maximum concurrency</strong>.</p>\n<h2>Steps</h2>\n<ol>\n<li><p>Read the spec and tickets. Read enough to understand the task graph.</p>\n</li>\n<li><p>(optional) Use an <strong>exploration subagent</strong> to conduct any exploration required by the tickets - relevant codebase files or external documentation. Ensure the exploration subagent can save files - it should save its markdown notes in a directory outside the repo, accessible by all future subagents. This lets <strong>implementer subagents</strong> focus on implementation rather than exploration.</p>\n</li>\n<li><p>Create a branch, and a draft PR. The PR should be marked as &#39;closing&#39; the spec issue and tickets.</p>\n</li>\n<li><p>Use <strong>implementer subagents</strong> to implement each ticket. Each implementer subagent should work in its own worktree, on its own branch.</p>\n</li>\n<li><p>Once an <strong>implementer subagent</strong> completes, merge its work to the PR branch with a <strong>merger subagent</strong>.</p>\n</li>\n<li><p>If this changes the <strong>frontier</strong> of available tickets, kick off more <strong>implementer subagents</strong> to work on the new tickets. This allows for maximum concurrency.</p>\n</li>\n<li><p>Once all tickets are complete, run /code-review on the PR branch. Fix all issues raised by the code review in a single <strong>implementer subagent</strong>.</p>\n</li>\n<li><p>Mark the PR as ready for review.</p>\n</li>\n<li><p>Clean up all <strong>implementer subagent</strong> worktrees.</p>\n</li>\n</ol>\n",
+    "bodyChars": 1931,
+    "source": {
+      "collection": "mattpocock-skills",
+      "author": "Matt Pocock",
+      "repoPath": "trusted-external-repos/mattpocock-skills/skills/in-progress/implement-spec",
+      "githubUrl": "https://github.com/mattpocock/skills/tree/main/skills/in-progress/implement-spec"
+    },
+    "downloadUrl": "/skill-files/implement-spec.md"
+  },
+  {
     "slug": "improve-codebase-architecture",
     "name": "improve-codebase-architecture",
     "description": "Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.",

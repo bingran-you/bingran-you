@@ -47,6 +47,9 @@ const SKILLS_DIR = path.join(REPO_ROOT, ".agents", "skills");
 const OUT_JSON = path.join(PERSONAL_SITE, "lib", "skills.generated.json");
 const PUBLIC_SKILL_FILES = path.join(PERSONAL_SITE, "public", "skill-files");
 
+// `owner`/`repo` must name the repo each submodule actually tracks in
+// .gitmodules, not a fork of it. A fork that lags upstream does not contain the
+// pinned commit's skills, so every link for a newly added skill 404s.
 const SOURCE_RULES = [
   {
     re: /^repo-skills\/(.+)$/,
@@ -61,7 +64,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/gstack\/browser-skills\/(.+)$/,
     collection: "gstack/browser-skills",
     displayName: "gstack · browser-skills",
-    owner: "bingran-you",
+    owner: "garrytan",
     repo: "gstack",
     branch: "main",
     repoSubpath: (m) => `browser-skills/${m[1]}`,
@@ -70,7 +73,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/gstack\/openclaw\/skills\/(.+)$/,
     collection: "gstack/openclaw",
     displayName: "gstack · openclaw",
-    owner: "bingran-you",
+    owner: "garrytan",
     repo: "gstack",
     branch: "main",
     repoSubpath: (m) => `openclaw/skills/${m[1]}`,
@@ -79,7 +82,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/gstack\/(.+)$/,
     collection: "gstack",
     displayName: "gstack",
-    owner: "bingran-you",
+    owner: "garrytan",
     repo: "gstack",
     branch: "main",
     repoSubpath: (m) => m[1],
@@ -88,7 +91,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/gstack$/,
     collection: "gstack",
     displayName: "gstack",
-    owner: "bingran-you",
+    owner: "garrytan",
     repo: "gstack",
     branch: "main",
     repoSubpath: () => "",
@@ -97,7 +100,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/marketingskills\/skills\/(.+)$/,
     collection: "marketingskills",
     displayName: "marketingskills",
-    owner: "bingran-you",
+    owner: "coreyhaines31",
     repo: "marketingskills",
     branch: "main",
     repoSubpath: (m) => `skills/${m[1]}`,
@@ -115,7 +118,7 @@ const SOURCE_RULES = [
     re: /^trusted-external-repos\/open-design\/skills\/(.+)$/,
     collection: "open-design",
     displayName: "open-design",
-    owner: "bingran-you",
+    owner: "nexu-io",
     repo: "open-design",
     branch: "main",
     repoSubpath: (m) => `skills/${m[1]}`,

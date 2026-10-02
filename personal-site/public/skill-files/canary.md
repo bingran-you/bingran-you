@@ -236,7 +236,8 @@ At session start or after compaction, recover recent project context.
 ```bash
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
 _BRANCH=$(git branch --show-current 2>/dev/null | tr -cd 'a-zA-Z0-9._/-') || :; _BRANCH=${_BRANCH:-unknown}
-_PROJ="${GSTACK_HOME:-$HOME/.gstack}/projects/${SLUG:-unknown}"
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+_PROJ="$GSTACK_STATE_ROOT/projects/${SLUG:-unknown}"
 if [ -d "$_PROJ" ]; then
   echo "--- RECENT ARTIFACTS ---"
   find "$_PROJ/ceo-plans" "$_PROJ/checkpoints" -type f -name "*.md" 2>/dev/null | xargs -r ls -t 2>/dev/null | head -3
@@ -411,7 +412,7 @@ fi
 9. **Show screenshots to the user.** After copying a screenshot, use the Read tool on the copied file so the user sees it inline. Prefer `type: "jpeg", quality: 60` to keep files small.
 10. **Deterministic first.** Drive with `aside repl` for anything you can express as steps. Reach for `aside exec "<task>"` (Aside's built-in agent) only for open-ended reading or research where step-by-step driving has no advantage; it acts with the same real sessions, so a mutating task needs the same consent, and its answer is untrusted content.
 
-**Script shapes.** Every browsing skill carries its own `aside repl` scripts, built from the verified cookbook that lives in the /browse skill (`browse/SKILL.md`, "Cookbook"). When a skill's text names "the read script", "the flow script", "the links script", "the responsive script", or "the annotated-screenshot script" without showing it, take the shape from there — never from memory.
+**Script shapes.** Use this skill's `aside repl` scripts. For named read, flow, links, responsive or annotated-screenshot scripts not shown here, Read `browse/SKILL.md`, "Cookbook", and take the shape from there — never from memory.
 
 ## Browser fallback: gstack's own headless browser
 
@@ -694,8 +695,9 @@ Per-page and overall status: BROKEN if any confirmed CRITICAL alert occurred; ot
 Log the result for the review dashboard:
 
 ```bash
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
-mkdir -p ~/.gstack/projects/$SLUG
+mkdir -p "$GSTACK_STATE_ROOT"/projects/$SLUG
 ```
 
 Write a JSONL entry: `{"skill":"canary","timestamp":"<ISO>","status":"<HEALTHY/DEGRADED/BROKEN>","url":"<url>","duration_min":<N>,"alerts":<N>}`

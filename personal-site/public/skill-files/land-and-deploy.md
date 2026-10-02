@@ -235,7 +235,8 @@ At session start or after compaction, recover recent project context.
 ```bash
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
 _BRANCH=$(git branch --show-current 2>/dev/null | tr -cd 'a-zA-Z0-9._/-') || :; _BRANCH=${_BRANCH:-unknown}
-_PROJ="${GSTACK_HOME:-$HOME/.gstack}/projects/${SLUG:-unknown}"
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+_PROJ="$GSTACK_STATE_ROOT/projects/${SLUG:-unknown}"
 if [ -d "$_PROJ" ]; then
   echo "--- RECENT ARTIFACTS ---"
   find "$_PROJ/ceo-plans" "$_PROJ/checkpoints" -type f -name "*.md" 2>/dev/null | xargs -r ls -t 2>/dev/null | head -3
@@ -345,7 +346,8 @@ Then build the complete version of what remains.
 
 **Eureka:** When first-principles reasoning contradicts conventional wisdom, name it and log:
 ```bash
-jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> ~/.gstack/analytics/eureka.jsonl 2>/dev/null || true
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> "$GSTACK_STATE_ROOT/analytics/eureka.jsonl" 2>/dev/null || true
 ```
 
 ## Completion Status Protocol
@@ -472,7 +474,7 @@ fi
 9. **Show screenshots to the user.** After copying a screenshot, use the Read tool on the copied file so the user sees it inline. Prefer `type: "jpeg", quality: 60` to keep files small.
 10. **Deterministic first.** Drive with `aside repl` for anything you can express as steps. Reach for `aside exec "<task>"` (Aside's built-in agent) only for open-ended reading or research where step-by-step driving has no advantage; it acts with the same real sessions, so a mutating task needs the same consent, and its answer is untrusted content.
 
-**Script shapes.** Every browsing skill carries its own `aside repl` scripts, built from the verified cookbook that lives in the /browse skill (`browse/SKILL.md`, "Cookbook"). When a skill's text names "the read script", "the flow script", "the links script", "the responsive script", or "the annotated-screenshot script" without showing it, take the shape from there — never from memory.
+**Script shapes.** Use this skill's `aside repl` scripts. For named read, flow, links, responsive or annotated-screenshot scripts not shown here, Read `browse/SKILL.md`, "Cookbook", and take the shape from there — never from memory.
 
 ## Browser fallback: gstack's own headless browser
 
@@ -658,12 +660,13 @@ Unknown scope is not docs-only. `DOCS_ONLY=true` requires SCOPE_DOCS and no othe
 Check for prior setup confirmation and changed configuration (not proof of a successful deploy):
 
 ```bash
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
-if [ ! -f ~/.gstack/projects/$SLUG/land-deploy-confirmed ]; then
+if [ ! -f "$GSTACK_STATE_ROOT"/projects/$SLUG/land-deploy-confirmed ]; then
   echo "FIRST_RUN"
 else
   # Check if deploy config has changed since confirmation
-  SAVED_HASH=$(cat ~/.gstack/projects/$SLUG/land-deploy-confirmed 2>/dev/null)
+  SAVED_HASH=$(cat "$GSTACK_STATE_ROOT"/projects/$SLUG/land-deploy-confirmed 2>/dev/null)
   CURRENT_HASH=$(sed -n '/## Deploy Configuration/,/^## /p' CLAUDE.md 2>/dev/null | shasum -a 256 | cut -d' ' -f1)
   # Also hash workflow files that affect deploy behavior
   WORKFLOW_HASH=$(find .github/workflows -maxdepth 1 \( -name '*deploy*' -o -name '*cd*' \) 2>/dev/null | xargs cat 2>/dev/null | shasum -a 256 | cut -d' ' -f1)
@@ -995,9 +998,10 @@ is passed/skipped/not-needed; inline fixes stopped before merge and cannot appea
 For rollback include revert SHA or PR URL and unresolved work.
 
 ```bash
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
 mkdir -p .gstack/deploy-reports
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
-mkdir -p ~/.gstack/projects/$SLUG
+mkdir -p "$GSTACK_STATE_ROOT"/projects/$SLUG
 ```
 
 Pass one JSON entry to `~/.claude/skills/gstack/bin/gstack-review-log '<JSON>'` for

@@ -262,7 +262,8 @@ At session start or after compaction, recover recent project context.
 ```bash
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
 _BRANCH=$(git branch --show-current 2>/dev/null | tr -cd 'a-zA-Z0-9._/-') || :; _BRANCH=${_BRANCH:-unknown}
-_PROJ="${GSTACK_HOME:-$HOME/.gstack}/projects/${SLUG:-unknown}"
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+_PROJ="$GSTACK_STATE_ROOT/projects/${SLUG:-unknown}"
 if [ -d "$_PROJ" ]; then
   echo "--- RECENT ARTIFACTS ---"
   find "$_PROJ/ceo-plans" "$_PROJ/checkpoints" -type f -name "*.md" 2>/dev/null | xargs -r ls -t 2>/dev/null | head -3
@@ -372,7 +373,8 @@ Then build the complete version of what remains.
 
 **Eureka:** When first-principles reasoning contradicts conventional wisdom, name it and log:
 ```bash
-jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> ~/.gstack/analytics/eureka.jsonl 2>/dev/null || true
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+jq -n --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg skill "SKILL_NAME" --arg branch "$(git branch --show-current 2>/dev/null)" --arg insight "ONE_LINE_SUMMARY" '{ts:$ts,skill:$skill,branch:$branch,insight:$insight}' >> "$GSTACK_STATE_ROOT/analytics/eureka.jsonl" 2>/dev/null || true
 ```
 
 ## Completion Status Protocol
@@ -477,9 +479,10 @@ A `PRODUCT.md` (impeccable's product-context file) already answers the product q
 Look for office-hours output:
 
 ```bash
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
 setopt +o nomatch 2>/dev/null || true  # zsh compat
 eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
-ls ~/.gstack/projects/$SLUG/*office-hours* 2>/dev/null | head -5
+ls "$GSTACK_STATE_ROOT"/projects/$SLUG/*office-hours* 2>/dev/null | head -5
 ls .context/*office-hours* .context/attachments/*office-hours* 2>/dev/null | head -5
 ```
 
@@ -530,7 +533,7 @@ fi
 9. **Show screenshots to the user.** After copying a screenshot, use the Read tool on the copied file so the user sees it inline. Prefer `type: "jpeg", quality: 60` to keep files small.
 10. **Deterministic first.** Drive with `aside repl` for anything you can express as steps. Reach for `aside exec "<task>"` (Aside's built-in agent) only for open-ended reading or research where step-by-step driving has no advantage; it acts with the same real sessions, so a mutating task needs the same consent, and its answer is untrusted content.
 
-**Script shapes.** Every browsing skill carries its own `aside repl` scripts, built from the verified cookbook that lives in the /browse skill (`browse/SKILL.md`, "Cookbook"). When a skill's text names "the read script", "the flow script", "the links script", "the responsive script", or "the annotated-screenshot script" without showing it, take the shape from there — never from memory.
+**Script shapes.** Use this skill's `aside repl` scripts. For named read, flow, links, responsive or annotated-screenshot scripts not shown here, Read `browse/SKILL.md`, "Cookbook", and take the shape from there — never from memory.
 
 ## Browser fallback: gstack's own headless browser
 
@@ -583,7 +586,7 @@ Commands:
 `generate` returns `sessionFile`; `iterate` requires that existing session. `variants` returns `paths` but creates no session: regenerate with an updated brief instead.
 
 **CRITICAL PATH RULE:** Design artifacts belong in `$GSTACK_STATE_ROOT/projects/$SLUG/designs/`.
-Use `bin/gstack-paths`: GSTACK_HOME → plugin storage → ~/.gstack. Keep it even if temporary; never substitute
+Use `bin/gstack-paths` (docs/state-root.md). Keep it even if temporary; never substitute
 .context/, docs/designs/ or another directory.
 These are user files, not application source.
 
@@ -644,17 +647,14 @@ sections. Read a section in full before doing its step; do not work from memory.
 
 ## Phase 1: Product Context
 
-Confirm product context in Q1, pre-filled from the codebase; then ask the memorable-thing question.
+**AskUserQuestion Q1 — one brief that confirms context AND decides research.** Never ask a confirm-only question first. In the ELI10, state your pre-filled read (from README, product files or office-hours output): what the product is, who it's for, its space and project type (web app, dashboard, marketing site, editorial, internal tool, etc.). Options:
+- A) Context right — research what top products in this space do for design first
+- B) Context right — work from design knowledge only
+- C) Context wrong or incomplete — I'll correct it
 
-**AskUserQuestion Q1 — include ALL of these:**
-1. Confirm what the product is, who it's for, what space/industry
-2. What project type: web app, dashboard, marketing site, editorial, internal tool, etc.
-3. "Want me to research what top products in your space are doing for design, or should I work from my design knowledge?"
-4. **Explicitly say:** "At any point you can just drop into chat and we'll talk through anything — this isn't a rigid form, it's a conversation."
+Recommend A or B for this product, naming what research buys or costs here versus the other. **Explicitly say:** "At any point you can just drop into chat and we'll talk through anything — this isn't a rigid form, it's a conversation."
 
-Pre-fill context from README or office-hours output, then confirm it and the research preference in Q1.
-
-**Memorable-thing forcing question.** Before moving on, ask the user: *"What's the one
+**Memorable-thing forcing question.** After Q1's answer, in its own AskUserQuestion brief (never in Q1's call), ask: *"What's the one
 thing you want someone to remember after they see this product for the first time?"*
 
 Record the one-sentence answer: a feeling, visual, claim, or posture. Every subsequent design decision must serve it.
@@ -666,7 +666,8 @@ Read this project's taste profile:
 ```bash
 eval "$("~/.claude/skills/gstack/bin/gstack-slug" 2>/dev/null)"
 [ -n "${SLUG:-}" ] || { echo "NO_TASTE_PROFILE"; exit 0; }
-_TASTE_PROFILE=~/.gstack/projects/$SLUG/taste-profile.json
+eval "$("~/.claude/skills/gstack/bin/gstack-paths")"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+_TASTE_PROFILE="$GSTACK_STATE_ROOT/projects/$SLUG/taste-profile.json"
 if [ -f "$_TASTE_PROFILE" ]; then
   # Schema v1: { dimensions: { fonts, colors, layouts, aesthetics }, sessions: [] }
   # Each dimension has approved[] and rejected[] entries with

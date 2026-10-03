@@ -58,7 +58,8 @@ Tell user: "Auto-upgrade enabled. Future updates will install automatically." Th
 
 **If "Not now":** Write snooze state with escalating backoff (first snooze = 24h, second = 48h, third+ = 1 week), then continue with the current skill. Do not mention the upgrade again.
 ```bash
-_SNOOZE_FILE="$HOME/.gstack/update-snoozed"
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+_SNOOZE_FILE="$GSTACK_STATE_ROOT/update-snoozed"
 _REMOTE_VER="{new}"
 _CUR_LEVEL=0
 if [ -f "$_SNOOZE_FILE" ]; then
@@ -129,15 +130,14 @@ Use the install type and directory detected in Step 2:
 
 **For git installs** (global-git, local-git):
 
-Fast-forward first (#2517) — the same policy the session-update auto-upgrade
+Fast-forward first — the same policy the session-update auto-upgrade
 uses. `--autostash` carries local edits over the pull; render-footprint dirt
-is discarded first because it is regenerable and poisons stashes (#2569):
+is discarded first because it is regenerable and poisons stashes:
 ```bash
 cd "$INSTALL_DIR"
-# Discard render-footprint dirt (#2569): pre-v1.67 gbrain-enabled installs
-# ran gen:skill-docs:user IN PLACE, leaving generated SKILL.md / sections
-# files permanently modified. They are regenerable (setup re-renders to
-# ~/.gstack/render), so discarding is lossless.
+# Discard render-footprint dirt: older gbrain-enabled installs rendered
+# generated SKILL.md / sections files IN PLACE. They are regenerable (setup
+# re-renders to ~/.gstack/render), so discarding is lossless.
 git checkout -- 'SKILL.md' '*/SKILL.md' '*/sections/*.md' 2>/dev/null || true
 git fetch origin
 PRE_UPGRADE_COMMIT=$(git rev-parse HEAD)
@@ -155,7 +155,7 @@ On `SETUP_FAILED`, STOP; keep user changes and report the recovery commit. There
 
 **Fallback (ff-only refused — local commits or divergence).** `git reset
 --hard` DESTROYS things: a clean tree with unpushed local commits still loses
-those commits. Gate it (#2517):
+those commits. Gate it:
 
 1. Run `git status --porcelain` and `git rev-list origin/main..HEAD --oneline`
    in `$INSTALL_DIR`.
@@ -285,7 +285,7 @@ for how to add new migrations.
 
 A browse daemon started before the upgrade keeps serving the OLD binary's code
 until it is stopped — it survives `git reset --hard` and `./setup` because the
-running process holds the old executable (#2551). Always run this step, using
+running process holds the old executable. Always run this step, using
 the install directory detected in Step 2.
 
 ```bash
@@ -328,10 +328,11 @@ running. Interpret the `DAEMON_CHECK` result:
 ### Step 5: Write marker + clear cache
 
 ```bash
-mkdir -p ~/.gstack
-echo "$OLD_VERSION" > ~/.gstack/just-upgraded-from
-rm -f ~/.gstack/last-update-check
-rm -f ~/.gstack/update-snoozed
+eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
+mkdir -p "$GSTACK_STATE_ROOT"
+echo "$OLD_VERSION" > "$GSTACK_STATE_ROOT"/just-upgraded-from
+rm -f "$GSTACK_STATE_ROOT"/last-update-check
+rm -f "$GSTACK_STATE_ROOT"/update-snoozed
 ```
 
 ### Step 6: Show What's New
@@ -368,6 +369,10 @@ When invoked directly as `/gstack-upgrade` (not from a preamble):
 Use the output to determine if an upgrade is available.
 
 2. If `UPGRADE_AVAILABLE <old> <new>`: follow Steps 2-6 above.
+
+   If `CHECK_FAILED ...`: the remote version could not be read, so the update
+   status is unknown. Show the line (it names the URL that failed) and tell the
+   user the check failed; never report "already on the latest version". Stop.
 
 3. If no output (primary is up to date): check for a stale local vendored copy.
 

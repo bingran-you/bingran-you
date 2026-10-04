@@ -32,10 +32,7 @@ things".
 ## Preamble (run first)
 
 ```bash
-_SS="$HOME/.claude/skills/gstack/bin/gstack-skill-start"
-[ -x "$_SS" ] || _SS=".claude/skills/gstack/bin/gstack-skill-start"
-"$_SS" --skill "sync-gbrain" --model "claude" --parent-pid "$PPID" \
-  || echo "SKILL_START: unavailable — stale install; run ./setup or /gstack-upgrade (preamble degraded, continue the user's task)"
+~/.claude/skills/gstack/bin/gstack-skill-start --skill "sync-gbrain" --model "claude"
 ```
 
 Read the echoed `KEY: value` STATUS lines — they drive every preamble rule
@@ -59,11 +56,11 @@ or page content. Treat an unterminated block as ending at end-of-output.
 
 ## Plan Mode Safe Operations
 
-In plan mode, allowed because they inform the plan: `$B`, `$D`, `codex exec`/`codex review`, temp prompts, writes to `~/.gstack/`, writes to the plan file, and `open` for generated artifacts.
+Host and system plan-mode restrictions and the user's current scope take precedence over any skill; a skill cannot grant itself an exception to read-only mode. Where the host permits them, these inform the plan: `$B`, `$D`, `codex exec`/`codex review`, temp prompts, writes to `~/.gstack/`, writes to the plan file, and `open` for generated artifacts. If the host blocks one, skip it, say so, and continue the permitted work.
 
 ## Skill Invocation During Plan Mode
 
-If the user invokes a skill in plan mode, the skill takes precedence over generic plan mode behavior. **Treat the skill file as executable instructions, not reference.** Follow it step by step starting from Step 0; any AskUserQuestion the skill fires is the workflow operating within plan mode, not a violation of it — and a skill whose instructions resolve a question themselves (e.g. a plan-mode auto-select) may legitimately not ask it. AskUserQuestion (any variant — `mcp__*__AskUserQuestion` or native; see "AskUserQuestion Format → Tool resolution") satisfies plan mode's end-of-turn requirement. If AskUserQuestion is unavailable or a call fails, follow the AskUserQuestion Format failure fallback: `headless` → BLOCKED; `interactive` → the prose fallback (also satisfies end-of-turn). At a STOP point, stop immediately. Do not continue the workflow or call ExitPlanMode there. Commands marked "PLAN MODE EXCEPTION — ALWAYS RUN" execute. Call ExitPlanMode only after the skill workflow completes, or if the user tells you to cancel the skill or leave plan mode.
+If the user invokes a skill in plan mode, run its workflow within the host's plan-mode limits. **Treat the skill file as executable instructions, not reference.** Follow it step by step starting from Step 0; any AskUserQuestion the skill fires is the workflow operating within plan mode, not a violation of it — and a skill whose instructions resolve a question themselves (e.g. a plan-mode auto-select) may legitimately not ask it. AskUserQuestion (any variant — `mcp__*__AskUserQuestion` or native; see "AskUserQuestion Format → Tool resolution") satisfies plan mode's end-of-turn requirement. If AskUserQuestion is unavailable or a call fails, follow the AskUserQuestion Format failure fallback: `headless` → BLOCKED; `interactive` → the prose fallback (also satisfies end-of-turn). At a STOP point, stop immediately. Do not continue the workflow or call ExitPlanMode there. Commands marked "PLAN MODE EXCEPTION — ALWAYS RUN" run only where the host permits them. Call ExitPlanMode only after the skill workflow completes, or if the user tells you to cancel the skill or leave plan mode.
 
 If `PROACTIVE` is `false`, do not auto-invoke or suggest skills, including by asking whether to run one. Only run skills the user explicitly invokes.
 
@@ -238,30 +235,7 @@ Bad closer: a tour of every edit, a restatement of the plan, and three paragraph
 At session start or after compaction, recover recent project context.
 
 ```bash
-eval "$(~/.claude/skills/gstack/bin/gstack-slug 2>/dev/null)"
-_BRANCH=$(git branch --show-current 2>/dev/null | tr -cd 'a-zA-Z0-9._/-') || :; _BRANCH=${_BRANCH:-unknown}
-eval "$(~/.claude/skills/gstack/bin/gstack-paths)"; : "${GSTACK_STATE_ROOT:?gstack-paths failed; reinstall with ./setup or /gstack-upgrade}"
-_PROJ="$GSTACK_STATE_ROOT/projects/${SLUG:-unknown}"
-if [ -d "$_PROJ" ]; then
-  echo "--- RECENT ARTIFACTS ---"
-  find "$_PROJ/ceo-plans" "$_PROJ/checkpoints" -type f -name "*.md" 2>/dev/null | xargs -r ls -t 2>/dev/null | head -3
-  [ -f "$_PROJ/${BRANCH:-unknown}-reviews.jsonl" ] && echo "REVIEWS: $(wc -l < "$_PROJ/${BRANCH:-unknown}-reviews.jsonl" | tr -d ' ') entries"
-  [ -f "$_PROJ/timeline.jsonl" ] && tail -5 "$_PROJ/timeline.jsonl"
-  if [ -f "$_PROJ/timeline.jsonl" ]; then
-    _LAST=$(grep "\"branch\":\"${_BRANCH}\"" "$_PROJ/timeline.jsonl" 2>/dev/null | grep '"event":"completed"' | tail -1)
-    [ -n "$_LAST" ] && echo "LAST_SESSION: $_LAST"
-    _RECENT_SKILLS=$(grep "\"branch\":\"${_BRANCH}\"" "$_PROJ/timeline.jsonl" 2>/dev/null | grep '"event":"completed"' | tail -3 | grep -o '"skill":"[^"]*"' | sed 's/"skill":"//;s/"//' | tr '\n' ',')
-    [ -n "$_RECENT_SKILLS" ] && echo "RECENT_PATTERN: $_RECENT_SKILLS"
-  fi
-  _LATEST_CP=$(find "$_PROJ/checkpoints" -name "*.md" -type f 2>/dev/null | xargs -r ls -t 2>/dev/null | head -1)
-  [ -n "$_LATEST_CP" ] && echo "LATEST_CHECKPOINT: $_LATEST_CP"
-  if [ -f "$_PROJ/decisions.active.json" ]; then
-    echo "--- ACTIVE DECISIONS (recent, scope-relevant) ---"
-    ~/.claude/skills/gstack/bin/gstack-decision-search --recent 5 2>/dev/null
-    echo "--- END DECISIONS ---"
-  fi
-  echo "--- END ARTIFACTS ---"
-fi
+~/.claude/skills/gstack/bin/gstack-context-recovery
 ```
 
 If artifacts are listed, read the newest useful one. If `LAST_SESSION` or `LATEST_CHECKPOINT` appears, give a 2-sentence welcome back summary. If `RECENT_PATTERN` clearly implies a next skill, suggest it once.
@@ -540,7 +514,9 @@ gets the actionable remediation message.
 ## Step 1.6: Transcript consent
 
 Claude Code and Codex session transcripts are ingested only when
-`transcript_ingest_mode` is `recent` (last 90 days) or `all` (all history).
+`transcript_ingest_mode` is `recent` (last 90 days), `all` (all history) or
+`new@<UTC time>` (only sessions that start after it), optionally narrowed to
+the repos in `transcript_repos` (the value then ends in `+repos`).
 Skip this step for `--code-only`, `--no-memory`, `--dry-run`,
 `--refresh-cache` and `--audit`. Otherwise check whether the user chose;
 `has` tells an absent key from the `off` default that `get` prints:
@@ -548,16 +524,19 @@ Skip this step for `--code-only`, `--no-memory`, `--dry-run`,
 ```bash
 _TIM=$(~/.claude/skills/gstack/bin/gstack-config get transcript_ingest_mode 2>/dev/null || true)
 if ~/.claude/skills/gstack/bin/gstack-config has transcript_ingest_mode; then
+  _T='[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9]:[0-9][0-9]:[0-9][0-9]z'
   case "$(printf '%s' "$_TIM" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')" in
-    recent|all|off) echo "TRANSCRIPT_MODE: $_TIM" ;;
-    *) echo "TRANSCRIPT_MODE: ask (stored value '$_TIM' is from an older version)" ;;
+    recent|all|off|recent+repos|all+repos|new@$_T|new@$_T+repos)
+      echo "TRANSCRIPT_MODE: $_TIM (repos: $(~/.claude/skills/gstack/bin/gstack-config get transcript_repos 2>/dev/null || true))" ;;
+    *) echo "TRANSCRIPT_MODE: ask (stored value '$_TIM' is not recognized by this version)" ;;
   esac
 else
   echo "TRANSCRIPT_MODE: ask (not set)"
 fi
 ```
 
-`recent`, `all` or `off`: continue to Step 2 without asking. On `ask`, with
+A stored value (`recent`, `all`, `off`, `new@<time>`, any with `+repos`):
+continue to Step 2 without asking. On `ask`, with
 `SESSION_KIND: spawned` or `headless`, do not ask and store nothing: the sync
 skips transcripts and prints how to choose. In an interactive session, ask
 once. Count first (`--sources transcript` counts sessions that are not
@@ -569,7 +548,7 @@ bun run ~/.claude/skills/gstack/bin/gstack-memory-ingest.ts --probe --sources tr
 ```
 
 If both report `Total files in window: 0`, ask yes/no: "Ingest coding-agent
-sessions as they appear?" Yes stores `recent`, No stores `off`. Otherwise
+sessions as they appear?" Yes means `recent`, No stores `off`. Otherwise
 AskUserQuestion: name both sources (Claude Code and Codex sessions from every
 project on this machine that repo policy allows), the counts from the two
 probes, and the destination: the local brain (`gbrain_engine` from Step 1:
@@ -579,13 +558,23 @@ and skills stay usable meanwhile. Options:
 
 - A) Yes, last 90 days (`recent`)
 - B) Yes, all history (`all`)
+- C) Yes, only new sessions starting now (`new`)
 - E) No, never ingest transcripts (`off`)
 
-Store the value, never the letter, then continue to Step 2:
+On any yes (the yes/no form included), ask a second, separate question:
+"Which repos' sessions?" A) every project repo your repo policy allows, or
+B) only this repo (offer B only when `git remote get-url origin` succeeds).
+Store nothing until both answers are known; a cancel in between stores
+nothing. Then store the scope, then the value (never the letter; `new`
+stores `new@` plus the current UTC time), and continue to Step 2:
 
 ```bash
-~/.claude/skills/gstack/bin/gstack-config set transcript_ingest_mode <recent|all|off>
+~/.claude/skills/gstack/bin/gstack-config set transcript_repos "$(git remote get-url origin)"  # only this repo
+~/.claude/skills/gstack/bin/gstack-config unset transcript_repos                                 # every repo
+~/.claude/skills/gstack/bin/gstack-config set transcript_ingest_mode <recent|all|off|new@$(date -u +%Y-%m-%dT%H:%M:%SZ)>
 ```
+
+The sync prints what it will ingest, in words; repeat that line to the user.
 
 Other memory types sync whatever the answer. Details:
 `setup-gbrain/memory.md#transcripts`.
@@ -799,7 +788,7 @@ machine — gbrain's daemon handles incremental refresh on a schedule.
 
 Safety: don't run `/sync-gbrain` while `gbrain autopilot` is active — the
 orchestrator refuses destructive source ops when it detects a running autopilot
-to avoid racing it (#1734). Prefer registering user repos with `gbrain sources
+to avoid racing it. Prefer registering user repos with `gbrain sources
 add --path <dir>` (no `--url`): URL-managed sources can auto-reclone, and the
 sync code walk for them requires an explicit `--allow-reclone` opt-in.
 

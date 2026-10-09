@@ -1,188 +1,155 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  EducationTable,
+  PaperSection,
+  ProjectsTable,
+} from "@/components/article/blocks";
+import { Sheet } from "@/components/article/sheet";
+import styles from "@/components/article/article.module.css";
+import { PalaceCta } from "@/components/palace-cta";
+import {
   education,
-  getAiPaperHighlights,
-  getAiProjectHighlights,
+  getPaperDetail,
+  papers,
+  projects,
+  TRACK_LABEL,
+  type Paper,
 } from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
-import {
-  AtomIcon,
-  GraduationCapIcon,
-  LaptopIcon,
-} from "@/components/bio-icons";
+import { PERSON, SITE_URL } from "@/lib/site";
+
+type NumberedPaper = {
+  paper: Paper;
+  figureNumber: number;
+  tableNumber?: number;
+};
+
+const hasTable = (paper: Paper) => Boolean(getPaperDetail(paper.slug).table);
+
+/** Fig. 1 is the portrait and Tables 1–2 are on the title page. */
+function numberPapers(list: Paper[]): NumberedPaper[] {
+  let figure = 1;
+  let table = 2;
+  return list.map((paper) => ({
+    paper,
+    figureNumber: ++figure,
+    tableNumber: hasTable(paper) ? ++table : undefined,
+  }));
+}
+
+/** A paper with a table fills a sheet; two without one share a sheet. */
+function paginate(list: NumberedPaper[]): NumberedPaper[][] {
+  const sheets: NumberedPaper[][] = [];
+  for (const entry of list) {
+    const last = sheets.at(-1);
+    const shares =
+      last?.length === 1 &&
+      last[0].paper.track === entry.paper.track &&
+      !hasTable(last[0].paper) &&
+      !hasTable(entry.paper);
+    if (shares) last.push(entry);
+    else sheets.push([entry]);
+  }
+  return sheets;
+}
 
 export default function Home() {
-  const aiHighlights = getAiProjectHighlights();
-  const paperHighlights = getAiPaperHighlights();
+  const sheets = paginate(numberPapers(papers));
+  const firstOfTrack = new Set(
+    Object.keys(TRACK_LABEL).map(
+      (track) => papers.find((paper) => paper.track === track)?.slug,
+    ),
+  );
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdScriptContent(profilePageJsonLd("/")),
         }}
       />
-      <section className="grid gap-8 sm:gap-10 sm:grid-cols-[1fr_auto] sm:items-start">
-        <div>
-          <h1 className="font-display text-5xl leading-[1.02] tracking-[-0.035em] sm:text-6xl">
-            Bingran You
-          </h1>
-          <ul className="mt-7 space-y-3 text-base text-[var(--muted)]">
-            <li className="flex flex-wrap items-center gap-x-6 gap-y-2">
-              <span className="inline-flex items-center gap-2">
-                <LaptopIcon className="h-[18px] w-[18px] shrink-0" />
-                Agentic Builder
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <AtomIcon className="h-[18px] w-[18px] shrink-0" />
-                Ion Trapper
-              </span>
+
+      <Sheet current="/">
+        <h1 className={styles.title}>{PERSON.name}</h1>
+
+        <div className={styles.front}>
+          <ul className={styles.meta}>
+            <li>
+              <Link href="/" className={styles.link}>
+                {SITE_URL}
+              </Link>
             </li>
-            <li className="flex items-start gap-2">
-              <GraduationCapIcon className="h-[18px] w-[18px] shrink-0 mt-[3px]" />
-              <span>
-                PhD Candidate in Applied Science &amp; Technology at UC
-                Berkeley
-              </span>
+            <li>
+              <a href={`mailto:${PERSON.email}`} className={styles.link}>
+                {PERSON.email}
+              </a>
+            </li>
+            <li>
+              <a
+                href={PERSON.labHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                {PERSON.lab}, UC Berkeley
+              </a>
+            </li>
+            <li>{PERSON.location}</li>
+            <li className={styles.action}>
+              <PalaceCta />
             </li>
           </ul>
 
-          <Link
-            href="/palace"
-            className="palace-cta mt-7 inline-flex items-center gap-3 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-[var(--accent-strong)] transition hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]"
-          >
-            <span aria-hidden className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 rounded-full bg-[var(--accent)]" />
-              <span className="absolute inset-0 rounded-full bg-[var(--accent)] animate-ping opacity-70" />
-            </span>
-            Enter the Memory Palace
-            <span aria-hidden>→</span>
-          </Link>
+          <div>
+            <p className={styles.byline}>
+              {TRACK_LABEL.ai} | {TRACK_LABEL.ion}
+            </p>
+            <p className={styles.lead}>{PERSON.position}</p>
+          </div>
         </div>
 
-        <div className="halftone-portrait relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 ring-[var(--border)] sm:h-52 sm:w-52">
-          <Image
-            src="/images/profile/bingran-you-portrait.jpg"
-            alt="Bingran You"
-            fill
-            priority
-            sizes="(max-width: 640px) 8rem, 13rem"
-            className="object-cover object-[50%_28%]"
-          />
-        </div>
-      </section>
-
-      <section>
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-          Education
-        </h2>
-        <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {education.map((item) => (
-            <li
-              key={`${item.institution}-${item.period}`}
-              className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-6"
-            >
-              <span className="font-mono text-xs text-[var(--muted)] tabular-nums">
-                {item.period}
-              </span>
-              <div>
-                <p className="text-base font-medium">{item.institution}</p>
-                <p className="mt-1 text-sm text-[var(--muted)]">
-                  {item.degree} · {item.location}
-                </p>
-                {item.metrics?.length ? (
-                  <p className="mt-1 font-mono text-xs text-[var(--muted)]">
-                    {item.metrics.join(" · ")}
-                  </p>
-                ) : null}
+        <div className={styles.body}>
+          <div className={styles.columns}>
+            <EducationTable number={1} items={education} />
+            <figure className={styles.figure}>
+              <div className={styles.plate}>
+                <Image
+                  src={PERSON.portrait}
+                  alt={PERSON.name}
+                  fill
+                  priority
+                  sizes="(max-width: 760px) 100vw, 560px"
+                />
               </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
-        <div className="flex items-baseline justify-between gap-4">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-            Current projects
-          </h2>
-          <Link
-            href="/projects"
-            className="text-xs text-[var(--muted)] hover:text-foreground transition"
-          >
-            All →
-          </Link>
+              <figcaption className={styles.caption}>
+                <b>Fig. 1 | {PERSON.name}.</b>
+              </figcaption>
+            </figure>
+          </div>
+          <div className={styles.block}>
+            <ProjectsTable number={2} items={projects} />
+          </div>
         </div>
-        <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {aiHighlights.map((p) => (
-            <li key={p.name} className="py-5">
-              <a
-                href={p.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col gap-1 group"
-              >
-                <span className="text-base font-medium group-hover:underline underline-offset-4">
-                  {p.name}
-                </span>
-                <span className="text-sm text-[var(--muted)] leading-relaxed">
-                  {p.description}
-                </span>
-              </a>
-              {p.repoHref ? (
-                <a
-                  href={p.repoHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 inline-flex text-xs text-[var(--muted)] hover:text-foreground transition"
-                >
-                  Repo ↗
-                </a>
+      </Sheet>
+
+      {sheets.map((entries, i) => (
+        <Sheet key={entries[0].paper.slug} page={i + 2} current="/">
+          {entries.map(({ paper, figureNumber, tableNumber }) => (
+            <div key={paper.slug} className={styles.entry}>
+              {firstOfTrack.has(paper.slug) ? (
+                <h2 className={styles.section}>{TRACK_LABEL[paper.track]}</h2>
               ) : null}
-            </li>
+              <PaperSection
+                paper={paper}
+                figureNumber={figureNumber}
+                tableNumber={tableNumber}
+              />
+            </div>
           ))}
-        </ul>
-      </section>
-
-      <section>
-        <div className="flex items-baseline justify-between gap-4">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-            Selected papers
-          </h2>
-          <Link
-            href="/papers"
-            className="text-xs text-[var(--muted)] hover:text-foreground transition"
-          >
-            All →
-          </Link>
-        </div>
-        <ul className="mt-6 divide-y divide-[var(--border)] border-y border-[var(--border)]">
-          {paperHighlights.map((p) => (
-            <li key={p.href}>
-              <a
-                href={p.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex flex-col gap-1 py-5 group"
-              >
-                <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--muted)]">
-                  {p.venue}
-                </span>
-                <span className="text-base font-medium leading-snug group-hover:underline underline-offset-4">
-                  {p.title}
-                </span>
-                {p.blurb ? (
-                  <span className="text-sm text-[var(--muted)] leading-relaxed">
-                    {p.blurb}
-                  </span>
-                ) : null}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
+        </Sheet>
+      ))}
+    </>
   );
 }

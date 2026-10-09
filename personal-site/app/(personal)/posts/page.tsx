@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/posts";
+import { Sheet } from "@/components/article/sheet";
+import styles from "@/components/article/article.module.css";
 import { PostCard } from "@/components/post-card";
 
 export const metadata: Metadata = {
@@ -13,24 +15,19 @@ export default async function PostsPage() {
   const posts = await getAllPosts();
 
   return (
-    <div className="space-y-12">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Posts</h1>
-        <p className="mt-3 max-w-2xl text-base text-[var(--muted)]">
-          Videos and notes I&apos;ve posted across YouTube, X, Xiaohongshu,
-          Bilibili and elsewhere — newest first.
-        </p>
-      </header>
-
-      {posts.length === 0 ? (
-        <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
-      ) : (
-        <div className="post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      )}
-    </div>
+    <Sheet current="/posts">
+      <h1 className={styles.title}>Posts</h1>
+      <div className={`${styles.body} font-sans`}>
+        {posts.length === 0 ? (
+          <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
+        ) : (
+          <div className="post-grid columns-1 gap-6 sm:columns-2 lg:columns-3">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
+      </div>
+    </Sheet>
   );
 }

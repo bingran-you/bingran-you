@@ -1,4 +1,4 @@
-import type { Paper, Project } from "@/lib/content";
+import { getPaperDetail, type Paper, type Project } from "@/lib/content";
 import { SITE_URL } from "@/lib/site";
 
 export { SITE_URL };
@@ -27,10 +27,6 @@ export const SITE_KEYWORDS = [
   "UC Berkeley",
   "Haeffner Lab",
 ] as const;
-
-function isoDate(value: string) {
-  return new Date(value).toISOString();
-}
 
 const author = {
   "@type": "Person" as const,
@@ -144,6 +140,9 @@ export function profilePageJsonLd(path: "/" | "/about" = "/") {
 }
 
 export function paperJsonLd(paper: Paper) {
+  const abstract = getPaperDetail(paper.slug)
+    .abstract.join(" ")
+    .replace(/<[^>]+>/g, "");
   return {
     "@type": "ScholarlyArticle",
     headline: paper.title,
@@ -155,7 +154,7 @@ export function paperJsonLd(paper: Paper) {
       "@type": "Periodical",
       name: paper.venue,
     },
-    ...(paper.blurb ? { abstract: paper.blurb } : {}),
+    abstract,
   } as const;
 }
 
@@ -173,110 +172,6 @@ export function projectJsonLd(project: Project) {
     url,
     ...(codeRepository ? { codeRepository } : {}),
     author,
-  } as const;
-}
-
-export function blogPostingJsonLd(args: {
-  slug: string;
-  title: string;
-  description?: string;
-  date: string;
-  modifiedTime?: string;
-}) {
-  const url = `${SITE_URL}/blog/${args.slug}`;
-  const publishedTime = isoDate(args.date);
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "@id": `${url}#article`,
-    headline: args.title,
-    ...(args.description ? { description: args.description } : {}),
-    datePublished: publishedTime,
-    dateModified: args.modifiedTime ?? publishedTime,
-    url,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${url}#webpage`,
-    },
-    author,
-    publisher: author,
-    image: [OG_IMAGE_URL],
-    isAccessibleForFree: true,
-  } as const;
-}
-
-export function definedTermJsonLd(args: {
-  path: string;
-  name: string;
-  alternateName?: ReadonlyArray<string>;
-  description: string;
-  termCode?: string;
-}) {
-  const url = `${SITE_URL}${args.path}`;
-  return {
-    "@context": "https://schema.org",
-    "@type": "DefinedTerm",
-    "@id": `${url}#term`,
-    name: args.name,
-    ...(args.alternateName ? { alternateName: [...args.alternateName] } : {}),
-    description: args.description,
-    ...(args.termCode ? { termCode: args.termCode } : {}),
-    url,
-    inDefinedTermSet: {
-      "@type": "DefinedTermSet",
-      name: "Bingran You — Glossary",
-      url: `${SITE_URL}/`,
-    },
-  } as const;
-}
-
-export function articleJsonLd(args: {
-  path: string;
-  title: string;
-  description: string;
-  date: string;
-  modifiedTime?: string;
-  about?: string;
-  keywords?: ReadonlyArray<string>;
-}) {
-  const url = `${SITE_URL}${args.path}`;
-  const publishedTime = isoDate(args.date);
-  return {
-    "@context": "https://schema.org",
-    "@type": "TechArticle",
-    "@id": `${url}#article`,
-    headline: args.title,
-    name: args.title,
-    description: args.description,
-    datePublished: publishedTime,
-    dateModified: args.modifiedTime ?? publishedTime,
-    url,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${url}#webpage`,
-    },
-    author,
-    publisher: author,
-    image: [OG_IMAGE_URL],
-    isAccessibleForFree: true,
-    inLanguage: "en",
-    ...(args.about ? { about: args.about } : {}),
-    ...(args.keywords ? { keywords: [...args.keywords] } : {}),
-  } as const;
-}
-
-export function breadcrumbJsonLd(
-  trail: ReadonlyArray<{ name: string; path: string }>,
-) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: trail.map((step, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: step.name,
-      item: `${SITE_URL}${step.path}`,
-    })),
   } as const;
 }
 

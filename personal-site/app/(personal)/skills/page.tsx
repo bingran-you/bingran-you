@@ -4,6 +4,8 @@ import {
   getAllSkills,
   type SkillCategory,
 } from "@/lib/skills";
+import { Sheet } from "@/components/article/sheet";
+import styles from "@/components/article/article.module.css";
 import { SkillsBrowser } from "./_components/skills-browser";
 
 export const metadata: Metadata = {
@@ -20,23 +22,16 @@ export default function SkillsPage() {
   );
 
   return (
-    <div className="space-y-12">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Skills</h1>
-        <p className="mt-3 max-w-2xl text-base text-[var(--muted)]">
-          A live catalog of the {skills.length} skills loaded into my AI agents
-          army. Each is a packaged capability — a self-contained set of
-          instructions, references, and helper scripts — that any agent in this
-          workspace can pick up at runtime.
-        </p>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
+    <Sheet current="/skills">
+      <h1 className={styles.title}>Skills</h1>
+      <div className={`${styles.body} font-sans`}>
+        <p className="mb-6 text-sm text-[var(--muted)]">
           Generated from{" "}
           <code className="font-mono text-[12px]">.agents/skills/</code> at
           build time.
         </p>
-      </header>
-
-      <SkillsBrowser skills={skills} categories={categoriesInUse} />
-    </div>
+        <SkillsBrowser skills={skills} categories={categoriesInUse} />
+      </div>
+    </Sheet>
   );
 }

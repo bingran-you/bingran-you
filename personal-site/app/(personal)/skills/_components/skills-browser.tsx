@@ -36,7 +36,7 @@ export function SkillsBrowser({ skills, categories }: Props) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search skills, triggers, descriptions…"
             aria-label="Search skills"
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 pl-10 text-sm placeholder:text-[var(--muted)] focus:border-foreground/40 focus:outline-none focus:ring-0"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 pl-10 text-sm placeholder:text-[var(--muted)] focus:border-foreground/40 focus:outline-none focus:ring-0"
           />
           <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
         </div>
@@ -75,7 +75,7 @@ export function SkillsBrowser({ skills, categories }: Props) {
             <button
               type="button"
               onClick={() => setActiveCategory("All")}
-              className="mt-3 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-foreground transition hover:border-foreground/30"
+              className="mt-3 border border-[var(--border)] px-3 py-1 text-xs text-foreground transition hover:border-foreground/30"
             >
               Search all categories ({vm.queryMatchesAcrossCategories})
             </button>
@@ -86,7 +86,7 @@ export function SkillsBrowser({ skills, categories }: Props) {
           {vm.groups.map(([cat, list]) => (
             <section key={cat}>
               <div className="mb-4 flex items-baseline justify-between">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
+                <h2 className="font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
                   {cat}
                 </h2>
                 <span className="font-mono text-[11px] text-[var(--muted)]">
@@ -112,7 +112,7 @@ function SkillCard({ skill }: { skill: Skill }) {
   return (
     <Link
       href={`/skills/${skill.slug}`}
-      className="group flex h-full flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] p-5 transition hover:border-foreground/30 hover:shadow-[0_1px_0_rgba(0,0,0,0.02),0_8px_24px_-12px_rgba(0,0,0,0.12)]"
+      className="group flex h-full flex-col gap-3 border border-[var(--border)] bg-[var(--background)] p-5 transition hover:border-foreground/30"
     >
       <div className="flex items-start gap-3">
         <SkillIcon slug={skill.slug} />
@@ -129,7 +129,7 @@ function SkillCard({ skill }: { skill: Skill }) {
         {skill.description}
       </p>
       <div className="mt-auto flex items-center justify-between pt-1">
-        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-[var(--muted)]">
+        <span className="font-sans text-[10px] uppercase tracking-[0.12em] text-[var(--muted)]">
           {skill.category}
         </span>
         <span className="text-xs text-[var(--muted)] opacity-0 transition group-hover:opacity-100">
@@ -153,7 +153,7 @@ function CategoryChip({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-xs transition ${
+      className={`shrink-0 whitespace-nowrap border px-3 py-1 text-xs transition ${
         active
           ? "border-foreground bg-foreground text-[var(--background)]"
           : "border-[var(--border)] text-[var(--muted)] hover:border-foreground/30 hover:text-foreground"
@@ -171,28 +171,14 @@ function SkillIcon({ slug }: { slug: string }) {
     .slice(0, 2)
     .map((p) => p[0]?.toUpperCase() ?? "")
     .join("");
-  const hue = hashHue(slug);
   return (
     <span
-      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border font-mono text-[11px] font-semibold tracking-tight"
-      style={{
-        background: `hsl(${hue} 70% 96%)`,
-        color: `hsl(${hue} 60% 32%)`,
-        borderColor: `hsl(${hue} 50% 88%)`,
-      }}
+      className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--border)] font-mono text-[11px] font-semibold tracking-tight"
       aria-hidden
     >
       {initials || "·"}
     </span>
   );
-}
-
-function hashHue(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) {
-    h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  }
-  return h % 360;
 }
 
 function SearchIcon({ className }: { className?: string }) {

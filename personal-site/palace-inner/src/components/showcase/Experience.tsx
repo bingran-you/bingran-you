@@ -11,30 +11,17 @@ interface RoleEntry {
 
 const ROLES: RoleEntry[] = [
     {
-        org: 'UC Berkeley · HaeffnerLab',
-        role: 'PhD Candidate, Applied Science & Technology',
-        period: 'Berkeley, CA',
-        href: 'https://haeffner.physics.berkeley.edu/',
-        lines: [
-            'Trapped-ion experiments in atomic, molecular and optical physics.',
-            'Integrated photonics for scalable ion addressing; ion-photon interfaces for multiplexed networking.',
-            'Novel trap architectures, including 3D-printed microtraps.',
-            'Stack: ARTIQ, laser control, RF engineering, ultra-high vacuum.',
-        ],
+        org: 'University of California, Berkeley',
+        role: 'PhD Candidate in Applied Science & Technology',
+        period: '2022 — Present',
+        href: 'https://ions.berkeley.edu/',
+        lines: ['Berkeley, California', 'Haeffner Lab'],
     },
     {
-        org: 'Agentic Builder · Open source',
-        role: 'Independent / collaborative work on agent infrastructure',
-        period: 'Ongoing',
-        lines: [
-            'Specialist physics benchmark tasks for frontier agents (FrontierPhysics).',
-            'Frontier environment lab for AI-agent runtime and benchmark infrastructure (BenchFlow).',
-            'Skills-based benchmarking for AI agents (SkillsBench).',
-            'Deterministic mock environments for long-horizon agent tasks (smolclaw, SBTI CLI).',
-            'Git-native context layer for team decisions and ownership (first-tree).',
-            'AI research assistant built on Zotero for cited answers and multi-paper comparison (DeepTutor).',
-            'Local notification daemons that dispatch Codex / Claude Code work (mews).',
-        ],
+        org: 'University of Chinese Academy of Sciences',
+        role: 'BS in Physics, Minor in Computer Science',
+        period: '2018 — 2022',
+        lines: ['Beijing, China', 'GPA 3.95 / 4.00', 'Rank 1 / 54'],
     },
 ];
 
@@ -86,8 +73,7 @@ const Experience = () => {
         <div className="site-page-content">
             <ResumeDownload />
             <div style={styles.section}>
-                <h1>Experience</h1>
-                <h3>Where I spend my time</h3>
+                <h1>Education</h1>
                 <br />
                 {ROLES.map((r) => (
                     <div key={r.org} style={styles.role}>

@@ -7,73 +7,73 @@ interface ProjectEntry {
     tag: 'Agent' | 'Physics';
 }
 
+// Descriptions are each project's own wording, as in lib/content.ts of the
+// parent site.
 const PROJECTS: ProjectEntry[] = [
     {
         title: 'FrontierPhysics',
         blurb:
-            'Authentic specialist physics tasks for evaluating frontier agents.',
+            'FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.',
         href: 'https://www.benchflow.ai/frontierphysics',
         tag: 'Agent',
     },
     {
         title: 'BenchFlow',
         blurb:
-            'Frontier environment lab building the runtime and benchmarks AI agents learn in.',
+            'BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.',
         href: 'https://www.benchflow.ai/',
         tag: 'Agent',
     },
     {
         title: 'SkillsBench',
-        blurb: 'Benchmark for evaluating how well AI agents use skills.',
+        blurb:
+            'SkillsBench evaluates how well skills work and how effective agents are at using them.',
         href: 'https://github.com/benchflow-ai/skillsbench',
         tag: 'Agent',
     },
     {
         title: 'first-tree',
         blurb:
-            'Git-native context layer for decisions, ownership, and shared team knowledge.',
+            'Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.',
         href: 'https://first-tree.ai/',
         tag: 'Agent',
     },
     {
         title: 'DeepTutor',
         blurb:
-            'AI research assistant built on Zotero — cited answers, figure/formula understanding, multi-paper comparison.',
-        href: 'https://deeptutor.knowhiz.us/',
+            'DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.',
+        href: 'https://github.com/KnoWhiz/DeepTutorZotero',
         tag: 'Agent',
     },
     {
         title: 'mews',
-        blurb:
-            'Local GitHub notification daemon that triages inbox activity and dispatches Codex / Claude Code work for allow-listed repos.',
+        blurb: 'Represent you to finish all the work, when you are sleeping.',
         href: 'https://github.com/bingran-you/mews',
         tag: 'Agent',
     },
     {
         title: 'smolclaw',
         blurb:
-            'Seeded mock environments for testing agent behavior in realistic workflows.',
+            'High resolution mock environments for testing and improving claw like agents',
         href: 'https://github.com/bingran-you/smolclaw',
         tag: 'Agent',
     },
     {
         title: 'SBTI CLI',
-        blurb:
-            'Offline CLI for testing agent behavior with bundled logic and exportable results.',
+        blurb: 'SBTI CLI - Test SBTI for your agents.',
         href: 'https://github.com/bingran-you/sbti-cli',
         tag: 'Agent',
     },
     {
         title: 'bem',
         blurb:
-            'Scientific computing code for boundary element and fast multipole methods in Python.',
+            'triangulation, boundary element method (BEM), fast multipole method (FMM) code for python',
         href: 'https://github.com/HaeffnerLab/bem',
         tag: 'Physics',
     },
     {
         title: 'artiq_photonics_integration',
-        blurb:
-            'ARTIQ control framework for photonics-integration experiments at HaeffnerLab.',
+        blurb: 'ARTIQ Control Framework (ACF) of Photonics Integration',
         href: 'https://github.com/HaeffnerLab/artiq_photonics_integration',
         tag: 'Physics',
     },
@@ -106,14 +106,6 @@ const Projects = () => {
     return (
         <div className="site-page-content">
             <h1>Projects</h1>
-            <h3>Agent stuff & ion-trap stuff</h3>
-            <br />
-            <p>
-                Selected open-source work. The <b>Agent</b> row is software I
-                build to make AI agents more useful and more honest. The{' '}
-                <b>Physics</b> row is code we use inside HaeffnerLab for
-                trapped-ion experiments. Click any title to open the project.
-            </p>
             <br />
             <div style={styles.list}>
                 {PROJECTS.map((p) => (

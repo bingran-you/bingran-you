@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Sheet } from "@/components/article/sheet";
+import styles from "@/components/article/article.module.css";
 import { getAllSkills, getSkill } from "@/lib/skills";
 
 export function generateStaticParams() {
@@ -43,141 +45,141 @@ export default async function SkillDetailPage({
   const next = idx < all.length - 1 ? all[idx + 1] : null;
 
   return (
-    <article className="space-y-10">
-      <Link
-        href="/skills"
-        className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] transition hover:text-foreground"
-      >
-        ← Skills
-      </Link>
+    <Sheet current="/skills">
+      <article className="space-y-10 font-sans">
+        <Link
+          href="/skills"
+          className="inline-flex items-center gap-1.5 font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] transition hover:text-foreground"
+        >
+          ← Skills
+        </Link>
 
-      <header className="space-y-4">
-        <span className="inline-flex font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)]">
-          {skill.category}
-        </span>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          {skill.name}
-        </h1>
-        <p className="font-mono text-[12px] text-[var(--muted)]">
-          {skill.slug}
-        </p>
-      </header>
+        <header className="space-y-4">
+          <span className="inline-flex font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
+            {skill.category}
+          </span>
+          <h1 className={`${styles.title} font-serif`}>{skill.name}</h1>
+          <p className="font-mono text-[12px] text-[var(--muted)]">
+            {skill.slug}
+          </p>
+        </header>
 
-      <aside className="grid grid-cols-1 gap-3 rounded-2xl border border-[var(--border)] p-5 sm:grid-cols-2">
-        <Meta label="Author">{skill.source.author}</Meta>
-        <Meta label="Collection">{skill.source.collection}</Meta>
-        <Meta label="License">
-          {skill.license ? skill.license.name : "—"}
-        </Meta>
-        <Meta label="Updated">
-          {new Date(skill.updatedAt).toISOString().slice(0, 10)}
-        </Meta>
-        <div className="sm:col-span-2 flex flex-wrap gap-2 pt-2">
-          <a
-            href={skill.downloadUrl}
-            download={`${skill.slug}.md`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-foreground bg-foreground px-3.5 py-1.5 text-xs text-[var(--background)]! no-underline! transition hover:opacity-90"
-          >
-            <DownloadIcon className="h-3 w-3" />
-            Download SKILL.md
-          </a>
-          {skill.source.githubUrl ? (
+        <aside className="grid grid-cols-1 gap-3 border border-[var(--border)] p-5 sm:grid-cols-2">
+          <Meta label="Author">{skill.source.author}</Meta>
+          <Meta label="Collection">{skill.source.collection}</Meta>
+          <Meta label="License">
+            {skill.license ? skill.license.name : "—"}
+          </Meta>
+          <Meta label="Updated">
+            {new Date(skill.updatedAt).toISOString().slice(0, 10)}
+          </Meta>
+          <div className="sm:col-span-2 flex flex-wrap gap-2 pt-2">
             <a
-              href={skill.source.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] px-3.5 py-1.5 text-xs text-[var(--muted)] transition hover:border-foreground/30 hover:text-foreground"
+              href={skill.downloadUrl}
+              download={`${skill.slug}.md`}
+              className="inline-flex items-center gap-1.5 border border-foreground bg-foreground px-3.5 py-1.5 text-xs text-[var(--background)]! no-underline! transition hover:opacity-90"
             >
-              <GitHubIcon className="h-3 w-3" />
-              View source on GitHub
+              <DownloadIcon className="h-3 w-3" />
+              Download SKILL.md
             </a>
-          ) : null}
-        </div>
-      </aside>
-
-      <section>
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-4">
-          Description
-        </h2>
-        <p className="text-base leading-relaxed text-foreground">
-          {skill.description}
-        </p>
-      </section>
-
-      {skill.triggers && skill.triggers.length > 0 ? (
-        <section>
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-4">
-            Triggers
-          </h2>
-          <ul className="flex flex-wrap gap-1.5">
-            {skill.triggers.map((t) => (
-              <li
-                key={t}
-                className="rounded-full border border-[var(--border)] px-3 py-1 font-mono text-[11px] text-[var(--muted)]"
+            {skill.source.githubUrl ? (
+              <a
+                href={skill.source.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 border border-[var(--border)] px-3.5 py-1.5 text-xs text-[var(--muted)] transition hover:border-foreground/30 hover:text-foreground"
               >
-                {t}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+                <GitHubIcon className="h-3 w-3" />
+                View source on GitHub
+              </a>
+            ) : null}
+          </div>
+        </aside>
 
-      {skill.bodyHtml ? (
         <section>
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-4">
-            SKILL.md
+          <h2 className="font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] mb-4">
+            Description
           </h2>
-          <div
-            className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-pre:bg-foreground/[0.04] prose-pre:text-foreground prose-pre:border prose-pre:border-[var(--border)] prose-code:font-mono prose-code:text-[13px] prose-code:text-foreground prose-code:bg-foreground/[0.06] prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-a:text-[var(--accent)] prose-a:underline-offset-4"
-            dangerouslySetInnerHTML={{ __html: skill.bodyHtml }}
-          />
+          <p className="text-base leading-relaxed text-foreground">
+            {skill.description}
+          </p>
         </section>
-      ) : null}
 
-      {skill.license ? (
-        <section>
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-4">
-            License
-          </h2>
-          <pre className="overflow-x-auto whitespace-pre-wrap rounded-xl border border-[var(--border)] bg-[var(--background)] p-4 font-mono text-[12px] leading-relaxed text-[var(--muted)]">
-            {skill.license.text}
-          </pre>
-        </section>
-      ) : null}
+        {skill.triggers && skill.triggers.length > 0 ? (
+          <section>
+            <h2 className="font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] mb-4">
+              Triggers
+            </h2>
+            <ul className="flex flex-wrap gap-1.5">
+              {skill.triggers.map((t) => (
+                <li
+                  key={t}
+                  className=" border border-[var(--border)] px-3 py-1 font-mono text-[11px] text-[var(--muted)]"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
-      <nav className="flex items-stretch justify-between gap-3 border-t border-[var(--border)] pt-8">
-        {prev ? (
-          <Link
-            href={`/skills/${prev.slug}`}
-            className="group flex flex-col gap-1 text-left"
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-[var(--muted)]">
-              ← Prev
-            </span>
-            <span className="text-sm group-hover:underline underline-offset-4">
-              {prev.name}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {next ? (
-          <Link
-            href={`/skills/${next.slug}`}
-            className="group flex flex-col gap-1 text-right"
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-[var(--muted)]">
-              Next →
-            </span>
-            <span className="text-sm group-hover:underline underline-offset-4">
-              {next.name}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-    </article>
+        {skill.bodyHtml ? (
+          <section>
+            <h2 className="font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] mb-4">
+              SKILL.md
+            </h2>
+            <div
+              className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-pre:bg-foreground/[0.04] prose-pre:text-foreground prose-pre:border prose-pre:border-[var(--border)] prose-code:font-mono prose-code:text-[13px] prose-code:text-foreground prose-code:bg-foreground/[0.06] prose-code:rounded prose-code:px-1 prose-code:py-0.5 prose-code:before:content-none prose-code:after:content-none prose-a:text-[var(--accent)] prose-a:underline-offset-4"
+              dangerouslySetInnerHTML={{ __html: skill.bodyHtml }}
+            />
+          </section>
+        ) : null}
+
+        {skill.license ? (
+          <section>
+            <h2 className="font-sans text-[11px] uppercase tracking-[0.14em] text-[var(--muted)] mb-4">
+              License
+            </h2>
+            <pre className="overflow-x-auto whitespace-pre-wrap border border-[var(--border)] bg-[var(--background)] p-4 font-mono text-[12px] leading-relaxed text-[var(--muted)]">
+              {skill.license.text}
+            </pre>
+          </section>
+        ) : null}
+
+        <nav className="flex items-stretch justify-between gap-3 border-t border-[var(--border)] pt-8">
+          {prev ? (
+            <Link
+              href={`/skills/${prev.slug}`}
+              className="group flex flex-col gap-1 text-left"
+            >
+              <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-[var(--muted)]">
+                ← Prev
+              </span>
+              <span className="text-sm group-hover:underline underline-offset-4">
+                {prev.name}
+              </span>
+            </Link>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <Link
+              href={`/skills/${next.slug}`}
+              className="group flex flex-col gap-1 text-right"
+            >
+              <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-[var(--muted)]">
+                Next →
+              </span>
+              <span className="text-sm group-hover:underline underline-offset-4">
+                {next.name}
+              </span>
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+      </article>
+    </Sheet>
   );
 }
 
@@ -190,7 +192,7 @@ function Meta({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-[var(--muted)]">
+      <span className="font-sans text-[10px] uppercase tracking-[0.14em] text-[var(--muted)]">
         {label}
       </span>
       <span className="text-sm">{children}</span>

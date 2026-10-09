@@ -1,81 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ProjectsTable } from "@/components/article/blocks";
+import { Sheet } from "@/components/article/sheet";
+import styles from "@/components/article/article.module.css";
 import { projects } from "@/lib/content";
 import { graphScriptContent, projectJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected projects across AI systems and trapped-ion experiments.",
+  description:
+    "Selected projects across AI systems and trapped-ion experiments.",
   alternates: { canonical: "/projects" },
 };
 
 export default function ProjectsPage() {
-  const ai = projects.filter((p) => p.track === "ai");
-  const ion = projects.filter((p) => p.track === "ion");
   const jsonLd = graphScriptContent(projects.map(projectJsonLd));
 
   return (
-    <div className="space-y-16">
+    <Sheet current="/projects">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}
       />
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Projects</h1>
-        <p className="mt-3 text-base text-[var(--muted)] max-w-2xl">
-          A snapshot of the things I&apos;m lucky to work on. Most are open
-          source; the rest will be when they&apos;re ready.
-        </p>
-      </header>
+      <h1 className={styles.title}>Projects</h1>
 
-      <Section title="Agentic Builder" items={ai} />
-      <Section title="Ion Trapper" items={ion} />
-    </div>
-  );
-}
-
-function Section({
-  title,
-  items,
-}: {
-  title: string;
-  items: typeof projects;
-}) {
-  return (
-    <section>
-      <h2 className="font-mono text-[11px] uppercase tracking-[0.32em] text-[var(--muted)] mb-6">
-        {title}
-      </h2>
-      <ul className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
-        {items.map((p) => (
-          <li key={p.name} className="py-5">
-            <Link
-              href={p.href}
-              {...(p.href.startsWith("/")
-                ? {}
-                : { target: "_blank", rel: "noopener noreferrer" })}
-              className="flex flex-col gap-1 group"
-            >
-              <span className="text-base font-medium group-hover:underline underline-offset-4">
-                {p.name}
-              </span>
-              <span className="text-sm text-[var(--muted)] leading-relaxed">
-                {p.description}
-              </span>
-            </Link>
-            {p.repoHref ? (
-              <a
-                href={p.repoHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 inline-flex text-xs text-[var(--muted)] hover:text-foreground transition"
-              >
-                Repo ↗
-              </a>
-            ) : null}
-          </li>
-        ))}
-      </ul>
-    </section>
+      <div className={styles.body}>
+        <ProjectsTable number={1} items={projects} />
+      </div>
+    </Sheet>
   );
 }

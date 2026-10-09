@@ -8,6 +8,7 @@ export default function Image() {
   return renderOgImage({
     eyebrow: "Papers",
     title: "Selected publications.",
-    subtitle: "Across AI agents and trapped-ion physics — Nature, PRL, arXiv.",
+    subtitle:
+      "Across AI agents and trapped-ion physics — NeurIPS, COLM, Nature, PRL.",
   });
 }

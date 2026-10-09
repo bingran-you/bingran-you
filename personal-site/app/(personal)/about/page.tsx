@@ -23,12 +23,14 @@ const focusAreas = [
       "Agent skills and tool use, with an emphasis on evaluation that mirrors real workflows.",
       "Productivity agents that triage notifications, dispatch background work, and stay out of the way.",
       "Open-source benchmarks for measuring agent capability and safety in simulated workspaces.",
+      "Reward integrity for agent benchmarks — instrumentation that catches reward hacking in evaluation infrastructure.",
     ],
   },
   {
     label: "Ion Trapper",
     items: [
       "Adjoint-optimized integrated photonic circuits for individual trapped-ion addressing.",
+      "Broadband two- and three-dimensional photonic integrated circuits for individually addressing trapped ions.",
       "Temporally multiplexed ion-photon interfaces via fast ion-chain transport.",
       "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
       "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",

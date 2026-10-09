@@ -47,9 +47,9 @@ describe("getAiProjectHighlights", () => {
 });
 
 describe("getAiPaperHighlights", () => {
-  it("returns up to 2 ai-track papers by default", () => {
+  it("returns up to 3 ai-track papers by default", () => {
     const result = getAiPaperHighlights();
-    expect(result.length).toBeLessThanOrEqual(2);
+    expect(result.length).toBeLessThanOrEqual(3);
     expect(result.every((p) => p.track === "ai")).toBe(true);
   });
 

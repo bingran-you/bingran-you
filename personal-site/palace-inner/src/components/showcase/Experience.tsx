@@ -40,14 +40,34 @@ const ROLES: RoleEntry[] = [
 
 const PAPERS = [
     {
-        venue: 'arXiv',
+        venue: 'NeurIPS 2026',
+        title: 'SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks',
+        href: 'https://arxiv.org/abs/2602.12670',
+    },
+    {
+        venue: 'COLM 2026',
         title: 'ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces',
         href: 'https://arxiv.org/abs/2604.05172',
     },
     {
         venue: 'arXiv',
-        title: 'SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks',
-        href: 'https://arxiv.org/abs/2602.12670',
+        title: 'BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure',
+        href: 'https://arxiv.org/abs/2609.11028',
+    },
+    {
+        venue: 'Nature',
+        title: '3D-printed micro ion trap technology for quantum information applications',
+        href: 'https://www.nature.com/articles/s41586-025-09474-1',
+    },
+    {
+        venue: 'Phys. Rev. Lett.',
+        title: 'Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion',
+        href: 'https://doi.org/10.1103/PhysRevLett.130.200201',
+    },
+    {
+        venue: 'Phys. Rev. Applied',
+        title: 'Temporally multiplexed ion-photon quantum interface via fast ion-chain transport',
+        href: 'https://doi.org/10.1103/ppm8-8kx5',
     },
     {
         venue: 'npj Nanophotonics',
@@ -56,18 +76,8 @@ const PAPERS = [
     },
     {
         venue: 'arXiv',
-        title: 'Temporally multiplexed ion-photon quantum interface via fast ion-chain transport',
-        href: 'https://arxiv.org/abs/2405.10501',
-    },
-    {
-        venue: 'Nature',
-        title: '3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing',
-        href: 'https://www.nature.com/articles/s41586-025-09474-1',
-    },
-    {
-        venue: 'Phys. Rev. Lett.',
-        title: 'Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion',
-        href: 'https://doi.org/10.1103/PhysRevLett.130.200201',
+        title: 'A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control',
+        href: 'https://arxiv.org/abs/2607.25062',
     },
 ];
 

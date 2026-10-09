@@ -48,8 +48,9 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
-- 📑 *arXiv* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
-- 📑 *arXiv* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *NeurIPS 2026* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *COLM 2026* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
+- 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
 
 ## ⚛️ Ion Trapper
 
@@ -78,10 +79,11 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
+- 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable atomic-physics platforms.
+- 📑 *Phys. Rev. Lett.* · [Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.
+- 📑 *Phys. Rev. Applied* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://doi.org/10.1103/ppm8-8kx5) - Multiplexed ion-photon interface based on fast ion-chain transport.
 - 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
-- 📑 *arXiv* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
-- 📑 *Nature* · [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable atomic-physics platforms.
-- 📑 *Phys. Rev. Lett.* · [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.
+- 📑 *arXiv* · [A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control](https://arxiv.org/abs/2607.25062) - Broadband photonic integrated circuit for individually addressing trapped ions from 405 to 880 nm.
 
 ## Connect
 

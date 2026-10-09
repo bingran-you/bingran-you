@@ -118,17 +118,51 @@ export const projects: Project[] = [
 
 export const papers: Paper[] = [
   {
+    title: "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+    href: "https://arxiv.org/abs/2602.12670",
+    venue: "NeurIPS 2026",
+    track: "ai",
+  },
+  {
     title:
       "ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces",
     href: "https://arxiv.org/abs/2604.05172",
+    venue: "COLM 2026",
+    track: "ai",
+  },
+  {
+    title:
+      "BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure",
+    href: "https://arxiv.org/abs/2609.11028",
     venue: "arXiv",
     track: "ai",
   },
   {
-    title: "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
-    href: "https://arxiv.org/abs/2602.12670",
-    venue: "arXiv",
-    track: "ai",
+    title:
+      "3D-printed micro ion trap technology for quantum information applications",
+    href: "https://www.nature.com/articles/s41586-025-09474-1",
+    venue: "Nature",
+    blurb:
+      "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
+    track: "ion",
+  },
+  {
+    title:
+      "Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion",
+    href: "https://doi.org/10.1103/PhysRevLett.130.200201",
+    venue: "Phys. Rev. Lett.",
+    blurb:
+      "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",
+    track: "ion",
+  },
+  {
+    title:
+      "Temporally multiplexed ion-photon quantum interface via fast ion-chain transport",
+    href: "https://doi.org/10.1103/ppm8-8kx5",
+    venue: "Phys. Rev. Applied",
+    blurb:
+      "Multiplexed ion-photon interface based on fast ion-chain transport.",
+    track: "ion",
   },
   {
     title:
@@ -140,29 +174,11 @@ export const papers: Paper[] = [
   },
   {
     title:
-      "Temporally multiplexed ion-photon quantum interface via fast ion-chain transport",
-    href: "https://arxiv.org/abs/2405.10501",
+      "A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control",
+    href: "https://arxiv.org/abs/2607.25062",
     venue: "arXiv",
     blurb:
-      "Multiplexed ion-photon interface based on fast ion-chain transport.",
-    track: "ion",
-  },
-  {
-    title:
-      "3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing",
-    href: "https://www.nature.com/articles/s41586-025-09474-1",
-    venue: "Nature",
-    blurb:
-      "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
-    track: "ion",
-  },
-  {
-    title:
-      "Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion",
-    href: "https://doi.org/10.1103/PhysRevLett.130.200201",
-    venue: "Phys. Rev. Lett.",
-    blurb:
-      "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",
+      "Broadband photonic integrated circuit for individually addressing trapped ions from 405 to 880 nm.",
     track: "ion",
   },
 ];
@@ -171,7 +187,7 @@ export function getAiProjectHighlights(limit = 5): Project[] {
   return projects.filter((p) => p.track === "ai").slice(0, limit);
 }
 
-export function getAiPaperHighlights(limit = 2): Paper[] {
+export function getAiPaperHighlights(limit = 3): Paper[] {
   return papers.filter((p) => p.track === "ai").slice(0, limit);
 }
 

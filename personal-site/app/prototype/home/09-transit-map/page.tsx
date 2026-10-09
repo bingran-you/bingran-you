@@ -1,4 +1,4 @@
-// PROTOTYPE 09 — Two Tracks. The home page as a transit strip map: the Agentic
+// PROTOTYPE 09 — Transit Map. The home page as a transit strip map: the Agentic
 // line and the Ion line leave two shared interchanges, carry their own stations
 // and meet again at one terminus, the Memory Palace.
 
@@ -21,7 +21,7 @@ import {
 import { PalaceCta } from "../_shared/palace-cta";
 import styles from "./styles.module.css";
 
-export const metadata: Metadata = { title: "09 · Two Tracks" };
+export const metadata: Metadata = { title: "09 · Transit Map" };
 
 const sans = Radio_Canada_Big({
   subsets: ["latin"],
@@ -157,7 +157,7 @@ export default function TwoTracks() {
               <Bullet line="i" />
             </span>
             <h1 className={styles.name}>{person.name}</h1>
-            <p className={styles.subtitle}>Two tracks, both active</p>
+            <p className={styles.subtitle}>System map</p>
           </div>
 
           <nav aria-label="Connections" className={styles.cell}>
@@ -207,8 +207,6 @@ export default function TwoTracks() {
 
       <main>
         <section className={styles.hero} aria-label="The two lines">
-          <p className={styles.craft}>{person.craft}</p>
-
           <div className={styles.lines}>
             {LINE_IDS.map((id) => (
               <div key={id} className={`${styles.lineRow} ${styles[id]}`}>

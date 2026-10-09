@@ -111,7 +111,7 @@ export default function Preprint() {
             </p>
             <p className={styles.dated}>(Dated: {year})</p>
             <p className={styles.abstract}>
-              {person.summary} {person.craft}
+              {person.about.join(" ")}
             </p>
 
             <aside

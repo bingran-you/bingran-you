@@ -153,9 +153,6 @@ const ABSTRACT: Sentence[] = [
       HREF.printedTrap,
     ],
   },
-  {
-    text: "Both tracks share one craft: turning complex, noisy systems into something that behaves on purpose.",
-  },
 ];
 
 const TRACKS: { role: string; sentences: Sentence[] }[] = [

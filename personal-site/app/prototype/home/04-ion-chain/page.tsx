@@ -242,8 +242,7 @@ export default function IonChain() {
           <div className={styles.codaTrap} aria-hidden>
             <Ion />
           </div>
-          <p className={styles.codaLead}>{person.summary}</p>
-          <p className={styles.codaLine}>{person.craft}</p>
+          <p className={styles.codaLine}>{person.summary}</p>
         </section>
       </main>
 

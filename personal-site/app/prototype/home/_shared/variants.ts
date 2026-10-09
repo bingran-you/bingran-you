@@ -56,8 +56,8 @@ export const variants: Variant[] = [
       "An agent run that answers “who is Bingran You?” and asks permission to enter the palace.",
   },
   {
-    slug: "09-two-tracks",
-    name: "Two Tracks",
+    slug: "09-transit-map",
+    name: "Transit Map",
     concept:
       "A transit map: the Agentic line and the Ion line run side by side to one terminus.",
   },

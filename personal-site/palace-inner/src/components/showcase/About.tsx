@@ -12,13 +12,12 @@ const About: React.FC<AboutProps> = () => {
             <br />
             <div className="text-block">
                 <p>
-                    I split my week between two labs that look nothing alike.
-                    Half of it I'm an <b>Agentic Builder</b> — designing
-                    benchmarks and deterministic environments that let AI
-                    agents do real work across email, chat, code and
-                    documents. The other half I'm an <b>Ion Trapper</b>{' '}
-                    at HaeffnerLab, building integrated photonics and
-                    3D-printed microtraps for trapped-ion quantum systems.
+                    I'm an <b>Agentic Builder</b> — designing benchmarks
+                    and deterministic environments that let AI agents do
+                    real work across email, chat, code and documents — and
+                    an <b>Ion Trapper</b> at HaeffnerLab, building
+                    integrated photonics and 3D-printed microtraps for
+                    trapped-ion quantum systems.
                 </p>
                 <br />
                 <p>
@@ -32,7 +31,7 @@ const About: React.FC<AboutProps> = () => {
             </div>
             <ResumeDownload />
             <div className="text-block">
-                <h3>Two tracks, both active</h3>
+                <h3>Focus</h3>
                 <br />
                 <p>
                     <b>Agentic Builder.</b> Agent evaluation, skills-based

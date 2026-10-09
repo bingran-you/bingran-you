@@ -859,14 +859,6 @@
 .root .codaTrap .ion {
   left: calc((100% / var(--v-n) - var(--v-ion)) / 2);
 }
-.root .codaLead {
-  grid-column: 1 / span 4;
-  max-width: 18rem;
-  margin: 0.55rem 0 0;
-  line-height: 1.55;
-  color: var(--v-dim);
-  text-wrap: pretty;
-}
 .root .codaLine {
   grid-column: 5 / -1;
   margin: 0;
@@ -1000,12 +992,6 @@
   .root .codaLine {
     grid-column: 1 / -1;
   }
-  .root .codaLead {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    max-width: 30rem;
-    margin-top: 1.5rem;
-  }
 }
 
 /* ── phone ────────────────────────────────────────────────────────────── */
@@ -1119,9 +1105,6 @@
   }
   .root .coda {
     margin-top: 4.5rem;
-  }
-  .root .codaLead {
-    max-width: 19rem;
   }
   .root .footerInner {
     padding-top: 1.5rem;

@@ -77,9 +77,9 @@ export default function Broadsheet() {
           <h1 className={styles.nameplate}>{person.name}</h1>
           <div className={styles.ears}>
             <p className={`${styles.ear} ${styles.earLeft}`}>
-              <span className={styles.earLine}>{person.roles[0]}</span>
+              <span className={styles.earLine}>{person.lab}</span>
               <span className={styles.earDot}> · </span>
-              <span className={styles.earLine}>{person.roles[1]}</span>
+              <span className={styles.earLine}>{person.school}</span>
             </p>
             <p className={`${styles.ear} ${styles.earRight}`}>
               <span className={styles.earLine}>{person.degree}</span>{" "}
@@ -114,8 +114,8 @@ export default function Broadsheet() {
           <header className={styles.leadHead}>
             <p className={styles.kicker}>Profile</p>
             <h2 id="lead-headline" className={styles.headline}>
-              <span className={styles.headlineLine}>Two Tracks,</span>{" "}
-              <span className={styles.headlineLine}>Both Active</span>
+              <span className={styles.headlineLine}>{person.roles[0]},</span>{" "}
+              <span className={styles.headlineLine}>{person.roles[1]}</span>
             </h2>
             <p className={styles.deck}>{person.summary}</p>
           </header>
@@ -162,9 +162,6 @@ export default function Broadsheet() {
                 </p>
               ))}
             </div>
-            <blockquote className={styles.pull}>
-              <p className={styles.pullText}>“{person.craft}”</p>
-            </blockquote>
           </div>
         </section>
 

@@ -11,7 +11,7 @@ export async function GET() {
 
 > PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.
 
-I work on two tracks: reliable AI agent systems, and trapped-ion atomic, molecular and optical physics hardware. Different materials, same craft — turning complex, noisy systems into something that behaves on purpose.
+I work on reliable AI agent systems and on trapped-ion hardware in atomic, molecular and optical physics.
 
 ## Identity
 

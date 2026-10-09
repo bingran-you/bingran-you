@@ -27,8 +27,11 @@ export const person = {
   portrait: "/images/profile/bingran-you-portrait.jpg",
   summary:
     "I build reliable AI systems and run trapped-ion experiments in atomic, molecular and optical physics.",
-  craft:
-    "Both tracks share one craft: turning complex, noisy systems into something that behaves on purpose.",
+  // Verbatim from the /about page.
+  about: [
+    "I build reliable AI systems — agent infrastructure, evaluation harnesses, and applied AI products that need to behave under noisy real-world conditions.",
+    "I run trapped-ion experiments in atomic, molecular and optical physics — integrated photonics for individual ion addressing, ion-photon interfaces, and 3D-printed micro ion traps for scalable hardware.",
+  ],
   tracks: {
     ai: {
       role: "Agentic Builder",

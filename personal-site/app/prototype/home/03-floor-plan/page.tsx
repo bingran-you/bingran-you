@@ -288,7 +288,6 @@ export default function FloorPlan() {
           </h2>
           <ol>
             <li>{person.summary}</li>
-            <li>{person.craft}</li>
             <li>Dimensions are counts and years, not lengths. Do not scale from this drawing.</li>
           </ol>
         </section>

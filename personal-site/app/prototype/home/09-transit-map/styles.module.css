@@ -1,4 +1,4 @@
-/* PROTOTYPE 09 — Two Tracks */
+/* PROTOTYPE 09 — Transit Map */
 
 /* Undo the element styles from app/globals.css inside this variant. Every
    rule below is prefixed with .root so it outranks this reset. */
@@ -269,22 +269,12 @@
   grid-template-columns: var(--v-portrait) minmax(0, 1fr);
   grid-template-areas:
     "portrait position"
-    "craft craft"
     "lines lines";
   align-items: center;
   gap: 1.25rem;
   width: var(--v-wrap);
   margin: 0 auto;
   padding: 1.75rem 0 2rem;
-}
-.root .craft {
-  grid-area: craft;
-  margin: 0;
-  font-size: 1.125rem;
-  font-style: italic;
-  font-weight: 500;
-  line-height: 1.4;
-  text-wrap: balance;
 }
 .root .lines {
   grid-area: lines;
@@ -740,22 +730,16 @@
 
   .root .hero {
     --v-portrait: 13rem;
-    --v-lane: 7.75rem; /* from one track to the other */
+    --v-lane: 7.75rem; /* from one line to the other */
     --v-hero-gap: clamp(2rem, 5vw, 3rem);
 
     grid-template-columns: minmax(0, 1fr) var(--v-portrait);
     grid-template-areas:
-      "craft ."
       "lines portrait"
       "position .";
     align-items: start;
     gap: 0 var(--v-hero-gap);
-    padding: 1.75rem 0 2.25rem;
-  }
-  .root .craft {
-    margin-bottom: 1.5rem;
-    font-size: 1.1875rem;
-    line-height: 1.6875rem;
+    padding: 3rem 0 2.25rem;
   }
   .root .lines {
     gap: 0;
@@ -777,7 +761,7 @@
     padding-top: 0.5rem;
     font-size: 1.1875rem;
   }
-  /* Centre the ring between the two tracks. */
+  /* Centre the ring between the two lines. */
   .root .portrait {
     margin-top: calc(1.375rem + var(--v-lane) / 2 - var(--v-portrait) / 2);
   }

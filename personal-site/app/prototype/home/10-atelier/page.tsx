@@ -66,7 +66,6 @@ export default function Atelier() {
 
           <div className={styles.intro}>
             <p className={styles.position}>{person.position}</p>
-            <p className={styles.standfirst}>{person.craft}</p>
           </div>
 
           <div className={styles.arch}>

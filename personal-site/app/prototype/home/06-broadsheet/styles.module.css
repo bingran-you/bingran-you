@@ -262,10 +262,14 @@
   line-height: 1;
   letter-spacing: 0.24em;
 }
+.root .leadHead {
+  container-type: inline-size;
+}
 .root .headline {
-  /* The vh term trims the headline on short windows so the advertisement
-     stays above the fold; from about 880px of height up it has no effect. */
-  font-size: min(8.6vw, 7.75rem, max(5.5rem, 27.7vh - 7.5rem));
+  /* Sized to its column (16cqw) so each role keeps to one line. The vh term
+     trims the headline on short windows so the advertisement stays above the
+     fold; from about 880px of height up it has no effect. */
+  font-size: min(16cqw, 7.2rem, max(5.5rem, 27.7vh - 7.5rem));
   font-weight: 800;
   line-height: 0.87;
   letter-spacing: -0.012em;
@@ -274,6 +278,7 @@
 }
 .root .headlineLine {
   display: block;
+  white-space: nowrap;
 }
 .root .deck {
   margin: 0.85rem 0 0;
@@ -820,7 +825,7 @@
     aspect-ratio: 5 / 4;
   }
   .root .headline {
-    font-size: min(17.4vw, 6.5rem);
+    font-size: min(16cqw, 6.5rem);
   }
   .root .deck {
     font-size: 1.3125rem;

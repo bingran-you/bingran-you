@@ -240,8 +240,6 @@ export default function Transcript() {
           </ul>
         </Step>
 
-        <p className={styles.answer}>{person.craft}</p>
-
         <div aria-hidden className={`${styles.turn} ${styles.input}`}>
           <span className={styles.caret}>&gt;</span>
           <span className={styles.cursor} />

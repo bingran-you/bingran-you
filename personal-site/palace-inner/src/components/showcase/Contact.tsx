@@ -55,7 +55,7 @@ const Contact: React.FC<ContactProps> = () => {
     return (
         <div className="site-page-content">
             <h1>Contact</h1>
-            <h3>Different platforms, same person</h3>
+            <h3>Email and profiles</h3>
             <br />
             <p>
                 I read most of these regularly. The fastest is email

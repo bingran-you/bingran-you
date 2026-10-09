@@ -1,0 +1,359 @@
+/* PROTOTYPE 01 — Specimen */
+
+/* Undo the element styles from app/globals.css inside this variant. Every
+   rule below is prefixed with .root so it outranks this reset. */
+.root :where(h1, h2, h3, h4, h5, h6, p, li) {
+  font-family: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.root :where(a:not(:global(.palace-cta))) {
+  color: inherit;
+  text-decoration: none;
+}
+.root :where(a:not(:global(.palace-cta))):visited {
+  color: inherit;
+}
+
+.root {
+  --v-ink: #0a0a0a;
+  --v-soft: #2b2b2b;
+  --v-rule: rgba(10, 10, 10, 0.55);
+  --v-select: #000080;
+  --v-link: #551a8b;
+  --v-label: "MSSerif", "Millennium", "Times New Roman", monospace;
+  --v-bold: "MillenniumBold", "Times New Roman", Times, serif;
+  --v-slab: "Alfa Slab One", Georgia, "Times New Roman", serif;
+  --v-measure: 68rem;
+  --v-gutter: clamp(1.25rem, 4vw, 3rem);
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  color: var(--v-ink);
+  font-family: "Millennium", "Times New Roman", Times, serif;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+/* ── masthead ─────────────────────────────────────────────────────────── */
+.root .masthead {
+  border-bottom: 3px double var(--v-ink);
+}
+.root .mastheadInner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+  max-width: var(--v-measure);
+  margin: 0 auto;
+  padding: 1.1rem var(--v-gutter) 0.95rem;
+}
+.root .brand,
+.root .navLink,
+.root .label,
+.root .all,
+.root .meta,
+.root .venue,
+.root .year,
+.root .caption,
+.root .repo {
+  font-family: var(--v-label);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.root .brand {
+  font-size: 0.8125rem;
+}
+.root .nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+}
+.root .navLink {
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+.root .navLink:hover,
+.root .brand:hover,
+.root .all:hover,
+.root .repo:hover {
+  color: var(--v-link);
+  border-bottom-color: currentColor;
+}
+
+/* ── sheet ────────────────────────────────────────────────────────────── */
+.root .sheet {
+  flex: 1;
+  width: 100%;
+  max-width: var(--v-measure);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 7vw, 5.5rem) var(--v-gutter) clamp(4rem, 9vw, 7rem);
+}
+
+.root .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem clamp(2rem, 5vw, 4.5rem);
+  padding-bottom: clamp(3rem, 7vw, 5.5rem);
+}
+.root .name {
+  margin: 0 0 0 -0.04em;
+  font-family: var(--v-slab);
+  font-size: clamp(4rem, 13.5vw, 10.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.012em;
+}
+.root .facts {
+  display: grid;
+  gap: 0.6rem;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--v-soft);
+  font-size: 1.125rem;
+}
+.root .roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.75rem;
+}
+.root .fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+.root .icon {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.22rem;
+}
+.root .cta {
+  margin-top: 1.75rem;
+}
+
+.root .portrait {
+  margin: 0;
+}
+.root .portraitFrame {
+  width: clamp(9rem, 22vw, 17rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 2px solid var(--v-ink);
+  box-shadow: 8px 8px 0 var(--v-ink);
+}
+.root .portraitImage {
+  object-fit: cover;
+  object-position: 58% 26%;
+}
+.root .caption {
+  margin-top: 1.25rem;
+  color: var(--v-soft);
+}
+
+/* ── ledger ───────────────────────────────────────────────────────────── */
+.root .section {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding: 1.6rem 0 clamp(2.5rem, 5vw, 4rem);
+  border-top: 2px solid var(--v-ink);
+}
+.root .rail {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-content: start;
+  align-items: baseline;
+  gap: 0.5rem 0.9rem;
+}
+.root .numeral {
+  font-family: var(--v-slab);
+  font-size: 2.75rem;
+  line-height: 0.9;
+}
+.root .label {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.root .all {
+  grid-column: 2;
+  justify-self: start;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  color: var(--v-link);
+}
+
+.root .rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.root .rows > li + li {
+  border-top: 1px solid var(--v-rule);
+}
+
+.root .entry {
+  padding: 0.95rem 0.75rem;
+}
+.root .sub.split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1.5rem;
+}
+
+.root .line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0;
+}
+.root .rowTitle {
+  font-family: var(--v-bold);
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+.root .leader {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 2px dotted currentColor;
+  opacity: 0.55;
+  transform: translateY(-0.28em);
+}
+.root .meta {
+  flex: none;
+  color: var(--v-soft);
+}
+.root .sub {
+  display: block;
+  margin: 0.2rem 0 0;
+  color: var(--v-soft);
+  font-size: 1rem;
+}
+
+/* Rows pick up the Win98 selection colour instead of an underline. */
+.root .rowLink {
+  display: block;
+  padding: 0.95rem 0.75rem;
+}
+.root .rowLink:hover,
+.root .rowLink:focus-visible {
+  background: var(--v-select);
+  color: #fff;
+  outline: 1px dotted #fff;
+  outline-offset: -4px;
+}
+.root .rowLink:hover :is(.meta, .sub, .venue, .year),
+.root .rowLink:focus-visible :is(.meta, .sub, .venue, .year) {
+  color: inherit;
+}
+
+.root .repo {
+  display: inline-block;
+  margin: -0.35rem 0 0.9rem 0.75rem;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  color: var(--v-link);
+}
+
+.root .paper {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.35rem 1.5rem;
+}
+.root .venue {
+  justify-self: start;
+  padding: 0.2rem 0.45rem 0.12rem;
+  border: 1px solid currentColor;
+  color: var(--v-soft);
+  white-space: nowrap;
+}
+.root .year {
+  color: var(--v-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── footer ───────────────────────────────────────────────────────────── */
+.root .footer {
+  border-top: 3px double var(--v-ink);
+}
+.root .footerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+  max-width: var(--v-measure);
+  margin: 0 auto;
+  padding: 1.75rem var(--v-gutter) 5.5rem;
+}
+.root .copyright {
+  margin: 0;
+  color: var(--v-soft);
+  font-size: 0.9375rem;
+}
+.root .socials a {
+  color: var(--v-soft);
+}
+.root .socials a:hover {
+  color: var(--v-link);
+}
+
+/* ── small screens ────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .root .section {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1rem;
+  }
+  .root .rail {
+    grid-template-columns: auto auto 1fr;
+  }
+  .root .all {
+    grid-column: 3;
+    justify-self: end;
+  }
+  .root .numeral {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .root .hero {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .root .portrait {
+    order: -1;
+  }
+  .root .portraitFrame {
+    box-shadow: 6px 6px 0 var(--v-ink);
+  }
+  .root .paper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .root .entry,
+  .root .rowLink {
+    padding-inline: 0.25rem;
+  }
+  .root .line {
+    flex-wrap: wrap;
+    gap: 0.15rem 0.75rem;
+  }
+  .root .leader {
+    display: none;
+  }
+  .root .repo {
+    margin-left: 0.25rem;
+  }
+  .root .year {
+    display: none;
+  }
+}

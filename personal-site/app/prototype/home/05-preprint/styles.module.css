@@ -1,0 +1,571 @@
+/* PROTOTYPE 05 — Preprint */
+
+/* Undo the element styles from app/globals.css inside this variant. Every
+   rule below is prefixed with .root so it outranks this reset. */
+.root :where(h1, h2, h3, h4, h5, h6, p, li) {
+  font-family: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.root :where(a:not(:global(.palace-cta))) {
+  color: inherit;
+  text-decoration: none;
+}
+.root :where(a:not(:global(.palace-cta))):visited {
+  color: inherit;
+}
+.root :where(b, strong) {
+  font-family: inherit;
+  font-weight: 700;
+}
+
+/* Every length that decides a line break is in rem, so the sheet is one rigid
+   object: 57.5rem wide with two 23.25rem columns. Justified text is only ever
+   set on one of two fixed measures (those columns, or the 37.25rem single
+   column) whose line breaks have been checked; fluid phone widths are set
+   ragged-right instead. Leading and vertical spacing are rem values that land
+   on whole pixels, so every baseline sits on the pixel grid. */
+.root {
+  --v-desk: #e7e4dc;
+  --v-sheet: #fffdf8;
+  --v-ink: #17150f;
+  --v-soft: #5c584f;
+  --v-hair: #8d897f;
+  --v-faint: #a9a499;
+  --v-link: #1d3f8a;
+  --v-margin: 4.5rem;
+  --v-gutter: 2rem;
+  --v-small: 0.859375rem;
+  /* Booktabs weights. A 1x screen cannot draw a rule thinner than the heavy
+     one, so there the hairline is lightened instead; see the 2dppx query. */
+  --v-rule: 1px solid var(--v-ink);
+  --v-hairline: 1px solid var(--v-hair);
+
+  flex: 1;
+  min-height: 100dvh;
+  padding: 2.5rem 1.5rem 6.5rem;
+  background: var(--v-desk);
+  color: var(--v-ink);
+  font-family: var(--v-stix), "STIX Two Text", "Times New Roman", Times, serif;
+  font-size: 1rem;
+  line-height: 1.4375rem;
+  /* STIX Two's default figures are tabular; running text wants proportional. */
+  font-variant-numeric: proportional-nums;
+}
+
+/* The Google Fonts build of STIX Two Text ships without the `smcp` feature, so
+   `font-variant-caps` would fall back to shrunken, anaemic capitals. Small caps
+   are set by hand instead: capitals at small-cap height, a step heavier on the
+   weight axis so they hold the colour of the text, and lightly letterspaced. */
+.root .brand,
+.root .nav,
+.root .supplementTitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* ── links ────────────────────────────────────────────────────────────── */
+.root .link,
+.root .link:visited {
+  color: var(--v-link);
+}
+.root .url {
+  white-space: nowrap;
+}
+.root .link:hover,
+.root .navLink:hover,
+.root .brand:hover,
+.root .marks a:hover {
+  color: var(--v-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.17em;
+}
+.root a:not(:global(.palace-cta)):focus-visible {
+  color: var(--v-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.17em;
+  outline: 1.5px solid var(--v-link);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+/* ── the sheet ────────────────────────────────────────────────────────── */
+.root .sheet {
+  position: relative;
+  width: 57.5rem;
+  margin: 0 auto;
+  padding: 1.875rem var(--v-margin) 2.125rem;
+  background: var(--v-sheet);
+  box-shadow:
+    0 0 0 1px rgba(64, 56, 38, 0.05),
+    0 1px 2px rgba(64, 56, 38, 0.07),
+    0 22px 44px -22px rgba(64, 56, 38, 0.24);
+}
+
+/* arXiv-style stamp running up the left margin. */
+.root .stamp {
+  position: absolute;
+  top: 13.5rem;
+  left: 0;
+  display: flex;
+  gap: 0.85em;
+  width: var(--v-margin);
+  align-items: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--v-faint);
+  font-size: 1.25rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ── running head ─────────────────────────────────────────────────────── */
+.root .runningHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 1.5rem;
+  padding-bottom: 0.4375rem;
+  border-bottom: var(--v-rule);
+  line-height: 1.125rem;
+}
+.root .nav {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.root .navItem + .navItem::before {
+  content: "·";
+  margin: 0 0.5em;
+  color: var(--v-soft);
+}
+/* A comfortable hit area that moves nothing; the focus ring stays snug. */
+.root .brand,
+.root .navLink {
+  margin: -0.5em -0.4em;
+  padding: 0.5em 0.4em;
+}
+.root a.brand:focus-visible,
+.root a.navLink:focus-visible {
+  outline-offset: -0.2em;
+}
+
+/* ── front matter ─────────────────────────────────────────────────────── */
+.root .front {
+  padding-top: 2.75rem;
+  text-align: center;
+}
+.root .titleLine {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+.root .title {
+  margin: 0;
+  font-size: 2.375rem;
+  font-weight: 700;
+  line-height: 2.625rem;
+  letter-spacing: -0.003em;
+}
+.root .marks {
+  position: absolute;
+  top: 0.15em;
+  left: 100%;
+  margin-left: 0.15em;
+  font-size: 1rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+.root .byline {
+  margin: 0.75rem 0 0;
+  font-size: 1.1875rem;
+  line-height: 1.5625rem;
+}
+.root .affiliation {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  font-style: italic;
+  line-height: 1.3125rem;
+}
+.root .affiliation span {
+  display: block;
+  text-wrap: balance;
+}
+.root .dated {
+  margin: 0.3125rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.3125rem;
+}
+.root .abstract {
+  width: 33.5rem;
+  max-width: 100%;
+  margin: 1.375rem auto 0;
+  font-size: 0.9375rem;
+  line-height: 1.3125rem;
+  text-align: justify;
+  text-indent: 1.25em;
+}
+
+/* The button's home: a ruled box whose label sits in the rule. */
+.root .supplement {
+  position: relative;
+  width: 26rem;
+  margin: 1.875rem auto 0;
+  padding: 1.1875rem 1.5rem 1.25rem;
+  border: var(--v-hairline);
+}
+.root .supplementTitle {
+  position: absolute;
+  top: -0.5em;
+  right: 0;
+  left: 0;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 0.8em;
+  background: var(--v-sheet);
+  line-height: 1;
+  white-space: nowrap;
+}
+.root .supplementText {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.3125rem;
+  text-wrap: balance;
+}
+/* The button is 234.72 x 28.5px. Centred exactly it would start on a fraction
+   of a pixel, which softens its bitmap-style lettering, so it sits at the
+   start of a centred 236 x 29px slot instead: at most 0.64px off the axis,
+   and rendered on whole pixels exactly as on the live home page. A flex
+   line, so this page's font metrics never reach it. */
+.root .supplementAction {
+  display: flex;
+  align-items: flex-start;
+  width: 14.75rem;
+  min-height: 1.8125rem;
+  margin: 0.8125rem auto 0;
+}
+
+/* ── two-column body ──────────────────────────────────────────────────── */
+.root .body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--v-gutter);
+  align-items: start;
+  margin-top: 2.375rem;
+}
+.root .heading {
+  margin: 1.5rem 0 0.625rem;
+  font-size: var(--v-small);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.125rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+.root .education .heading {
+  margin-top: 0;
+}
+
+/* Browsers justify by stretching word spaces only, never shrinking them. A
+   slightly tight natural space brings the stretched average back to normal. */
+.root .paragraph,
+.root .referenceText {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 5 2 3;
+  -webkit-hyphenate-limit-before: 2;
+  -webkit-hyphenate-limit-after: 3;
+}
+.root .paragraph {
+  margin: 0;
+  text-indent: 1.25em;
+  word-spacing: -0.05em;
+}
+.root .runIn {
+  font-weight: 600;
+}
+
+/* TABLE I — booktabs: three rules, none vertical. */
+.root .table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+.root .tableCaption {
+  padding-bottom: 0.4375rem;
+  caption-side: top;
+  font-size: var(--v-small);
+  line-height: 1.1875rem;
+  text-align: center;
+}
+.root .table th,
+.root .table td {
+  padding: 0.125rem 0.75rem 0.1875rem 0;
+  font-weight: 400;
+  text-align: left;
+  vertical-align: top;
+}
+.root .table th:last-child,
+.root .table td:last-child {
+  padding-right: 0;
+}
+.root .table thead th,
+.root .table thead td {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  border-top: var(--v-rule);
+  border-bottom: var(--v-hairline);
+  vertical-align: bottom;
+  text-wrap: balance;
+}
+.root .table thead td {
+  width: 4.9em;
+}
+.root .table thead th:nth-child(2) {
+  width: 46%;
+}
+.root .table tbody tr:first-child > * {
+  padding-top: 0.375rem;
+}
+.root .table tbody tr:last-child > * {
+  padding-bottom: 0.4375rem;
+  border-bottom: var(--v-rule);
+}
+.root .metric {
+  display: block;
+}
+
+/* FIG. 1 */
+.root .figure {
+  margin: 0;
+}
+.root .plate {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #dccfc1;
+}
+.root .portrait {
+  object-fit: cover;
+  object-position: 50% 12%;
+}
+.root .figureCaption {
+  margin-top: 0.5rem;
+  font-size: var(--v-small);
+  line-height: 1.1875rem;
+  text-align: center;
+}
+
+/* References */
+.root .referenceList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--v-small);
+  line-height: 1.1875rem;
+}
+.root .referencesContinued {
+  margin-top: 1.875rem;
+}
+.root .reference {
+  display: grid;
+  grid-template-columns: 2em minmax(0, 1fr);
+  scroll-margin-top: 1.5rem;
+}
+.root .reference + .reference {
+  margin-top: 0.25rem;
+}
+.root .referenceText {
+  display: block;
+  word-spacing: -0.05em;
+}
+.root .referenceText :is(strong, i) {
+  white-space: nowrap;
+}
+.root .paperTitle {
+  font-style: italic;
+}
+.root .seeAlso {
+  margin: 0.25rem 0 0;
+  padding-left: 2em;
+  font-size: var(--v-small);
+  line-height: 1.1875rem;
+}
+.root .reference:target,
+.root .footnote:target {
+  background: rgba(29, 63, 138, 0.08);
+  box-shadow: 0 0 0 5px rgba(29, 63, 138, 0.08);
+}
+
+/* ── footer: footnotes, imprint, folio ────────────────────────────────── */
+.root .footer {
+  margin-top: 2.5rem;
+  font-size: var(--v-small);
+  line-height: 1.3125rem;
+}
+.root .footer::before {
+  content: "";
+  display: block;
+  width: 7.5rem;
+  margin-bottom: 0.4375rem;
+  border-top: var(--v-hairline);
+}
+.root .footnote {
+  margin: 0;
+  padding-left: 1em;
+  text-indent: -1em;
+  scroll-margin-top: 1.5rem;
+}
+.root .footnoteMark {
+  display: inline-block;
+  width: 1em;
+  text-indent: 0;
+}
+.root .imprint {
+  margin: 1.875rem 0 0;
+  color: var(--v-soft);
+  text-align: center;
+}
+.root .folio {
+  margin: 0.875rem 0 0;
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+/* ── no room for the desk: the sheet goes full-bleed, the text block and its
+      line breaks stay exactly as they were ───────────────────────────────── */
+@media (max-width: 62.49em) {
+  .root {
+    padding: 0 0 6rem;
+  }
+  .root .sheet {
+    width: auto;
+    padding: 1.5rem calc((100% - 48.5rem) / 2) 2.125rem;
+    box-shadow: none;
+  }
+  .root .stamp {
+    display: none;
+  }
+}
+
+/* ── single column, REVTeX "preprint" style, on a fixed 37.25rem measure ─ */
+@media (max-width: 51.49em) {
+  .root .sheet {
+    padding-inline: max(1.25rem, calc((100% - 37.25rem) / 2));
+  }
+  .root .runningHead {
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0.5rem;
+  }
+  .root .body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .root .column {
+    display: contents;
+  }
+  /* The table and the figure keep the width they have in a column. */
+  .root .table,
+  .root .figure {
+    width: 100%;
+    max-width: 23.25rem;
+    margin-inline: auto;
+  }
+  .root .figure {
+    order: 1;
+    margin-top: 1.75rem;
+  }
+  .root .references {
+    order: 2;
+  }
+  .root .referencesContinued {
+    order: 3;
+    margin-top: 0.25rem;
+  }
+  .root .seeAlso {
+    order: 4;
+  }
+}
+
+/* ── phones: fluid measure, so the text is set ragged-right ────────────── */
+@media (max-width: 39.74em) {
+  .root .sheet {
+    padding-top: 1.25rem;
+  }
+  .root .nav {
+    display: block;
+    line-height: 1.5625rem;
+    text-align: center;
+  }
+  .root .navItem {
+    display: inline;
+  }
+  /* Break the seven links 4 + 3 so no line starts or ends with a middot. */
+  .root .navItem:nth-child(5)::before {
+    content: "\A";
+    margin: 0;
+    white-space: pre;
+  }
+  .root .front {
+    padding-top: 2rem;
+  }
+  .root .title {
+    font-size: 2.125rem;
+    line-height: 2.375rem;
+  }
+  .root .abstract {
+    width: auto;
+    margin-inline: 0.875rem;
+  }
+  .root .supplement {
+    width: auto;
+    max-width: 26rem;
+    padding-inline: 1rem;
+  }
+  .root .table,
+  .root .figure {
+    max-width: 26rem;
+  }
+  .root .abstract,
+  .root .paragraph,
+  .root .referenceText {
+    text-align: left;
+    text-wrap: pretty;
+    hyphenate-limit-chars: 10 4 4;
+    -webkit-hyphenate-limit-before: 4;
+    -webkit-hyphenate-limit-after: 4;
+    word-spacing: 0;
+  }
+}
+
+/* On a high-density screen the hairline can be a true hairline. */
+@media (min-resolution: 2dppx) {
+  .root {
+    --v-hairline: 0.5px solid var(--v-ink);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .root .reference:target,
+  .root .footnote:target {
+    animation: v-cited 1.6s ease-out;
+  }
+  @keyframes v-cited {
+    from {
+      background: rgba(29, 63, 138, 0.22);
+      box-shadow: 0 0 0 5px rgba(29, 63, 138, 0.22);
+    }
+  }
+}

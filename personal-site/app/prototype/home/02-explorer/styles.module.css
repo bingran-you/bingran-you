@@ -1,0 +1,678 @@
+/* PROTOTYPE 02 — Explorer.exe */
+
+/* Undo the element styles from app/globals.css inside this variant. Every
+   rule below is prefixed with .root so it outranks this reset. */
+.root :where(h1, h2, h3, h4, h5, h6, p, li) {
+  font-family: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+.root :where(a:not(:global(.palace-cta))) {
+  color: inherit;
+  text-decoration: none;
+}
+.root :where(a:not(:global(.palace-cta))):visited {
+  color: inherit;
+}
+
+/* Everything sits on whole pixels and a 2px rhythm: no radius, no blur, no
+   transitions. Sizes are px on purpose — this is a bitmap interface. */
+.root {
+  --v-desktop: #008080;
+  --v-face: #c0c0c0;
+  --v-hilight: #ffffff;
+  --v-light: #dfdfdf;
+  --v-shadow: #808080;
+  --v-frame: #0a0a0a;
+  --v-navy: #000080;
+  --v-ink: #000000;
+  --v-dim: #4d4d4d;
+  --v-link: #0000ff;
+  --v-focus: #ffff80;
+
+  /* The Win98 edges. A window frame and a push button differ only in which
+     of the two light lines is outermost. */
+  --v-raised: inset -1px -1px var(--v-frame), inset 1px 1px var(--v-light),
+    inset -2px -2px var(--v-shadow), inset 2px 2px var(--v-hilight);
+  --v-button: inset -1px -1px var(--v-frame), inset 1px 1px var(--v-hilight),
+    inset -2px -2px var(--v-shadow), inset 2px 2px var(--v-light);
+  --v-pressed: inset -1px -1px var(--v-hilight), inset 1px 1px var(--v-frame),
+    inset -2px -2px var(--v-light), inset 2px 2px var(--v-shadow);
+  --v-sunken: inset -1px -1px var(--v-hilight), inset 1px 1px var(--v-shadow),
+    inset -2px -2px var(--v-light), inset 2px 2px var(--v-frame);
+  --v-well: inset -1px -1px var(--v-hilight), inset 1px 1px var(--v-shadow);
+  --v-lift: inset 1px 1px var(--v-hilight), inset -1px -1px var(--v-shadow);
+  --v-etch: inset 0 1px var(--v-shadow), inset 0 2px var(--v-hilight);
+
+  --v-ui: "MSSerif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  --v-serif: "MillenniumBold", "Times New Roman", Times, serif;
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--v-desktop);
+  color: var(--v-ink);
+  font-family: var(--v-ui);
+  font-size: 12px;
+  line-height: 16px;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  cursor: default;
+}
+
+.root .icon {
+  flex: none;
+}
+
+/* ── desktop and window frame ─────────────────────────────────────────── */
+.root .desktop {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+}
+.root .window {
+  width: 100%;
+  max-width: 1120px;
+  padding: 4px;
+  background: var(--v-face);
+  box-shadow: var(--v-raised);
+}
+
+/* ── title bar ────────────────────────────────────────────────────────── */
+.root .titleBar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 2px;
+  background: linear-gradient(90deg, var(--v-navy), #1084d0);
+  color: #fff;
+}
+.root .caption {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding-right: 4px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.root .captionText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.root .caption:hover,
+.root .caption:focus-visible {
+  outline: 1px dotted #fff;
+  outline-offset: 0;
+}
+.root .captionButtons {
+  display: flex;
+  margin-left: auto;
+}
+.root .captionButton {
+  width: 16px;
+  height: 14px;
+  background: var(--v-face);
+  box-shadow: var(--v-button);
+  color: var(--v-ink);
+}
+.root .minimize {
+  padding: 9px 0 0 4px;
+}
+.root .maximize {
+  padding: 2px 0 0 3px;
+}
+.root .close {
+  margin-left: 2px;
+  padding: 3px 0 0 4px;
+}
+
+/* ── menu bar and address bar: two bands of a rebar ───────────────────── */
+.root .menuBar,
+.root .addressBar {
+  display: flex;
+  align-items: center;
+  box-shadow: var(--v-etch);
+}
+.root .menuBar {
+  margin-top: 2px;
+  padding-top: 2px;
+}
+.root .addressBar {
+  padding: 4px 2px 2px 0;
+}
+.root .grip {
+  flex: none;
+  width: 3px;
+  height: 18px;
+  margin: 0 4px 0 2px;
+  box-shadow: var(--v-lift);
+}
+.root .menu {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.root .menuItem {
+  display: block;
+  padding: 4px 7px;
+  white-space: nowrap;
+}
+.root .menuItem:hover,
+.root .menuItem:focus-visible {
+  background: var(--v-navy);
+  color: #fff;
+  outline: none;
+}
+.root .accel {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 1px;
+}
+/* Text-sized boxes end on fractions of a pixel, so the labels that sit in
+   front of a bevel (this one, Start, the tray, the status panel) are given
+   whole widths. */
+.root .addressLabel {
+  flex: none;
+  width: 48px;
+}
+.root .addressField {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: 22px;
+  padding: 2px 2px 2px 4px;
+  background: #fff;
+  box-shadow: var(--v-sunken);
+}
+.root .addressText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.root .dropdown {
+  flex: none;
+  width: 16px;
+  height: 18px;
+  padding: 7px 0 0 4px;
+  background: var(--v-face);
+  box-shadow: var(--v-button);
+}
+
+/* ── client area ──────────────────────────────────────────────────────── */
+.root .client {
+  display: grid;
+  grid-template-columns: 304px minmax(0, 1fr);
+  margin-top: 2px;
+}
+
+/* Left: the web-view pane. */
+.root .webView {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px 14px;
+  font-size: 13px;
+  line-height: 18px;
+}
+.root .portrait {
+  padding: 2px;
+  box-shadow: var(--v-sunken);
+}
+.root .portraitCrop {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.root .portraitImage {
+  object-fit: cover;
+  object-position: 58% 26%;
+}
+.root .name {
+  margin: 12px 0 0;
+  font-family: var(--v-serif);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 44px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.root .facts {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.root .fact {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: 8px;
+  text-wrap: balance;
+}
+.root .fact .icon {
+  margin-top: 1px;
+}
+.root .summary {
+  margin: 10px 0 14px;
+  text-wrap: balance;
+}
+/* Any slack in the pane opens above the rule, so the button stays at its
+   foot like the default button of a dialog. */
+.root .etched {
+  height: 2px;
+  margin: auto 0 12px;
+  border: 0;
+  box-shadow: inset 0 1px var(--v-shadow), inset 0 -1px var(--v-hilight);
+}
+/* The button is 28.5px tall; a 30px row keeps what follows on whole pixels. */
+.root .action {
+  display: flex;
+  min-height: 30px;
+}
+
+/* Right: the list view. */
+.root .listView {
+  min-width: 0;
+  padding: 2px 2px 10px;
+  background: #fff;
+  box-shadow: var(--v-sunken);
+  font-size: 13px;
+  line-height: 18px;
+}
+/* Period lines up with Location below it when there is room; name and
+   degree, which need 290px each to stay on one line, get theirs first. */
+.root .education {
+  --v-cols: minmax(0, 1fr) minmax(0, 1fr) clamp(100px, 100% - 580px, 220px);
+}
+.root .projects {
+  --v-cols: 136px minmax(0, 1fr) 220px;
+}
+.root .papers {
+  --v-cols: 136px minmax(0, 1fr) 56px;
+}
+.root .group + .group {
+  margin-top: 6px;
+}
+.root .groupHead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px 6px 6px;
+}
+.root .groupTitle {
+  margin: 0;
+  font-family: var(--v-serif);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+.root .all,
+.root .repo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  padding: 0 3px;
+  color: var(--v-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+/* The 7px arrows sit on the x-height of an 18px line, on a whole pixel. */
+.root .arrow {
+  flex: none;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+.root .all {
+  margin-left: auto;
+}
+.root .repo {
+  position: relative;
+  z-index: 1;
+  margin-left: -3px;
+}
+.root .all:hover,
+.root .all:focus-visible,
+.root .repo:hover,
+.root .repo:focus-visible {
+  background: var(--v-navy);
+  color: #fff;
+  outline: 1px dotted var(--v-focus);
+  outline-offset: -1px;
+}
+
+.root .columns {
+  display: grid;
+  grid-template-columns: var(--v-cols);
+  background: var(--v-face);
+  font-size: 12px;
+  line-height: 16px;
+}
+.root .columns > span {
+  padding: 2px 6px;
+  box-shadow: var(--v-button);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.root .rows {
+  margin: 0;
+  padding: 2px 0 0;
+  list-style: none;
+}
+.root .row {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--v-cols);
+  padding: 3px 0;
+}
+.root .lead {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  column-gap: 6px;
+  padding: 0 6px;
+}
+.root .lead .icon {
+  margin-top: 1px;
+}
+.root .label,
+.root .body,
+.root .meta {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.root .body,
+.root .meta {
+  padding: 0 6px;
+}
+.root .body {
+  text-wrap: balance;
+}
+.root .note {
+  grid-column: 1 / -1;
+  padding: 0 6px 0 28px;
+  color: var(--v-dim);
+}
+
+/* The whole row is the link: its ::after is stretched over the row, and the
+   row takes the Win98 selection colours with a dotted focus rectangle. The
+   link only gives up its own focus ring where the row can show one. */
+.root .rowLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+@supports selector(:has(a)) {
+  .root .rowLink {
+    outline: none;
+  }
+}
+.root .row:has(.rowLink:hover),
+.root .row:has(.rowLink:focus-visible) {
+  background: var(--v-navy);
+  color: #fff;
+  outline: 1px dotted var(--v-focus);
+  outline-offset: -1px;
+}
+.root .row:has(.rowLink:hover) :is(.meta, .repo),
+.root .row:has(.rowLink:focus-visible) :is(.meta, .repo) {
+  color: #fff;
+}
+
+/* ── status bar ───────────────────────────────────────────────────────── */
+.root .statusBar {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+.root .statusPanel {
+  margin: 0;
+  padding: 3px 6px;
+  box-shadow: var(--v-well);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.root .statusPanel:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.root .statusPanel:last-of-type {
+  min-width: 224px;
+  padding-right: 20px;
+}
+.root .sizeGrip {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+}
+
+/* ── taskbar ──────────────────────────────────────────────────────────── */
+.root .taskbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  padding: 4px 2px 2px;
+  background: var(--v-face);
+  box-shadow: inset 0 1px var(--v-light), inset 0 2px var(--v-hilight);
+}
+.root .start {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 54px;
+  height: 22px;
+  padding-left: 4px;
+  font-weight: 700;
+  box-shadow: var(--v-button);
+}
+.root .divider {
+  flex: none;
+  width: 2px;
+  height: 18px;
+  box-shadow: inset 1px 0 var(--v-shadow), inset -1px 0 var(--v-hilight);
+}
+.root .quickLaunch,
+.root .tasks {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+/* The task button and the tray travel together, so a narrow taskbar wraps
+   into two tidy rows: Start and quick launch above, these two below. */
+.root .tasks {
+  flex: 1 1 268px;
+}
+.root .quickLaunch ul {
+  flex-wrap: nowrap;
+  gap: 0;
+}
+.root .quickLaunch a {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 22px;
+  color: var(--v-ink);
+  transition: none;
+}
+.root .quickLaunch svg {
+  width: 16px;
+  height: 16px;
+}
+.root .quickLaunch a:hover {
+  box-shadow: var(--v-lift);
+}
+.root .quickLaunch a:active {
+  box-shadow: var(--v-well);
+}
+.root .quickLaunch a:focus-visible {
+  outline: 1px dotted var(--v-ink);
+  outline-offset: -2px;
+}
+/* A pressed task button: sunken edge over the dithered "checked" face, its
+   contents nudged one pixel down and right. */
+.root .task {
+  flex: 0 1 164px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  height: 22px;
+  padding: 2px 6px 0 5px;
+  background: repeating-conic-gradient(
+      var(--v-hilight) 0 25%,
+      var(--v-face) 0 50%
+    )
+    0 0 / 2px 2px;
+  margin-right: 4px;
+  box-shadow: var(--v-pressed);
+  font-weight: 700;
+}
+.root .taskLabel {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.root .tray {
+  min-width: 88px;
+  margin-left: auto;
+  padding: 3px 10px;
+  box-shadow: var(--v-well);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Clearance for the floating prototype switcher. It is kept off-screen
+   (black, below the taskbar) so the taskbar stays the bottom edge of the
+   desktop; delete it together with the switcher. */
+.root .gutter {
+  height: 90px;
+  background: #000;
+}
+
+/* ── narrower screens ─────────────────────────────────────────────────── */
+@media (max-width: 1175px) {
+  .root .desktop {
+    padding: 16px;
+  }
+}
+
+/* Too narrow for two panes: the web view becomes a band above the list. */
+@media (max-width: 1019px) {
+  .root .client {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .root .webView {
+    display: grid;
+    grid-template-columns: 216px minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 16px;
+    align-content: start;
+    padding: 12px;
+  }
+  .root .portrait {
+    grid-column: 1;
+    grid-row: 1 / span 5;
+    align-self: start;
+  }
+  .root .name,
+  .root .facts,
+  .root .summary,
+  .root .etched,
+  .root .action {
+    grid-column: 2;
+  }
+  /* The capitals start level with the photo, and the summary row takes any
+     slack so the button ends level with it. */
+  .root .name {
+    margin-top: -7px;
+  }
+}
+
+/* Too narrow for columns: every row folds into a bold name over its details. */
+@media (max-width: 719px) {
+  .root .all {
+    padding: 4px 6px;
+  }
+  .root .columns {
+    display: none;
+  }
+  .root .rows {
+    padding: 0;
+  }
+  .root .row {
+    grid-template-columns: 16px minmax(0, 1fr) auto;
+    column-gap: 8px;
+    padding: 6px 8px;
+  }
+  .root .lead {
+    display: contents;
+  }
+  .root .label {
+    font-weight: 700;
+  }
+  .root .label,
+  .root .body,
+  .root .meta,
+  .root .note {
+    grid-column: 2 / -1;
+    padding: 0;
+  }
+  .root .meta {
+    color: var(--v-dim);
+  }
+  .root .papers .label {
+    grid-column: 2;
+  }
+  .root .papers .meta {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+/* Phones: the window runs nearly edge to edge and the portrait shrinks to a
+   thumbnail beside the name. */
+@media (max-width: 600px) {
+  .root .desktop {
+    padding: 8px;
+  }
+  .root .menuItem {
+    padding: 6px 7px;
+  }
+  .root .webView {
+    grid-template-columns: 112px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 12px;
+  }
+  .root .portrait {
+    grid-row: 1 / span 2;
+  }
+  /* 172px of chrome and portrait beside it; the name is 7em wide. */
+  .root .name {
+    margin-top: -5px;
+    font-size: min(28px, (100vw - 172px) / 7.1);
+    line-height: 32px;
+  }
+  .root .summary,
+  .root .etched,
+  .root .action {
+    grid-column: 1 / -1;
+  }
+}

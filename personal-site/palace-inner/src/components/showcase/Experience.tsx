@@ -32,7 +32,7 @@ const ROLES: RoleEntry[] = [
             'Skills-based benchmarking for AI agents (SkillsBench).',
             'Deterministic mock environments for long-horizon agent tasks (smolclaw, SBTI CLI).',
             'Git-native context layer for team decisions and ownership (first-tree).',
-            'Agent-native productivity products across email/chat/docs (DoWhiz, DeepTutor).',
+            'AI research assistant built on Zotero for cited answers and multi-paper comparison (DeepTutor).',
             'Local notification daemons that dispatch Codex / Claude Code work (mews).',
         ],
     },

@@ -59,14 +59,6 @@ export const projects: Project[] = [
     track: "ai",
   },
   {
-    name: "DoWhiz",
-    href: "https://github.com/KnoWhiz/DoWhiz",
-    description:
-      "Agent-native product for getting work done across email, chat, documents, and related tools.",
-    emoji: "🥷",
-    track: "ai",
-  },
-  {
     name: "DeepTutor",
     href: "https://deeptutor.knowhiz.us/",
     description:

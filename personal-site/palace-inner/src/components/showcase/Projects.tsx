@@ -36,13 +36,6 @@ const PROJECTS: ProjectEntry[] = [
         tag: 'Agent',
     },
     {
-        title: 'DoWhiz',
-        blurb:
-            'Agent-native product that gets work done across email, chat, docs, and the tools you already use.',
-        href: 'https://github.com/KnoWhiz/DoWhiz',
-        tag: 'Agent',
-    },
-    {
         title: 'DeepTutor',
         blurb:
             'AI research assistant built on Zotero — cited answers, figure/formula understanding, multi-paper comparison.',

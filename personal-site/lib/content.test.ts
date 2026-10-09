@@ -20,6 +20,12 @@ describe("getAiProjectHighlights", () => {
     );
   });
 
+  it("does not list DoWhiz as a project", () => {
+    expect(
+      projects.some(({ name, href }) => /dowhiz/i.test(`${name} ${href}`)),
+    ).toBe(false);
+  });
+
   it("returns up to 5 ai-track projects by default", () => {
     const result = getAiProjectHighlights();
     expect(result.length).toBeLessThanOrEqual(5);

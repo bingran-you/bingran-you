@@ -20,7 +20,6 @@ export const SITE_KEYWORDS = [
   "BenchFlow",
   "SkillsBench",
   "first-tree",
-  "DoWhiz",
   "atomic, molecular and optical physics",
   "trapped ions",
   "integrated photonics",

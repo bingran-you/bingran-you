@@ -5,8 +5,7 @@ Personal site of [Bingran You](https://bingran.ai) — built with Next.js, deplo
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack, React 19)
-- **Tailwind CSS v4** + `@tailwindcss/typography`, with CSS Modules for the page furniture
-- **Generated skills catalog** sourced from mirrored `.agents/skills/`
+- **Tailwind CSS v4**, with CSS Modules for the page furniture
 - **TypeScript**
 
 ## Develop
@@ -17,8 +16,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
-
-`npm run dev` regenerates `lib/skills.generated.json` before starting Next.js so the `/skills` catalog stays in sync with the mirrored workspace skills. In a checkout without the skill submodules, run `./node_modules/.bin/next dev` instead so the catalog is left alone.
 
 ## Design: the site is set as a journal article
 
@@ -47,14 +44,6 @@ The site carries facts and other people's own words, never prose composed for it
 
 See the `social-scraping-policy` skill; `npm run post:add -- <url>` appends to `content/posts/posts.json`.
 
-## Refresh the skills catalog
-
-When mirrored skills change and you want to refresh the static data without starting the dev server:
-
-```bash
-npm run skills:generate
-```
-
 ## Layout
 
 ```
@@ -65,8 +54,6 @@ app/
   (personal)/projects/page.tsx          projects table
   (personal)/papers/page.tsx            reference list
   (personal)/posts/page.tsx             social posts
-  (personal)/skills/page.tsx            skills index
-  (personal)/skills/[slug]/page.tsx     individual skill page
   llms.txt/route.ts                     crawler-friendly site index
   llms-full.txt/route.ts                the index plus every paper's abstract
 components/
@@ -80,12 +67,9 @@ lib/
   content.ts                            projects + papers + education data
   site.ts                               site URL, navigation, contact links
   posts.ts                              posts loader
-  skills.ts                             skills catalog helpers
-  skills.generated.json                 generated skills payload
 public/
   papers/                               one figure per paper
 scripts/
-  generate-skills-data.mjs              build skills payload + public downloads
   build-palace.mjs                      build + combine the two Memory Palace apps
 palace-outer/                            3D Memory Palace room
 palace-inner/                            in-monitor portfolio OS

@@ -2,7 +2,6 @@ import { stat } from "node:fs/promises";
 import path from "node:path";
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
-import { getAllSkills, getSkillsLastModified } from "@/lib/skills";
 
 async function getFileLastModified(relativePath: string) {
   const { mtime } = await stat(
@@ -20,7 +19,7 @@ async function getLatestLastModified(relativePaths: string[]) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticEntries: MetadataRoute.Sitemap = [
+  return [
     {
       url: `${SITE_URL}/`,
       lastModified: await getLatestLastModified([
@@ -69,12 +68,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/skills`,
-      lastModified: getSkillsLastModified(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
       url: `${SITE_URL}/palace`,
       lastModified: await getLatestLastModified([
         // /palace is served as a static webpack/CRA bundle from the vendored
@@ -90,13 +83,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
   ];
-
-  const skillEntries: MetadataRoute.Sitemap = getAllSkills().map((skill) => ({
-    url: `${SITE_URL}/skills/${skill.slug}`,
-    lastModified: new Date(skill.updatedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
-  }));
-
-  return [...staticEntries, ...skillEntries];
 }

@@ -22,10 +22,6 @@
 	path = current-projects/first-tree
 	url = https://github.com/first-tree-ai/first-tree.git
 	branch = main
-[submodule "current-projects/DoWhiz"]
-	path = current-projects/DoWhiz
-	url = https://github.com/KnoWhiz/DoWhiz.git
-	branch = dev
 [submodule "current-projects/skillsbench"]
 	path = current-projects/skillsbench
 	url = https://github.com/bingran-you/skillsbench.git

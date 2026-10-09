@@ -64,7 +64,6 @@ The generator derives each skill's `updatedAt` from `git log -1` on its `SKILL.m
 ### Submodules (see `.gitmodules`)
 
 - `bingran-you-private` — **private.** Treat contents as confidential. Never paste into external channels, commits outside the submodule, PRs, or LLM calls that leave the machine.
-- `current-projects/DoWhiz` — active project submodule.
 - `current-projects/first-tree` — active project submodule.
 - `current-projects/mews` — active project submodule.
 - `current-projects/skillsbench` — active project submodule.

@@ -48,7 +48,7 @@ const CHANNELS: ChannelEntry[] = [
         href: 'https://space.bilibili.com/85906410',
     },
     { label: 'Rednote', handle: '小红书', href: 'https://xhslink.com/m/gFj0Vwr2Ak' },
-    { label: 'Discord', handle: 'invite', href: 'https://discord.gg/jsAnjCep' },
+    { label: 'Discord', handle: 'invite', href: 'https://discord.gg/x2KYk4FVS' },
 ];
 
 const Contact: React.FC<ContactProps> = () => {

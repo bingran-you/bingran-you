@@ -43,7 +43,7 @@ export const SOCIALS = [
   { label: "Xiaohongshu", href: "https://xhslink.com/m/gFj0Vwr2Ak" },
   { label: "YouTube", href: "https://www.youtube.com/@BingranBRY" },
   { label: "Bilibili", href: "https://space.bilibili.com/85906410" },
-  { label: "Discord", href: "https://discord.gg/jsAnjCep" },
+  { label: "Discord", href: "https://discord.gg/x2KYk4FVS" },
   { label: "GitHub", href: "https://github.com/bingran-you" },
   {
     label: "Google Scholar",

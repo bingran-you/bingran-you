@@ -6,6 +6,7 @@ import {
   PaperTable,
   PaperText,
   ProjectsTable,
+  ReferenceItem,
 } from "@/components/article/blocks";
 import { Front } from "@/components/article/front";
 import { Sheet } from "@/components/article/sheet";
@@ -146,7 +147,10 @@ export default function Home() {
 
       {sheets.map((entries, i) => {
         const [first] = entries;
-        const coFirst = entries.some(({ paper }) => hasCoFirstAuthors(paper));
+        // The article closes with its reference list, on the last sheet.
+        const last = i === sheets.length - 1;
+        const listed = last ? papers : entries.map(({ paper }) => paper);
+        const coFirst = listed.some(hasCoFirstAuthors);
         return (
           <Sheet
             key={first.paper.slug}
@@ -166,6 +170,20 @@ export default function Home() {
                 <Stacked key={entry.paper.slug} {...entry} />
               ))
             )}
+            {last ? (
+              <section className={styles.entry} id="references">
+                <h2 className={styles.heading}>References</h2>
+                <ol className={styles.references}>
+                  {papers.map((paper, n) => (
+                    <ReferenceItem
+                      key={paper.slug}
+                      paper={paper}
+                      number={n + 1}
+                    />
+                  ))}
+                </ol>
+              </section>
+            ) : null}
           </Sheet>
         );
       })}

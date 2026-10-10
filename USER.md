@@ -13,22 +13,24 @@ _The one you serve. Keep this living and current._
 ## Role
 
 - PhD Candidate in Applied Science & Technology, UC Berkeley
+- Affiliations: [Haeffner Lab](https://ions.berkeley.edu/), UC Berkeley, and [BenchFlow](https://www.benchflow.ai/)
 - **Two areas of work:**
   - 💻 **Agent Evaluation** — skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
-  - ⚛︎ **Experimental AMO Physics** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps. Member of HaeffnerLab.
+  - ⚛︎ **Experimental AMO Physics** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps.
 
 ## Primary Stack
 
-- **AI work:** Codex + GPT-5.5 **and** Claude Code + Fable 5 as dual primaries — Codex for long-horizon autonomous runs, Claude Code for interactive pair work. He cares about cache hit rate and cost discipline.
+- **AI work:** Claude Code + Opus 5.5 **and** Codex + GPT-6-Astra as dual primaries — Claude Code for interactive pair work, Codex for long-horizon autonomous runs. He cares about cache hit rate and cost discipline.
 - **Ion-trap work:** ARTIQ, laser control, RF engineering, UHV systems.
 
 ## Projects to Know
 
+- [FrontierPhysics](https://www.benchflow.ai/frontierphysics) — FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
 - [BenchFlow](https://www.benchflow.ai/) — frontier environment lab building the runtime and benchmarks AI agents learn in.
 - [SkillsBench](https://github.com/benchflow-ai/skillsbench) — benchmark for evaluating how well AI agents use skills.
-- [first-tree](https://github.com/agent-team-foundation/first-tree) — Git-native context layer for decisions, ownership, and shared team knowledge.
+- [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) — Open-source agent orchestration for engineers.
 - [DoWhiz](https://github.com/KnoWhiz/DoWhiz) — agent-native product for getting work done across email, chat, documents, and related tools.
-- [DeepTutor](https://deeptutor.knowhiz.us/) — AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
+- [DeepTutor](https://github.com/KnoWhiz/DeepTutorZotero) — AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
 - [mews](https://github.com/bingran-you/mews) — local GitHub notification daemon that triages inbox activity and dispatches Codex or Claude Code work for allow-listed repos.
 - [smolclaw](https://github.com/bingran-you/smolclaw) — seeded mock environments for testing agent behavior in realistic workflows.
 - [SBTI CLI](https://github.com/bingran-you/sbti-cli) — offline CLI for testing agent behavior with bundled logic and exportable results.
@@ -53,7 +55,7 @@ _The one you serve. Keep this living and current._
 ## Public Channels
 
 - 𝕏 / Twitter: [@bingran_bry](https://x.com/bingran_bry)
-- GitHub, Rednote, YouTube, Discord, Google Scholar, ORCID, Hugging Face, LinkedIn — see README.md for links.
+- Xiaohongshu, YouTube, Bilibili, Discord, GitHub, Google Scholar, ORCID, Hugging Face, LinkedIn — links in `personal-site/lib/site.ts` (`SOCIALS`).
 
 ---
 

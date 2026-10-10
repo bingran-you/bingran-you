@@ -3,7 +3,7 @@ import printer from '../../assets/resume/printer.gif';
 
 // Don't leak a real CV PDF. Send people to the text-version homepage on the
 // parent site instead. `target="_top"` breaks out of the inner iframe so the
-// browser navigates the whole window to bingranyou.com/.
+// browser navigates the whole window to bingran.ai/.
 const TEXT_SITE_HREF = '/';
 
 export interface ResumeDownloadProps {
@@ -17,7 +17,7 @@ const ResumeDownload: React.FC<ResumeDownloadProps> = ({ altText }) => {
             <div style={styles.resumeContainerText}>
                 <h3>{altText ? altText : 'Prefer the plain-text version?'}</h3>
                 <a rel="noreferrer" target="_top" href={TEXT_SITE_HREF}>
-                    <p>Open the regular bingranyou.com homepage</p>
+                    <p>Open the regular bingran.ai homepage</p>
                 </a>
             </div>
         </div>

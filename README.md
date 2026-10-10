@@ -9,8 +9,8 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 ### How I Build
 
 <p align="center">
-  <img alt="Primary stack: Codex + GPT-5.6-SOL" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--5.6--SOL-111111?style=for-the-badge&logo=openai&logoColor=white" />
-  <img alt="Primary stack: Claude Code + Fable 5" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Fable%205-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img alt="Primary stack: Claude Code + Opus 5.5" src="https://img.shields.io/badge/Primary%20stack-Claude%20Code%20%2B%20Opus%205.5-D97706?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img alt="Primary stack: Codex + GPT-6-Astra" src="https://img.shields.io/badge/Primary%20stack-Codex%20%2B%20GPT--6--Astra-111111?style=for-the-badge&logo=openai&logoColor=white" />
 </p>
 
 <!-- Token-usage stats temporarily hidden (2026-06-12) pending fresh numbers on the new stack.
@@ -42,8 +42,6 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 - 🐈 [mews](https://github.com/bingran-you/mews) - Represent you to finish all the work, when you are sleeping.
 - 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - High resolution mock environments for testing and improving claw like agents
 - 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - SBTI CLI - Test SBTI for your agents.
-- 💻 [bem](https://github.com/HaeffnerLab/bem) - triangulation, boundary element method (BEM), fast multipole method (FMM) code for python
-- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - ARTIQ Control Framework (ACF) of Photonics Integration
 
 ### Selected Papers
 
@@ -76,6 +74,11 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 - 🔗 Ion-photon interfaces and multiplexed networking
 - 🧩 Novel ion trap architectures, including 3D-printed microtraps
 
+### Selected Work
+
+- 💻 [bem](https://github.com/HaeffnerLab/bem) - triangulation, boundary element method (BEM), fast multipole method (FMM) code for python
+- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - ARTIQ Control Framework (ACF) of Photonics Integration
+
 ### Selected Papers
 
 - 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://www.nature.com/articles/s41586-025-09474-1)
@@ -91,10 +94,10 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
   <a href="https://xhslink.com/m/gFj0Vwr2Ak"><img alt="Rednote" src="https://img.shields.io/badge/-Rednote-FF2442?style=flat-square&logo=xiaohongshu&logoColor=white" /></a>
   <a href="https://www.youtube.com/@BingranBRY"><img alt="YouTube" src="https://img.shields.io/badge/-YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white" /></a>
   <a href="https://space.bilibili.com/85906410"><img alt="Bilibili" src="https://img.shields.io/badge/-Bilibili-00A1D6?style=flat-square&logo=bilibili&logoColor=white" /></a>
-  <a href="https://discord.gg/jsAnjCep"><img alt="Discord" src="https://img.shields.io/badge/-Discord-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>
-  <a href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en&authuser=2"><img alt="Google Scholar" src="https://img.shields.io/badge/-Google%20Scholar-4285F4?style=flat-square&logo=googlescholar&logoColor=white" /></a>
+  <a href="https://discord.gg/x2KYk4FVS"><img alt="Discord" src="https://img.shields.io/badge/-Discord-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en"><img alt="Google Scholar" src="https://img.shields.io/badge/-Google%20Scholar-4285F4?style=flat-square&logo=googlescholar&logoColor=white" /></a>
   <a href="https://orcid.org/0000-0002-0316-2115"><img alt="ORCID" src="https://img.shields.io/badge/-ORCID-A6CE39?style=flat-square&logo=orcid&logoColor=white" /></a>
   <a href="https://huggingface.co/bingran-you"><img alt="Hugging Face" src="https://img.shields.io/badge/-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" /></a>
-  <a href="https://www.linkedin.com/in/bingran-you-775b4017b/"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
+  <a href="https://www.linkedin.com/in/bingran-you/"><img alt="LinkedIn" src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
   <a href="mailto:me@bingranyou.com"><img alt="Email" src="https://img.shields.io/badge/-Email-EA4335?style=flat-square&logo=gmail&logoColor=white" /></a>
 </p>

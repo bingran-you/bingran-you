@@ -1297,7 +1297,6 @@
 │   ├── Multicentric_epidemiologic_study_on_six_thousand_three_hundred_and_ninety_five_cases_of_femoral_head_osteonecrosis_in_China.md
 │   ├── Multimode_Ion-Photon_Entanglement_over_101_Kilometers.md
 │   ├── NeuroBEM_Hybrid_Aerodynamic_Quadrotor_Model.md
-│   ├── New_Team_Member_Onboarding_Guide_-_Jason.md
 │   ├── Noise_sensing_and_quantum_simulation_with_trapped_atomic_ions.md
 │   ├── On_Liu_morphisms_in_non-Archimedean_geometry.md
 │   ├── On_Memory_Construction_and_Retrieval_for_Personalized_Conversational_Agents.md
@@ -1544,7 +1543,6 @@
 │   ├── Extended_interval_dosing_of_natalizumab_More_evidence_in_support.md
 │   ├── Full-stack_Analog_Optical_Quantum_Computer_with_A_Hundred_Inputs.md
 │   ├── Helios_A_98-qubit_trapped-ion_quantum_computer.md
-│   ├── Master_Degree_CeD.2518-IXEA-BVUU.md
 │   ├── Migrating_from_Pocket_to_Instapaper.html
 │   ├── Nonperturbatively_Renormalized_Nucleon_Gluon_Momentum_Fraction_in_the_Continuum_Limit_of_$N_f=2+1+1$_Lattice_QCD.md
 │   ├── On_the_nature_of_the_glass_transition_in_metallic_glasses_after_deep_relaxation__rename_for_test.md

@@ -84,15 +84,19 @@ export function Sheet({ page = 1, current, children }: SheetProps) {
             <p className={styles.kind}>Article</p>
             {first ? (
               <nav aria-label="Primary" className={styles.nav}>
-                {NAV.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    aria-current={item.href === current ? "page" : undefined}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                {NAV.map((item) => {
+                  // The router cannot prefetch or open a static document.
+                  const Anchor = item.document ? "a" : Link;
+                  return (
+                    <Anchor
+                      key={item.href}
+                      href={item.href}
+                      aria-current={item.href === current ? "page" : undefined}
+                    >
+                      {item.label}
+                    </Anchor>
+                  );
+                })}
               </nav>
             ) : null}
           </header>

@@ -22,14 +22,21 @@ export const PERSON_SUMMARY = [
   ...AFFILIATIONS.map((affiliation) => affiliation.name),
 ].join(" · ");
 
-export const NAV = [
+type NavItem = {
+  href: string;
+  label: string;
+  /** Served as a static document by a rewrite, outside the router. */
+  document?: boolean;
+};
+
+export const NAV: readonly NavItem[] = [
   { href: "/", label: "Home" },
-  { href: "/palace", label: "Palace" },
+  { href: "/palace", label: "Palace", document: true },
   { href: "/projects", label: "Projects" },
   { href: "/papers", label: "Papers" },
   { href: "/posts", label: "Posts" },
   { href: "/about", label: "About" },
-] as const;
+];
 
 export const SOCIALS = [
   { label: "X", href: "https://x.com/bingran_bry" },

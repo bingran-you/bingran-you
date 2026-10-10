@@ -8,7 +8,7 @@ const Home: React.FC<HomeProps> = () => {
         <div style={styles.page}>
             <div style={styles.header}>
                 <h1 style={styles.name}>Bingran You</h1>
-                <h2>Agentic Builder &nbsp;·&nbsp; Ion Trapper</h2>
+                <h2>Agent Evaluation &nbsp;·&nbsp; Experimental AMO Physics</h2>
             </div>
             <div style={styles.buttons}>
                 <Link containerStyle={styles.link} to="about" text="ABOUT" />

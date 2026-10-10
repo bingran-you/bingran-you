@@ -14,8 +14,8 @@ _The one you serve. Keep this living and current._
 
 - PhD Candidate in Applied Science & Technology, UC Berkeley
 - **Two areas of work:**
-  - 💻 **Agentic Builder** — agent evaluation, skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
-  - ⚛︎ **Ion Trapper** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps. Member of HaeffnerLab.
+  - 💻 **Agent Evaluation** — skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
+  - ⚛︎ **Experimental AMO Physics** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps. Member of HaeffnerLab.
 
 ## Primary Stack
 

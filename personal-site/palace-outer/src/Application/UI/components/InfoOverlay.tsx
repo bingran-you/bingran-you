@@ -8,7 +8,7 @@ interface InfoOverlayProps {
 }
 
 const NAME_TEXT = 'Bingran You';
-const TITLE_TEXT = 'Agentic Builder · Ion Trapper';
+const TITLE_TEXT = 'Agent Evaluation · Experimental AMO Physics';
 const MULTIPLIER = 1;
 
 const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {

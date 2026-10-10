@@ -3,8 +3,8 @@ import paperDetails from "@/content/papers/details.json";
 export type Track = "ai" | "ion";
 
 export const TRACK_LABEL: Record<Track, string> = {
-  ai: "Agentic Builder",
-  ion: "Ion Trapper",
+  ai: "Agent Evaluation",
+  ion: "Experimental AMO Physics",
 };
 
 // Site copy rule: nothing here is written for the site. Every description,

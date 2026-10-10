@@ -34,22 +34,22 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Work
 
-- ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - Authentic specialist physics tasks for evaluating frontier agents.
-- 🌊 [BenchFlow](https://www.benchflow.ai/) - A frontier environment lab building the runtime and benchmarks AI agents learn in.
-- 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - A benchmark for evaluating how well AI agents use skills.
-- 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/agent-team-foundation/first-tree)) - A Git-native context layer for decisions, ownership, and shared team knowledge.
-- 🥷 [DoWhiz](https://github.com/KnoWhiz/DoWhiz) - An agent-native product for getting work done across email, chat, documents, and related tools.
-- 🧠 [DeepTutor](https://deeptutor.knowhiz.us/) - An AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.
-- 🐈 [mews](https://github.com/bingran-you/mews) - A local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.
-- 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - Seeded mock environments for testing agent behavior in realistic workflows.
-- 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - An offline CLI for testing agent behavior with bundled logic and exportable results.
-- 💻 [bem](https://github.com/HaeffnerLab/bem) - Scientific computing code for boundary element and fast multipole methods in Python.
-- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - An ARTIQ control framework for photonics integration experiments.
+- ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
+- 🌊 [BenchFlow](https://www.benchflow.ai/) - BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.
+- 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - SkillsBench evaluates how well skills work and how effective agents are at using them.
+- 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) - Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.
+- 🧠 [DeepTutor](https://github.com/KnoWhiz/DeepTutorZotero) - DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.
+- 🐈 [mews](https://github.com/bingran-you/mews) - Represent you to finish all the work, when you are sleeping.
+- 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - High resolution mock environments for testing and improving claw like agents
+- 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - SBTI CLI - Test SBTI for your agents.
+- 💻 [bem](https://github.com/HaeffnerLab/bem) - triangulation, boundary element method (BEM), fast multipole method (FMM) code for python
+- 🦾 [artiq_photonics_integration](https://github.com/HaeffnerLab/artiq_photonics_integration) - ARTIQ Control Framework (ACF) of Photonics Integration
 
 ### Selected Papers
 
-- 📑 *arXiv* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
-- 📑 *arXiv* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *NeurIPS 2026* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *COLM 2026* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
+- 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
 
 ## ⚛️ Ion Trapper
 
@@ -78,10 +78,11 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
-- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4) - Integrated photonic circuits for scalable trapped-ion addressing.
-- 📑 *arXiv* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://arxiv.org/abs/2405.10501) - Multiplexed ion-photon interface based on fast ion-chain transport.
-- 📑 *Nature* · [3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing](https://www.nature.com/articles/s41586-025-09474-1) - 3D-printed micro ion trap technology for scalable atomic-physics platforms.
-- 📑 *Phys. Rev. Lett.* · [Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201) - Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.
+- 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://www.nature.com/articles/s41586-025-09474-1)
+- 📑 *Phys. Rev. Lett.* · [Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201)
+- 📑 *Phys. Rev. Applied* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://doi.org/10.1103/ppm8-8kx5)
+- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4)
+- 📑 *arXiv* · [A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control](https://arxiv.org/abs/2607.25062)
 
 ## Connect
 

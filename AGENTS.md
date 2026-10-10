@@ -27,7 +27,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 ## Code Modification Skills
 
-Before making any code modification, read and follow both `.agents/skills/karpathy-guidelines/SKILL.md` and `.agents/skills/thermo-nuclear-code-quality-review/SKILL.md`.
+Before making any code modification, read and follow both the `karpathy-guidelines` and `thermo-nuclear-code-quality-review` skills. This repo holds no skills; both are installed at user level (`~/.claude/skills/`, `~/.codex/skills/`).
 
 - Use `karpathy-guidelines` to keep changes simple, surgical, assumption-aware, and verifiable.
 - Use `thermo-nuclear-code-quality-review` as the maintainability approval bar: avoid structural regressions, unjustified file-size growth, ad-hoc branching, unnecessary wrappers, type-boundary muddiness, and logic drifting away from its canonical layer.
@@ -41,25 +41,17 @@ Before making any code modification, read and follow both `.agents/skills/karpat
 │   # Agent-facing config + long-term workspace memory
 ├── HEARTBEAT.md                  # Periodic check-in tasks
 ├── README.md                     # Human-facing GitHub profile
-├── .agents/ .claude/ .codex/ .openclaw/
-│   # Agent runtime state, hooks, configs, mirrored skills
+├── .claude/ .openclaw/           # Agent runtime state and local configs
 ├── bingran-you-private/          # 🔒 Private submodule — never exfiltrate
 ├── current-projects/             # Active project submodules / local checkouts
 ├── trusted-external-repos/       # Vendored trusted repos and references
-├── repo-skills/                  # First-party workspace skills
-├── personal-site/                # bingranyou.com — Next.js + MDX, deployed on Vercel
+├── personal-site/                # bingran.ai — Next.js, deployed on Vercel
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
-├── scripts/                      # Utility scripts (including skill sync)
+├── scripts/                      # Utility scripts
 ├── social-media/                 # Drafts / publishing assets
 └── memory/                       # Daily logs + heartbeat state
 ```
-
-Repo-managed skill sources live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, `trusted-external-repos/mattpocock-skills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`). Three layers must stay aligned: **sources** → mirrored entrypoints in `.agents/skills` and `.claude/skills` → personal-site generator output (`personal-site/lib/skills.generated.json` and `personal-site/public/skill-files/`).
-
-**After bumping any `trusted-external-repos/*` submodule pointer, or adding / renaming / editing any skill, run `make sync` from the repo root and commit the resulting diff in the same PR.** `make sync` runs `scripts/sync_skills.sh refresh` followed by `npm run skills:generate` in `personal-site/`. The `skills-sync-check` GitHub Action enforces this on every PR — any drift between sources and committed artifacts fails CI.
-
-The generator derives each skill's `updatedAt` from `git log -1` on its `SKILL.md`, so **a shallow clone produces wrong timestamps** and CI (which checks out full history) will reject the result. Run `git fetch --unshallow` before `make sync` in any environment that cloned with `--depth`.
 
 ### Submodules (see `.gitmodules`)
 
@@ -67,13 +59,7 @@ The generator derives each skill's `updatedAt` from `git log -1` on its `SKILL.m
 - `current-projects/first-tree` — active project submodule.
 - `current-projects/mews` — active project submodule.
 - `current-projects/skillsbench` — active project submodule.
-- `trusted-external-repos/skills` — shared skills library.
-- `trusted-external-repos/claude-skills` — Anthropic/Claude example skills reference library.
-- `trusted-external-repos/marketingskills` — trusted external marketing skills library; mirrored into workspace skill entrypoints via `scripts/sync_skills.sh`.
-- `trusted-external-repos/mattpocock-skills` — Matt Pocock's engineering/productivity skills library; mirrored into workspace skill entrypoints via `scripts/sync_skills.sh`.
-- `trusted-external-repos/gstack` — gstack tooling.
 - `trusted-external-repos/gbrain` — gbrain tooling.
-- `trusted-external-repos/open-design` — local-first open-source design workflow / design systems repo.
 
 If a submodule looks stale, check `git submodule status` before assuming it's broken.
 
@@ -101,7 +87,7 @@ You wake up fresh each session. Files are your continuity. Three layers, ordered
 
 - "Remember this" (transient / session-scoped) → `memory/YYYY-MM-DD.md`
 - Durable fact about Bingran, his projects, stack, or preferences → **update `bingran-you-private/PRIVATE_MEMORY.md`** (see below)
-- Learned a lesson about how to operate here → update `AGENTS.md`, `TOOLS.md`, or the relevant skill
+- Learned a lesson about how to operate here → update `AGENTS.md` or `TOOLS.md`
 - Made a mistake → document it so future-you doesn't repeat it
 
 ### Maintaining `PRIVATE_MEMORY.md`

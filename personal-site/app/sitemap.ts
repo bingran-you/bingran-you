@@ -1,12 +1,7 @@
 import { stat } from "node:fs/promises";
 import path from "node:path";
 import type { MetadataRoute } from "next";
-import {
-  getAllBlogPosts,
-  getBlogPostLastModified,
-} from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
-import { getAllSkills, getSkillsLastModified } from "@/lib/skills";
 
 async function getFileLastModified(relativePath: string) {
   const { mtime } = await stat(
@@ -24,33 +19,14 @@ async function getLatestLastModified(relativePaths: string[]) {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllBlogPosts();
-  const postEntries = await Promise.all(
-    posts.map(async (post) => ({
-      url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: await getBlogPostLastModified(post.slug),
-      changeFrequency: "yearly" as const,
-      priority: 0.6,
-    })),
-  );
-  const blogLastModified = new Date(
-    Math.max(
-      (
-        await getLatestLastModified([
-          "app/(personal)/blog/page.tsx",
-          "lib/blog.ts",
-        ])
-      ).getTime(),
-      ...postEntries.map((entry) => entry.lastModified.getTime()),
-    ),
-  );
-
-  const staticEntries: MetadataRoute.Sitemap = [
+  return [
     {
       url: `${SITE_URL}/`,
       lastModified: await getLatestLastModified([
         "app/layout.tsx",
         "app/(personal)/page.tsx",
+        "lib/content.ts",
+        "content/papers/details.json",
       ]),
       changeFrequency: "weekly",
       priority: 1,
@@ -83,12 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/blog`,
-      lastModified: blogLastModified,
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
       url: `${SITE_URL}/posts`,
       lastModified: await getLatestLastModified([
         "app/(personal)/posts/page.tsx",
@@ -96,28 +66,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ]),
       changeFrequency: "weekly",
       priority: 0.7,
-    },
-    {
-      url: `${SITE_URL}/skills`,
-      lastModified: getSkillsLastModified(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/zero-human-company`,
-      lastModified: await getLatestLastModified([
-        "app/(personal)/zero-human-company/page.tsx",
-      ]),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/one-person-company`,
-      lastModified: await getLatestLastModified([
-        "app/(personal)/one-person-company/page.tsx",
-      ]),
-      changeFrequency: "monthly",
-      priority: 0.9,
     },
     {
       url: `${SITE_URL}/palace`,
@@ -135,13 +83,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
   ];
-
-  const skillEntries: MetadataRoute.Sitemap = getAllSkills().map((skill) => ({
-    url: `${SITE_URL}/skills/${skill.slug}`,
-    lastModified: new Date(skill.updatedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.5,
-  }));
-
-  return [...staticEntries, ...postEntries, ...skillEntries];
 }

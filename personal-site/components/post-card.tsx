@@ -168,7 +168,7 @@ function PostLinkCard({ post }: { post: Post }) {
       href={post.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group mb-6 block break-inside-avoid overflow-hidden rounded-md border border-[var(--border)] bg-[var(--background)] transition hover:border-foreground/40 hover:shadow-sm"
+      className="group mb-6 block break-inside-avoid overflow-hidden border border-[var(--border)] bg-[var(--background)] transition hover:border-foreground/40 hover:shadow-sm"
     >
       {hasThumb ? (
         <div
@@ -200,11 +200,11 @@ function PostLinkCard({ post }: { post: Post }) {
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-center gap-2 text-xs text-[var(--muted)]">
           <Icon className={`h-3.5 w-3.5 ${accent}`} />
-          <span className="font-mono uppercase tracking-wide">
+          <span className="font-sans uppercase tracking-wide">
             {PLATFORM_LABEL[post.platform]}
           </span>
           <span aria-hidden>·</span>
-          <time className="font-mono tabular-nums">
+          <time className="font-sans tabular-nums">
             {formatDate(post.date)}
           </time>
         </div>

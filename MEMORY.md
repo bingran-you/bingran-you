@@ -4,13 +4,10 @@ Main-session only. Keep this file high-signal and durable.
 
 ## Workspace
 
-- `current-projects/` holds active project submodules such as `DoWhiz`, `first-tree`, `mews`, and `skillsbench`.
-- `personal-site/` hosts `bingranyou.com` (Next.js 16 + MDX, deployed on Vercel from this repo with Root Directory `personal-site`). Pushes to `main` trigger production builds; the `personal-site/vercel.json` `ignoreCommand` skips builds when nothing inside `personal-site/` changes.
-- The personal site now includes `/about`, `/projects`, `/papers`, `/skills`, `/blog`, `/llms.txt`, and `/llms-full.txt`.
-- `personal-site/scripts/generate-skills-data.mjs` generates the `/skills` catalog payload (`lib/skills.generated.json`) and downloadable copies under `public/skill-files/` from mirrored `.agents/skills/`. The generator derives `updatedAt` per skill from `git log -1 --format=%cI SKILL.md` in the file's directory — always `git fetch --unshallow` (main repo _and_ each managed submodule) before running `make sync`, or the catalog silently drifts with placeholder timestamps. CI's `actions/checkout@v4` sets `fetch-depth: 0` so its regeneration is authoritative; a shallow local clone produces different `updatedAt` values.
-- Repo-managed skills live in `repo-skills/`, `trusted-external-repos/open-design/skills/`, `trusted-external-repos/marketingskills/skills/`, `trusted-external-repos/mattpocock-skills/skills/`, and `trusted-external-repos/gstack/` (including `browser-skills/` and `openclaw/skills/`).
-- `scripts/sync_skills.sh` mirrors valid skill directories into `.agents/skills` and `.claude/skills`.
-- Session-start hooks in `.claude/settings.json` and `.codex/config.toml` attempt to run `scripts/sync_skills.sh init` automatically.
+- `current-projects/` holds the active project submodules `first-tree`, `mews`, and `skillsbench`.
+- `personal-site/` hosts `bingran.ai` (Next.js 16, deployed on Vercel from this repo with Root Directory `personal-site`). Pushes to `main` trigger production builds; the `personal-site/vercel.json` `ignoreCommand` skips builds when nothing inside `personal-site/` changes.
+- The personal site's routes are `/`, `/about`, `/projects`, `/papers`, `/posts`, `/palace`, `/llms.txt`, and `/llms-full.txt`. It is laid out as a journal article and carries only each paper's and project's own wording; see `personal-site/README.md`.
+- This repo holds no skills. `repo-skills/`, the `.agents/skills` and `.claude/skills` mirrors, `scripts/sync_skills.sh`, `make sync`, the `skills-sync-check` workflow, the site's `/skills` catalog and the skill-library submodules were removed on 2026-10-09. Skills are installed at user level (`~/.claude/skills/`, `~/.codex/skills/`).
 
 ## Maintenance
 

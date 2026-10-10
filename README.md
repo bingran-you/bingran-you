@@ -1,10 +1,10 @@
 # Hi, I'm Bingran 👋
 
-📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 💻 Agentic Builder | ⚛️ Ion Trapper
+📍 Berkeley | 🎓 PhD Candidate @ UC Berkeley | 💻 Agent Evaluation | ⚛️ Experimental AMO Physics
 
 I build reliable AI systems and run trapped-ion experiments in atomic, molecular and optical physics. This page is a short snapshot of projects and papers I've been lucky to work on across both tracks.
 
-## 💻 Agentic Builder
+## 💻 Agent Evaluation
 
 ### How I Build
 
@@ -51,7 +51,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 - 📑 *COLM 2026* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
 - 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
 
-## ⚛️ Ion Trapper
+## ⚛️ Experimental AMO Physics
 
 ### How I Build
 

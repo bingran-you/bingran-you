@@ -50,6 +50,8 @@ type SheetProps = {
   page?: number;
   /** Route this sheet belongs to, to mark it in the navigation. */
   current: string;
+  /** A note above the page number; on page 1 it precedes the contacts. */
+  footnote?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -58,7 +60,7 @@ type SheetProps = {
  * site is set as one article, so every left-hand page is headed alike and the
  * first page carries the contacts as its footnote.
  */
-export function Sheet({ page = 1, current, children }: SheetProps) {
+export function Sheet({ page = 1, current, footnote, children }: SheetProps) {
   const first = page === 1;
   const recto = page % 2 === 0;
   const year = new Date().getFullYear();
@@ -105,9 +107,11 @@ export function Sheet({ page = 1, current, children }: SheetProps) {
         {children}
 
         <footer className={styles.footer}>
-          {first ? (
+          {footnote || first ? (
             <p className={styles.footnotes}>
-              <Contacts />
+              {footnote}
+              {footnote && first ? " " : null}
+              {first ? <Contacts /> : null}
             </p>
           ) : null}
           <p className={styles.folio}>

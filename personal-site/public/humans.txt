@@ -10,8 +10,8 @@
 
 /* SITE */
 
-   Last update:  2026/05/08
+   Last update:  2026/10/09
    Standards:    HTML5, CSS3, TypeScript
-   Components:   Next.js 16, React 19, MDX, Tailwind CSS 4
+   Components:   Next.js 16, React 19, Tailwind CSS 4
    Hosting:      Vercel
    Source:       https://github.com/bingran-you/bingran-you

@@ -643,13 +643,6 @@
     "thumbnail": "/posts-thumbs/xiaohongshu/69fff197000000003601bfa5.jpg"
   },
   {
-    "id": "x-2053303104985329892",
-    "platform": "x",
-    "url": "https://x.com/bingran_bry/status/2053303104985329892",
-    "date": "2026-05-09",
-    "addedVia": "manual"
-  },
-  {
     "id": "xhs-69ff9d24000000003601866c",
     "platform": "xiaohongshu",
     "url": "https://www.xiaohongshu.com/explore/69ff9d24000000003601866c?xsec_token=CBpefz9x_fdFP-UWh6zWguSkU72Zd0MA5VQGXS5B-szVE%3D&xsec_source=pc_user",
@@ -1097,20 +1090,6 @@
     "addedVia": "manual"
   },
   {
-    "id": "x-2036954500607697098",
-    "platform": "x",
-    "url": "https://x.com/bingran_bry/status/2036954500607697098",
-    "date": "2026-03-25",
-    "addedVia": "manual"
-  },
-  {
-    "id": "x-2031437343660585251",
-    "platform": "x",
-    "url": "https://x.com/bingran_bry/status/2031437343660585251",
-    "date": "2026-03-10",
-    "addedVia": "manual"
-  },
-  {
     "id": "youtube-AvHiZStyb5g",
     "platform": "youtube",
     "url": "https://www.youtube.com/watch?v=AvHiZStyb5g",
@@ -1120,57 +1099,10 @@
     "addedVia": "auto"
   },
   {
-    "id": "youtube-5H9g3LOGkMc",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/shorts/5H9g3LOGkMc",
-    "title": "DoWhiz Demo 1",
-    "description": "DoWhiz Demo 1",
-    "thumbnail": "https://i2.ytimg.com/vi/5H9g3LOGkMc/hqdefault.jpg",
-    "date": "2026-02-27",
-    "addedVia": "auto"
-  },
-  {
-    "id": "youtube-PSsJ7WBk71w",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/shorts/PSsJ7WBk71w",
-    "title": "DoWhiz Demo 2",
-    "description": "DoWhiz Demo 2",
-    "thumbnail": "https://i1.ytimg.com/vi/PSsJ7WBk71w/hqdefault.jpg",
-    "date": "2026-02-27",
-    "addedVia": "auto"
-  },
-  {
-    "id": "youtube-SI9mxW_Top0",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/shorts/SI9mxW_Top0",
-    "title": "DoWhiz Demo 3",
-    "description": "DoWhiz Demo 3",
-    "thumbnail": "https://i4.ytimg.com/vi/SI9mxW_Top0/hqdefault.jpg",
-    "date": "2026-02-27",
-    "addedVia": "auto"
-  },
-  {
-    "id": "youtube-IsSOTSYIIIY",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/watch?v=IsSOTSYIIIY",
-    "title": "DoWhiz Demo v0.2",
-    "description": "https://www.dowhiz.com",
-    "thumbnail": "https://i2.ytimg.com/vi/IsSOTSYIIIY/hqdefault.jpg",
-    "date": "2026-02-26",
-    "addedVia": "auto"
-  },
-  {
     "id": "x-2020533035339534636",
     "platform": "x",
     "url": "https://x.com/bingran_bry/status/2020533035339534636",
     "date": "2026-02-08",
-    "addedVia": "manual"
-  },
-  {
-    "id": "x-2020200229069639813",
-    "platform": "x",
-    "url": "https://x.com/bingran_bry/status/2020200229069639813",
-    "date": "2026-02-07",
     "addedVia": "manual"
   },
   {

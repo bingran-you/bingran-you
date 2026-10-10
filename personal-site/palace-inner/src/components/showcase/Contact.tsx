@@ -55,21 +55,7 @@ const Contact: React.FC<ContactProps> = () => {
     return (
         <div className="site-page-content">
             <h1>Contact</h1>
-            <h3>Different platforms, same person</h3>
-            <br />
-            <p>
-                I read most of these regularly. The fastest is email
-                (<a href="mailto:me@bingranyou.com">me@bingranyou.com</a>) or a
-                DM on{' '}
-                <a
-                    rel="noreferrer"
-                    target="_blank"
-                    href="https://x.com/bingran_bry"
-                >
-                    X
-                </a>
-                . For academic stuff, my Berkeley email works.
-            </p>
+            <h3>Email and profiles</h3>
             <br />
             <div style={styles.list}>
                 {CHANNELS.map((c) => (

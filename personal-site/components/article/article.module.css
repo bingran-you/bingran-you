@@ -1,0 +1,607 @@
+/* Page furniture of the article layout.
+
+   The geometry is measured from a printed journal page of 595.276 × 790.866
+   pt: text from 40 pt to 561.5 pt in two 255.5 pt columns 10.5 pt apart, a
+   166 pt fact column beside a 344.5 pt lead column, 0.5 pt rules and a rule
+   down the left margin at 34 pt. Every length is a point from that page
+   times --pt (one point in CSS px), so a sheet scales like a zoomed page. */
+
+.desk {
+  flex: 1;
+  padding: clamp(16px, 2.4vw, 36px) 0 clamp(48px, 7vw, 104px);
+}
+
+.sheet {
+  container-type: inline-size;
+  width: min(100% - 2 * clamp(12px, 3vw, 48px), 1220px);
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.14),
+    0 14px 44px rgba(0, 0, 0, 0.1);
+}
+.sheet + .sheet {
+  margin-top: clamp(14px, 2vw, 28px);
+}
+
+.page {
+  --pt: clamp(1.72px, 0.16799cqw, 2.05px);
+  --rule: max(1px, calc(var(--pt) * 0.5)) solid var(--ink);
+  --gap: calc(var(--pt) * 10.5);
+  --small: max(calc(var(--pt) * 6), 11.5px);
+  --label: max(calc(var(--pt) * 7), 12px);
+  --sans:
+    var(--font-hanken), "Helvetica Neue", Arial, var(--font-noto-serif-sc),
+    sans-serif;
+
+  position: relative;
+  padding: calc(var(--pt) * 47) calc(var(--pt) * 33.8) calc(var(--pt) * 18)
+    calc(var(--pt) * 40);
+  color: var(--ink);
+  font-size: calc(var(--pt) * 8);
+  line-height: calc(var(--pt) * 10.75);
+  font-optical-sizing: auto;
+  font-variant-numeric: lining-nums;
+}
+
+/* The head rule and the rule down the left margin. On a left-hand page the
+   head rule starts at the margin rule and runs off the right edge; on a
+   right-hand page it comes in from the left edge and stops at the text. */
+.page::before,
+.page::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--pt) * 34);
+}
+.page::before {
+  top: calc(var(--pt) * 44.5);
+  right: 0;
+  border-top: var(--rule);
+}
+.page::after {
+  top: calc(var(--pt) * 28.5);
+  bottom: calc(var(--pt) * 47.7);
+  border-left: var(--rule);
+}
+.recto::before {
+  left: 0;
+  right: calc(var(--pt) * 33.8);
+}
+.recto::after {
+  top: calc(var(--pt) * 49);
+}
+
+/* ── running head ─────────────────────────────────────────────────────── */
+.runningHead {
+  position: absolute;
+  top: calc(var(--pt) * 24.5);
+  right: calc(var(--pt) * 33.8);
+  left: calc(var(--pt) * 40);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: calc(var(--pt) * 12);
+}
+.kind {
+  margin: 0;
+  font-size: calc(var(--pt) * 14);
+  font-weight: 800;
+  line-height: calc(var(--pt) * 18);
+  letter-spacing: -0.012em;
+}
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  font-family: var(--sans);
+  font-size: calc(var(--pt) * 8);
+  line-height: calc(var(--pt) * 12);
+}
+.nav a + a::before,
+.folio > * + *::before {
+  content: "|";
+  margin: 0 calc(var(--pt) * 5.5);
+  font-weight: 300;
+}
+.nav a:hover,
+.nav a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.nav a[aria-current="page"] {
+  font-weight: 700;
+}
+
+/* ── title and front matter ───────────────────────────────────────────── */
+.title {
+  margin: calc(var(--pt) * -1.4) 0 0;
+  font-size: calc(var(--pt) * 26);
+  font-weight: 800;
+  line-height: calc(var(--pt) * 27.4);
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 28;
+}
+
+.front {
+  display: grid;
+  grid-template-columns: calc(var(--pt) * 166) minmax(0, 1fr);
+  column-gap: calc(var(--pt) * 11);
+  align-items: start;
+  margin-top: calc(var(--pt) * 40.6);
+  border-top: var(--rule);
+}
+.meta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--sans);
+  font-weight: 500;
+}
+.meta li {
+  height: calc(var(--pt) * 16);
+  line-height: calc(var(--pt) * 16);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.meta li + li {
+  border-top: var(--rule);
+  line-height: calc(var(--pt) * 15.5);
+}
+.meta .action {
+  display: flex;
+  align-items: center;
+  height: auto;
+  min-height: max(calc(var(--pt) * 19), 36px);
+  overflow: visible;
+}
+.byline {
+  margin: 0;
+  padding: calc(var(--pt) * 2.6) 0 calc(var(--pt) * 18.2);
+  font-family: var(--sans);
+  font-weight: 600;
+}
+.lead {
+  padding-top: calc(var(--pt) * 0.8);
+  border-top: var(--rule);
+  font-size: calc(var(--pt) * 9);
+  line-height: calc(var(--pt) * 13);
+}
+.lead p {
+  margin: 0;
+}
+
+.page sup,
+.page sub {
+  position: relative;
+  font-size: 0.62em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+.page sup {
+  top: -0.52em;
+}
+.page sub {
+  top: 0.22em;
+}
+.envelope {
+  display: inline-block;
+  width: calc(var(--pt) * 6);
+  height: calc(var(--pt) * 4.5);
+  margin-right: calc(var(--pt) * 1.2);
+  overflow: visible;
+  stroke-width: 0.9;
+}
+
+/* ── body ─────────────────────────────────────────────────────────────── */
+.body {
+  margin-top: calc(var(--pt) * 24);
+  padding-top: calc(var(--pt) * 1.2);
+  border-top: var(--rule);
+}
+/* Under a bare title the body rule stands where the front matter would. */
+.title + .body {
+  margin-top: calc(var(--pt) * 40.6);
+}
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: start;
+}
+* + .block {
+  margin-top: calc(var(--pt) * 16);
+}
+.figure + .block {
+  margin-top: calc(var(--pt) * 18);
+}
+
+/* Section and paper headings. A heading stands two lines below the text
+   before it and directly above the text after it. */
+.section {
+  margin: calc(var(--pt) * -3.3) 0 calc(var(--pt) * 8);
+  font-size: calc(var(--pt) * 12);
+  font-weight: 700;
+  line-height: calc(var(--pt) * 15);
+}
+.entry + .entry {
+  margin-top: calc(var(--pt) * 30);
+}
+.heading {
+  margin: 0;
+  font-size: calc(var(--pt) * 10);
+  font-weight: 700;
+  line-height: calc(var(--pt) * 12);
+  text-wrap: balance;
+}
+.citation {
+  margin: calc(var(--pt) * 2) 0 0;
+  font-family: var(--sans);
+  font-size: var(--small);
+  line-height: 1.375;
+}
+.citation b,
+.references b {
+  font-weight: 600;
+}
+
+/* Running text: the paper's own abstract, in two justified columns. */
+.text {
+  margin-top: calc(var(--pt) * 5.5);
+  columns: 2;
+  column-gap: var(--gap);
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  orphans: 2;
+  widows: 2;
+}
+.text p {
+  margin: 0;
+}
+.text p + p {
+  text-indent: calc(var(--pt) * 8);
+}
+
+/* A figure one column wide stands in the second column, beside the text of
+   its paper and of the paper after it. Where the figure is the taller side,
+   the two texts share the difference. */
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: calc(var(--pt) * 21.5) var(--gap);
+  align-items: start;
+}
+.spread > * {
+  grid-column: 1;
+}
+.spread > .figure {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin-top: calc(var(--pt) * 2.6);
+}
+.spread .text {
+  columns: 1;
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 0, 0, 0.3);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.17em;
+}
+.link:hover,
+.link:focus-visible {
+  text-decoration-color: currentColor;
+}
+.meta .link,
+.lead .link,
+.folio .link,
+.quiet {
+  text-decoration-color: transparent;
+}
+.page a:focus-visible {
+  outline: 2px solid #1a5fd0;
+  outline-offset: 2px;
+}
+
+/* ── figures ──────────────────────────────────────────────────────────── */
+.figure {
+  margin: calc(var(--pt) * 16) 0 0;
+}
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.columns > .figure {
+  margin-top: calc(var(--pt) * 1.2);
+}
+/* A paper's figure keeps the width it has on the published page. */
+.print {
+  display: block;
+  width: min(100%, calc(var(--pt) * var(--print-width)));
+  margin: 0 auto;
+}
+.plate {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: #d9dde0;
+}
+.plate img {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 19%;
+}
+.square {
+  aspect-ratio: 1;
+}
+.caption {
+  margin: calc(var(--pt) * 7.6) 0 0;
+  font-size: var(--label);
+  line-height: 1.4286;
+}
+/* Under a figure wider than a column the caption runs in both columns. */
+.spanning > .caption {
+  columns: 2;
+  column-gap: var(--gap);
+}
+.caption code,
+.table code {
+  font-size: 0.92em;
+}
+.credit {
+  color: var(--muted);
+}
+
+/* ── tables ───────────────────────────────────────────────────────────── */
+.tableTitle {
+  margin: 0 0 calc(var(--pt) * 3.4);
+  font-family: var(--sans);
+  font-size: var(--label);
+  line-height: 1.36;
+}
+.scroll {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: var(--label);
+  line-height: 1.286;
+  text-align: left;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.table th,
+.table td {
+  padding: calc(var(--pt) * 1.25) calc(var(--pt) * 8) calc(var(--pt) * 1.25) 0;
+  font-weight: 400;
+  vertical-align: top;
+}
+.table :is(th, td):last-child {
+  padding-right: 0;
+}
+.table thead tr:first-child > *,
+.table tbody:first-child tr:first-child > * {
+  border-top: var(--rule);
+}
+.table thead tr:last-child > * {
+  border-bottom: var(--rule);
+}
+.table thead th {
+  font-weight: 600;
+}
+.table tbody tr:last-child > * {
+  border-bottom: var(--rule);
+}
+.table tbody th {
+  font-weight: 600;
+}
+.table .ruled > * {
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
+}
+.table .center {
+  text-align: center;
+}
+.table .right {
+  text-align: right;
+}
+/* A paper's table is as wide as on the published page, or as its contents. */
+.fit {
+  width: auto;
+  min-width: min(100%, calc(var(--pt) * var(--print-width)));
+  margin: 0 auto;
+  white-space: nowrap;
+}
+.note {
+  display: block;
+  font-weight: 400;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+/* ── references ───────────────────────────────────────────────────────── */
+.references {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: var(--gap);
+  font-family: var(--sans);
+  font-size: var(--small);
+  line-height: 1.375;
+}
+.references li {
+  display: grid;
+  grid-template-columns: calc(var(--pt) * 14) minmax(0, 1fr);
+  break-inside: avoid;
+}
+.references li:target {
+  background: #fff6c7;
+}
+
+/* ── foot of the page ─────────────────────────────────────────────────── */
+.footer {
+  font-family: var(--sans);
+}
+.footnotes {
+  margin: calc(var(--pt) * 6) 0 0;
+  padding-top: calc(var(--pt) * 1);
+  border-top: var(--rule);
+  font-size: var(--small);
+  line-height: 1.5;
+}
+.folio {
+  display: flex;
+  flex-wrap: wrap;
+  margin: calc(var(--pt) * 15) 0 0;
+  line-height: calc(var(--pt) * 12);
+}
+.recto .folio {
+  justify-content: flex-end;
+}
+
+/* ── narrower sheets: same page, fluid measure ────────────────────────── */
+@media (max-width: 760px) {
+  .desk {
+    padding: 0 0 72px;
+    background: var(--paper);
+  }
+  .sheet {
+    width: 100%;
+    box-shadow: none;
+  }
+  .sheet + .sheet {
+    margin-top: 0;
+    border-top: 10px solid var(--desk);
+  }
+  .page {
+    --pt: 2px;
+    padding: 22px 18px 26px 28px;
+  }
+  .recto {
+    padding-top: 30px;
+  }
+  .page::before {
+    content: none;
+  }
+  .page::after,
+  .recto::after {
+    top: 24px;
+    bottom: 26px;
+    left: 13px;
+  }
+  .runningHead {
+    position: static;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: var(--rule);
+  }
+  .nav {
+    justify-content: flex-start;
+    row-gap: 2px;
+  }
+  .nav a + a::before {
+    margin: 0 7px;
+  }
+  .title {
+    margin-top: 10px;
+    font-size: clamp(34px, 10.2vw, 49px);
+    line-height: 1.06;
+  }
+  .front {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+    margin-top: 28px;
+  }
+  .meta li,
+  .meta li + li {
+    height: auto;
+    line-height: 2.1;
+    white-space: normal;
+  }
+  .meta .action {
+    min-height: 44px;
+  }
+  .byline {
+    padding: 0 0 12px;
+  }
+  .lead {
+    padding-top: 8px;
+  }
+  .body,
+  .title + .body {
+    margin-top: 28px;
+    padding-top: 12px;
+  }
+  .section {
+    margin-top: 16px;
+  }
+  .columns,
+  .spread {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+  }
+  .columns > .figure {
+    order: -1;
+  }
+  .spread > .figure {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 0;
+  }
+  .text {
+    columns: 1;
+    text-align: left;
+  }
+  .spanning > .caption {
+    columns: 1;
+  }
+  /* Education and Projects: one entry per block instead of three columns. */
+  .stack thead {
+    display: none;
+  }
+  .stack tr {
+    display: block;
+    padding: 9px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+  }
+  .stack tbody tr:first-child {
+    border-top: var(--rule);
+  }
+  .stack tbody tr:last-child {
+    border-bottom: var(--rule);
+  }
+  .stack :is(th, td) {
+    display: block;
+    padding: 0;
+    border: 0 !important;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .references {
+    columns: 1;
+  }
+  .references li {
+    grid-template-columns: 22px minmax(0, 1fr);
+    margin-bottom: 4px;
+  }
+  .footnotes {
+    margin-top: 28px;
+    padding-top: 8px;
+  }
+  .folio {
+    margin-top: 20px;
+    font-size: 12.5px;
+  }
+  .recto .folio {
+    justify-content: flex-start;
+  }
+  .folio > * + *::before {
+    margin: 0 5px;
+  }
+}

@@ -25,11 +25,11 @@ Some skills are the single source of truth for a domain — invoke them *first* 
 
 ### Adding posts to /posts → `social-scraping-policy`
 
-Any pasted social post URL ("add this to /posts" / "把这条加到个人网站" / X / Xiaohongshu / YouTube / Bilibili / LinkedIn) is owned by the `social-scraping-policy` skill — invoke it first; it documents `npm run post:add`, the XHS Chrome-MCP fallback, and the diff discipline. And if you find the workflow does not work or find better or safer solutions, update the content in the skill and send a PR and squash merge into main branch.
+Any pasted social post URL ("add this to /posts" / "把这条加到个人网站" / X / Xiaohongshu / YouTube / Bilibili / LinkedIn) is owned by the `social-scraping-policy` skill — invoke it first; it documents `npm run post:add`, the XHS Chrome-MCP fallback, and the diff discipline.
 
 ## Typical workflow
 
-When you do code changes, always follow the skill `.agents/skills/karpathy-guidelines` for any coding tasks.
+When you do code changes, always follow the `karpathy-guidelines` skill for any coding tasks.
 
 For challenging tasks, if the plan is detailed and coherent, you should always try to finish all the requirements instead of asking for permissions, unless your action could bring in-reversible damages.
 
@@ -46,7 +46,7 @@ The `bingran-you` repo nests many submodules (`trusted-external-repos/*`, `curre
 
 Rules:
 
-- **Don't `--recursive` init by default.** Only `git submodule update --init <path>` for the submodules the current task actually needs (usually none, sometimes `personal-site/` deps live in `repo-skills/`, occasionally `trusted-external-repos/skills` for a skill edit). If you don't know, ask — don't preemptively pull 16G of submodule history.
+- **Don't `--recursive` init by default.** Only `git submodule update --init <path>` for the submodules the current task actually needs (usually none). If you don't know, ask — don't preemptively pull 16G of submodule history.
 - **Finish a worktree with `git worktree remove <path>`, not `rm -rf`.** That cleans the metadata and submodule `.git` data in one go. If a worktree was already `rm`'d, run `git worktree prune -v` in the main repo to reclaim it.
 - **Periodic hygiene in `~/Downloads/GitHub/bingran-you`:** `git worktree prune -v && git gc --prune=now`. Safe to run anytime; reclaims dead worktree metadata and compacts packs.
 

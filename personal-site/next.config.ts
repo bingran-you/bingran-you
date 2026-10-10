@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   turbopack: {
     root: path.resolve(__dirname),
   },
@@ -34,12 +32,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withMDX = createMDX({
-  extension: /\.(md|mdx)$/,
-  options: {
-    remarkPlugins: ["remark-gfm", "remark-math"],
-    rehypePlugins: [["rehype-katex", { strict: false, output: "html" }]],
-  },
-});
-
-export default withMDX(nextConfig);
+export default nextConfig;

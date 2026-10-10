@@ -1,4 +1,5 @@
 import { ogContentType, ogSize, renderOgImage } from "@/lib/og";
+import { PERSON, PERSON_SUMMARY } from "@/lib/site";
 
 export const alt = "Bingran You — Agentic Builder & Ion Trapper";
 export const size = ogSize;
@@ -6,8 +7,7 @@ export const contentType = ogContentType;
 
 export default function Image() {
   return renderOgImage({
-    title: "Bingran You",
-    subtitle:
-      "PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.",
+    title: PERSON.name,
+    subtitle: PERSON_SUMMARY,
   });
 }

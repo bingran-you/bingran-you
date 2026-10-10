@@ -1,28 +1,100 @@
+import paperDetails from "@/content/papers/details.json";
+
+export type Track = "ai" | "ion";
+
+export const TRACK_LABEL: Record<Track, string> = {
+  ai: "Agentic Builder",
+  ion: "Ion Trapper",
+};
+
+// Site copy rule: nothing here is written for the site. Every description,
+// abstract, caption and table is the project's or the paper's own wording.
+
 export type Project = {
   name: string;
   href: string;
   repoHref?: string;
+  /** Verbatim from the project's own site or repository. */
   description: string;
   emoji: string;
-  track: "ai" | "ion";
+  track: Track;
 };
 
+export type PaperReference =
+  | {
+      kind: "journal";
+      journal: string;
+      volume: string;
+      pages: string;
+      year: number;
+    }
+  | { kind: "conference"; name: string; year: number }
+  | { kind: "preprint"; year: number };
+
 export type Paper = {
+  /** Key into content/papers/details.json and public/papers/. */
+  slug: PaperSlug;
   title: string;
   href: string;
+  /** Short tag shown beside the title, e.g. "NeurIPS 2026". */
   venue: string;
-  blurb?: string;
-  track: "ai" | "ion";
+  /** Reference-style author list. */
+  authors: string;
+  reference: PaperReference;
+  arxiv: string;
+  track: Track;
 };
+
+export type TableCell = {
+  html: string;
+  align?: "center" | "right";
+  colSpan?: number;
+  rowSpan?: number;
+  header?: boolean;
+};
+
+export type TableRow = { rule: boolean; cells: TableCell[] };
+
+/**
+ * Text and figures copied verbatim from a paper's arXiv version by a script.
+ * `abstract`, the captions and the table cells are inline HTML limited to
+ * <i>, <b>, <sup>, <sub> and <code>.
+ */
+export type PaperDetail = {
+  source: string;
+  license: string | null;
+  abstract: string[];
+  figure: {
+    src: string;
+    width: number;
+    height: number;
+    /** Width of the figure on the published page, in points. */
+    printWidth: number;
+    sourceLabel: string;
+    caption: string;
+  };
+  table?: {
+    sourceLabel: string;
+    /** Width of the table on the published page, in points. */
+    printWidth: number;
+    caption: string;
+    head: TableRow[];
+    body: TableRow[];
+  };
+};
+
+export type PaperSlug = keyof typeof paperDetails;
+
+export function getPaperDetail(slug: PaperSlug): PaperDetail {
+  return paperDetails[slug] as PaperDetail;
+}
 
 export type Education = {
   institution: string;
   location: string;
   degree: string;
   period: string;
-  summary: string;
   metrics?: string[];
-  highlights: string[];
 };
 
 export const projects: Project[] = [
@@ -30,7 +102,7 @@ export const projects: Project[] = [
     name: "FrontierPhysics",
     href: "https://www.benchflow.ai/frontierphysics",
     description:
-      "Authentic specialist physics tasks for evaluating frontier agents.",
+      "FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
     emoji: "⚛️",
     track: "ai",
   },
@@ -38,47 +110,39 @@ export const projects: Project[] = [
     name: "BenchFlow",
     href: "https://www.benchflow.ai/",
     description:
-      "A frontier environment lab building the runtime and benchmarks AI agents learn in.",
+      "BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.",
     emoji: "🌊",
     track: "ai",
   },
   {
     name: "SkillsBench",
     href: "https://github.com/benchflow-ai/skillsbench",
-    description: "A benchmark for evaluating how well AI agents use skills.",
+    description:
+      "SkillsBench evaluates how well skills work and how effective agents are at using them.",
     emoji: "📐",
     track: "ai",
   },
   {
     name: "first-tree",
     href: "https://first-tree.ai/",
-    repoHref: "https://github.com/agent-team-foundation/first-tree",
+    repoHref: "https://github.com/first-tree-ai/first-tree",
     description:
-      "A Git-native context layer for decisions, ownership, and shared team knowledge.",
+      "Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.",
     emoji: "🌲",
     track: "ai",
   },
   {
-    name: "DoWhiz",
-    href: "https://github.com/KnoWhiz/DoWhiz",
-    description:
-      "Agent-native product for getting work done across email, chat, documents, and related tools.",
-    emoji: "🥷",
-    track: "ai",
-  },
-  {
     name: "DeepTutor",
-    href: "https://deeptutor.knowhiz.us/",
+    href: "https://github.com/KnoWhiz/DeepTutorZotero",
     description:
-      "An AI research assistant built on Zotero for cited answers, figure and formula understanding, and multi-paper comparison.",
+      "DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.",
     emoji: "🧠",
     track: "ai",
   },
   {
     name: "mews",
     href: "https://github.com/bingran-you/mews",
-    description:
-      "Local GitHub notification daemon that triages your inbox and dispatches Codex or Claude Code work for allow-listed repos while you sleep.",
+    description: "Represent you to finish all the work, when you are sleeping.",
     emoji: "🐈",
     track: "ai",
   },
@@ -86,15 +150,14 @@ export const projects: Project[] = [
     name: "smolclaw",
     href: "https://github.com/bingran-you/smolclaw",
     description:
-      "Seeded mock environments for testing agent behavior in realistic workflows.",
+      "High resolution mock environments for testing and improving claw like agents",
     emoji: "🦞",
     track: "ai",
   },
   {
     name: "SBTI CLI",
     href: "https://github.com/bingran-you/sbti-cli",
-    description:
-      "An offline CLI for testing agent behavior with bundled logic and exportable results.",
+    description: "SBTI CLI - Test SBTI for your agents.",
     emoji: "😜",
     track: "ai",
   },
@@ -102,15 +165,14 @@ export const projects: Project[] = [
     name: "bem",
     href: "https://github.com/HaeffnerLab/bem",
     description:
-      "Scientific computing code for boundary element and fast multipole methods in Python.",
+      "triangulation, boundary element method (BEM), fast multipole method (FMM) code for python",
     emoji: "💻",
     track: "ion",
   },
   {
     name: "artiq_photonics_integration",
     href: "https://github.com/HaeffnerLab/artiq_photonics_integration",
-    description:
-      "An ARTIQ control framework for photonics integration experiments.",
+    description: "ARTIQ Control Framework (ACF) of Photonics Integration",
     emoji: "🦾",
     track: "ion",
   },
@@ -118,62 +180,122 @@ export const projects: Project[] = [
 
 export const papers: Paper[] = [
   {
+    slug: "skillsbench",
+    title:
+      "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+    href: "https://arxiv.org/abs/2602.12670",
+    venue: "NeurIPS 2026",
+    authors: "Li, X., Liu, Y., Chen, W., You, B. et al.",
+    reference: { kind: "conference", name: "NeurIPS", year: 2026 },
+    arxiv: "2602.12670",
+    track: "ai",
+  },
+  {
+    slug: "clawsbench",
     title:
       "ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces",
     href: "https://arxiv.org/abs/2604.05172",
-    venue: "arXiv",
+    venue: "COLM 2026",
+    authors: "Li, X., Choe, K. W., Liu, Y., Chen, X., Tao, C., You, B. et al.",
+    reference: { kind: "conference", name: "COLM", year: 2026 },
+    arxiv: "2604.05172",
     track: "ai",
   },
   {
-    title: "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
-    href: "https://arxiv.org/abs/2602.12670",
+    slug: "benchshield",
+    title:
+      "BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure",
+    href: "https://arxiv.org/abs/2609.11028",
     venue: "arXiv",
+    authors: "Zheng, S., Di, Z., Liu, Y., …, You, B. et al.",
+    reference: { kind: "preprint", year: 2026 },
+    arxiv: "2609.11028",
     track: "ai",
   },
   {
+    slug: "printed-trap",
+    title:
+      "3D-printed micro ion trap technology for quantum information applications",
+    href: "https://www.nature.com/articles/s41586-025-09474-1",
+    venue: "Nature",
+    authors:
+      "Xu, S., Xia, X., Yu, Q., Parakh, A., Khan, S., Megidish, E., You, B. et al.",
+    reference: {
+      kind: "journal",
+      journal: "Nature",
+      volume: "645",
+      pages: "362–368",
+      year: 2025,
+    },
+    arxiv: "2310.00595",
+    track: "ion",
+  },
+  {
+    slug: "ramsey",
+    title:
+      "Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion",
+    href: "https://doi.org/10.1103/PhysRevLett.130.200201",
+    venue: "Phys. Rev. Lett.",
+    authors:
+      "Broz, J., You, B., Khan, S., Häffner, H., Kaplan, D. E. & Rajendran, S.",
+    reference: {
+      kind: "journal",
+      journal: "Phys. Rev. Lett.",
+      volume: "130",
+      pages: "200201",
+      year: 2023,
+    },
+    arxiv: "2206.12976",
+    track: "ion",
+  },
+  {
+    slug: "multiplexed",
+    title:
+      "Temporally multiplexed ion-photon quantum interface via fast ion-chain transport",
+    href: "https://doi.org/10.1103/ppm8-8kx5",
+    venue: "Phys. Rev. Applied",
+    authors:
+      "You, B., Wu, Q., Miron, D., Ke, W., Monga, I., Saglamyurek, E. & Haeffner, H.",
+    reference: {
+      kind: "journal",
+      journal: "Phys. Rev. Appl.",
+      volume: "26",
+      pages: "014101",
+      year: 2026,
+    },
+    arxiv: "2405.10501",
+    track: "ion",
+  },
+  {
+    slug: "adjoint",
     title:
       "Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits",
     href: "https://www.nature.com/articles/s44310-025-00102-4",
     venue: "npj Nanophotonics",
-    blurb: "Integrated photonic circuits for scalable trapped-ion addressing.",
+    authors:
+      "Momenzadeh, M., Sun, K., Wu, Q., You, B., Tang, Y.-L., Häffner, H. & Shcherbakov, M. R.",
+    reference: {
+      kind: "journal",
+      journal: "npj Nanophotonics",
+      volume: "3",
+      pages: "3",
+      year: 2026,
+    },
+    arxiv: "2505.08997",
     track: "ion",
   },
   {
+    slug: "broadband",
     title:
-      "Temporally multiplexed ion-photon quantum interface via fast ion-chain transport",
-    href: "https://arxiv.org/abs/2405.10501",
+      "A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control",
+    href: "https://arxiv.org/abs/2607.25062",
     venue: "arXiv",
-    blurb:
-      "Multiplexed ion-photon interface based on fast ion-chain transport.",
-    track: "ion",
-  },
-  {
-    title:
-      "3D-Printed Micro Ion Trap Technology for Scalable Quantum Information Processing",
-    href: "https://www.nature.com/articles/s41586-025-09474-1",
-    venue: "Nature",
-    blurb:
-      "3D-printed micro ion trap technology for scalable atomic-physics platforms.",
-    track: "ion",
-  },
-  {
-    title:
-      "Test of Causal Non-Linear Quantum Mechanics by Ramsey Interferometry on the Vibrational Mode of a Trapped Ion",
-    href: "https://doi.org/10.1103/PhysRevLett.130.200201",
-    venue: "Phys. Rev. Lett.",
-    blurb:
-      "Trapped-ion Ramsey interferometry probing fundamental physics of single-ion vibrational modes.",
+    authors: "Klawson, D., Zhi, Y., You, B. et al.",
+    reference: { kind: "preprint", year: 2026 },
+    arxiv: "2607.25062",
     track: "ion",
   },
 ];
-
-export function getAiProjectHighlights(limit = 5): Project[] {
-  return projects.filter((p) => p.track === "ai").slice(0, limit);
-}
-
-export function getAiPaperHighlights(limit = 2): Paper[] {
-  return papers.filter((p) => p.track === "ai").slice(0, limit);
-}
 
 export const education: Education[] = [
   {
@@ -181,25 +303,13 @@ export const education: Education[] = [
     location: "Berkeley, California",
     degree: "PhD Candidate in Applied Science & Technology",
     period: "2022 — Present",
-    summary:
-      "Graduate research in atomic, molecular and optical physics — trapped ions, integrated photonics, and ion-photon interfaces.",
     metrics: ["Haeffner Lab"],
-    highlights: [
-      "Research focus on scalable trapped-ion hardware and photonic integration.",
-      "Builds experimental systems that connect precision physics with dependable engineering.",
-    ],
   },
   {
     institution: "University of Chinese Academy of Sciences",
     location: "Beijing, China",
     degree: "BS in Physics, Minor in Computer Science",
     period: "2018 — 2022",
-    summary:
-      "Undergraduate training in physics with a strong computational foundation across mathematics, programming, and scientific problem solving.",
     metrics: ["GPA 3.95 / 4.00", "Rank 1 / 54"],
-    highlights: [
-      "Graduated at the top of the cohort in physics.",
-      "Built an early bridge between physical systems work and software-driven experimentation.",
-    ],
   },
 ];

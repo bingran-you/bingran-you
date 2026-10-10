@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Newsreader, Noto_Serif_SC } from "next/font/google";
+import {
+  Hanken_Grotesk,
+  Noto_Serif_SC,
+  Source_Serif_4,
+} from "next/font/google";
 import "./globals.css";
 import {
   jsonLdScriptContent,
@@ -8,27 +12,28 @@ import {
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
   SITE_NAME,
-  SITE_OG_DESCRIPTION,
   SITE_URL,
   websiteJsonLd,
 } from "@/lib/jsonld";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Text face: an open serif with optical sizes, set like a journal's body.
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Label face: metadata rows, tables, references and the navigation.
+const hanken = Hanken_Grotesk({
+  variable: "--font-hanken",
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin"],
-});
-
-// Noto Serif SC pairs with Newsreader for harmonious Han + Latin display.
+// Noto Serif SC pairs with Source Serif for harmonious Han + Latin display.
 // subsets: ["latin"] only controls preload hints; CJK glyphs are still
 // served via unicode-range and lazy-loaded when Chinese characters render.
 // preload: false — most pages have no Chinese, so don't waste a preload slot.
@@ -50,7 +55,7 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   openGraph: {
     title: SITE_NAME,
-    description: SITE_OG_DESCRIPTION,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: "en_US",
@@ -61,16 +66,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@bingran_bry",
     title: SITE_NAME,
-    description: SITE_OG_DESCRIPTION,
+    description: SITE_DESCRIPTION,
     images: [OG_IMAGE_URL],
   },
   alternates: {
     canonical: "/",
-    types: {
-      "application/rss+xml": [
-        { url: "/feed.xml", title: `${SITE_NAME} — Blog` },
-      ],
-    },
   },
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
@@ -85,10 +85,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4ead7" },
-    { media: "(prefers-color-scheme: dark)", color: "#1a1610" },
-  ],
+  themeColor: "#e8e9eb",
 };
 
 export default function RootLayout({
@@ -99,7 +96,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} ${notoSerifSC.variable} h-full antialiased`}
+      className={`${sourceSerif.variable} ${hanken.variable} ${notoSerifSC.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

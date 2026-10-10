@@ -1,12 +1,9 @@
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import {
-  getAiPaperHighlights,
-  getAiProjectHighlights,
-  papers,
-  projects,
-} from "./content";
+import { getPaperDetail, papers, projects } from "./content";
 
-describe("getAiProjectHighlights", () => {
+describe("projects", () => {
   it("leads with FrontierPhysics", () => {
     expect(projects[0]).toMatchObject({
       name: "FrontierPhysics",
@@ -20,53 +17,63 @@ describe("getAiProjectHighlights", () => {
     );
   });
 
-  it("returns up to 5 ai-track projects by default", () => {
-    const result = getAiProjectHighlights();
-    expect(result.length).toBeLessThanOrEqual(5);
-    expect(result.every((p) => p.track === "ai")).toBe(true);
-  });
-
-  it("respects a custom limit", () => {
-    const result = getAiProjectHighlights(2);
-    expect(result).toHaveLength(2);
-    expect(result.every((p) => p.track === "ai")).toBe(true);
-  });
-
-  it("preserves source order", () => {
-    const aiProjects = projects.filter((p) => p.track === "ai");
-    const result = getAiProjectHighlights(3);
-    expect(result.map((p) => p.name)).toEqual(
-      aiProjects.slice(0, 3).map((p) => p.name),
-    );
-  });
-
-  it("excludes ion-track projects", () => {
-    const result = getAiProjectHighlights(99);
-    expect(result.every((p) => p.track !== "ion")).toBe(true);
+  it("does not list DoWhiz as a project", () => {
+    expect(
+      projects.some(({ name, href }) => /dowhiz/i.test(`${name} ${href}`)),
+    ).toBe(false);
   });
 });
 
-describe("getAiPaperHighlights", () => {
-  it("returns up to 2 ai-track papers by default", () => {
-    const result = getAiPaperHighlights();
-    expect(result.length).toBeLessThanOrEqual(2);
-    expect(result.every((p) => p.track === "ai")).toBe(true);
+describe("papers", () => {
+  it("lists each paper once", () => {
+    expect(new Set(papers.map((p) => p.slug)).size).toBe(papers.length);
+    expect(new Set(papers.map((p) => p.href)).size).toBe(papers.length);
   });
 
-  it("respects a custom limit", () => {
-    const result = getAiPaperHighlights(1);
-    expect(result).toHaveLength(1);
+  it("has every paper's own abstract and first figure", () => {
+    for (const paper of papers) {
+      const detail = getPaperDetail(paper.slug);
+      expect(detail.source, paper.slug).toContain(paper.arxiv);
+      expect(detail.abstract.join(" ").length, paper.slug).toBeGreaterThan(400);
+      expect(detail.figure.caption.length, paper.slug).toBeGreaterThan(40);
+      const file = fileURLToPath(
+        new URL(`../public${detail.figure.src}`, import.meta.url),
+      );
+      expect(existsSync(file), detail.figure.src).toBe(true);
+    }
   });
 
-  it("excludes ion-track papers", () => {
-    const result = getAiPaperHighlights(99);
-    expect(result.every((p) => p.track !== "ion")).toBe(true);
+  // Figures and tables are set at their printed width, in points. The text
+  // block of a sheet is 521.5 pt wide, so nothing in print is wider.
+  it("records the printed width of every figure and table", () => {
+    for (const paper of papers) {
+      const { figure, table } = getPaperDetail(paper.slug);
+      for (const width of [figure.printWidth, table?.printWidth ?? 1]) {
+        expect(width, paper.slug).toBeGreaterThan(0);
+        expect(width, paper.slug).toBeLessThanOrEqual(521.5);
+      }
+    }
   });
 
-  it("matches the slice of source data", () => {
-    const aiPapers = papers.filter((p) => p.track === "ai");
-    expect(getAiPaperHighlights(aiPapers.length).map((p) => p.title)).toEqual(
-      aiPapers.map((p) => p.title),
-    );
+  // The copied text is rendered as HTML, so it may only carry inline markup.
+  it("keeps the copied text to inline markup", () => {
+    const allowed = new Set(["i", "b", "sup", "sub", "code"]);
+    for (const paper of papers) {
+      const { abstract, figure, table } = getPaperDetail(paper.slug);
+      const rows = table ? [...table.head, ...table.body] : [];
+      const html = [
+        ...abstract,
+        figure.caption,
+        table?.caption ?? "",
+        ...rows.flatMap((row) => row.cells.map((cell) => cell.html)),
+      ].join(" ");
+      const tags = [...html.matchAll(/<\/?([a-z0-9]+)[^>]*>/gi)].map(
+        (m) => m[1],
+      );
+      expect(
+        tags.filter((tag) => !allowed.has(tag)),
+        paper.slug,
+      ).toEqual([]);
+    }
   });
 });

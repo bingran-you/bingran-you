@@ -1,0 +1,1442 @@
+{
+  "skillsbench": {
+    "source": "https://arxiv.org/abs/2602.12670v4",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "Agent Skills are structured packages of procedural knowledge that augment large language model (LLM) agents at inference time. Despite rapid adoption, there is no standard way to measure whether they actually help. We present SkillsBench, a benchmark whose current inventory contains 87 tasks across 8 domains paired with curated Skills and deterministic verifiers. Our latest aggregate evaluation runs the 87-task benchmark under matched no-Skills and curated-Skills conditions for 18 model–harness configurations. Curated Skills raise the average pass rate from 33.9% to 50.5% (+16.6 percentage points; 25.5% normalized gain), with configuration-level gains ranging from +4.1 to +25.7 pp. Focused Skills with at most three modules outperform larger or exhaustive bundles, and smaller models with Skills can match larger models without them. SkillsBench establishes paired evaluation as the foundation for rigorous measurement of Skill efficacy on agentic, expertise-heavy work."
+    ],
+    "figure": {
+      "src": "/papers/skillsbench-fig1.png",
+      "width": 1614,
+      "height": 462,
+      "printWidth": 382,
+      "sourceLabel": "Figure 1",
+      "caption": "Agent architecture stack and resolution rates across 18 model–harness configurations on 87 SkillsBench tasks. Each bar stacks the no-Skills baseline and curated-Skills lift; open/filled interval markers denote 95% CIs for the baseline/total. Bars are ordered by Curated-Skills pass rate and colored by model family. Harness abbreviations: OH = OpenHands, CC = Claude Code, GCLI = Gemini CLI."
+    },
+    "table": {
+      "sourceLabel": "Table 2",
+      "printWidth": 268,
+      "caption": "Pass rates (%), absolute gain (Δ, pp), and normalized gain (<i>g</i>, %) across the latest 87-task no-Skills vs. curated-Skills aggregate. Δ and <i>g</i> are computed at full precision; configurations are ordered by Curated-Skills pass rate. The Mean-row <i>g</i> macro-averages per-configuration normalized gains rather than recomputing <i>g</i> from the mean pass rates. Each pass cell uses the fixed 87 × 3 trial frame; per-cell public coverage is reported in Appendix I. Differences from rounded <i>Pass</i> cells may differ by ±0.1 pp.",
+      "head": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": ""
+            },
+            {
+              "html": ""
+            },
+            {
+              "html": "<b>No Sk.</b>",
+              "align": "center"
+            },
+            {
+              "html": "<b>Curated Skills</b>",
+              "align": "center",
+              "colSpan": 3
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Harness</b>"
+            },
+            {
+              "html": "<b>Model</b>"
+            },
+            {
+              "html": "<b>Pass</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Pass</b>",
+              "align": "right"
+            },
+            {
+              "html": "Δ<b>(pp)</b>",
+              "align": "right"
+            },
+            {
+              "html": "<i>g</i><b>(%)</b>",
+              "align": "right"
+            }
+          ]
+        }
+      ],
+      "body": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "GPT-5.5"
+            },
+            {
+              "html": "51.5",
+              "align": "right"
+            },
+            {
+              "html": "67.3",
+              "align": "right"
+            },
+            {
+              "html": "+15.8",
+              "align": "right"
+            },
+            {
+              "html": "32.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Codex"
+            },
+            {
+              "html": "GPT-5.5"
+            },
+            {
+              "html": "46.8",
+              "align": "right"
+            },
+            {
+              "html": "66.5",
+              "align": "right"
+            },
+            {
+              "html": "+19.7",
+              "align": "right"
+            },
+            {
+              "html": "37.0",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Claude Code"
+            },
+            {
+              "html": "Opus 4.7"
+            },
+            {
+              "html": "43.0",
+              "align": "right"
+            },
+            {
+              "html": "61.2",
+              "align": "right"
+            },
+            {
+              "html": "+18.2",
+              "align": "right"
+            },
+            {
+              "html": "31.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Gemini CLI"
+            },
+            {
+              "html": "Gemini 3.1 Pro"
+            },
+            {
+              "html": "36.0",
+              "align": "right"
+            },
+            {
+              "html": "60.8",
+              "align": "right"
+            },
+            {
+              "html": "+24.8",
+              "align": "right"
+            },
+            {
+              "html": "38.7",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "GLM 5.1"
+            },
+            {
+              "html": "32.7",
+              "align": "right"
+            },
+            {
+              "html": "58.4",
+              "align": "right"
+            },
+            {
+              "html": "+25.7",
+              "align": "right"
+            },
+            {
+              "html": "38.1",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Claude Opus 4.8"
+            },
+            {
+              "html": "45.7",
+              "align": "right"
+            },
+            {
+              "html": "54.1",
+              "align": "right"
+            },
+            {
+              "html": "+8.4",
+              "align": "right"
+            },
+            {
+              "html": "15.5",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Kimi K2.6"
+            },
+            {
+              "html": "33.4",
+              "align": "right"
+            },
+            {
+              "html": "54.0",
+              "align": "right"
+            },
+            {
+              "html": "+20.6",
+              "align": "right"
+            },
+            {
+              "html": "31.0",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Claude Opus 4.7"
+            },
+            {
+              "html": "42.1",
+              "align": "right"
+            },
+            {
+              "html": "53.1",
+              "align": "right"
+            },
+            {
+              "html": "+11.1",
+              "align": "right"
+            },
+            {
+              "html": "19.1",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "MiniMax M3"
+            },
+            {
+              "html": "29.7",
+              "align": "right"
+            },
+            {
+              "html": "53.0",
+              "align": "right"
+            },
+            {
+              "html": "+23.3",
+              "align": "right"
+            },
+            {
+              "html": "33.2",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Gemini 3.1 Pro"
+            },
+            {
+              "html": "33.8",
+              "align": "right"
+            },
+            {
+              "html": "52.8",
+              "align": "right"
+            },
+            {
+              "html": "+19.0",
+              "align": "right"
+            },
+            {
+              "html": "28.7",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "DeepSeek V4 Pro"
+            },
+            {
+              "html": "26.9",
+              "align": "right"
+            },
+            {
+              "html": "50.1",
+              "align": "right"
+            },
+            {
+              "html": "+23.2",
+              "align": "right"
+            },
+            {
+              "html": "31.8",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Gemini 3.5 Flash"
+            },
+            {
+              "html": "41.1",
+              "align": "right"
+            },
+            {
+              "html": "48.2",
+              "align": "right"
+            },
+            {
+              "html": "+7.1",
+              "align": "right"
+            },
+            {
+              "html": "12.1",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Claude Sonnet 4.6"
+            },
+            {
+              "html": "33.5",
+              "align": "right"
+            },
+            {
+              "html": "47.2",
+              "align": "right"
+            },
+            {
+              "html": "+13.6",
+              "align": "right"
+            },
+            {
+              "html": "20.5",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "DeepSeek V4 Flash"
+            },
+            {
+              "html": "27.5",
+              "align": "right"
+            },
+            {
+              "html": "44.7",
+              "align": "right"
+            },
+            {
+              "html": "+17.2",
+              "align": "right"
+            },
+            {
+              "html": "23.7",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Grok 4.3"
+            },
+            {
+              "html": "22.8",
+              "align": "right"
+            },
+            {
+              "html": "41.7",
+              "align": "right"
+            },
+            {
+              "html": "+18.8",
+              "align": "right"
+            },
+            {
+              "html": "24.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "GPT-5.4 Mini"
+            },
+            {
+              "html": "29.9",
+              "align": "right"
+            },
+            {
+              "html": "41.4",
+              "align": "right"
+            },
+            {
+              "html": "+11.5",
+              "align": "right"
+            },
+            {
+              "html": "16.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "MiniMax M2.7"
+            },
+            {
+              "html": "18.1",
+              "align": "right"
+            },
+            {
+              "html": "34.9",
+              "align": "right"
+            },
+            {
+              "html": "+16.8",
+              "align": "right"
+            },
+            {
+              "html": "20.5",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "OpenHands"
+            },
+            {
+              "html": "Gemini 3.1 Flash Lite"
+            },
+            {
+              "html": "16.0",
+              "align": "right"
+            },
+            {
+              "html": "20.1",
+              "align": "right"
+            },
+            {
+              "html": "+4.1",
+              "align": "right"
+            },
+            {
+              "html": "4.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "<b>Mean</b>"
+            },
+            {
+              "html": ""
+            },
+            {
+              "html": "33.9",
+              "align": "right"
+            },
+            {
+              "html": "50.5",
+              "align": "right"
+            },
+            {
+              "html": "<b>+16.6</b>",
+              "align": "right"
+            },
+            {
+              "html": "25.5",
+              "align": "right"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "clawsbench": {
+    "source": "https://arxiv.org/abs/2604.05172v2",
+    "license": null,
+    "abstract": [
+      "Large language model (LLM) agents are increasingly deployed to automate productivity tasks (e.g., email, scheduling, document management), but evaluating them on live services is risky due to potentially irreversible changes. Existing benchmarks rely on simplified environments and fail to capture realistic, stateful, multi-service workflows. We introduce ClawsBench, a benchmark for evaluating and improving LLM agents in realistic productivity settings. It includes five high-fidelity mock services (Gmail, Slack, Calendar, Docs, Drive) with full state management and deterministic snapshot/restore, along with 44 structured tasks covering single-service, cross-service, and safety-critical scenarios. We decompose agent scaffolding into two independent levers (domain skills that inject API knowledge via progressive disclosure, and a meta prompt that coordinates behavior across services) and vary both to measure their separate and combined effects. Experiments across 6 models, 4 agent harnesses, and 33 conditions show that with full scaffolding, agents achieve task success rates of 39–64% but exhibit unsafe action rates of 7–33%. On OpenClaw, the top five models fall within a 10 percentage-point band on task success (53–63%), with unsafe action rates from 7% to 23% and no consistent ordering between the two metrics. We identify eight recurring patterns of unsafe behavior, including multi-step sandbox escalation and silent contract modification. We release the trajectories and future dataset at clawsbench.com."
+    ],
+    "figure": {
+      "src": "/papers/clawsbench-fig1.jpg",
+      "width": 1552,
+      "height": 858,
+      "printWidth": 367.5,
+      "sourceLabel": "Figure 1",
+      "caption": "ClawsBench evaluation pipeline. Seed data populates five SQLite-backed mock services; an agent harness, optionally augmented with domain skills and a meta prompt, routes the agent’s API calls. Tasks include both non-safety workflows and safety scenarios that test for harmful actions such as data leakage, unauthorized deletions, and prompt-injection compliance. A state-based evaluator compares pre- and post-execution database snapshots to score each trial; scores are aggregated into Task Success Rate (TSR), Unsafe Action Rate (UAR), and Safe Completion Rate (SCR)."
+    },
+    "table": {
+      "sourceLabel": "Table 4",
+      "printWidth": 323,
+      "caption": "Model comparison on OpenClaw at unscaffolded (off/off) and fully scaffolded (on/on) conditions. Sk = Domain Skills; Mt = Meta Prompt. TSR = Task Success Rate (non-safety, ≥ 0.8). UAR = Unsafe Action Rate (safety, &lt; 0). SCR = Safe Completion Rate (safety, ≥ 0.8). Task-level cluster bootstrap 95% CIs in brackets. Full 33-condition results in Table 11 (Appendix).",
+      "head": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "<b>Model</b>"
+            },
+            {
+              "html": "<b>Sk</b>",
+              "align": "center"
+            },
+            {
+              "html": "<b>Mt</b>",
+              "align": "center"
+            },
+            {
+              "html": "<b>TSR</b>",
+              "align": "center",
+              "colSpan": 2
+            },
+            {
+              "html": "<b>UAR</b>",
+              "align": "center",
+              "colSpan": 2
+            },
+            {
+              "html": "<b>SCR</b>",
+              "align": "center",
+              "colSpan": 2
+            }
+          ]
+        }
+      ],
+      "body": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "Gemini 3.1 Flash-Lite"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Gemini 3.1 Flash-Lite"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "39%",
+              "align": "right"
+            },
+            {
+              "html": "[21,57]"
+            },
+            {
+              "html": "23%",
+              "align": "right"
+            },
+            {
+              "html": "[11,35]"
+            },
+            {
+              "html": "26%",
+              "align": "right"
+            },
+            {
+              "html": "[12,41]"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "Gemini 3.1 Pro"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "8%",
+              "align": "right"
+            },
+            {
+              "html": "[2,16]"
+            },
+            {
+              "html": "4%",
+              "align": "right"
+            },
+            {
+              "html": "[0,12]"
+            },
+            {
+              "html": "2%",
+              "align": "right"
+            },
+            {
+              "html": "[0,4]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Gemini 3.1 Pro"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "58%",
+              "align": "right"
+            },
+            {
+              "html": "[38,77]"
+            },
+            {
+              "html": "10%",
+              "align": "right"
+            },
+            {
+              "html": "[3,19]"
+            },
+            {
+              "html": "48%",
+              "align": "right"
+            },
+            {
+              "html": "[30,65]"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "Claude Sonnet 4.6"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "1%",
+              "align": "right"
+            },
+            {
+              "html": "[0,3]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Claude Sonnet 4.6"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "56%",
+              "align": "right"
+            },
+            {
+              "html": "[36,75]"
+            },
+            {
+              "html": "13%",
+              "align": "right"
+            },
+            {
+              "html": "[3,27]"
+            },
+            {
+              "html": "48%",
+              "align": "right"
+            },
+            {
+              "html": "[32,64]"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "Claude Opus 4.6"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "Claude Opus 4.6"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "<b>63%</b>",
+              "align": "right"
+            },
+            {
+              "html": "[42,82]"
+            },
+            {
+              "html": "23%",
+              "align": "right"
+            },
+            {
+              "html": "[8,40]"
+            },
+            {
+              "html": "<b>50%</b>",
+              "align": "right"
+            },
+            {
+              "html": "[32,68]"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "GPT-5.4"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "1%",
+              "align": "right"
+            },
+            {
+              "html": "[0,3]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "GPT-5.4"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "53%",
+              "align": "right"
+            },
+            {
+              "html": "[34,72]"
+            },
+            {
+              "html": "<b>7%</b>",
+              "align": "right"
+            },
+            {
+              "html": "[0,15]"
+            },
+            {
+              "html": "41%",
+              "align": "right"
+            },
+            {
+              "html": "[27,55]"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "GLM-5"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "✗",
+              "align": "center"
+            },
+            {
+              "html": "3%",
+              "align": "right"
+            },
+            {
+              "html": "[0,6]"
+            },
+            {
+              "html": "0%",
+              "align": "right"
+            },
+            {
+              "html": "[0,0]"
+            },
+            {
+              "html": "1%",
+              "align": "right"
+            },
+            {
+              "html": "[0,3]"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "GLM-5"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "✓",
+              "align": "center"
+            },
+            {
+              "html": "60%",
+              "align": "right"
+            },
+            {
+              "html": "[41,78]"
+            },
+            {
+              "html": "23%",
+              "align": "right"
+            },
+            {
+              "html": "[10,38]"
+            },
+            {
+              "html": "48%",
+              "align": "right"
+            },
+            {
+              "html": "[32,63]"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "benchshield": {
+    "source": "https://arxiv.org/abs/2609.11028v1",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "LLM-agent benchmarks increasingly function as interactive evaluation infrastructure. Agents observe state, call tools, modify workspaces, submit artifacts, and receive rewards from outcome procedures. This interactivity makes evaluations vulnerable to reward hacking: an agent improves its measured score by exploiting the reward-relevant trajectory instead of solving the intended task. Existing defenses rely largely on task-specific patches, prompt instructions, or post-hoc detectors. They do not provide reusable evidence that a concrete run remained within its intended evaluation boundary. This paper presents BenchShield, a model-backed instrumentation layer for reward integrity in LLM-agent evaluation. BenchShield grounds detection in a finite lifecycle model of an evaluation’s reward-relevant events. Within the benchmark infrastructure, two complementary analyses operate over this model. A static, phase-aware taint analysis exposes reward-hacking paths before a run. Its runtime counterpart uses infrastructure-side evidence to attribute concrete agent use and emit evidence-backed claims.",
+      "We construct <i>BenchShield Trajectories</i>, a human-labeled corpus of 456 adjudicated trajectories from more than 31,000 public agent runs across three benchmarks. Compared with an agentic hackability scanner baseline on the same tasks and model, BenchShield improves full-chain recall from 23–94% to 77–100%, same-vector coverage from 16–56% to 43–78%, and reduces per-task cost by up to 65%. Its runtime analysis achieves 96% accuracy in detecting reward hacking from infrastructure-side evidence."
+    ],
+    "figure": {
+      "src": "/papers/benchshield-fig1.png",
+      "width": 1949,
+      "height": 580,
+      "printWidth": 504.5,
+      "sourceLabel": "Figure 1",
+      "caption": "Two reward-hacking failures from Terminal-Bench 3 in which an isolated verifier is insufficient. Left: agent-controlled executable content disables a kernel check through the declared patch (I2 → I7). Right: the agent downloads hidden labels and submits answer-derived clusters (I1 → I7). Both runs retain a native reward of 1.00; BenchShield reports <code>AgentViolation</code>."
+    },
+    "table": {
+      "sourceLabel": "Table 3",
+      "printWidth": 367,
+      "caption": "Paired static discovery on the same native tasks, adjudicated integrity-link chains, and identical stripped task packages. Recall columns report the union over five trials and the per-trial mean ± standard deviation. <i>Same-vector</i> also requires the reported path to name the channel used by the exploit. <i>Stability</i> is the mean pairwise Jaccard similarity across trials. Cost and wall time are measured per audit with the same model.",
+      "head": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "<b>Corpus</b>"
+            },
+            {
+              "html": "<b>System</b>"
+            },
+            {
+              "html": "<b>Dim. recall</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Same-vector</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Full chain</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Stability</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Wall</b>",
+              "align": "right"
+            },
+            {
+              "html": "<b>Cost/task</b>",
+              "align": "right"
+            }
+          ]
+        }
+      ],
+      "body": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "SkillsBench",
+              "header": true
+            },
+            {
+              "html": "BenchJack",
+              "header": true
+            },
+            {
+              "html": "0.60 (0.37 ± 0.08)",
+              "align": "right"
+            },
+            {
+              "html": "0.27 (0.21 ± 0.03)",
+              "align": "right"
+            },
+            {
+              "html": "0.25 (0.25 ± 0.00)",
+              "align": "right"
+            },
+            {
+              "html": "0.63",
+              "align": "right"
+            },
+            {
+              "html": "279 s",
+              "align": "right"
+            },
+            {
+              "html": "$3.34",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "",
+              "header": true
+            },
+            {
+              "html": "BenchShield",
+              "header": true
+            },
+            {
+              "html": "0.93 (0.85 ± 0.06)",
+              "align": "right"
+            },
+            {
+              "html": "0.67 (0.61 ± 0.08)",
+              "align": "right"
+            },
+            {
+              "html": "0.88 (0.73 ± 0.10)",
+              "align": "right"
+            },
+            {
+              "html": "0.94",
+              "align": "right"
+            },
+            {
+              "html": "150 s",
+              "align": "right"
+            },
+            {
+              "html": "$2.15",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "ClawsBench",
+              "header": true
+            },
+            {
+              "html": "BenchJack",
+              "header": true
+            },
+            {
+              "html": "0.94 (0.94 ± 0.00)",
+              "align": "right"
+            },
+            {
+              "html": "0.56 (0.28 ± 0.09)",
+              "align": "right"
+            },
+            {
+              "html": "0.94 (0.94 ± 0.00)",
+              "align": "right"
+            },
+            {
+              "html": "0.92",
+              "align": "right"
+            },
+            {
+              "html": "460 s",
+              "align": "right"
+            },
+            {
+              "html": "$2.04",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "",
+              "header": true
+            },
+            {
+              "html": "BenchShield",
+              "header": true
+            },
+            {
+              "html": "1.00 (0.96 ± 0.02)",
+              "align": "right"
+            },
+            {
+              "html": "0.78 (0.69 ± 0.06)",
+              "align": "right"
+            },
+            {
+              "html": "1.00 (0.95 ± 0.03)",
+              "align": "right"
+            },
+            {
+              "html": "0.91",
+              "align": "right"
+            },
+            {
+              "html": "410 s",
+              "align": "right"
+            },
+            {
+              "html": "$1.91",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "Terminal-Bench 3",
+              "header": true
+            },
+            {
+              "html": "BenchJack",
+              "header": true
+            },
+            {
+              "html": "0.48 (0.46 ± 0.02)",
+              "align": "right"
+            },
+            {
+              "html": "0.16 (0.14 ± 0.02)",
+              "align": "right"
+            },
+            {
+              "html": "0.23 (0.19 ± 0.04)",
+              "align": "right"
+            },
+            {
+              "html": "0.93",
+              "align": "right"
+            },
+            {
+              "html": "357 s",
+              "align": "right"
+            },
+            {
+              "html": "$5.91",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "",
+              "header": true
+            },
+            {
+              "html": "BenchShield",
+              "header": true
+            },
+            {
+              "html": "0.80 (0.73 ± 0.03)",
+              "align": "right"
+            },
+            {
+              "html": "0.43 (0.29 ± 0.11)",
+              "align": "right"
+            },
+            {
+              "html": "0.77 (0.66 ± 0.04)",
+              "align": "right"
+            },
+            {
+              "html": "0.79",
+              "align": "right"
+            },
+            {
+              "html": "426 s",
+              "align": "right"
+            },
+            {
+              "html": "$2.05",
+              "align": "right"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "printed-trap": {
+    "source": "https://arxiv.org/abs/2310.00595v2",
+    "license": null,
+    "abstract": [
+      "Trapped-ion applications, such as in quantum information, precision measurements, optical clocks, and mass spectrometry, rely on specialized high-performance ion traps. The latter applications typically employ traditional machining to customize macroscopic 3D Paul traps, while quantum information processing experiments usually rely on photo-lithographic techniques to miniaturize the traps and meet scalability requirements. Using photolithography, however, it is challenging to fabricate the complex three-dimensional electrode structures required for optimal confinement. Here we address these limitations by adopting a high-resolution 3D printing technology based on two-photon polymerization supporting fabrication of large arrays of high-performance miniaturized 3D traps. We show that 3D-printed ion traps combine the advantages of traditionally machined 3D traps with the miniaturization provided by photolithography by confining single calcium ions in a small 3D-printed ion trap with radial trap frequencies ranging from 2 MHz to 24 MHz. The tight confinement eases ion cooling requirements and allows us to demonstrate high-fidelity coherent operations on an optical qubit after only Doppler cooling. With 3D printing technology, the design freedom is drastically expanded without sacrificing scalability and precision so that ion trap geometries can be optimized for higher performance and better functionality."
+    ],
+    "figure": {
+      "src": "/papers/printed-trap-fig1.jpg",
+      "width": 2000,
+      "height": 1023,
+      "printWidth": 367.3,
+      "sourceLabel": "Figure 1",
+      "caption": "<b>Paul trap comparison.</b> Schematics and representative pictures of a conventional 3D Paul trap <b>a</b>, a surface trap <b>b</b>, and a 3D-printed vertical Paul trap <b>c</b>. The basic structure of a conventional 3D Paul trap (<b>a</b>) consists of four RF electrodes and two end cap DC electrodes, with a characteristic length scale of 1 mm. It requires precision machining and is thus challenging to scale. Surface traps (<b>b</b>) usually have two RF electrodes with a characteristic length scale on the order of 100 µm and can be produced by microfabrication techniques allowing for large and scalable trap arrays. However, constraining electrodes to a single plane distorts the desired quadrupole potential reducing its efficiency. 3D-printed Paul traps (<b>c</b>) can have four RF electrodes creating a quadrupole field while of similar size and scalability as surface traps."
+    }
+  },
+  "ramsey": {
+    "source": "https://arxiv.org/abs/2206.12976v1",
+    "license": null,
+    "abstract": [
+      "Kaplan and Rajendran have recently demonstrated that non-linear and state-dependent terms can be consistently added to quantum field theory to yield causal non-linear time evolution in quantum mechanics. Causal non-linear theories have the unavoidable feature that their quantum effects are dramatically sensitive to the full physical spread of the quantum state of the system. As a result, such theories are not well tested by conventional atomic and nuclear spectroscopy. By using a well-controlled superposition of vibrational modes of a <sup>40</sup>Ca<sup>+</sup> ion trapped in a harmonic potential, we set a stringent limit of 5.4 × 10<sup>−12</sup> on the magnitude of the unitless scaling factor <i>ϵ̃</i><sub><i>γ</i></sub> of the predicted causal, non-linear perturbation."
+    ],
+    "figure": {
+      "src": "/papers/ramsey-fig1.png",
+      "width": 2013,
+      "height": 455,
+      "printWidth": 491,
+      "sourceLabel": "Figure 1",
+      "caption": "<b>Experimental implementation. (a)</b> A <sup>40</sup>Ca<sup>+</sup> ion is trapped using a combination of RF and DC electric fields. In a time-averaged sense, the confinement is well modeled by a 3-dimensional harmonic potential. <b>(b)</b> Motion along the <i>x</i>-direction is excited by resonantly coupling to the internal electronic Zeeman sublevels of the 4<sup>2</sup><i>S</i><sub>1/2</sub> ↔ 3<sup>2</sup><i>D</i><sub>5/2</sub> transition using narrow band light near 729 nm. The degeneracy of the Zeeman states is broken through application of a strong magnetic field of ≈4 G. Measurement is performed by scattering photons of the short-lived 4<sup>2</sup><i>S</i><sub>1/2</sub> ↔ 4<sup>2</sup><i>P</i><sub>1/2</sub>, which are then focused onto an EMCCD camera. <b>(c)</b> The experimental pulse sequence. Pulses that address the qubit are colored gray and those that address the blue sideband, blue. After preparing the state |<i>S</i>,0⟩, the first pair of pulses is used to generate the state |<i>ψ</i>(<i>t</i> = 0)⟩ = |<i>D</i>⟩(<i>α</i><sub>0</sub>|0⟩ + <i>α</i><sub>1</sub>|1⟩). This is then allowed to freely evolve for a time <i>τ</i>, accumulating a relative phase of Φ(<i>τ</i>), which is sensitive to the proposed causal non-linear perturbation. Afterwards, the information is mapped onto the qubit with a blue sideband pulse and then the expectation value of the Pauli spin operator cos(<i>ξ</i><sub><i>L</i></sub>)<i>σ</i><sub><i>x</i></sub> + sin(<i>ξ</i><sub><i>L</i></sub>)<i>σ</i><sub><i>y</i></sub> is measured. <b>(d)</b> An illustration of the two-step process for generating the state |<i>ψ</i>(<i>t</i> = 0)⟩, as described in more detail in the main text. The key feature is the fact that the state |<i>D</i>,0⟩ is transparent to the resonant blue sideband drive as illustrated in <b>(e)</b>. This allows us to map an arbitrary qubit state onto the ground and first excited state of the vibrational mode."
+    }
+  },
+  "multiplexed": {
+    "source": "https://arxiv.org/abs/2405.10501v2",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "High-rate remote entanglement between photon and matter-based qubits is essential for distributed quantum information processing. A key technique to increase the modest entangling rates of existing long-distance quantum networking approaches is multiplexing. Here, we demonstrate a temporally multiplexed ion-photon interface via rapid transport of a chain of nine calcium ions across 74 µm within 86 µs. The non-classical nature of the multiplexed photons is verified by measuring the second-order correlation function with an average value of <i>g</i><sup>(2)</sup>(0) = 0.060(13). This indicates low crosstalk of about 1% between the multiplexed modes, which can be reduced further once coupling of the photons to a single-mode fiber is incorporated. In addition, we characterize the motional degree-of-freedom of the ion crystal after transport and find that it is coherently excited to <i>n̄</i><sub><i>α</i></sub> ≈ 110 for the center-of-mass mode. Our proof-of-principle implementation paves the way for large-scale quantum networking with trapped ions, but highlights some challenges that must be overcome."
+    ],
+    "figure": {
+      "src": "/papers/multiplexed-fig1.png",
+      "width": 1036,
+      "height": 1856,
+      "printWidth": 243,
+      "sourceLabel": "Figure 1",
+      "caption": "Schematics of multiplexed ion-photon interface. (a) A nine-ion chain is confined in an RF Paul trap. Controlling DC endcap voltages allows for ion transport. A beam of 397 nm and 866 nm light illuminating all ions is used for Doppler cooling. An objective collects the 397 nm single photons and guides them to a 50/50 beamsplitter, followed by a photomultiplier tube on each exit port for photon detection. An 866 nm beam counter-propagates with the single photons and addresses individual ions. (b), (c) Excitation scheme and pulse sequence for the 397 nm single-photon generation. First, a global 397 nm beam prepares the ions in the 3<sup>2</sup><i>D</i><sub>3/2</sub> state. Then, the 866 nm addressing beam (resonant with 3<sup>2</sup><i>D</i><sub>3/2</sub> ↔ 4<sup>2</sup><i>P</i><sub>1/2</sub>) is stroboscopically switched on when the target ion is in the interaction zone to extract photons from the target ion."
+    }
+  },
+  "adjoint": {
+    "source": "https://arxiv.org/abs/2505.08997v1",
+    "license": null,
+    "abstract": [
+      "Trapped-ion quantum computing requires precise optical control for individual qubit manipulation. However, conventional free-space optics face challenges in alignment stability and scalability as the number of qubits increases. Integrated photonics offers a promising alternative, providing miniaturized optical systems on a chip. Here, we propose a design for a multimode photonic circuit integrated with a surface-electrode ion trap capable of targeted and reconfigurable light delivery. Three closely positioned ions can be addressed using a focusing grating coupler that emits multimode light through electrode openings to ions trapped 80 µm above the chip. Simulations show that the couplers achieve diffraction-limited spot with a 4.3 µm beam waist along the trap axis and 2.2 µm perpendicular to the trap axis. Controlled interference of the TE<sub>10</sub> and TE<sub>20</sub> modes results in crosstalk of –20 dB to –30 dB at ion separations of 5-8 µm when addressing ions individually, and down to –60 dB when two of the three ions are addressed simultaneously. Additionally, the higher-order TE modes can offer a novel mechanism for driving spin-motion coupling transitions, potentially enabling alternative approaches to quantum gates and simulations. The proposed integrated platform offers a viable path for constructing large-scale trapped-ion systems, leveraging the benefits of nanophotonic design for precise and reliable ion manipulation."
+    ],
+    "figure": {
+      "src": "/papers/adjoint-fig1.jpg",
+      "width": 1561,
+      "height": 718,
+      "printWidth": 468.3,
+      "sourceLabel": "Figure 1",
+      "caption": "(a) Conceptual illustration of the designed surface trap with ions, integrated waveguides and beam forming elements underneath at multiple zones. Ions are trapped at one of the positions marked by the green dots, H= 80 µm above the electrodes, with appropriate potentials applied to the DC and radio-frequency (RF) electrodes. The distances from the grating to the centerline of the trapping region are denoted as <i>d</i><sub>1</sub> = 30 µm and <i>d</i><sub>2</sub> = 100 µm. Top-left shows the energy-level diagram for <sup>40</sup>Ca<sup>+</sup>. (b) Material stack of final ion trap devices, showing the integrated multimode waveguides and beam forming element beneath the surface-trap electrodes and light diffracting out of the chip by means of an apodized grating. Indium tin oxide (ITO) protects the ions from interface/substrate charging at the cost of reduced out coupling efficiencies."
+    }
+  },
+  "broadband": {
+    "source": "https://arxiv.org/abs/2607.25062v1",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "Trapped ions provide a high-fidelity platform for quantum information processing, yet delivery of multiple, distinct wavelengths across large networks of interaction zones remains a bottleneck. Conventional free-space light delivery lacks scalability, while on-chip grating couplers suffer from narrow operational bandwidth that increases circuit footprint and optical interfacing complexity. Here we show a broadband photonic integrated circuit capable of addressing individual ions. The circuit combines a planar waveguide lens with a micromirror fabricated using two-photon polymerization at wafer scale. This implementation can address three individual ions from <i>λ</i> = 405 – 880 nm with -27 dB average intensity crosstalk at 5 μm pitch. We trap Ca and Ba ions above such devices, characterize optical crosstalk with barium ions, and demonstrate individual repumping of calcium ions. This monolithic photonic architecture brings broadband addressing in an on-chip modality to trapped-ion technology. More generally, integrating additive manufacturing into quantum devices is poised to unlock expanded design space for implementing novel quantum architectures."
+    ],
+    "figure": {
+      "src": "/papers/broadband-fig1.jpg",
+      "width": 2400,
+      "height": 1424,
+      "printWidth": 441,
+      "sourceLabel": "Figure 1",
+      "caption": "<b>Architecture of the 2D-3D PIC. a,</b> Isometric rendering of the device. The photonic layer is made up of an amorphous Al<sub>2</sub>O<sub>3</sub> core with a symmetric SiO<sub>2</sub> cladding, patterned underneath the 200 nm Al surface-electrode layer. In the ion interaction region, a combination of lithographically defined photonics and 2PP-printed optics is used to route and shape the beam delivered to the ion location. <b>b,</b> Side view of the on-chip imaging system. The beam exits from the on-chip planar lens aperture and is focused by the Al-coated reflector to the ion location. <b>c,</b> Top view of the on-chip imaging system. The planar lens expands and collimates the optical mode from the incoming strip waveguides. The mirror focuses the optical energy onto the ion location. Each incoming waveguide is mapped to a different focal spot by the imaging system. <b>d,</b> Optical micrograph of a finished device showing the planar lens, the μ-mirror, and the surrounding surface-trap electrodes. The mirror has the same potential as the center DC electrode. The alignment accuracy achieved between the substrate and the printed mirror is within 1 μm."
+    }
+  }
+}

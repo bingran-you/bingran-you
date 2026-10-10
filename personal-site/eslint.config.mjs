@@ -7,6 +7,9 @@ const eslintConfig = defineConfig([
   ...nextTs,
   // Override default ignores of eslint-config-next.
   globalIgnores([
+    "palace-outer/**",
+    "palace-inner/**",
+    "public/palace/**",
     // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",

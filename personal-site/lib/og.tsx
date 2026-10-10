@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { SITE_HOST } from "@/lib/site";
 
 export const ogSize = { width: 1200, height: 630 } as const;
 export const ogContentType = "image/png" as const;
@@ -37,7 +38,7 @@ export function renderOgImage({
             color: "#a8431c",
           }}
         >
-          {eyebrow ?? "bingran.you"}
+          {eyebrow ?? SITE_HOST}
         </div>
 
         <div
@@ -85,7 +86,7 @@ export function renderOgImage({
         >
           <span>Bingran You · Berkeley, CA</span>
           <span style={{ fontFamily: "ui-monospace, Menlo, monospace" }}>
-            bingran.ai
+            {SITE_HOST}
           </span>
         </div>
       </div>

@@ -158,7 +158,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                         </div>
                         <div style={styles.headerInfo}>
                             <p>Booting palace · 05/2026</p>
-                            <p>BYBIOS (C)2026 bingranyou.com</p>
+                            <p>BYBIOS (C)2026 bingran.ai</p>
                         </div>
                     </div>
                     <div style={styles.body} className="loading-screen-body">

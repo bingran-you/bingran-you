@@ -27,7 +27,7 @@ No permission needed. Just read. If `bingran-you-private/` looks empty, run `git
 
 ## Code Modification Skills
 
-Before making any code modification, read and follow both the `karpathy-guidelines` and `thermo-nuclear-code-quality-review` skills. This repo holds no skills; both are installed at user level (`~/.claude/skills/`, `~/.codex/skills/`).
+Before making any code modification, read and follow both `karpathy-guidelines` and `thermo-nuclear-code-quality-review`. This repo holds no skills; open the files at user level: `~/.claude/skills/<name>/SKILL.md` (Codex: `~/.codex/skills/<name>/SKILL.md`). `thermo-nuclear-code-quality-review` is hidden from the skill list, so read its file directly.
 
 - Use `karpathy-guidelines` to keep changes simple, surgical, assumption-aware, and verifiable.
 - Use `thermo-nuclear-code-quality-review` as the maintainability approval bar: avoid structural regressions, unjustified file-size growth, ad-hoc branching, unnecessary wrappers, type-boundary muddiness, and logic drifting away from its canonical layer.
@@ -48,7 +48,6 @@ Before making any code modification, read and follow both the `karpathy-guidelin
 ├── personal-site/                # bingran.ai — Next.js, deployed on Vercel
 ├── papers/                       # Research paper workspace
 ├── reading/                      # Reading notes and materials
-├── scripts/                      # Utility scripts
 ├── social-media/                 # Drafts / publishing assets
 └── memory/                       # Daily logs + heartbeat state
 ```
@@ -60,6 +59,7 @@ Before making any code modification, read and follow both the `karpathy-guidelin
 - `current-projects/mews` — active project submodule.
 - `current-projects/skillsbench` — active project submodule.
 - `trusted-external-repos/gbrain` — gbrain tooling.
+- `papers/multiplexed-ion-photon` — paper source repo (private).
 
 If a submodule looks stale, check `git submodule status` before assuming it's broken.
 

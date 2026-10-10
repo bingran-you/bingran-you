@@ -29,24 +29,22 @@ Any pasted social post URL ("add this to /posts" / "把这条加到个人网站"
 
 ## Typical workflow
 
-When you do code changes, always follow the `karpathy-guidelines` skill for any coding tasks.
+When you do code changes, follow the two code-quality skills named in `AGENTS.md` ("Code Modification Skills").
 
 For challenging tasks, if the plan is detailed and coherent, you should always try to finish all the requirements instead of asking for permissions, unless your action could bring in-reversible damages.
 
 By default, you should always send a PR and squash merge into main and delete the PR branch when you finish any coding changing stages. And then you can move on to the next stage and do the same process.
 
-When I ask you to do reports / deep research / article review / display or explain any content or concept, if the content is worth sharing, by default you can create a blog post in the website in blog section. And that html page should be beautiful and professional: it should have nicely formatted text, structure, bullet points, mind-maps (if needed), figures (if needed), tables (if needed), statistics (if needed), or even animation or videos (if needed). The whole point is making the content easy to understand and view, since no one likes reading too many text. But do not sacrifice the content itself. The content should always be professional and informative. Please avoid unnecessary filler. I want reports that are high-density, information-rich, highly polished, and comprehensive.
-
 ## Worktree & disk hygiene
 
-The `bingran-you` repo nests many submodules (`trusted-external-repos/*`, `current-projects/*`, `bingran-you-private`). Most of them are large reference repos that a typical task does **not** touch. Watch out for two failure modes that quietly eat tens of GB:
+The `bingran-you` repo nests six submodules (`current-projects/{first-tree,mews,skillsbench}`, `trusted-external-repos/gbrain`, `papers/multiplexed-ion-photon`, `bingran-you-private`). A typical task touches none of them. Watch out for two failure modes that quietly eat disk:
 
-1. **Submodule init blows up the main repo's `.git/worktrees/`.** When a worktree runs `git submodule update --init --recursive`, each submodule's `.git` data lands in `<main-repo>/.git/worktrees/<branch>/modules/<submodule>/`, not in the worktree itself. 50+ worktrees × all-submodules ≈ 15–20G inside the main `.git/`.
+1. **Submodule init blows up the main repo's `.git/worktrees/`.** When a worktree runs `git submodule update --init --recursive`, each submodule's `.git` data lands in `<main-repo>/.git/worktrees/<branch>/modules/<submodule>/`, not in the worktree itself. With many worktrees this adds up inside the main `.git/`.
 2. **Removed worktree directories leave `prunable` metadata behind.** Deleting a worktree folder with `rm -rf` doesn't free the `.git/worktrees/<name>/` slot — only `git worktree remove` or `git worktree prune` does.
 
 Rules:
 
-- **Don't `--recursive` init by default.** Only `git submodule update --init <path>` for the submodules the current task actually needs (usually none). If you don't know, ask — don't preemptively pull 16G of submodule history.
+- **Don't `--recursive` init by default.** Only `git submodule update --init <path>` for the submodules the current task actually needs (usually none). If you don't know, ask — don't preemptively pull submodule history.
 - **Finish a worktree with `git worktree remove <path>`, not `rm -rf`.** That cleans the metadata and submodule `.git` data in one go. If a worktree was already `rm`'d, run `git worktree prune -v` in the main repo to reclaim it.
 - **Periodic hygiene in `~/Downloads/GitHub/bingran-you`:** `git worktree prune -v && git gc --prune=now`. Safe to run anytime; reclaims dead worktree metadata and compacts packs.
 

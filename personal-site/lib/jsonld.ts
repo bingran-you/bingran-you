@@ -99,7 +99,7 @@ function personEntity() {
       "https://huggingface.co/bingran-you",
       "https://www.linkedin.com/in/bingran-you/",
       "https://www.youtube.com/@BingranBRY",
-      "https://discord.gg/jsAnjCep",
+      "https://discord.gg/x2KYk4FVS",
     ],
   };
 }

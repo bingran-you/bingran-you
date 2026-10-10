@@ -54,9 +54,6 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   openGraph: {
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    url: SITE_URL,
     siteName: SITE_NAME,
     locale: "en_US",
     type: "website",
@@ -65,8 +62,6 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     creator: "@bingran_bry",
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
     images: [OG_IMAGE_URL],
   },
   alternates: {

@@ -65,7 +65,7 @@ export type TableCell = {
 export type TableRow = { rule: boolean; cells: TableCell[] };
 
 /**
- * Text and figures copied verbatim from a paper's arXiv version by a script.
+ * Text and figures copied verbatim from a paper's arXiv version.
  * `abstract`, the captions and the table cells are inline HTML limited to
  * <i>, <b>, <sup>, <sub> and <code>.
  */

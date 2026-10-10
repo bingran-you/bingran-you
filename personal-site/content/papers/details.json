@@ -9,11 +9,13 @@
       "src": "/papers/skillsbench-fig1.png",
       "width": 1614,
       "height": 462,
+      "printWidth": 382,
       "sourceLabel": "Figure 1",
       "caption": "Agent architecture stack and resolution rates across 18 model–harness configurations on 87 SkillsBench tasks. Each bar stacks the no-Skills baseline and curated-Skills lift; open/filled interval markers denote 95% CIs for the baseline/total. Bars are ordered by Curated-Skills pass rate and colored by model family. Harness abbreviations: OH = OpenHands, CC = Claude Code, GCLI = Gemini CLI."
     },
     "table": {
       "sourceLabel": "Table 2",
+      "printWidth": 268,
       "caption": "Pass rates (%), absolute gain (Δ, pp), and normalized gain (<i>g</i>, %) across the latest 87-task no-Skills vs. curated-Skills aggregate. Δ and <i>g</i> are computed at full precision; configurations are ordered by Curated-Skills pass rate. The Mean-row <i>g</i> macro-averages per-configuration normalized gains rather than recomputing <i>g</i> from the mean pass rates. Each pass cell uses the fixed 87 × 3 trial frame; per-cell public coverage is reported in Appendix I. Differences from rounded <i>Pass</i> cells may differ by ±0.1 pp.",
       "head": [
         {
@@ -591,11 +593,13 @@
       "src": "/papers/clawsbench-fig1.jpg",
       "width": 1552,
       "height": 858,
+      "printWidth": 367.5,
       "sourceLabel": "Figure 1",
       "caption": "ClawsBench evaluation pipeline. Seed data populates five SQLite-backed mock services; an agent harness, optionally augmented with domain skills and a meta prompt, routes the agent’s API calls. Tasks include both non-safety workflows and safety scenarios that test for harmful actions such as data leakage, unauthorized deletions, and prompt-injection compliance. A state-based evaluator compares pre- and post-execution database snapshots to score each trial; scores are aggregated into Task Success Rate (TSR), Unsafe Action Rate (UAR), and Safe Completion Rate (SCR)."
     },
     "table": {
       "sourceLabel": "Table 4",
+      "printWidth": 323,
       "caption": "Model comparison on OpenClaw at unscaffolded (off/off) and fully scaffolded (on/on) conditions. Sk = Domain Skills; Mt = Meta Prompt. TSR = Task Success Rate (non-safety, ≥ 0.8). UAR = Unsafe Action Rate (safety, &lt; 0). SCR = Safe Completion Rate (safety, ≥ 0.8). Task-level cluster bootstrap 95% CIs in brackets. Full 33-condition results in Table 11 (Appendix).",
       "head": [
         {
@@ -1089,11 +1093,13 @@
       "src": "/papers/benchshield-fig1.png",
       "width": 1949,
       "height": 580,
+      "printWidth": 504.5,
       "sourceLabel": "Figure 1",
       "caption": "Two reward-hacking failures from Terminal-Bench 3 in which an isolated verifier is insufficient. Left: agent-controlled executable content disables a kernel check through the declared patch (I2 → I7). Right: the agent downloads hidden labels and submits answer-derived clusters (I1 → I7). Both runs retain a native reward of 1.00; BenchShield reports <code>AgentViolation</code>."
     },
     "table": {
       "sourceLabel": "Table 3",
+      "printWidth": 367,
       "caption": "Paired static discovery on the same native tasks, adjudicated integrity-link chains, and identical stripped task packages. Recall columns report the union over five trials and the per-trial mean ± standard deviation. <i>Same-vector</i> also requires the reported path to name the channel used by the exploit. <i>Stability</i> is the mean pairwise Jaccard similarity across trials. Cost and wall time are measured per audit with the same model.",
       "head": [
         {
@@ -1368,6 +1374,7 @@
       "src": "/papers/printed-trap-fig1.jpg",
       "width": 2000,
       "height": 1023,
+      "printWidth": 367.3,
       "sourceLabel": "Figure 1",
       "caption": "<b>Paul trap comparison.</b> Schematics and representative pictures of a conventional 3D Paul trap <b>a</b>, a surface trap <b>b</b>, and a 3D-printed vertical Paul trap <b>c</b>. The basic structure of a conventional 3D Paul trap (<b>a</b>) consists of four RF electrodes and two end cap DC electrodes, with a characteristic length scale of 1 mm. It requires precision machining and is thus challenging to scale. Surface traps (<b>b</b>) usually have two RF electrodes with a characteristic length scale on the order of 100 µm and can be produced by microfabrication techniques allowing for large and scalable trap arrays. However, constraining electrodes to a single plane distorts the desired quadrupole potential reducing its efficiency. 3D-printed Paul traps (<b>c</b>) can have four RF electrodes creating a quadrupole field while of similar size and scalability as surface traps."
     }
@@ -1382,6 +1389,7 @@
       "src": "/papers/ramsey-fig1.png",
       "width": 2013,
       "height": 455,
+      "printWidth": 491,
       "sourceLabel": "Figure 1",
       "caption": "<b>Experimental implementation. (a)</b> A <sup>40</sup>Ca<sup>+</sup> ion is trapped using a combination of RF and DC electric fields. In a time-averaged sense, the confinement is well modeled by a 3-dimensional harmonic potential. <b>(b)</b> Motion along the <i>x</i>-direction is excited by resonantly coupling to the internal electronic Zeeman sublevels of the 4<sup>2</sup><i>S</i><sub>1/2</sub> ↔ 3<sup>2</sup><i>D</i><sub>5/2</sub> transition using narrow band light near 729 nm. The degeneracy of the Zeeman states is broken through application of a strong magnetic field of ≈4 G. Measurement is performed by scattering photons of the short-lived 4<sup>2</sup><i>S</i><sub>1/2</sub> ↔ 4<sup>2</sup><i>P</i><sub>1/2</sub>, which are then focused onto an EMCCD camera. <b>(c)</b> The experimental pulse sequence. Pulses that address the qubit are colored gray and those that address the blue sideband, blue. After preparing the state |<i>S</i>,0⟩, the first pair of pulses is used to generate the state |<i>ψ</i>(<i>t</i> = 0)⟩ = |<i>D</i>⟩(<i>α</i><sub>0</sub>|0⟩ + <i>α</i><sub>1</sub>|1⟩). This is then allowed to freely evolve for a time <i>τ</i>, accumulating a relative phase of Φ(<i>τ</i>), which is sensitive to the proposed causal non-linear perturbation. Afterwards, the information is mapped onto the qubit with a blue sideband pulse and then the expectation value of the Pauli spin operator cos(<i>ξ</i><sub><i>L</i></sub>)<i>σ</i><sub><i>x</i></sub> + sin(<i>ξ</i><sub><i>L</i></sub>)<i>σ</i><sub><i>y</i></sub> is measured. <b>(d)</b> An illustration of the two-step process for generating the state |<i>ψ</i>(<i>t</i> = 0)⟩, as described in more detail in the main text. The key feature is the fact that the state |<i>D</i>,0⟩ is transparent to the resonant blue sideband drive as illustrated in <b>(e)</b>. This allows us to map an arbitrary qubit state onto the ground and first excited state of the vibrational mode."
     }
@@ -1396,6 +1404,7 @@
       "src": "/papers/multiplexed-fig1.png",
       "width": 1036,
       "height": 1856,
+      "printWidth": 243,
       "sourceLabel": "Figure 1",
       "caption": "Schematics of multiplexed ion-photon interface. (a) A nine-ion chain is confined in an RF Paul trap. Controlling DC endcap voltages allows for ion transport. A beam of 397 nm and 866 nm light illuminating all ions is used for Doppler cooling. An objective collects the 397 nm single photons and guides them to a 50/50 beamsplitter, followed by a photomultiplier tube on each exit port for photon detection. An 866 nm beam counter-propagates with the single photons and addresses individual ions. (b), (c) Excitation scheme and pulse sequence for the 397 nm single-photon generation. First, a global 397 nm beam prepares the ions in the 3<sup>2</sup><i>D</i><sub>3/2</sub> state. Then, the 866 nm addressing beam (resonant with 3<sup>2</sup><i>D</i><sub>3/2</sub> ↔ 4<sup>2</sup><i>P</i><sub>1/2</sub>) is stroboscopically switched on when the target ion is in the interaction zone to extract photons from the target ion."
     }
@@ -1410,6 +1419,7 @@
       "src": "/papers/adjoint-fig1.jpg",
       "width": 1561,
       "height": 718,
+      "printWidth": 468.3,
       "sourceLabel": "Figure 1",
       "caption": "(a) Conceptual illustration of the designed surface trap with ions, integrated waveguides and beam forming elements underneath at multiple zones. Ions are trapped at one of the positions marked by the green dots, H= 80 µm above the electrodes, with appropriate potentials applied to the DC and radio-frequency (RF) electrodes. The distances from the grating to the centerline of the trapping region are denoted as <i>d</i><sub>1</sub> = 30 µm and <i>d</i><sub>2</sub> = 100 µm. Top-left shows the energy-level diagram for <sup>40</sup>Ca<sup>+</sup>. (b) Material stack of final ion trap devices, showing the integrated multimode waveguides and beam forming element beneath the surface-trap electrodes and light diffracting out of the chip by means of an apodized grating. Indium tin oxide (ITO) protects the ions from interface/substrate charging at the cost of reduced out coupling efficiencies."
     }
@@ -1424,6 +1434,7 @@
       "src": "/papers/broadband-fig1.jpg",
       "width": 2400,
       "height": 1424,
+      "printWidth": 441,
       "sourceLabel": "Figure 1",
       "caption": "<b>Architecture of the 2D-3D PIC. a,</b> Isometric rendering of the device. The photonic layer is made up of an amorphous Al<sub>2</sub>O<sub>3</sub> core with a symmetric SiO<sub>2</sub> cladding, patterned underneath the 200 nm Al surface-electrode layer. In the ion interaction region, a combination of lithographically defined photonics and 2PP-printed optics is used to route and shape the beam delivered to the ion location. <b>b,</b> Side view of the on-chip imaging system. The beam exits from the on-chip planar lens aperture and is focused by the Al-coated reflector to the ion location. <b>c,</b> Top view of the on-chip imaging system. The planar lens expands and collimates the optical mode from the incoming strip waveguides. The mirror focuses the optical energy onto the ion location. Each incoming waveguide is mapped to a different focal spot by the imaging system. <b>d,</b> Optical micrograph of a finished device showing the planar lens, the μ-mirror, and the surrounding surface-trap electrodes. The mirror has the same potential as the center DC electrode. The alignment accuracy achieved between the substrate and the printed mirror is within 1 μm."
     }

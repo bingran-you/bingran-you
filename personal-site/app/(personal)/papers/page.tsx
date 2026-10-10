@@ -4,15 +4,15 @@ import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { papers, TRACK_LABEL, type Track } from "@/lib/content";
 import { graphScriptContent, paperJsonLd } from "@/lib/jsonld";
+import { PERSON } from "@/lib/site";
+
+const venues = [...new Set(papers.map((paper) => paper.venue))];
 
 export const metadata: Metadata = {
   title: "Papers",
-  description:
-    "Selected publications across AI agents and trapped-ion physics.",
+  description: `Papers by ${PERSON.name}: ${venues.join(", ")}.`,
   alternates: { canonical: "/papers" },
 };
-
-const SCHOLAR = "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en";
 
 export default function PapersPage() {
   const jsonLd = graphScriptContent(papers.map(paperJsonLd));
@@ -43,16 +43,6 @@ export default function PapersPage() {
             </ol>
           </section>
         ))}
-        <p className={`${styles.citation} ${styles.entry}`}>
-          <a
-            href={SCHOLAR}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.link}
-          >
-            Google Scholar
-          </a>
-        </p>
       </div>
     </Sheet>
   );

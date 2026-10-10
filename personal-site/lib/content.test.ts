@@ -43,6 +43,18 @@ describe("papers", () => {
     }
   });
 
+  // Figures and tables are set at their printed width, in points. The text
+  // block of a sheet is 521.5 pt wide, so nothing in print is wider.
+  it("records the printed width of every figure and table", () => {
+    for (const paper of papers) {
+      const { figure, table } = getPaperDetail(paper.slug);
+      for (const width of [figure.printWidth, table?.printWidth ?? 1]) {
+        expect(width, paper.slug).toBeGreaterThan(0);
+        expect(width, paper.slug).toBeLessThanOrEqual(521.5);
+      }
+    }
+  });
+
   // The copied text is rendered as HTML, so it may only carry inline markup.
   it("keeps the copied text to inline markup", () => {
     const allowed = new Set(["i", "b", "sup", "sub", "code"]);

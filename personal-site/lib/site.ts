@@ -5,12 +5,22 @@ export const PERSON = {
   name: "Bingran You",
   position: "PhD Candidate in Applied Science & Technology at UC Berkeley",
   field: "Applied Science & Technology",
-  lab: "Haeffner Lab",
-  labHref: "https://ions.berkeley.edu/",
   location: "Berkeley, CA",
   email: "me@bingranyou.com",
   portrait: "/images/profile/bingran-you-portrait.jpg",
 } as const;
+
+/** Where Bingran works now. */
+export const AFFILIATIONS = [
+  { name: "Haeffner Lab, UC Berkeley", href: "https://ions.berkeley.edu/" },
+  { name: "BenchFlow", href: "https://www.benchflow.ai/" },
+] as const;
+
+/** One line for link previews: position and affiliations. */
+export const PERSON_SUMMARY = [
+  PERSON.position,
+  ...AFFILIATIONS.map((affiliation) => affiliation.name),
+].join(" · ");
 
 export const NAV = [
   { href: "/", label: "Home" },

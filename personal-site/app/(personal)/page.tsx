@@ -1,10 +1,13 @@
 import Image from "next/image";
-import Link from "next/link";
 import {
   EducationTable,
-  PaperSection,
+  fitsColumn,
+  PaperFigure,
+  PaperTable,
+  PaperText,
   ProjectsTable,
 } from "@/components/article/blocks";
+import { Front } from "@/components/article/front";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { PalaceCta } from "@/components/palace-cta";
@@ -17,7 +20,7 @@ import {
   type Paper,
 } from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
-import { PERSON, SITE_URL } from "@/lib/site";
+import { PERSON } from "@/lib/site";
 
 type NumberedPaper = {
   paper: Paper;
@@ -38,7 +41,11 @@ function numberPapers(list: Paper[]): NumberedPaper[] {
   }));
 }
 
-/** A paper with a table fills a sheet; two without one share a sheet. */
+/**
+ * A paper with a table fills a sheet; two of a track without one share a
+ * sheet. A paper whose figure is one column wide always opens its sheet, so
+ * the text can run beside the figure.
+ */
 function paginate(list: NumberedPaper[]): NumberedPaper[][] {
   const sheets: NumberedPaper[][] = [];
   for (const entry of list) {
@@ -47,11 +54,47 @@ function paginate(list: NumberedPaper[]): NumberedPaper[][] {
       last?.length === 1 &&
       last[0].paper.track === entry.paper.track &&
       !hasTable(last[0].paper) &&
-      !hasTable(entry.paper);
+      !hasTable(entry.paper) &&
+      !fitsColumn(entry.paper);
     if (shares) last.push(entry);
     else sheets.push([entry]);
   }
   return sheets;
+}
+
+/** A paper down the page: text in two columns, then its figure and table. */
+function Stacked({ paper, figureNumber, tableNumber }: NumberedPaper) {
+  return (
+    <div className={styles.entry}>
+      <PaperText paper={paper} />
+      <PaperFigure paper={paper} number={figureNumber} />
+      {tableNumber ? <PaperTable paper={paper} number={tableNumber} /> : null}
+    </div>
+  );
+}
+
+/**
+ * A paper whose figure is one column wide: the figure stands in the second
+ * column and the text runs beside it, followed by the text of the paper that
+ * shares the sheet. That paper's own figure spans the page underneath.
+ */
+function Spread({ entries }: { entries: NumberedPaper[] }) {
+  const [first, second] = entries;
+  return (
+    <div className={styles.entry}>
+      <div className={styles.spread}>
+        <PaperText paper={first.paper} />
+        <PaperFigure paper={first.paper} number={first.figureNumber} column />
+        {second ? <PaperText paper={second.paper} /> : null}
+      </div>
+      {second ? (
+        <PaperFigure paper={second.paper} number={second.figureNumber} />
+      ) : null}
+      {first.tableNumber ? (
+        <PaperTable paper={first.paper} number={first.tableNumber} />
+      ) : null}
+    </div>
+  );
 }
 
 export default function Home() {
@@ -73,42 +116,7 @@ export default function Home() {
 
       <Sheet current="/">
         <h1 className={styles.title}>{PERSON.name}</h1>
-
-        <div className={styles.front}>
-          <ul className={styles.meta}>
-            <li>
-              <Link href="/" className={styles.link}>
-                {SITE_URL}
-              </Link>
-            </li>
-            <li>
-              <a href={`mailto:${PERSON.email}`} className={styles.link}>
-                {PERSON.email}
-              </a>
-            </li>
-            <li>
-              <a
-                href={PERSON.labHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-              >
-                {PERSON.lab}, UC Berkeley
-              </a>
-            </li>
-            <li>{PERSON.location}</li>
-            <li className={styles.action}>
-              <PalaceCta />
-            </li>
-          </ul>
-
-          <div>
-            <p className={styles.byline}>
-              {TRACK_LABEL.ai} | {TRACK_LABEL.ion}
-            </p>
-            <p className={styles.lead}>{PERSON.position}</p>
-          </div>
-        </div>
+        <Front action={<PalaceCta />} />
 
         <div className={styles.body}>
           <div className={styles.columns}>
@@ -134,22 +142,25 @@ export default function Home() {
         </div>
       </Sheet>
 
-      {sheets.map((entries, i) => (
-        <Sheet key={entries[0].paper.slug} page={i + 2} current="/">
-          {entries.map(({ paper, figureNumber, tableNumber }) => (
-            <div key={paper.slug} className={styles.entry}>
-              {firstOfTrack.has(paper.slug) ? (
-                <h2 className={styles.section}>{TRACK_LABEL[paper.track]}</h2>
-              ) : null}
-              <PaperSection
-                paper={paper}
-                figureNumber={figureNumber}
-                tableNumber={tableNumber}
-              />
-            </div>
-          ))}
-        </Sheet>
-      ))}
+      {sheets.map((entries, i) => {
+        const [first] = entries;
+        return (
+          <Sheet key={first.paper.slug} page={i + 2} current="/">
+            {firstOfTrack.has(first.paper.slug) ? (
+              <h2 className={styles.section}>
+                {TRACK_LABEL[first.paper.track]}
+              </h2>
+            ) : null}
+            {fitsColumn(first.paper) ? (
+              <Spread entries={entries} />
+            ) : (
+              entries.map((entry) => (
+                <Stacked key={entry.paper.slug} {...entry} />
+              ))
+            )}
+          </Sheet>
+        );
+      })}
     </>
   );
 }

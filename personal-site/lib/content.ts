@@ -68,11 +68,15 @@ export type PaperDetail = {
     src: string;
     width: number;
     height: number;
+    /** Width of the figure on the published page, in points. */
+    printWidth: number;
     sourceLabel: string;
     caption: string;
   };
   table?: {
     sourceLabel: string;
+    /** Width of the table on the published page, in points. */
+    printWidth: number;
     caption: string;
     head: TableRow[];
     body: TableRow[];

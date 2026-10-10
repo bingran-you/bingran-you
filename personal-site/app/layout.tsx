@@ -12,7 +12,6 @@ import {
   SITE_DESCRIPTION,
   SITE_KEYWORDS,
   SITE_NAME,
-  SITE_OG_DESCRIPTION,
   SITE_URL,
   websiteJsonLd,
 } from "@/lib/jsonld";
@@ -56,7 +55,7 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   openGraph: {
     title: SITE_NAME,
-    description: SITE_OG_DESCRIPTION,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: "en_US",
@@ -67,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     creator: "@bingran_bry",
     title: SITE_NAME,
-    description: SITE_OG_DESCRIPTION,
+    description: SITE_DESCRIPTION,
     images: [OG_IMAGE_URL],
   },
   alternates: {

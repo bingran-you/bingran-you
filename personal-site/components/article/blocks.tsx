@@ -85,13 +85,24 @@ export function ReferenceItem({
   );
 }
 
-export function DataTable({
-  head,
-  body,
-}: {
+/** Width of one text column, in points. */
+const COLUMN_WIDTH = 255.5;
+
+/** The largest size of a point on screen, in CSS px (`--pt` in the styles). */
+const MAX_PT = 2.05;
+
+/** Hands a printed width, in points, to `.print` and `.fit`. */
+const printWidthStyle = (points: number) =>
+  ({ "--print-width": points }) as React.CSSProperties;
+
+type DataTableProps = {
   head: TableRow[];
   body: TableRow[];
-}) {
+  /** Width of the table on the published page, in points. */
+  width: number;
+};
+
+function DataTable({ head, body, width }: DataTableProps) {
   const cells = (row: TableRow, inHead: boolean) =>
     row.cells.map((cell, i) => {
       const Cell = inHead || cell.header ? "th" : "td";
@@ -109,7 +120,10 @@ export function DataTable({
 
   return (
     <div className={styles.scroll}>
-      <table className={styles.table}>
+      <table
+        className={`${styles.table} ${styles.fit}`}
+        style={printWidthStyle(width)}
+      >
         <thead>
           {head.map((row, i) => (
             <tr key={i}>{cells(row, true)}</tr>
@@ -130,65 +144,22 @@ export function DataTable({
   );
 }
 
-type PaperSectionProps = {
-  paper: Paper;
-  figureNumber: number;
-  /** Set when the paper has a table. */
-  tableNumber?: number;
-};
+/** True when the paper's figure is no wider than a text column in print. */
+export function fitsColumn(paper: Paper): boolean {
+  return getPaperDetail(paper.slug).figure.printWidth <= COLUMN_WIDTH;
+}
 
-/**
- * A paper in its own words: title, reference, abstract, first figure and,
- * where it has one, its main table.
- */
-export function PaperSection({
-  paper,
-  figureNumber,
-  tableNumber,
-}: PaperSectionProps) {
-  const detail = getPaperDetail(paper.slug);
-  const { figure, table } = detail;
-  const beside = figure.height > figure.width;
-  const origin = `arXiv:${paper.arxiv}${detail.license ? ` (${detail.license})` : ""}`;
+/** "arXiv:2602.12670 (CC BY 4.0)": where a paper's text and figure come from. */
+function origin(paper: Paper): string {
+  const { license } = getPaperDetail(paper.slug);
+  return `arXiv:${paper.arxiv}${license ? ` (${license})` : ""}`;
+}
 
-  const text = (
-    <div className={styles.text}>
-      {detail.abstract.map((paragraph) => (
-        <p key={paragraph}>
-          <Verbatim html={paragraph} />
-        </p>
-      ))}
-    </div>
-  );
-
-  const plate = (
-    <figure className={styles.figure}>
-      {/* The figure opens at full size: wide plots are small on a phone. */}
-      <a href={figure.src} target="_blank" rel="noopener noreferrer">
-        <Image
-          src={figure.src}
-          alt={`Fig. ${figureNumber}`}
-          width={figure.width}
-          height={figure.height}
-          sizes={
-            beside
-              ? "(max-width: 760px) 100vw, 540px"
-              : "(max-width: 760px) 100vw, 1100px"
-          }
-        />
-      </a>
-      <figcaption className={styles.caption}>
-        <b>Fig. {figureNumber} | </b>
-        <Verbatim html={figure.caption} />{" "}
-        <span className={styles.credit}>
-          {figure.sourceLabel} of {origin}.
-        </span>
-      </figcaption>
-    </figure>
-  );
-
+/** Title, reference and abstract of a paper, in its own words. */
+export function PaperText({ paper }: { paper: Paper }) {
+  const { abstract } = getPaperDetail(paper.slug);
   return (
-    <article className={styles.paper} id={paper.slug}>
+    <div id={paper.slug}>
       <h3 className={styles.heading}>
         <a
           href={paper.href}
@@ -216,32 +187,83 @@ export function PaperSection({
           </>
         ) : null}
       </p>
-
-      {beside ? (
-        <div className={styles.beside}>
-          {text}
-          {plate}
-        </div>
-      ) : (
-        <>
-          {text}
-          {plate}
-        </>
-      )}
-
-      {table && tableNumber ? (
-        <div className={styles.block}>
-          <p className={styles.tableTitle}>
-            <b>Table {tableNumber} | </b>
-            <Verbatim html={table.caption} />{" "}
-            <span className={styles.credit}>
-              {table.sourceLabel} of {origin}.
-            </span>
+      <div className={styles.text}>
+        {abstract.map((paragraph) => (
+          <p key={paragraph}>
+            <Verbatim html={paragraph} />
           </p>
-          <DataTable head={table.head} body={table.body} />
-        </div>
-      ) : null}
-    </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type PaperFigureProps = {
+  paper: Paper;
+  number: number;
+  /** Set when the figure stands in one text column instead of across both. */
+  column?: boolean;
+};
+
+/** A paper's first figure at its published width, under the paper's caption. */
+export function PaperFigure({
+  paper,
+  number,
+  column = false,
+}: PaperFigureProps) {
+  const { figure } = getPaperDetail(paper.slug);
+  return (
+    <figure
+      className={column ? styles.figure : `${styles.figure} ${styles.spanning}`}
+    >
+      {/* The figure opens at full size: wide plots are small on a phone. */}
+      <a
+        href={figure.src}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.print}
+        style={printWidthStyle(figure.printWidth)}
+      >
+        <Image
+          src={figure.src}
+          alt={`Fig. ${number}`}
+          width={figure.width}
+          height={figure.height}
+          sizes={`(max-width: 760px) 100vw, ${Math.round(figure.printWidth * MAX_PT)}px`}
+        />
+      </a>
+      <figcaption className={styles.caption}>
+        <b>Fig. {number} | </b>
+        <Verbatim html={figure.caption} />{" "}
+        <span className={styles.credit}>
+          {figure.sourceLabel} of {origin(paper)}.
+        </span>
+      </figcaption>
+    </figure>
+  );
+}
+
+/** A paper's main table under its own caption. Renders nothing without one. */
+export function PaperTable({
+  paper,
+  number,
+}: {
+  paper: Paper;
+  number: number;
+}) {
+  const { table } = getPaperDetail(paper.slug);
+  if (!table) return null;
+  return (
+    <div className={styles.block}>
+      <p className={styles.tableTitle}>
+        <b>Table {number} | </b>
+        <Verbatim html={table.caption} />{" "}
+        <span className={styles.credit}>
+          {table.sourceLabel} of {origin(paper)}.
+        </span>
+      </p>
+      <DataTable head={table.head} body={table.body} width={table.printWidth} />
+    </div>
   );
 }
 

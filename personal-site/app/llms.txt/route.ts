@@ -1,6 +1,6 @@
 import { papers, projects } from "@/lib/content";
 import { SITE_DESCRIPTION } from "@/lib/jsonld";
-import { PERSON, SITE_URL as SITE, SOCIALS } from "@/lib/site";
+import { AFFILIATIONS, PERSON, SITE_URL as SITE, SOCIALS } from "@/lib/site";
 
 export const dynamic = "force-static";
 
@@ -13,7 +13,7 @@ export async function GET() {
 
 - Name: ${PERSON.name}
 - Role: PhD Candidate, ${PERSON.field}, UC Berkeley
-- Lab: ${PERSON.lab} (${PERSON.labHref})
+${AFFILIATIONS.map((a) => `- Affiliation: ${a.name} (${a.href})`).join("\n")}
 - Location: Berkeley, California, USA
 - Site: ${SITE}/
 - Email: ${PERSON.email}

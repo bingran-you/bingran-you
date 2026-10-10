@@ -1,23 +1,26 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { EducationTable } from "@/components/article/blocks";
+import { Front } from "@/components/article/front";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
-import { education, TRACK_LABEL } from "@/lib/content";
-import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
+import { education } from "@/lib/content";
+import {
+  jsonLdScriptContent,
+  profilePageJsonLd,
+  SITE_DESCRIPTION,
+} from "@/lib/jsonld";
 import { PERSON, SOCIALS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Bingran You — PhD candidate at UC Berkeley working on reliable AI systems and trapped-ion experiments in atomic, molecular and optical physics.",
+  description: SITE_DESCRIPTION,
   alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {
   const contacts = [
     { label: "E-mail", value: PERSON.email, href: `mailto:${PERSON.email}` },
-    { label: "Lab", value: `${PERSON.lab}, UC Berkeley`, href: PERSON.labHref },
     ...SOCIALS.map((social) => ({
       label: social.label,
       value: social.href.replace(/^https?:\/\/(www\.)?/, ""),
@@ -34,17 +37,7 @@ export default function AboutPage() {
         }}
       />
       <h1 className={styles.title}>{PERSON.name}</h1>
-
-      <div className={styles.front}>
-        <ul className={styles.meta}>
-          <li>{TRACK_LABEL.ai}</li>
-          <li>{TRACK_LABEL.ion}</li>
-          <li>{PERSON.location}</li>
-        </ul>
-        <div>
-          <p className={styles.lead}>{PERSON.position}</p>
-        </div>
-      </div>
+      <Front />
 
       <div className={styles.body}>
         <div className={styles.columns}>
@@ -82,7 +75,7 @@ export default function AboutPage() {
             </div>
           </div>
           <figure className={styles.figure}>
-            <div className={styles.plate}>
+            <div className={`${styles.plate} ${styles.square}`}>
               <Image
                 src={PERSON.portrait}
                 alt={PERSON.name}

@@ -4,11 +4,13 @@ import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { projects } from "@/lib/content";
 import { graphScriptContent, projectJsonLd } from "@/lib/jsonld";
+import { PERSON } from "@/lib/site";
+
+const names = projects.map((project) => project.name);
 
 export const metadata: Metadata = {
   title: "Projects",
-  description:
-    "Selected projects across AI systems and trapped-ion experiments.",
+  description: `Projects by ${PERSON.name}: ${names.join(", ")}.`,
   alternates: { canonical: "/projects" },
 };
 

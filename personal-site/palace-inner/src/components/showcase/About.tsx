@@ -16,6 +16,7 @@ const About: React.FC<AboutProps> = () => {
                 </p>
                 <br />
                 <p>Haeffner Lab, UC Berkeley</p>
+                <p>BenchFlow</p>
                 <p>Berkeley, CA</p>
                 <p>
                     <a href="mailto:me@bingranyou.com">me@bingranyou.com</a>

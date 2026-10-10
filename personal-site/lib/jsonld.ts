@@ -4,9 +4,7 @@ import { SITE_URL } from "@/lib/site";
 export { SITE_URL };
 export const SITE_NAME = "Bingran You";
 export const SITE_DESCRIPTION =
-  "Bingran You — PhD candidate at UC Berkeley building reliable AI systems and running trapped-ion experiments in atomic, molecular and optical physics.";
-export const SITE_OG_DESCRIPTION =
-  "Bingran You — PhD candidate at UC Berkeley. Reliable AI systems × trapped-ion atomic, molecular and optical physics.";
+  "Bingran You — PhD Candidate in Applied Science & Technology at UC Berkeley, working in the Haeffner Lab and at BenchFlow.";
 export const OG_IMAGE_URL = `${SITE_URL}/images/profile/bingran-you-portrait.jpg`;
 export const PERSON_ID = `${SITE_URL}#person`;
 export const WEBSITE_ID = `${SITE_URL}#website`;
@@ -27,6 +25,23 @@ export const SITE_KEYWORDS = [
   "UC Berkeley",
   "Haeffner Lab",
 ] as const;
+
+const haeffnerLab = {
+  "@type": "Organization" as const,
+  name: "Haeffner Lab, University of California, Berkeley",
+  url: "https://ions.berkeley.edu/",
+  parentOrganization: {
+    "@type": "CollegeOrUniversity" as const,
+    name: "University of California, Berkeley",
+    sameAs: "https://www.berkeley.edu/",
+  },
+};
+
+const benchflow = {
+  "@type": "Organization" as const,
+  name: "BenchFlow",
+  url: "https://www.benchflow.ai/",
+};
 
 const author = {
   "@type": "Person" as const,
@@ -65,21 +80,8 @@ function personEntity() {
         sameAs: "https://english.ucas.ac.cn/",
       },
     ],
-    affiliation: {
-      "@type": "Organization",
-      name: "Haeffner Lab, University of California, Berkeley",
-      url: "https://ions.berkeley.edu/",
-    },
-    worksFor: {
-      "@type": "Organization",
-      name: "Haeffner Lab, University of California, Berkeley",
-      url: "https://ions.berkeley.edu/",
-      parentOrganization: {
-        "@type": "CollegeOrUniversity",
-        name: "University of California, Berkeley",
-        sameAs: "https://www.berkeley.edu/",
-      },
-    },
+    affiliation: [haeffnerLab, benchflow],
+    worksFor: [haeffnerLab, benchflow],
     knowsAbout: [
       "Reliable AI Systems",
       "AI Agents",

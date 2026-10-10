@@ -3,11 +3,11 @@ import { getAllPosts } from "@/lib/posts";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { PostCard } from "@/components/post-card";
+import { PERSON } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Posts",
-  description:
-    "Things I've posted across YouTube, X, Xiaohongshu, Bilibili and elsewhere — all in one place, newest first.",
+  description: `Posts by ${PERSON.name} on X, Xiaohongshu, YouTube and Bilibili.`,
   alternates: { canonical: "/posts" },
 };
 

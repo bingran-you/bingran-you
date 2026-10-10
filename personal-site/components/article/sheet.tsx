@@ -2,7 +2,7 @@ import Link from "next/link";
 import { NAV, PERSON, SITE_HOST, SOCIALS } from "@/lib/site";
 import styles from "./article.module.css";
 
-export function EnvelopeIcon() {
+function EnvelopeIcon() {
   return (
     <svg viewBox="0 0 12 9" aria-hidden className={styles.envelope}>
       <rect
@@ -19,7 +19,7 @@ export function EnvelopeIcon() {
 }
 
 /** The e-mail address and the profile links, as the footnote of a title page. */
-export function Contacts() {
+function Contacts() {
   return (
     <>
       <EnvelopeIcon />
@@ -50,22 +50,18 @@ type SheetProps = {
   page?: number;
   /** Route this sheet belongs to, to mark it in the navigation. */
   current: string;
-  /** Footnote above the page number. Defaults to the contacts on page 1. */
-  footnotes?: React.ReactNode;
   children: React.ReactNode;
 };
 
 /**
- * One sheet of paper: margin rule, running head, content, page number. The
- * whole site is set as one article, so every left-hand page is headed alike.
+ * One sheet of paper: margin rule, head rule, content, page number. The whole
+ * site is set as one article, so every left-hand page is headed alike and the
+ * first page carries the contacts as its footnote.
  */
-export function Sheet({ page = 1, current, footnotes, children }: SheetProps) {
+export function Sheet({ page = 1, current, children }: SheetProps) {
   const first = page === 1;
   const recto = page % 2 === 0;
   const year = new Date().getFullYear();
-  const note = footnotes ?? (first ? <Contacts /> : null);
-
-  const pageClass = recto ? `${styles.page} ${styles.recto}` : styles.page;
 
   const number = <b key="page">{page}</b>;
   const imprint = [
@@ -82,9 +78,7 @@ export function Sheet({ page = 1, current, footnotes, children }: SheetProps) {
 
   return (
     <div className={styles.sheet}>
-      <div className={pageClass}>
-        <span className={styles.spine} aria-hidden />
-
+      <div className={recto ? `${styles.page} ${styles.recto}` : styles.page}>
         {recto ? null : (
           <header className={styles.runningHead}>
             <p className={styles.kind}>Article</p>
@@ -104,10 +98,14 @@ export function Sheet({ page = 1, current, footnotes, children }: SheetProps) {
           </header>
         )}
 
-        <div className={styles.content}>{children}</div>
+        {children}
 
         <footer className={styles.footer}>
-          {note ? <p className={styles.footnotes}>{note}</p> : null}
+          {first ? (
+            <p className={styles.footnotes}>
+              <Contacts />
+            </p>
+          ) : null}
           <p className={styles.folio}>
             {recto ? [...imprint, number] : [number, ...imprint]}
           </p>

@@ -38,12 +38,21 @@ export type Paper = {
   href: string;
   /** Short tag shown beside the title, e.g. "NeurIPS 2026". */
   venue: string;
-  /** Reference-style author list. */
+  /** Reference-style author list. A co-first author carries CO_FIRST_MARK. */
   authors: string;
   reference: PaperReference;
   arxiv: string;
   track: Track;
 };
+
+/** Follows the name of every author who contributed equally as first author. */
+export const CO_FIRST_MARK = "*";
+
+export const hasCoFirstAuthors = (paper: Paper) =>
+  paper.authors.includes(CO_FIRST_MARK);
+
+/** Explains the mark wherever marked author lists are shown. */
+export const CO_FIRST_NOTE = `${CO_FIRST_MARK}These authors contributed equally.`;
 
 export type TableCell = {
   html: string;
@@ -185,7 +194,7 @@ export const papers: Paper[] = [
       "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
     href: "https://arxiv.org/abs/2602.12670",
     venue: "NeurIPS 2026",
-    authors: "Li, X., Liu, Y., Chen, W., You, B. et al.",
+    authors: "Li, X.*, Liu, Y.*, Chen, W.*, You, B.* et al.",
     reference: { kind: "conference", name: "NeurIPS", year: 2026 },
     arxiv: "2602.12670",
     track: "ai",
@@ -196,7 +205,8 @@ export const papers: Paper[] = [
       "ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces",
     href: "https://arxiv.org/abs/2604.05172",
     venue: "COLM 2026",
-    authors: "Li, X., Choe, K. W., Liu, Y., Chen, X., Tao, C., You, B. et al.",
+    authors:
+      "Li, X.*, Choe, K. W.*, Liu, Y., Chen, X., Tao, C., You, B. et al.",
     reference: { kind: "conference", name: "COLM", year: 2026 },
     arxiv: "2604.05172",
     track: "ai",
@@ -219,7 +229,7 @@ export const papers: Paper[] = [
     href: "https://www.nature.com/articles/s41586-025-09474-1",
     venue: "Nature",
     authors:
-      "Xu, S., Xia, X., Yu, Q., Parakh, A., Khan, S., Megidish, E., You, B. et al.",
+      "Xu, S.*, Xia, X.*, Yu, Q., Parakh, A., Khan, S., Megidish, E., You, B. et al.",
     reference: {
       kind: "journal",
       journal: "Nature",
@@ -255,7 +265,7 @@ export const papers: Paper[] = [
     href: "https://doi.org/10.1103/ppm8-8kx5",
     venue: "Phys. Rev. Applied",
     authors:
-      "You, B., Wu, Q., Miron, D., Ke, W., Monga, I., Saglamyurek, E. & Haeffner, H.",
+      "You, B.*, Wu, Q.*, Miron, D., Ke, W., Monga, I., Saglamyurek, E. & Haeffner, H.",
     reference: {
       kind: "journal",
       journal: "Phys. Rev. Appl.",
@@ -290,7 +300,8 @@ export const papers: Paper[] = [
       "A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control",
     href: "https://arxiv.org/abs/2607.25062",
     venue: "arXiv",
-    authors: "Klawson, D., Zhi, Y., You, B. et al.",
+    authors:
+      "Klawson, D.*, Zhi, Y.*, You, B.*, Bareian, M.*, Mossman, E.* et al.",
     reference: { kind: "preprint", year: 2026 },
     arxiv: "2607.25062",
     track: "ion",

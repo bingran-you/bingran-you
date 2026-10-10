@@ -12,8 +12,10 @@ import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { PalaceCta } from "@/components/palace-cta";
 import {
+  CO_FIRST_NOTE,
   education,
   getPaperDetail,
+  hasCoFirstAuthors,
   papers,
   projects,
   TRACK_LABEL,
@@ -144,8 +146,14 @@ export default function Home() {
 
       {sheets.map((entries, i) => {
         const [first] = entries;
+        const coFirst = entries.some(({ paper }) => hasCoFirstAuthors(paper));
         return (
-          <Sheet key={first.paper.slug} page={i + 2} current="/">
+          <Sheet
+            key={first.paper.slug}
+            page={i + 2}
+            current="/"
+            footnote={coFirst ? CO_FIRST_NOTE : undefined}
+          >
             {firstOfTrack.has(first.paper.slug) ? (
               <h2 className={styles.section}>
                 {TRACK_LABEL[first.paper.track]}

@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { ReferenceItem } from "@/components/article/blocks";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
-import { papers, TRACK_LABEL, type Track } from "@/lib/content";
+import {
+  CO_FIRST_NOTE,
+  hasCoFirstAuthors,
+  papers,
+  TRACK_LABEL,
+  type Track,
+} from "@/lib/content";
 import { graphScriptContent, paperJsonLd } from "@/lib/jsonld";
 import { PERSON } from "@/lib/site";
 
@@ -19,7 +25,10 @@ export default function PapersPage() {
   const tracks = Object.keys(TRACK_LABEL) as Track[];
 
   return (
-    <Sheet current="/papers">
+    <Sheet
+      current="/papers"
+      footnote={papers.some(hasCoFirstAuthors) ? CO_FIRST_NOTE : undefined}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}

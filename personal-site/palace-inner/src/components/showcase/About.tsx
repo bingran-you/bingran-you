@@ -12,7 +12,8 @@ const About: React.FC<AboutProps> = () => {
             <br />
             <div className="text-block">
                 <p>
-                    <b>Agentic Builder</b> &nbsp;·&nbsp; <b>Ion Trapper</b>
+                    <b>Agent Evaluation</b> &nbsp;·&nbsp;{' '}
+                    <b>Experimental AMO Physics</b>
                 </p>
                 <br />
                 <p>Haeffner Lab, UC Berkeley</p>

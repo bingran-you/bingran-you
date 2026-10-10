@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { getPaperDetail, papers, projects } from "./content";
+import { CO_FIRST_MARK, getPaperDetail, papers, projects } from "./content";
 
 describe("projects", () => {
   it("leads with FrontierPhysics", () => {
@@ -41,6 +41,27 @@ describe("papers", () => {
       );
       expect(existsSync(file), detail.figure.src).toBe(true);
     }
+  });
+
+  // From each paper's own note on equal contribution. BenchShield, the Ramsey
+  // test and the adjoint paper name no co-first authors.
+  it("marks the co-first authors of each paper", () => {
+    const marked = Object.fromEntries(
+      papers.map((paper) => [
+        paper.slug,
+        paper.authors.split(CO_FIRST_MARK).length - 1,
+      ]),
+    );
+    expect(marked).toEqual({
+      skillsbench: 4,
+      clawsbench: 2,
+      benchshield: 0,
+      "printed-trap": 2,
+      ramsey: 0,
+      multiplexed: 2,
+      adjoint: 0,
+      broadband: 5,
+    });
   });
 
   // Figures and tables are set at their printed width, in points. The text

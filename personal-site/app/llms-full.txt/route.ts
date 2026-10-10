@@ -1,4 +1,10 @@
-import { education, getPaperDetail, papers, projects } from "@/lib/content";
+import {
+  CO_FIRST_NOTE,
+  education,
+  getPaperDetail,
+  papers,
+  projects,
+} from "@/lib/content";
 import { SITE_DESCRIPTION } from "@/lib/jsonld";
 import { AFFILIATIONS, PERSON, SITE_URL as SITE, SOCIALS } from "@/lib/site";
 
@@ -37,6 +43,8 @@ ${education
   .join("\n")}
 
 ## Selected papers
+
+${CO_FIRST_NOTE}
 
 ${papers
   .map(

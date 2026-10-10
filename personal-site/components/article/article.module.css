@@ -439,6 +439,9 @@
   grid-template-columns: calc(var(--pt) * 14) minmax(0, 1fr);
   break-inside: avoid;
 }
+.heading + .references {
+  margin-top: calc(var(--pt) * 3);
+}
 .references li:target {
   background: #fff6c7;
 }

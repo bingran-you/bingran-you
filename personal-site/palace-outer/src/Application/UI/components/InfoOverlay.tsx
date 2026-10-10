@@ -8,7 +8,9 @@ interface InfoOverlayProps {
 }
 
 const NAME_TEXT = 'Bingran You';
-const TITLE_TEXT = 'Agent Evaluation · Experimental AMO Physics';
+// The overlay is 256px wide. The second label is kept whole with no-break
+// spaces, so the title wraps after the dot into one label per line.
+const TITLE_TEXT = 'Agent Evaluation · Experimental\u00a0AMO\u00a0Physics';
 const MULTIPLIER = 1;
 
 const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {

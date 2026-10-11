@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TRACK_LABEL } from "@/lib/content";
 import { AFFILIATIONS, PERSON, SITE_URL } from "@/lib/site";
+import { Bar } from "./inline";
 import styles from "./article.module.css";
 
 /**
@@ -28,7 +29,7 @@ export function Front({ action }: { action?: React.ReactNode }) {
 
       <div>
         <p className={styles.byline}>
-          {TRACK_LABEL.ai} | {TRACK_LABEL.ion}
+          {TRACK_LABEL.ai} <Bar /> {TRACK_LABEL.ion}
         </p>
         <div className={styles.lead}>
           <p>{PERSON.position}</p>

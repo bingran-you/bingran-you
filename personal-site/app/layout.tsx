@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import {
-  Hanken_Grotesk,
-  Noto_Serif_SC,
-  Source_Serif_4,
-} from "next/font/google";
 import "./globals.css";
+import "./fonts";
 import {
   jsonLdScriptContent,
   OG_IMAGE_URL,
@@ -15,35 +11,6 @@ import {
   SITE_URL,
   websiteJsonLd,
 } from "@/lib/jsonld";
-
-// Text face: an open serif with optical sizes, set like a journal's body.
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
-  display: "swap",
-});
-
-// Label face: metadata rows, tables, references and the navigation.
-const hanken = Hanken_Grotesk({
-  variable: "--font-hanken",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-// Noto Serif SC pairs with Source Serif for harmonious Han + Latin display.
-// subsets: ["latin"] only controls preload hints; CJK glyphs are still
-// served via unicode-range and lazy-loaded when Chinese characters render.
-// preload: false — most pages have no Chinese, so don't waste a preload slot.
-const notoSerifSC = Noto_Serif_SC({
-  variable: "--font-noto-serif-sc",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  preload: false,
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -80,7 +47,11 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#e8e9eb",
+  // The dark desk of the paged layout; narrower windows are all paper.
+  themeColor: [
+    { media: "(min-width: 900px)", color: "#282828" },
+    { media: "(max-width: 899.98px)", color: "#e8e9eb" },
+  ],
 };
 
 export default function RootLayout({
@@ -89,10 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${sourceSerif.variable} ${hanken.variable} ${notoSerifSC.variable} h-full antialiased`}
-    >
+    <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <script
           type="application/ld+json"

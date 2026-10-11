@@ -15,9 +15,9 @@ export default async function PostsPage() {
   const posts = await getAllPosts();
 
   return (
-    <Sheet current="/posts">
+    <Sheet current="/posts" tall>
       <h1 className={styles.title}>Posts</h1>
-      <div className={`${styles.body} font-sans`}>
+      <div className={`${styles.body} ${styles.plain} font-sans`}>
         {posts.length === 0 ? (
           <p className="text-sm text-[var(--muted)]">Nothing here yet.</p>
         ) : (

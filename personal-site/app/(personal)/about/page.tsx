@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { EducationTable } from "@/components/article/blocks";
+import { EducationTable, Portrait } from "@/components/article/blocks";
 import { Front } from "@/components/article/front";
+import { Bar, InlineContent } from "@/components/article/inline";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
+import tables from "@/components/article/table.module.css";
+import { PORTRAIT_CAPTION } from "@/lib/article";
 import { education } from "@/lib/content";
 import {
   jsonLdScriptContent,
@@ -44,14 +46,16 @@ export default function AboutPage() {
           <div>
             <EducationTable number={1} items={education} />
             <div className={styles.block}>
-              <p className={styles.tableTitle}>
-                <b>Table 2 | Contact</b>
+              <p className={tables.tableTitle}>
+                <b>
+                  Table 2 <Bar /> Contact
+                </b>
               </p>
-              <table className={styles.table}>
+              <table className={tables.table}>
                 <tbody>
                   {contacts.map((contact) => (
                     <tr key={contact.label}>
-                      <th scope="row" className={styles.nowrap}>
+                      <th scope="row" className={tables.nowrap}>
                         {contact.label}
                       </th>
                       <td>
@@ -75,17 +79,9 @@ export default function AboutPage() {
             </div>
           </div>
           <figure className={styles.figure}>
-            <div className={`${styles.plate} ${styles.square}`}>
-              <Image
-                src={PERSON.portrait}
-                alt={PERSON.name}
-                fill
-                priority
-                sizes="(max-width: 760px) 100vw, 560px"
-              />
-            </div>
+            <Portrait square />
             <figcaption className={styles.caption}>
-              <b>Fig. 1 | {PERSON.name}.</b>
+              <InlineContent nodes={PORTRAIT_CAPTION} />
             </figcaption>
           </figure>
         </div>

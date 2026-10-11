@@ -60,6 +60,8 @@ type SheetProps = {
   footnote?: React.ReactNode;
   /** Set where the sheet is not one page but as tall as its content. */
   tall?: boolean;
+  /** In points, where the sheet is a page that ends under its content. */
+  length?: number;
   children: React.ReactNode;
 };
 
@@ -73,6 +75,7 @@ export function Sheet({
   current,
   footnote,
   tall = false,
+  length,
   children,
 }: SheetProps) {
   const first = page === 1;
@@ -93,7 +96,14 @@ export function Sheet({
   ];
 
   return (
-    <div className={tall ? `${styles.sheet} ${styles.tall}` : styles.sheet}>
+    <div
+      className={tall ? `${styles.sheet} ${styles.tall}` : styles.sheet}
+      style={
+        length
+          ? ({ "--page-length": length } as React.CSSProperties)
+          : undefined
+      }
+    >
       <div className={recto ? `${styles.page} ${styles.recto}` : styles.page}>
         {recto ? null : (
           <header className={styles.runningHead}>

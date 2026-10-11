@@ -22,6 +22,13 @@ const place = ({ x, y, w }: Piece, more?: Record<string, number>) =>
 const classNames = (...names: (string | false | undefined)[]) =>
   names.filter(Boolean).join(" ");
 
+type TextLinesProps = {
+  block: TextBlock;
+  piece: TextPiece;
+  /** Set where a rule is drawn above the piece. */
+  ruled: boolean;
+};
+
 /**
  * Lines of a text block as the typesetter broke them, in one flow of text.
  * Each line is a span that cannot wrap. Between two of them stands the
@@ -33,7 +40,7 @@ const classNames = (...names: (string | false | undefined)[]) =>
  * leaves no break in a copy of the text between blocks that are placed
  * themselves.
  */
-function TextLines({ block, piece }: { block: TextBlock; piece: TextPiece }) {
+function TextLines({ block, piece, ruled }: TextLinesProps) {
   const Tag = TEXT_TAG[block.kind];
   const text = inlineText(block.content);
   const opens = piece.lines[0][0] === 0;
@@ -41,7 +48,7 @@ function TextLines({ block, piece }: { block: TextBlock; piece: TextPiece }) {
   const runsOn = piece.lines[count - 1][1] < text.length;
   return (
     <div
-      className={paged.piece}
+      className={classNames(paged.piece, ruled && paged.ruled)}
       style={place(piece, {
         "--leading": LEADING[block.kind],
         ...(block.label ? { "--hang": REFERENCE_INDENT } : null),
@@ -97,7 +104,11 @@ type PagesProps = {
   footnote?: React.ReactNode;
 };
 
-/** An article in pages: each piece of its layout where it was typeset. */
+/**
+ * An article in pages: each piece of its layout where it was typeset. The
+ * title of a paper stands under a rule, which is the head rule where the
+ * title opens a page. The sheet of the last page ends under its content.
+ */
 export function Pages({ blocks, layout, current, footnote }: PagesProps) {
   const byId = blocksById(blocks);
   return layout.pages.map((pieces, i) => (
@@ -106,12 +117,16 @@ export function Pages({ blocks, layout, current, footnote }: PagesProps) {
       page={i + 1}
       current={current}
       footnote={i === 0 ? footnote : undefined}
+      length={i === layout.pages.length - 1 ? layout.length : undefined}
     >
-      {pieces.map((piece) => {
+      {pieces.map((piece, n) => {
         const block = byId.get(piece.block);
         if (block && isText(block) && isTextPiece(piece)) {
           const key = `${block.id}:${piece.lines[0][0]}`;
-          return <TextLines key={key} block={block} piece={piece} />;
+          const ruled = block.kind === "heading" && n > 0;
+          return (
+            <TextLines key={key} block={block} piece={piece} ruled={ruled} />
+          );
         }
         if (block && !isText(block) && !isTextPiece(piece)) {
           const style = place(piece, { "--h": piece.h });

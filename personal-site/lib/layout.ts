@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import layout from "@/content/layout/home.json";
+import sheets from "@/content/layout/sheets.json";
 import { homeArticle } from "@/lib/article";
 import {
   CO_FIRST_NOTE,
@@ -16,11 +17,15 @@ import { AFFILIATIONS, NAV, PERSON, SOCIALS } from "@/lib/site";
 /**
  * What the proof of the home article is rendered from and read by: the
  * faces, the type and the page, the components of the proof view, and the
- * typesetter. Each of them decides where a line breaks or how tall a box is.
+ * typesetter. Each of them decides where a line breaks or how tall a box
+ * is. The routes the typesetter measures the sheets of are among them.
  */
 const TYPESET_BY = [
   "app/fonts.ts",
   "app/(personal)/proof/page.tsx",
+  "app/(personal)/about/page.tsx",
+  "app/(personal)/papers/page.tsx",
+  "app/(personal)/projects/page.tsx",
   "components/article/article.module.css",
   "components/article/table.module.css",
   "components/article/blocks.tsx",
@@ -70,4 +75,13 @@ export function homeLayout(): Layout {
     );
   }
   return layout as Layout;
+}
+
+/**
+ * How long, in points, the one sheet of a route is that ends under its
+ * content. scripts/typeset.mjs measures it and records it with the hash of
+ * the layout, which a test compares.
+ */
+export function sheetLength(route: keyof typeof sheets.lengths): number {
+  return sheets.lengths[route];
 }

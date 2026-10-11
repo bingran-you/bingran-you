@@ -19,6 +19,17 @@
 .piece {
   top: calc(var(--pt) * (var(--y) - var(--leading)));
 }
+/* The rule a paper opens under runs across its title, centred a leading
+   above the first baseline: on the top of the piece. */
+.ruled::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--hair) / -2);
+  right: 0;
+  left: 0;
+  height: calc(var(--pt) * 1);
+  background: var(--rule-above);
+}
 /* The lines of a piece are one flow of text. A line cannot wrap, and the
    text can only break between two of them: where it was typeset to. */
 .line {

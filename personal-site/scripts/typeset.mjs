@@ -2,7 +2,10 @@
 // Typeset the home article. Loads the proof view (/proof) from a running
 // development server in headless Chrome, reads back where the browser broke
 // every line and how tall every box is, paginates (lib/paginate.ts) and
-// writes content/layout/home.json.
+// writes content/layout/home.json. Where a column would end on a broken
+// word it keeps the word whole and sets the article again. Then measures
+// the routes whose one sheet ends under its content, and writes how long
+// each sheet is to content/layout/sheets.json.
 //
 //   npm run dev                                  in another terminal
 //   npm run typeset [-- http://localhost:3000]
@@ -21,6 +24,11 @@ const CHROME =
 const OUTPUT = fileURLToPath(
   new URL("../content/layout/home.json", import.meta.url),
 );
+const SHEETS_OUTPUT = fileURLToPath(
+  new URL("../content/layout/sheets.json", import.meta.url),
+);
+// The routes that lie on one sheet each, which ends under its content.
+const SHEETS = ["about", "projects", "papers"];
 // The result does not depend on it: the proof is laid out at the size of a
 // full sheet in any window that is not narrow enough for the fluid column.
 const VIEWPORT = { width: 1440, height: 900 };
@@ -34,8 +42,9 @@ const LOOSEST = 1.33;
  * lines of every text block and the height of every box, in points.
  * `textWidth` and `leading` (per kind of text) are what the paginator
  * assumes: a proof that is set otherwise is refused. `loosest` is LOOSEST.
+ * `whole` lists, by block, characters whose words are not to be broken.
  */
-async function measure({ textWidth, leading, loosest }) {
+async function measure({ textWidth, leading, loosest, whole }) {
   await document.fonts.ready;
   const proof = document.querySelector("[data-proof]");
   if (!proof) throw new Error("This page is not the proof view.");
@@ -234,6 +243,14 @@ async function measure({ textWidth, leading, loosest }) {
       return hyphen && (run || compound || stub);
     });
 
+  // Keeps the word around character `at` of a block whole, or fails.
+  const keepWhole = (element, at) => {
+    if (unbreak(element, at)) return;
+    throw new Error(
+      `${element.dataset.block}: the word at character ${at} runs across markup and cannot be kept whole.`,
+    );
+  };
+
   // The lines of a block: the word an unwanted break is in is kept whole,
   // and the block is read again.
   const linesOf = (element) => {
@@ -241,15 +258,12 @@ async function measure({ textWidth, leading, loosest }) {
     if (!loaded.has(faceOf(element))) {
       throw new Error(`${id}: the font ${faceOf(element)} did not load.`);
     }
+    for (const at of whole[id] ?? []) keepWhole(element, at);
     for (;;) {
       const lines = readLines(element);
       const broken = unwanted(element.textContent, lines);
       if (!broken) return tracked(element, lines);
-      if (!unbreak(element, broken[1])) {
-        throw new Error(
-          `${id}: the word at character ${broken[1]} runs across markup and cannot be kept whole.`,
-        );
-      }
+      keepWhole(element, broken[1]);
     }
   };
 
@@ -266,6 +280,23 @@ async function measure({ textWidth, leading, loosest }) {
   const rise = baseline(footnotes, "append") - baseline(footnotes, "prepend");
 
   return { hash: proof.dataset.proof, footnotes: points(rise), blocks };
+}
+
+/**
+ * Runs in a route that lies on one sheet. Returns how long the sheet is to
+ * be, in points, to end under its content: `--foot` of the styles under
+ * the last thing that stands above the foot of the page. `pageWidth` is
+ * the width of a page in points.
+ */
+async function sheetLength(pageWidth) {
+  await document.fonts.ready;
+  const foot = document.querySelector("footer");
+  const page = foot.parentElement;
+  const { top, width } = page.getBoundingClientRect();
+  const { bottom } = foot.previousElementSibling.getBoundingClientRect();
+  const under = Number(getComputedStyle(page).getPropertyValue("--foot"));
+  const length = ((bottom - top) * pageWidth) / width + under;
+  return Math.round(length * 100) / 100;
 }
 
 /** Opens `url` in headless Chrome and returns what `fn(argument)` returns there. */
@@ -370,13 +401,14 @@ async function evaluateIn(url, fn, argument) {
 }
 
 /** One piece per line, so a change of layout reads as a change of lines. */
-function serialize({ hash, pages }) {
+function serialize({ hash, length, pages }) {
   const list = (items, indent) => items.join(`,\n${indent}`);
   const page = (pieces) =>
     `[\n   ${list(pieces.map((piece) => JSON.stringify(piece)), "   ")}\n  ]`;
   return [
     "{",
     ` "hash": ${JSON.stringify(hash)},`,
+    ` "length": ${length},`,
     ' "pages": [',
     `  ${list(pages.map(page), "  ")}`,
     " ]",
@@ -385,19 +417,52 @@ function serialize({ hash, pages }) {
   ].join("\n");
 }
 
-const proof = await evaluateIn(`${ORIGIN}/proof`, measure, {
-  textWidth: PAGE.textWidth,
-  leading: LEADING,
-  loosest: LOOSEST,
-});
-const { layout, fills } = paginate(proof);
+/**
+ * Sets the article and makes up its pages. No column ends on a broken
+ * word: where the pages leave one there, the word is added to `whole` and
+ * the article is set again.
+ */
+async function typeset(whole = {}) {
+  const proof = await evaluateIn(`${ORIGIN}/proof`, measure, {
+    textWidth: PAGE.textWidth,
+    leading: LEADING,
+    loosest: LOOSEST,
+    whole,
+  });
+  const result = paginate(proof);
+  const broken = result.layout.pages
+    .flat()
+    .filter(({ lines }) => lines?.at(-1)[2] === 1);
+  if (broken.length === 0) return result;
+  for (const { block, lines } of broken) {
+    (whole[block] ??= []).push(lines.at(-1)[1]);
+  }
+  return typeset(whole);
+}
+
+const { layout, fills } = await typeset();
 writeFileSync(OUTPUT, serialize(layout));
 
-// Per column, the lines left empty under the text; then the floats on the page.
-fills.forEach(({ floats, free }, i) => {
-  const columns = free.map((lines) =>
-    lines === null ? "no text" : `${lines} free`,
+// Per page: the height left unused at the least distances between its
+// parts, how far its gaps have grown to take it up, and what is left. The
+// sheet of the last page ends under it.
+fills.slice(0, -1).forEach(({ unused, gaps, growth, left }, i) => {
+  console.log(
+    `page ${i + 1}: ${unused} pt unused, ${gaps} gaps grown by ${growth} pt (twice that above a paper), ${left} pt left`,
   );
-  console.log(`page ${i + 1}: ${[...columns, ...floats].join(", ")}`);
 });
+console.log(`page ${fills.length}: ${layout.length} pt long`);
 console.log(`Wrote ${path.relative(process.cwd(), OUTPUT)}`);
+
+const lengths = await Promise.all(
+  SHEETS.map((route) =>
+    evaluateIn(`${ORIGIN}/${route}`, sheetLength, PAGE.width),
+  ),
+);
+const sheets = {
+  hash: layout.hash,
+  lengths: Object.fromEntries(SHEETS.map((route, i) => [route, lengths[i]])),
+};
+writeFileSync(SHEETS_OUTPUT, `${JSON.stringify(sheets, null, 1)}\n`);
+SHEETS.forEach((route, i) => console.log(`/${route}: ${lengths[i]} pt long`));
+console.log(`Wrote ${path.relative(process.cwd(), SHEETS_OUTPUT)}`);

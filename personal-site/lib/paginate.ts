@@ -14,10 +14,9 @@ export const PAGE = {
   columnWidth: 255.12,
   /** Both columns and the gutter between them. */
   textWidth: 521.57,
-  /** Leading of running text. Its baselines form a grid down the page. */
+  /** Leading of running text. */
   pitch: 10.75,
-  /** Baselines of the first and the last line of a full column of 65. */
-  firstBaseline: 55.52,
+  /** The foot of the text: the last baseline of a page. */
   lastBaseline: 743.52,
 } as const;
 
@@ -44,11 +43,14 @@ export const REFERENCE_INDENT = 14.2;
 /** Lengths are kept to a hundredth of a point. */
 const round = (value: number) => Math.round(value * 100) / 100;
 
-/** The width each kind of text is set in. */
+/**
+ * The width each kind of text is set in: headings and the line of authors
+ * and venue across the page, the rest in a column.
+ */
 export const MEASURE: Record<TextKind, number> = {
-  section: PAGE.columnWidth,
-  heading: PAGE.columnWidth,
-  citation: PAGE.columnWidth,
+  section: PAGE.textWidth,
+  heading: PAGE.textWidth,
+  citation: PAGE.textWidth,
   paragraph: PAGE.columnWidth,
   reference: round(PAGE.columnWidth - REFERENCE_INDENT),
   caption: PAGE.columnWidth,
@@ -71,7 +73,7 @@ export type MeasuredText = { id: string; kind: TextKind; lines: Line[] };
 
 /**
  * A block that is placed whole. `front` is the title block of the first
- * page; a `column` float is no wider than a text column and a `wide` one
+ * page; a `column` box is no wider than a text column and a `wide` one
  * spans both.
  */
 export type MeasuredBox = {
@@ -111,424 +113,600 @@ export type Piece = TextPiece | BoxPiece;
 export const isTextPiece = (piece: Piece): piece is TextPiece =>
   "lines" in piece;
 
-export type Layout = { hash: string; pages: Piece[][] };
+/** `length` is that of the last page: its sheet ends under its content. */
+export type Layout = { hash: string; length: number; pages: Piece[][] };
 
 /**
- * How full a page is: its floats and, per column, the grid lines left empty
- * under the text (null for a column without text).
+ * How full a page is: the height its parts leave `unused` at their least
+ * distances, the `gaps` between them, the `growth` of one inside a paper
+ * (one above a paper grows by twice as much), and what is `left` unused
+ * under the last part. None of the last page is unused.
  */
-export type Fill = { floats: string[]; free: (number | null)[] };
+export type Fill = {
+  unused: number;
+  gaps: number;
+  growth: number;
+  left: number;
+};
 
 // ── vertical rhythm ─────────────────────────────────────────────────────
+//
+// A page is a pile of parts: a paper's title over its abstract, a figure
+// over its caption, a table, the reference list. Each hangs from a line,
+// the bottom of a rule that may or may not be drawn: a box stands
+// RULE_TO_BOX under it and a first baseline RULE_TO_TEXT. The foot of a
+// part is its last baseline or the bottom of its box. The first part of a
+// page hangs from the head rule, every other one a gap under the foot of
+// the part above it.
 
 /** Top of the title block: the title's first baseline less its leading. */
 export const FRONT_TOP = 41.55;
 /** Bottom of the head rule. */
 const HEAD_RULE = 45;
-/** From the bottom of a rule to the floats under it. */
-const RULE_TO_FLOAT = 4.58;
-/** From the bottom of the title block's rule to the first baseline under it. */
-const RULE_TO_TEXT = 10.68;
-/** Between one float and the next below it. */
-const FLOAT_GAP = 20;
-/** From the bottom of a float to the first baseline that may follow. */
-const FLOAT_TO_TEXT = 30.5;
+/** From the bottom of a rule to the top of a box under it. */
+const RULE_TO_BOX = 4.58;
+/** From the bottom of a rule to the first baseline under it. */
+const RULE_TO_TEXT = 10.52;
+/** From the heading of a track to the rule of its first paper. */
+const SECTION_DROP = 9;
+/** From the last baseline of a title to the line of authors and venue. */
+const CITATION_DROP = 10.25;
+/** From that line to the first baseline of the abstract. */
+const ABSTRACT_DROP = 12.25;
+/** From the heading of the reference list to its first entry. */
+const REFERENCE_DROP = 11.1;
 /** From the bottom of a figure to the first baseline of its caption. */
 const CAPTION_DROP = 14;
-/** From the last baseline of a caption to the bottom of its float. */
-export const CAPTION_DESCENT = 2.5;
+/** A figure under the head of its paper is level with the capitals of a first line. */
+const CAP_HEIGHT = 6.1;
 /** From the last baseline of the text to the first of the footnotes. */
 const FOOTNOTE_GAP = 16;
 
-/** Text that flows through the columns: every kind but a caption. */
-type FlowKind = Exclude<TextKind, "caption">;
-
 /**
- * Whether a kind stands on the baseline grid, where a column may end
- * between two of its lines. The others keep their own leading and are
- * never broken.
+ * From the foot of a part to the line the next one hangs from: what that
+ * is at the `least`, and how far it may `grow` to bring the foot of a page
+ * down to its limit.
  */
-const ON_GRID: Record<FlowKind, boolean> = {
-  section: true,
-  heading: true,
-  citation: false,
-  paragraph: true,
-  reference: false,
-};
+type Gap = { least: number; grow: number };
 
-/**
- * Where a first line stands relative to the grid line it takes: headings
- * a little above it, and the small type of citations and references so
- * that its capitals line up with those of running text.
- */
-const RISE: Record<FlowKind, number> = {
-  section: -2,
-  heading: -1,
-  citation: -1.5,
-  paragraph: 0,
-  reference: -1.65,
-};
+/** The most a gap between the parts of a paper grows. */
+export const STRETCH = 28;
+/** Between the parts of a paper. */
+const WITHIN: Gap = { least: 18, grow: STRETCH };
+/** Above a paper and above the reference list: it grows twice as far. */
+const ABOVE: Gap = { least: 28, grow: 2 * STRETCH };
+
+/** The fewest lines in a column of an abstract that a page divides. */
+export const MIN_LINES = 4;
 
 /** Lengths closer than this, in points, are the same. */
 const EPSILON = 0.01;
 
-/** The first grid baseline at or below `y`. */
-function gridFrom(y: number): number {
-  const up = Math.floor((PAGE.lastBaseline - y + EPSILON) / PAGE.pitch);
-  return PAGE.lastBaseline - up * PAGE.pitch;
-}
+// ── lines in columns ────────────────────────────────────────────────────
 
-/** The last grid baseline at or above `y`. */
-function gridUpTo(y: number): number {
-  const up = Math.ceil((PAGE.lastBaseline - y - EPSILON) / PAGE.pitch);
-  return PAGE.lastBaseline - up * PAGE.pitch;
-}
-
-// ── the flow ────────────────────────────────────────────────────────────
+/** A line of a text block. No column ends after one `tied` to the next. */
+type Row = { text: MeasuredText; line: number; tied: boolean };
 
 /**
- * Lines of a text block that stay together. A column may end after a row
- * unless `keep` ties it to the next one.
+ * The lines of text blocks that follow one another. A paragraph leaves at
+ * least two lines on either side of a break and a reference is never
+ * broken. (A word broken where a column ends is the typesetter's to mend.)
  */
-type Row = {
-  text: MeasuredText & { kind: FlowKind };
-  from: number;
-  to: number;
-  keep: boolean;
-};
-
-/** `anchor` is the row of the heading the float belongs to, -1 for none. */
-type Float = MeasuredBox & { anchor: number; caption?: MeasuredText };
-
-/**
- * Splits the article into the rows that flow through the columns and the
- * floats. A heading is never the last thing in a column: it keeps its
- * citation and two lines of text. A paragraph leaves at least two lines on
- * either side of a break, and none of its words is broken across one. A
- * citation and a reference are never broken.
- */
-function flow(blocks: Proof["blocks"]) {
-  const rows: Row[] = [];
-  const floats: Float[] = [];
-  let front: MeasuredBox | undefined;
-  let anchor = -1;
-  for (const block of blocks) {
-    if ("height" in block) {
-      if (block.kind === "front") front = block;
-      else floats.push({ ...block, anchor });
-      continue;
-    }
-    const { kind, lines } = block;
-    if (kind === "caption") {
-      floats[floats.length - 1].caption = block;
-      continue;
-    }
-    const text = { ...block, kind };
-    if (!ON_GRID[kind]) {
-      rows.push({ text, from: 0, to: lines.length, keep: kind === "citation" });
-      continue;
-    }
-    if (kind === "heading") anchor = rows.length;
-    const last = lines.length - 1;
-    lines.forEach(([, , hyphen], i) => {
-      const keep =
-        kind !== "paragraph" ||
-        (i === 0 && last > 0) ||
-        i === last - 1 ||
-        hyphen === 1;
-      rows.push({ text, from: i, to: i + 1, keep });
-    });
-  }
-  return { rows, floats, front };
-}
-
-type Placed = { row: Row; y: number; last: number };
-
-type Column = { placed: Placed[]; next: number };
-
-/** Empty grid lines above a heading: fewer where a column starts. */
-function leadIn(row: Row, previous: Placed | undefined, underFloat: boolean) {
-  if (row.from > 0) return 0;
-  if (row.text.kind === "section") return previous ? 2 : underFloat ? 0 : 1;
-  if (row.text.kind === "heading") return previous ? 1 : 0;
-  return 0;
-}
-
-/**
- * Fills a column from `rows[start]`: running text and headings on the grid
- * from `top` down, citations and references at their own leading, nothing
- * below `limit`.
- */
-function fillColumn(
-  rows: Row[],
-  start: number,
-  top: number,
-  underFloat: boolean,
-  limit: number,
-): Column {
-  const placed: Placed[] = [];
-  let grid = top;
-  let breakable = 0;
-  let i = start;
-  for (; i < rows.length; i++) {
-    const row = rows[i];
-    const { kind } = row.text;
-    const leading = LEADING[kind];
-    const onGrid = ON_GRID[kind];
-    const previous = placed.at(-1);
-    const y = onGrid
-      ? grid + leadIn(row, previous, underFloat) * PAGE.pitch + RISE[kind]
-      : previous?.row.text.kind === kind
-        ? previous.last + leading
-        : grid + RISE[kind];
-    const last = y + (row.to - row.from - 1) * leading;
-    if (last > limit + EPSILON) break;
-    placed.push({ row, y, last });
-    grid = onGrid ? y - RISE[kind] + PAGE.pitch : gridFrom(last + PAGE.pitch);
-    if (!row.keep) breakable = placed.length;
-  }
-  if (i < rows.length) placed.length = breakable;
-  return { placed, next: start + placed.length };
-}
-
-// ── floats ──────────────────────────────────────────────────────────────
-
-/** Floats side by side at the top of a page: a wide one, or one per column. */
-type Band = Float[];
-
-/**
- * The bands with one more float, or null where it may not follow them: a
- * wide float under a column float would leave the other column empty
- * beside it.
- */
-function stack(bands: Band[], float: Float): Band[] | null {
-  const last = bands.at(-1);
-  const open = last?.length === 1 && last[0].kind === "column";
-  if (float.kind === "column" && open) {
-    return [...bands.slice(0, -1), [...last, float]];
-  }
-  return open && float.kind === "wide" ? null : [...bands, [float]];
-}
-
-/** Lines of caption under a figure: a wide one sets it in two columns. */
-function captionRows(float: Float): number {
-  const lines = float.caption?.lines.length ?? 0;
-  return float.kind === "column" ? lines : Math.ceil(lines / 2);
-}
-
-function floatHeight(float: Float): number {
-  const rows = captionRows(float);
-  if (rows === 0) return float.height;
-  const caption = CAPTION_DROP + (rows - 1) * LEADING.caption + CAPTION_DESCENT;
-  return float.height + caption;
-}
-
-function floatPieces(float: Float, column: number, y: number): Piece[] {
-  const wide = float.kind !== "column";
-  const x = PAGE.columns[wide ? 0 : column];
-  const w = wide ? PAGE.textWidth : PAGE.columnWidth;
-  const pieces: Piece[] = [
-    { block: float.id, x, y: round(y), w, h: float.height },
-  ];
-  if (float.caption) {
-    const { id, lines } = float.caption;
-    const rows = captionRows(float);
-    const baseline = round(y + float.height + CAPTION_DROP);
-    const piece = (x: number, lines: Line[]): TextPiece => ({
-      block: id,
-      x,
-      y: baseline,
-      w: MEASURE.caption,
-      lines,
-    });
-    pieces.push(piece(x, lines.slice(0, rows)));
-    if (rows < lines.length) {
-      pieces.push(piece(PAGE.columns[1], lines.slice(rows)));
-    }
-  }
-  return pieces;
-}
-
-/**
- * Stands the bands one under the other from `top`. `under` is, per column,
- * the bottom of the float the text starts under, or null for none.
- */
-function placeBands(bands: Band[], top: number) {
-  const pieces: Piece[] = [];
-  let under: (number | null)[] = [null, null];
-  let y = top;
-  let bottom = top;
-  for (const band of bands) {
-    const bottoms = band.map((float, column) => {
-      pieces.push(...floatPieces(float, column, y));
-      return y + floatHeight(float);
-    });
-    under =
-      band[0].kind === "column"
-        ? [bottoms[0], bottoms[1] ?? under[1]]
-        : [bottoms[0], bottoms[0]];
-    bottom = Math.max(...bottoms);
-    y = bottom + FLOAT_GAP;
-  }
-  return { pieces, under, bottom };
-}
-
-// ── pages ───────────────────────────────────────────────────────────────
-
-/** Where floats and text may start on a page, and the last baseline allowed. */
-type Frame = { floats: number; text: number; limit: number };
-
-type Page = { floats: Piece[]; columns: Column[]; next: number };
-
-/** One page from `rows[start]` under the bands, or null if they do not fit. */
-function layoutPage(
-  rows: Row[],
-  start: number,
-  bands: Band[],
-  frame: Frame,
-): Page | null {
-  const { pieces, under, bottom } = placeBands(bands, frame.floats);
-  if (bottom > frame.limit + CAPTION_DESCENT + EPSILON) return null;
-  let next = start;
-  const columns = under.map((floatBottom) => {
-    const underFloat = floatBottom !== null;
-    const top = underFloat ? gridFrom(floatBottom + FLOAT_TO_TEXT) : frame.text;
-    const column = fillColumn(rows, next, top, underFloat, frame.limit);
-    next = column.next;
-    return column;
+function rowsOf(...texts: MeasuredText[]): Row[] {
+  return texts.flatMap((text) => {
+    const last = text.lines.length - 1;
+    return text.lines.map((_, line) => ({
+      text,
+      line,
+      tied:
+        text.kind === "reference"
+          ? line < last
+          : text.kind === "paragraph" &&
+            ((line === 0 && last > 0) || line === last - 1),
+    }));
   });
-  return { floats: pieces, columns, next };
 }
 
-/** How finely `balance` looks for the shortest columns, in points. */
-const BALANCE_STEP = 0.5;
+/** Pieces where they stand, and the foot of the lowest of them. */
+type Laid = { pieces: Piece[]; foot: number };
 
-/** The same page with the shortest columns that hold as much. */
-function balance(
-  rows: Row[],
-  start: number,
-  bands: Band[],
-  frame: Frame,
-  page: Page,
-): Page {
-  for (let limit = frame.floats; limit < frame.limit; limit += BALANCE_STEP) {
-    const shorter = layoutPage(rows, start, bands, { ...frame, limit });
-    if (shorter?.next === page.next) return shorter;
-  }
-  return page;
-}
+const together = (...laid: Laid[]): Laid => ({
+  pieces: laid.flatMap(({ pieces }) => pieces),
+  foot: Math.max(...laid.map(({ foot }) => foot)),
+});
 
-function textPieces(column: Column, x: number): TextPiece[] {
+/** Rows one under the other from the baseline `y`: a piece to each block. */
+function column(rows: Row[], x: number, y: number): Laid {
   const pieces: TextPiece[] = [];
-  for (const { row, y } of column.placed) {
-    const { id, kind, lines } = row.text;
+  let foot = y;
+  rows.forEach(({ text, line }, n) => {
+    foot = y + n * LEADING[text.kind];
     const previous = pieces.at(-1);
-    if (previous?.block === id) {
-      previous.lines.push(...lines.slice(row.from, row.to));
+    if (previous?.block === text.id) {
+      previous.lines.push(text.lines[line]);
     } else {
       pieces.push({
-        block: id,
-        x: kind === "reference" ? round(x + REFERENCE_INDENT) : x,
-        y: round(y),
-        w: MEASURE[kind],
-        lines: lines.slice(row.from, row.to),
+        block: text.id,
+        x: text.kind === "reference" ? round(x + REFERENCE_INDENT) : x,
+        y: round(foot),
+        w: MEASURE[text.kind],
+        lines: [text.lines[line]],
       });
     }
-  }
-  return pieces;
+  });
+  return { pieces, foot };
 }
 
-/** The first page opens with the title block and closes with footnotes. */
-function frameOf(title: MeasuredBox | undefined, footnotes?: number): Frame {
-  const rule = title ? FRONT_TOP + title.height : HEAD_RULE;
+/**
+ * How many of the rows stand in the left of two columns: as nearly half
+ * as their ties allow, and the larger of two counts that are as near.
+ */
+function leftOf(rows: Row[]): number {
+  let left = rows.length;
+  for (let n = 1; n < rows.length; n++) {
+    if (rows[n - 1].tied) continue;
+    const nearer =
+      Math.abs(2 * n - rows.length) <= Math.abs(2 * left - rows.length);
+    if (nearer) left = n;
+  }
+  return left;
+}
+
+/** Rows in two columns that start on the baseline `y` and end evenly. */
+function columns(rows: Row[], y: number): Laid {
+  const left = leftOf(rows);
+  const [x, right] = PAGE.columns;
+  return together(
+    column(rows.slice(0, left), x, y),
+    column(rows.slice(left), right, y),
+  );
+}
+
+/** A text block across the page, a drop under the baseline above it. */
+type Run = [text: MeasuredText, drop: number];
+
+function under(top: number, runs: Run[]): Laid {
+  return runs.reduce<Laid>(
+    (above, [text, drop]) =>
+      together(above, column(rowsOf(text), PAGE.columns[0], above.foot + drop)),
+    { pieces: [], foot: top },
+  );
+}
+
+// ── boxes ───────────────────────────────────────────────────────────────
+
+type Captioned = { box: MeasuredBox; caption?: MeasuredText };
+
+/** A box with its top at `y`: in column `c`, or across both if it is wide. */
+function boxAt(box: MeasuredBox, c: number, y: number): Laid {
+  const narrow = box.kind === "column";
+  const piece = {
+    block: box.id,
+    x: PAGE.columns[narrow ? c : 0],
+    y: round(y),
+    w: narrow ? PAGE.columnWidth : PAGE.textWidth,
+    h: box.height,
+  };
+  return { pieces: [piece], foot: y + box.height };
+}
+
+/** A box over its caption: in the box's column, or in two under a wide one. */
+function captioned({ box, caption }: Captioned, c: number, y: number): Laid {
+  const figure = boxAt(box, c, y);
+  if (!caption) return figure;
+  const rows = rowsOf(caption);
+  const baseline = figure.foot + CAPTION_DROP;
+  return together(
+    figure,
+    box.kind === "column"
+      ? column(rows, PAGE.columns[c], baseline)
+      : columns(rows, baseline),
+  );
+}
+
+// ── parts and blocks ────────────────────────────────────────────────────
+
+/**
+ * What stands on a page in one piece: `lay` places it with the line it
+ * hangs from at `top`, a `gap` under the foot of the part above. `cut` is
+ * set where it leaves the text of its paper unfinished: a page that ends
+ * with it ends at its foot.
+ */
+type Part = { gap: Gap; cut: boolean; lay: (top: number) => Laid };
+
+/**
+ * A stretch of the article that a page may end after, or at one of its
+ * `stops`. `parts` is what a page has of it from one stop to another, 0
+ * being its start and `stops + 1` its end: null where that cannot be.
+ */
+type Block = {
+  stops: number;
+  parts: (from: number, to: number) => Part[] | null;
+};
+
+const whole = (part: Part): Block => ({ stops: 0, parts: () => [part] });
+
+/** Boxes side by side: one that spans the columns, or one to each column. */
+const shelf = (boxes: Captioned[]): Part => ({
+  gap: WITHIN,
+  cut: false,
+  lay: (top) =>
+    together(...boxes.map((box, c) => captioned(box, c, top + RULE_TO_BOX))),
+});
+
+/**
+ * A paper: its head over its abstract in two columns, then its figure. A
+ * page may end between two lines of the abstract that are not tied: the
+ * abstract runs on at the top of the next page, again in two columns. The
+ * page it ends has MIN_LINES lines or more in each column and as many in
+ * one as in the other, so that both end at its foot. What runs on has
+ * columns a line apart at the most, of which the shorter may be a line
+ * short of MIN_LINES. A page may also end with the figure under the head
+ * and the abstract after it, or in an abstract that follows its figure.
+ */
+function paper(head: Run[], abstract: Row[], figure?: Captioned): Block {
+  const all = abstract.length;
+  const cuts = abstract
+    .flatMap(({ tied }, n) => (tied ? [] : [n + 1]))
+    .slice(0, -1);
+  // Where a page may end, and before which line of the abstract: in the
+  // abstract or after it, then, with the figure first, after that or in
+  // the abstract.
+  type Break = [first: boolean, line: number];
+  const breaks = cuts.map((line): Break => [false, line]);
+  if (figure) {
+    const after = cuts.map((line): Break => [true, line]);
+    breaks.push([false, all], [true, 0], ...after);
+  }
+
+  /** Lines `from` to `to` of the abstract: under the head, or after `first`. */
+  const text = (from: number, to: number, first: boolean): Part | null => {
+    const rows = abstract.slice(from, to);
+    const left = leftOf(rows);
+    const right = rows.length - left;
+    const enough =
+      to < all
+        ? left === right && left >= MIN_LINES
+        : Math.abs(left - right) <= 1 && rows.length >= 2 * MIN_LINES - 1;
+    if (rows.length < all && !enough) return null;
+    return {
+      gap: first ? WITHIN : ABOVE,
+      cut: to < all,
+      lay(top) {
+        if (from > 0 || first) return columns(rows, top + RULE_TO_TEXT);
+        const opened = under(top, head);
+        return together(opened, columns(rows, opened.foot + ABSTRACT_DROP));
+      },
+    };
+  };
+  /** The figure under the head: `cut` where the page ends with it. */
+  const headed = (image: Captioned, cut: boolean): Part => ({
+    gap: ABOVE,
+    cut,
+    lay(top) {
+      const opened = under(top, head);
+      const y = opened.foot + ABSTRACT_DROP - CAP_HEIGHT;
+      return together(opened, captioned(image, 0, y));
+    },
+  });
+
   return {
-    floats: rule + RULE_TO_FLOAT,
-    text: title ? gridFrom(rule + RULE_TO_TEXT) : PAGE.firstBaseline,
-    limit:
-      footnotes === undefined
-        ? PAGE.lastBaseline
-        : gridUpTo(PAGE.lastBaseline - footnotes - FOOTNOTE_GAP),
+    stops: breaks.length,
+    parts(from, to) {
+      const [order, start] = from > 0 ? breaks[from - 1] : [undefined, 0];
+      const [first = order, end] =
+        to <= breaks.length ? breaks[to - 1] : [undefined, all];
+      // A page does not go on in one order from a stop of the other.
+      if (order !== undefined && first !== order) return null;
+      const lines = end > start ? text(start, end, first === true) : undefined;
+      if (lines === null) return null;
+      const rest = lines ? [lines] : [];
+      if (!figure) return rest;
+      if (first) return from > 0 ? rest : [headed(figure, !lines), ...rest];
+      return to > breaks.length ? [...rest, shelf([figure])] : rest;
+    },
   };
 }
 
 /**
- * One page from `rows[start]` with the floats that may stand above it, in
- * order from `floats[0]`. A float goes above the page its heading is on if
- * the heading stays on that page with the float above it. One left over from
- * an earlier page must leave room for text, unless it opens the page or no
- * text remains. The two columns end as evenly as their text allows, except
- * where the text ends on a page that floats still follow: there it runs on
- * down its column as on any page.
+ * A paper whose figure fits a column: the abstract and under it the
+ * caption in one column, the figure in the other. The caption ends level
+ * with the figure, or follows the abstract where that is lower.
  */
-function compose(rows: Row[], start: number, floats: Float[], frame: Frame) {
-  let bands: Band[] = [];
-  let page = layoutPage(rows, start, bands, frame);
-  for (const float of floats) {
-    if (!page || float.anchor >= page.next) break;
-    const stacked = stack(bands, float);
-    const attempt = stacked && layoutPage(rows, start, stacked, frame);
-    if (!attempt) break;
-    const stays =
-      float.anchor >= start
-        ? float.anchor < attempt.next
-        : float.anchor < 0 ||
-          bands.length === 0 ||
-          attempt.next > start ||
-          start === rows.length;
-    if (!stays) break;
-    bands = stacked;
-    page = attempt;
+function paperBeside(head: Run[], abstract: Row[], figure: Captioned): Part {
+  return {
+    gap: ABOVE,
+    cut: false,
+    lay(top) {
+      const opened = under(top, head);
+      const [x] = PAGE.columns;
+      const y = opened.foot + ABSTRACT_DROP;
+      const text = column(abstract, x, y);
+      const box = boxAt(figure.box, 1, y - CAP_HEIGHT);
+      const laid = together(opened, text, box);
+      if (!figure.caption) return laid;
+      const rows = rowsOf(figure.caption);
+      const depth = (rows.length - 1) * LEADING.caption;
+      const baseline = Math.max(
+        text.foot + WITHIN.least + RULE_TO_TEXT,
+        box.foot - depth,
+      );
+      return together(laid, column(rows, x, baseline));
+    },
+  };
+}
+
+/** The reference list: its heading over the entries in two columns. */
+const references = (heading: MeasuredText, entries: MeasuredText[]): Part => ({
+  gap: ABOVE,
+  cut: false,
+  lay(top) {
+    const opened = under(top, [[heading, RULE_TO_TEXT]]);
+    return together(
+      opened,
+      columns(rowsOf(...entries), opened.foot + REFERENCE_DROP),
+    );
+  },
+});
+
+const isBox = (block: MeasuredText | MeasuredBox): block is MeasuredBox =>
+  "height" in block;
+
+/**
+ * Reads the article as its title block, the boxes that open it, the blocks
+ * its pages are made up of, and the reference list that closes it. A paper
+ * is its title, the line of authors and venue, its abstract and its
+ * figure, under the heading of its track if it is the first of one. Its
+ * table is a block of its own. A heading that no paper follows is that of
+ * the reference list.
+ */
+function read(measured: Proof["blocks"]) {
+  const queue = [...measured];
+  const text = (kind: TextKind) => {
+    const [next] = queue;
+    if (!next || isBox(next) || next.kind !== kind) return undefined;
+    queue.shift();
+    return next;
+  };
+  const texts = (kind: TextKind) => {
+    const found: MeasuredText[] = [];
+    for (let next = text(kind); next; next = text(kind)) found.push(next);
+    return found;
+  };
+  const box = (kind: MeasuredBox["kind"]): Captioned | undefined => {
+    const [next] = queue;
+    if (!next || !isBox(next) || next.kind !== kind) return undefined;
+    queue.shift();
+    return { box: next, caption: text("caption") };
+  };
+
+  const front = box("front")?.box;
+  const opening: Part[] = [];
+  const blocks: Block[] = [];
+  let closing: Part | undefined;
+  while (queue.length > 0 && !closing) {
+    const section = text("section");
+    const title = text("heading");
+    if (title) {
+      const head: Run[] = section
+        ? [
+            [section, RULE_TO_TEXT],
+            [title, SECTION_DROP + RULE_TO_TEXT],
+          ]
+        : [[title, RULE_TO_TEXT]];
+      head.push(...texts("citation").map((line): Run => [line, CITATION_DROP]));
+      const abstract = rowsOf(...texts("paragraph"));
+      const beside = box("column");
+      blocks.push(
+        beside
+          ? whole(paperBeside(head, abstract, beside))
+          : paper(head, abstract, box("wide")),
+      );
+    } else if (section) {
+      closing = references(section, texts("reference"));
+    } else {
+      const first = box("wide") ?? box("column");
+      if (!first) break;
+      const second = first.box.kind === "column" ? box("column") : undefined;
+      const part = shelf(second ? [first, second] : [first]);
+      if (blocks.length > 0) blocks.push(whole(part));
+      else opening.push(part);
+    }
   }
-  if (!page || (page.next === start && bands.length === 0)) {
-    throw new Error("A block is taller than a page.");
+  if (queue.length > 0) throw new Error(`Nothing places "${queue[0].id}".`);
+  return { front, opening, blocks, closing };
+}
+
+// ── pages ───────────────────────────────────────────────────────────────
+
+/** The line the first part of a page hangs from, and the lowest foot. */
+type Frame = { top: number; limit: number };
+
+/**
+ * Parts under one another from `top`, every gap grown by `share` of what
+ * it may grow.
+ */
+function pile(parts: Part[], top: number, share = 0): Laid {
+  return parts.reduce<Laid>(
+    (above, { gap, lay }, n) =>
+      together(above, lay(n ? above.foot + gap.least + share * gap.grow : top)),
+    { pieces: [], foot: top },
+  );
+}
+
+/** Where a page may end: `at` a stop of a block, 0 being its start. */
+type Stop = { block: number; at: number };
+
+/** The parts from one stop to another: null where a block has none. */
+function between(blocks: Block[], from: Stop, to: Stop): Part[] | null {
+  const parts: Part[] = [];
+  const end = to.at > 0 ? to.block + 1 : to.block;
+  for (let b = from.block; b < end; b++) {
+    const some = blocks[b].parts(
+      b === from.block ? from.at : 0,
+      b === to.block ? to.at : blocks[b].stops + 1,
+    );
+    if (!some) return null;
+    parts.push(...some);
   }
-  const placed = bands.flat();
-  if (page.next < rows.length || placed.length === floats.length) {
-    page = balance(rows, start, bands, frame, page);
-  }
-  return { page, floats: placed };
+  return parts;
 }
 
 /**
- * Lays the article out in pages. The text fills column after column;
- * floats stand at the top of a page or of a column and keep their order.
+ * A page the article could have, up to the stop `end`: its parts, the
+ * height they leave `unused` at their least distances, the `share` of
+ * their growth its gaps take up of it, and what is `left` under the last
+ * part when they have grown all they may. `alone` is 1 where the page
+ * holds the reference list by itself and `cut` where it leaves the text
+ * of a paper unfinished.
+ */
+type Page = {
+  end: number;
+  parts: Part[];
+  unused: number;
+  share: number;
+  left: number;
+  alone: number;
+  cut: number;
+};
+
+/** What a run of pages costs: the first entry weighs most. */
+type Cost = number[];
+
+/** What the pages after the last one cost. */
+const NOTHING: Cost = [0, 0, 0, 0];
+
+const cheaper = (a: Cost, b: Cost) => {
+  const n = a.findIndex((value, i) => value !== b[i]);
+  return n >= 0 && a[n] < b[n];
+};
+
+/** A page, and what it and the pages after it cost. */
+type Plan = { page: Page; cost: Cost };
+
+/**
+ * The cheapest run of pages through the article: one of `firsts`, then one
+ * of `laters[stop]` for the stop each page ends at, none of which leaves
+ * more than `most` unused. `weigh` is the cost of a page and the pages
+ * after it.
+ */
+function choose(
+  firsts: Page[],
+  laters: Page[][],
+  weigh: (rest: Cost, page: Page) => Cost,
+  most: number,
+): Plan[] {
+  const last = laters.length;
+  // plans[n] is the best run of later pages from stop n to the end.
+  const plans: (Plan | undefined)[] = [];
+  const best = (pages: Page[]) => {
+    let plan: Plan | undefined;
+    for (const page of pages) {
+      const rest = page.end === last ? NOTHING : plans[page.end]?.cost;
+      if (!rest || page.left > most) continue;
+      const cost = weigh(rest, page);
+      if (!plan || cheaper(cost, plan.cost)) plan = { page, cost };
+    }
+    return plan;
+  };
+  for (let from = last - 1; from >= 0; from--) plans[from] = best(laters[from]);
+  const run: Plan[] = [];
+  for (let plan = best(firsts); ; plan = plans[plan.page.end]) {
+    if (!plan) throw new Error("A block is taller than a page.");
+    run.push(plan);
+    if (plan.page.end === last) return run;
+  }
+}
+
+/**
+ * Lays the article out in pages. The title block and the boxes that open
+ * the article stand on the first page; the blocks follow one another down
+ * the pages, each page filled from the top, and the reference list closes
+ * the last, whose sheet ends under it. The gaps of every other page grow,
+ * each by what it may at the most, to bring its last part down to its
+ * foot: the page is left what they cannot take up of its unused height.
+ * Where the pages end is chosen for the whole article at once: so that
+ * the page that is left the most is left the least; then, with no page
+ * left more than that, so that the pages are left the least in all, the
+ * fewest of them leave the text of a paper unfinished (an abstract
+ * divided, or after its figure), and the unused heights are as even as
+ * can be (the least sum of squares). Before any of that the reference
+ * list is kept from a page by itself.
  */
 export function paginate(proof: Proof): { layout: Layout; fills: Fill[] } {
-  const { rows, floats, front } = flow(proof.blocks);
-  const pages: Piece[][] = [];
-  const fills: Fill[] = [];
-  let start = 0;
-  let placed = 0;
+  const { front, opening, blocks, closing } = read(proof.blocks);
+  if (closing) blocks.push(whole(closing));
+  const stops: Stop[] = blocks.flatMap((block, b) =>
+    Array.from({ length: block.stops + 1 }, (_, at) => ({ block: b, at })),
+  );
+  const last = stops.push({ block: blocks.length, at: 0 }) - 1;
 
-  while (start < rows.length || placed < floats.length) {
-    const first = pages.length === 0;
-    const title = first ? front : undefined;
-    const frame = frameOf(title, first ? proof.footnotes : undefined);
-    const composed = compose(rows, start, floats.slice(placed), frame);
-    const { page } = composed;
+  const first: Frame = {
+    top: front ? FRONT_TOP + front.height : HEAD_RULE,
+    limit: PAGE.lastBaseline - proof.footnotes - FOOTNOTE_GAP,
+  };
+  const later: Frame = { top: HEAD_RULE, limit: PAGE.lastBaseline };
 
-    const pieces: Piece[] = [...page.floats];
-    if (title) {
-      const [x] = PAGE.columns;
-      const box = { x, y: FRONT_TOP, w: PAGE.textWidth, h: title.height };
-      pieces.unshift({ block: title.id, ...box });
+  /** The pages that may start at stop `from`, with `lead` at their top. */
+  const pagesFrom = (from: number, lead: Part[], { top, limit }: Frame) => {
+    const alone = closing && from === last - 1 && lead.length === 0 ? 1 : 0;
+    const pages: Page[] = [];
+    for (let to = from; to <= last; to++) {
+      const more = between(blocks, stops[from], stops[to]);
+      if (!more || lead.length + more.length === 0) continue;
+      const parts = [...lead, ...more];
+      const spare = round(limit - pile(parts, top).foot);
+      // Too long up to the end of a block, the page takes nothing more.
+      if (spare < -EPSILON && stops[to].at === 0) break;
+      if (spare < -EPSILON) continue;
+      // The sheet of the last page ends under it: none of it is unused.
+      const unused = to === last ? 0 : Math.max(spare, 0);
+      const room = parts.slice(1).reduce((sum, { gap }) => sum + gap.grow, 0);
+      const share = room > 0 ? Math.min(unused / room, 1) : 0;
+      const left = round(Math.max(unused - room, 0));
+      const cut = parts[parts.length - 1].cut ? 1 : 0;
+      // A page that leaves the text of a paper unfinished ends at its foot.
+      if (cut && left > EPSILON) continue;
+      pages.push({ end: to, parts, unused, share, left, alone, cut });
     }
-    page.columns.forEach((column, c) => {
-      pieces.push(...textPieces(column, PAGE.columns[c]));
-    });
-    pages.push(pieces);
-    fills.push({
-      floats: composed.floats.map((float) => float.id),
-      free: page.columns.map((column) => {
-        const last = column.placed.at(-1)?.last;
-        return last === undefined
-          ? null
-          : Math.floor((frame.limit - last + EPSILON) / PAGE.pitch);
-      }),
-    });
-    start = page.next;
-    placed += composed.floats.length;
+    return pages;
+  };
+  const firsts = pagesFrom(0, opening, first);
+  if (firsts.length === 0) {
+    throw new Error("The first page does not hold what opens the article.");
   }
+  const laters = stops
+    .slice(0, last)
+    .map((_, from) => pagesFrom(from, [], later));
 
-  return { layout: { hash: proof.hash, pages }, fills };
+  const [{ cost: least }] = choose(
+    firsts,
+    laters,
+    ([alone, worst], page) => [alone + page.alone, Math.max(worst, page.left)],
+    Infinity,
+  );
+  const run = choose(
+    firsts,
+    laters,
+    ([alone, left, cuts, squares], page) => [
+      alone + page.alone,
+      round(left + page.left),
+      cuts + page.cut,
+      squares + page.unused ** 2,
+    ],
+    least[1],
+  );
+
+  const fills: Fill[] = [];
+  const laid = run.map(({ page: { parts, unused, share, left } }, n) => {
+    const growth = round(share * STRETCH);
+    fills.push({ unused, gaps: parts.length - 1, growth, left });
+    return pile(parts, n === 0 ? first.top : later.top, share);
+  });
+  const pages = laid.map(({ pieces }) => pieces);
+  if (front) pages[0].unshift(...boxAt(front, 0, FRONT_TOP).pieces);
+  const { limit } = pages.length > 1 ? later : first;
+  const length = round(laid[laid.length - 1].foot + PAGE.height - limit);
+
+  return { layout: { hash: proof.hash, length, pages }, fills };
 }

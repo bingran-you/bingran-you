@@ -10,6 +10,7 @@ import {
   type Track,
 } from "@/lib/content";
 import { graphScriptContent, paperJsonLd } from "@/lib/jsonld";
+import { sheetLength } from "@/lib/layout";
 import { PERSON } from "@/lib/site";
 
 const venues = [...new Set(papers.map((paper) => paper.venue))];
@@ -28,6 +29,7 @@ export default function PapersPage() {
     <Sheet
       current="/papers"
       footnote={papers.some(hasCoFirstAuthors) ? CO_FIRST_NOTE : undefined}
+      length={sheetLength("papers")}
     >
       <script
         type="application/ld+json"

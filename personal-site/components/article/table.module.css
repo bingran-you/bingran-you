@@ -1,0 +1,118 @@
+/* Tables of the article layout. Their lengths and type are those of the
+   page they are on: --pt, --hair, --gap and the --table tokens of `.page`
+   in article.module.css. */
+
+.tableTitle,
+.table {
+  font-family: var(--sans);
+  font-size: calc(var(--pt) * var(--table-size));
+  font-weight: var(--table-weight);
+  font-variation-settings: var(--sans-axes);
+  letter-spacing: var(--table-tracking);
+  word-spacing: normal;
+}
+/* A title with room for two columns of 200 pt runs in two, like the
+   caption of a wide figure. */
+.tableTitle {
+  margin: 0 0 calc(var(--pt) * 3.4);
+  columns: 2 calc(var(--pt) * 200);
+  column-gap: var(--gap);
+  line-height: 1.36;
+}
+.tableTitle cite {
+  font-style: normal;
+}
+.scroll {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  line-height: 1.286;
+  text-align: left;
+}
+/* A cell paints the rule above it in --above and the one below in --below. */
+.table th,
+.table td {
+  padding: calc(var(--pt) * 1.5) calc(var(--pt) * 8) calc(var(--pt) * 1.5) 0;
+  background:
+    linear-gradient(var(--above, transparent), var(--above, transparent)) top,
+    linear-gradient(var(--below, transparent), var(--below, transparent))
+      bottom;
+  background-size: 100% var(--hair);
+  background-repeat: no-repeat;
+  font-weight: inherit;
+  vertical-align: top;
+}
+.table :is(th, td):last-child {
+  padding-right: 0;
+}
+.table thead tr:first-child > *,
+.table tbody:first-child tr:first-child > *,
+.table .ruled > * {
+  --above: var(--ink);
+}
+.table thead tr:last-child > *,
+.table tbody tr:last-child > * {
+  --below: var(--ink);
+}
+.tableTitle b,
+.table b,
+.table thead th,
+.table tbody th {
+  font-weight: var(--table-strong);
+}
+.table .center {
+  text-align: center;
+}
+.table .right {
+  text-align: right;
+}
+/* A column of numbers: its figures stand under one another. */
+.table td.right {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.table code {
+  font-size: 0.92em;
+  line-height: 0;
+}
+/* A paper's table is as wide as on the published page, or as its contents. */
+.fit {
+  width: auto;
+  min-width: min(100%, calc(var(--pt) * var(--print-width)));
+  margin: 0 auto;
+  white-space: nowrap;
+}
+.note {
+  display: block;
+  font-weight: var(--table-weight);
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+/* In the fluid column Education and Projects are one entry per block
+   instead of three columns. */
+@media (max-width: 899.98px) {
+  .stack thead {
+    display: none;
+  }
+  .stack tr {
+    display: block;
+    padding: 9px 0;
+    border-top: var(--hair) solid var(--border);
+  }
+  .stack tbody tr:first-child {
+    border-top-color: var(--ink);
+  }
+  .stack tbody tr:last-child {
+    border-bottom: var(--hair) solid;
+  }
+  .stack :is(th, td) {
+    display: block;
+    padding: 0;
+    background: none;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

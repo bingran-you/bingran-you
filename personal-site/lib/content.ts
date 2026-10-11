@@ -226,7 +226,7 @@ export const papers: Paper[] = [
     slug: "printed-trap",
     title:
       "3D-printed micro ion trap technology for quantum information applications",
-    href: "https://www.nature.com/articles/s41586-025-09474-1",
+    href: "https://doi.org/10.1038/s41586-025-09474-1",
     venue: "Nature",
     authors:
       "Xu, S.*, Xia, X.*, Yu, Q., Parakh, A., Khan, S., Megidish, E., You, B. et al.",
@@ -280,7 +280,7 @@ export const papers: Paper[] = [
     slug: "adjoint",
     title:
       "Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits",
-    href: "https://www.nature.com/articles/s44310-025-00102-4",
+    href: "https://doi.org/10.1038/s44310-025-00102-4",
     venue: "npj Nanophotonics",
     authors:
       "Momenzadeh, M., Sun, K., Wu, Q., You, B., Tang, Y.-L., Häffner, H. & Shcherbakov, M. R.",

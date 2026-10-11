@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { CO_FIRST_MARK, getPaperDetail, papers, projects } from "./content";
+import { PAGE } from "./paginate";
 
 describe("projects", () => {
   it("leads with FrontierPhysics", () => {
@@ -64,14 +65,14 @@ describe("papers", () => {
     });
   });
 
-  // Figures and tables are set at their printed width, in points. The text
-  // block of a sheet is 521.5 pt wide, so nothing in print is wider.
+  // Figures and tables are set at their printed width, in points. Nothing
+  // in print is wider than the text block of a sheet.
   it("records the printed width of every figure and table", () => {
     for (const paper of papers) {
       const { figure, table } = getPaperDetail(paper.slug);
       for (const width of [figure.printWidth, table?.printWidth ?? 1]) {
         expect(width, paper.slug).toBeGreaterThan(0);
-        expect(width, paper.slug).toBeLessThanOrEqual(521.5);
+        expect(width, paper.slug).toBeLessThanOrEqual(PAGE.textWidth);
       }
     }
   });

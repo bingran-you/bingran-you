@@ -45,6 +45,12 @@ function Contacts() {
   );
 }
 
+/**
+ * The width of a sheet at its largest, in CSS px. A page is laid out at
+ * this size and scaled to the sheet it is on (`--full` in the styles).
+ */
+export const FULL_WIDTH = 1220;
+
 type SheetProps = {
   /** 1-based. Odd pages are left-hand pages; page 1 also carries the navigation. */
   page?: number;
@@ -52,6 +58,8 @@ type SheetProps = {
   current: string;
   /** A note above the page number; on page 1 it precedes the contacts. */
   footnote?: React.ReactNode;
+  /** Set where the sheet is not one page but as tall as its content. */
+  tall?: boolean;
   children: React.ReactNode;
 };
 
@@ -60,7 +68,13 @@ type SheetProps = {
  * site is set as one article, so every left-hand page is headed alike and the
  * first page carries the contacts as its footnote.
  */
-export function Sheet({ page = 1, current, footnote, children }: SheetProps) {
+export function Sheet({
+  page = 1,
+  current,
+  footnote,
+  tall = false,
+  children,
+}: SheetProps) {
   const first = page === 1;
   const recto = page % 2 === 0;
   const year = new Date().getFullYear();
@@ -79,7 +93,7 @@ export function Sheet({ page = 1, current, footnote, children }: SheetProps) {
   ];
 
   return (
-    <div className={styles.sheet}>
+    <div className={tall ? `${styles.sheet} ${styles.tall}` : styles.sheet}>
       <div className={recto ? `${styles.page} ${styles.recto}` : styles.page}>
         {recto ? null : (
           <header className={styles.runningHead}>
@@ -106,13 +120,15 @@ export function Sheet({ page = 1, current, footnote, children }: SheetProps) {
 
         {children}
 
-        <footer className={styles.footer}>
+        <footer>
           {footnote || first ? (
-            <p className={styles.footnotes}>
-              {footnote}
-              {footnote && first ? " " : null}
-              {first ? <Contacts /> : null}
-            </p>
+            <div className={styles.footnotes}>
+              <p>
+                {footnote}
+                {footnote && first ? " " : null}
+                {first ? <Contacts /> : null}
+              </p>
+            </div>
           ) : null}
           <p className={styles.folio}>
             {recto ? [...imprint, number] : [number, ...imprint]}

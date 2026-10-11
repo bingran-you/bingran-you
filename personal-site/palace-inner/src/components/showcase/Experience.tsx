@@ -44,7 +44,7 @@ const PAPERS = [
     {
         venue: 'Nature',
         title: '3D-printed micro ion trap technology for quantum information applications',
-        href: 'https://www.nature.com/articles/s41586-025-09474-1',
+        href: 'https://doi.org/10.1038/s41586-025-09474-1',
     },
     {
         venue: 'Phys. Rev. Lett.',
@@ -59,7 +59,7 @@ const PAPERS = [
     {
         venue: 'npj Nanophotonics',
         title: 'Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits',
-        href: 'https://www.nature.com/articles/s44310-025-00102-4',
+        href: 'https://doi.org/10.1038/s44310-025-00102-4',
     },
     {
         venue: 'arXiv',

@@ -1,0 +1,44 @@
+/* The typeset page: where the pieces of a layout in content/layout stand
+   (paged.tsx). The proof the typesetter reads uses none of this, so the
+   layout does not record this file. */
+
+/* A piece stands where --x, --y and --w say, in points on its page. */
+.box,
+.piece {
+  position: absolute;
+  left: calc(var(--pt) * var(--x));
+  width: calc(var(--pt) * var(--w));
+}
+/* A box is as tall as it was when typeset (--h), whatever is in it. */
+.box {
+  top: calc(var(--pt) * var(--y));
+  height: calc(var(--pt) * var(--h));
+}
+/* Text: --y is the baseline of the first line, --leading under the top of
+   the piece. */
+.piece {
+  top: calc(var(--pt) * (var(--y) - var(--leading)));
+}
+/* The lines of a piece are one flow of text. A line cannot wrap, and the
+   text can only break between two of them: where it was typeset to. */
+.line {
+  white-space: nowrap;
+}
+/* An empty box as tall as the leading stands on the first baseline, inside
+   the first line, so that nothing can break between the two. Each line
+   after it lies a leading lower. */
+.first::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * var(--leading));
+}
+/* The hyphen of a word broken at the end of a line is not in the text. */
+.hyphen::after {
+  content: "\2010";
+}
+/* A paragraph that runs on in the next column is justified to its last
+   line here. The class stands beside `.paragraph` of article.module.css
+   and sets nothing that one does: which file comes first must not matter. */
+.continues {
+  text-align-last: justify;
+}

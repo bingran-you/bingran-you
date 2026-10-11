@@ -1,71 +1,245 @@
 /* Page furniture of the article layout.
 
-   The geometry is measured from a printed journal page of 595.276 × 790.866
-   pt: text from 40 pt to 561.5 pt in two 255.5 pt columns 10.5 pt apart, a
-   166 pt fact column beside a 344.5 pt lead column, 0.5 pt rules and a rule
-   down the left margin at 34 pt. Every length is a point from that page
-   times --pt (one point in CSS px), so a sheet scales like a zoomed page. */
+   The geometry is measured from a printed journal page of 210 × 279 mm
+   (595.276 × 790.866 pt): text from 14 mm to 198 mm (39.69 to 561.26 pt)
+   in two 90 mm columns 4 mm apart (255.12 and 11.33 pt), a 166.3 pt fact
+   column beside the lead, 0.35 pt rules and a rule down the left margin at
+   34 pt. Every length is a point from that page times --pt (one point in
+   CSS px).
 
+   From 900 px up a sheet is one such page. The page is laid out at one
+   size, that of a sheet at its full width (--full), and scaled to the
+   sheet it is on: its text is set at the size it was typeset at whatever
+   the window, and its smallest type (5.87 pt) clears a browser's minimum
+   font size of 12 px. Narrower windows get the same content in one fluid
+   column on sheets as tall as their content: the last block of this file.
+
+   Where a baseline has to stand at a given height, an empty inline box of a
+   known height stands on it (a ::before). Taller than the text beside it,
+   that box alone decides how far the baseline lies under the top of its
+   line, whatever the font.
+
+   A rule is painted on the edge of its box and takes no room of its own:
+   the half point it stands in is padding. A page then keeps its
+   proportions where the rule is thickened to a whole pixel. */
+
+/* The desk is handed the size of a page in points (--page-width,
+   --page-length) and the width of a sheet at its largest (--full): see
+   app/(personal)/layout.tsx. */
 .desk {
+  /* What the window leaves for a sheet. */
+  --fit: calc(100vw - 2 * clamp(12px, 3vw, 48px));
   flex: 1;
-  padding: clamp(16px, 2.4vw, 36px) 0 clamp(48px, 7vw, 104px);
+  padding: 16px 0 48px;
 }
 
 .sheet {
-  container-type: inline-size;
-  width: min(100% - 2 * clamp(12px, 3vw, 48px), 1220px);
+  position: relative;
+  width: min(var(--fit), var(--full));
+  aspect-ratio: var(--page-width) / var(--page-length);
   margin: 0 auto;
   background: var(--paper);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.14),
-    0 14px 44px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 .sheet + .sheet {
-  margin-top: clamp(14px, 2vw, 28px);
+  margin-top: 16px;
+}
+/* A route that is not paginated lies on one sheet as tall as its content. */
+.tall {
+  aspect-ratio: auto;
 }
 
 .page {
-  --pt: clamp(1.72px, 0.16799cqw, 2.05px);
-  --rule: max(1px, calc(var(--pt) * 0.5)) solid var(--ink);
-  --gap: calc(var(--pt) * 10.5);
-  --small: max(calc(var(--pt) * 6), 11.5px);
-  --label: max(calc(var(--pt) * 7), 12px);
-  --sans:
-    var(--font-hanken), "Helvetica Neue", Arial, var(--font-noto-serif-sc),
-    sans-serif;
+  /* How much the page is scaled to its sheet, and one point before that.
+     Without the scaling below a page is laid out at the size of its sheet,
+     as a sheet as tall as its content always is. */
+  --scale: 1;
+  --pt: calc(min(var(--fit), var(--full)) / var(--page-width));
+  /* A rule is 0.35 pt, and never thinner on screen than a device pixel (a
+     fiftieth more than one, as lengths are rounded down). */
+  --pixel: 1px;
+  --hair: max(
+    calc(var(--pt) * 0.35),
+    calc(1.02 * var(--pixel) / var(--scale))
+  );
+  --rule-above: linear-gradient(var(--ink), var(--ink)) top / 100% var(--hair)
+    no-repeat;
+  --rule-below: linear-gradient(var(--ink), var(--ink)) bottom / 100%
+    var(--hair) no-repeat;
+  /* The text block: its left edge, how far its right edge is from that of
+     the page, and the gutter between its columns. */
+  --left: calc(var(--pt) * 39.69);
+  --right: calc(var(--pt) * 34.016);
+  --gap: calc(var(--pt) * 11.33);
 
-  position: relative;
-  padding: calc(var(--pt) * 47) calc(var(--pt) * 33.8) calc(var(--pt) * 18)
-    calc(var(--pt) * 40);
+  /* Type: the families and, for every style on the page, its size (in
+     points), weight, axes (optical size and width: font-variation-settings
+     is one list), tracking and word space. The lead and the captions have
+     the weight and the axes of the body. The typesetter is run again after
+     a change here. */
+  --serif:
+    "Roboto Serif", "Noto Serif", Georgia, "Noto Serif SC", "Songti SC", serif;
+  --sans: "Inter", "Helvetica Neue", Arial, "Noto Serif SC", sans-serif;
+  --sans-axes: "opsz" 20;
+
+  --kind-size: 14.26;
+  --kind-weight: 759;
+  --kind-axes: "opsz" 14, "wdth" 63.6;
+  --kind-tracking: -0.0072em;
+  --title-size: 26.37;
+  --title-weight: 686;
+  --title-axes: "opsz" 14, "wdth" 61.8;
+  --title-tracking: -0.0239em;
+  --title-spacing: -0.073em;
+  --fact-size: 7.78;
+  --fact-weight: 593;
+  --fact-tracking: 0.0234em;
+  --fact-spacing: -0.106em;
+  --byline-size: 7.83;
+  --byline-weight: 709;
+  --byline-tracking: 0.0052em;
+  --byline-spacing: -0.076em;
+  --lead-size: 9.38;
+  --lead-tracking: -0.0049em;
+  --lead-spacing: -0.074em;
+  --body-size: 8.6;
+  --body-weight: 455;
+  --body-axes: "opsz" 72, "wdth" 81.7;
+  --body-tracking: 0em;
+  --body-spacing: -0.066em;
+  /* Bold in running text and in captions, as a part of the size around it. */
+  --strong-size: 0.971;
+  --strong-weight: 714;
+  --strong-axes: "opsz" 14, "wdth" 64.9;
+  --section-size: 9.88;
+  --section-weight: 714;
+  --section-axes: "opsz" 14, "wdth" 64.9;
+  --section-tracking: 0.0027em;
+  --section-spacing: -0.0905em;
+  --heading-size: 8.54;
+  --heading-weight: 636;
+  --heading-axes: "opsz" 14, "wdth" 67.4;
+  --heading-tracking: -0.001em;
+  --heading-spacing: -0.082em;
+  --caption-size: 7.3;
+  --caption-tracking: 0.0124em;
+  --caption-spacing: -0.087em;
+  --caption-strong-tracking: 0.0188em;
+  --caption-strong-spacing: -0.123em;
+  --table-size: 7;
+  --table-weight: 393;
+  --table-strong: 709;
+  --table-tracking: 0em;
+  --note-size: 5.87;
+  --note-weight: 393;
+  --note-strong: 709;
+  --note-tracking: 0.0093em;
+  --note-strong-tracking: 0.0052em;
+  --note-spacing: -0.09em;
+  --footnote-tracking: 0.0145em;
+  --foot-size: 7.84;
+  --foot-weight: 393;
+  --foot-strong: 709;
+  --foot-tracking: -0.0041em;
+  --foot-spacing: -0.066em;
+  --folio-weight: 900;
+  --folio-tracking: -0.0131em;
+  /* The bar between two labels, as a part of the size around it. */
+  --bar-size: 0.79;
+  --bar-weight: 450;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--pt) * var(--page-width));
+  height: calc(var(--pt) * var(--page-length));
+  padding: calc(var(--pt) * 41.55) var(--right) 0 var(--left);
   color: var(--ink);
-  font-size: calc(var(--pt) * 8);
+  font-family: var(--serif);
+  font-size: calc(var(--pt) * var(--body-size));
+  font-weight: var(--body-weight);
+  font-variation-settings: var(--body-axes);
+  font-variant-numeric: lining-nums proportional-nums;
   line-height: calc(var(--pt) * 10.75);
-  font-optical-sizing: auto;
-  font-variant-numeric: lining-nums;
+  letter-spacing: var(--body-tracking);
+  word-spacing: var(--body-spacing);
+  text-rendering: geometricPrecision;
+}
+@media (min-resolution: 2dppx) {
+  .page {
+    --pixel: 0.5px;
+  }
+}
+.tall > .page {
+  position: relative;
+  width: auto;
+  height: auto;
+  padding-bottom: calc(var(--pt) * 68);
+}
+/* What a sheet holds that is not set as part of the article takes none of
+   its type. The size and leading are those the cards of /posts have always
+   had in a narrow window. */
+.plain {
+  font-size: 16px;
+  font-weight: 400;
+  font-variation-settings: normal;
+  font-variant-numeric: normal;
+  line-height: 21.5px;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-rendering: optimizeLegibility;
 }
 
-/* The head rule and the rule down the left margin. On a left-hand page the
-   head rule starts at the margin rule and runs off the right edge; on a
-   right-hand page it comes in from the left edge and stops at the text. */
+/* The scaling: a page is laid out at the size of a full sheet and scaled to
+   its own. The scale is the quotient of two lengths, which the trigonometric
+   functions give as a number; a browser without them keeps the layout
+   above. On a full sheet the scale is 1 and nothing is transformed. */
+@media (min-width: 900px) {
+  @supports (transform: scale(tan(atan2(1px, 1px)))) {
+    .sheet:not(.tall) > .page {
+      --scale: min(1, tan(atan2(var(--fit), var(--full))));
+      --pt: calc(var(--full) / var(--page-width));
+      transform: scale(var(--scale));
+      transform-origin: 0 0;
+    }
+    /* The palace button keeps its size in CSS px: its slot is scaled back
+       by as much, from its left edge. */
+    .sheet:not(.tall) .action > * {
+      transform: scale(calc(1 / var(--scale)));
+      transform-origin: 0;
+    }
+  }
+}
+
+/* The head rule and the rule down the left margin, each centred on the
+   line it was measured at: 44.77 pt down the page and 34.02 pt in, down to
+   the last baseline. On a left-hand page the head rule starts with the
+   text and runs off the right edge; on a right-hand page it comes in from
+   the left edge and stops at the text. Like every rule they are painted
+   in a box with room to spare, so all are as thick on any screen. */
 .page::before,
 .page::after {
   content: "";
   position: absolute;
-  left: calc(var(--pt) * 34);
 }
 .page::before {
-  top: calc(var(--pt) * 44.5);
+  top: calc(var(--pt) * 44.77 - var(--hair) / 2);
   right: 0;
-  border-top: var(--rule);
+  left: var(--left);
+  height: calc(var(--pt) * 1);
+  background: var(--rule-above);
 }
 .page::after {
-  top: calc(var(--pt) * 28.5);
-  bottom: calc(var(--pt) * 47.7);
-  border-left: var(--rule);
+  top: calc(var(--pt) * 28.35);
+  bottom: calc(var(--pt) * 47.346);
+  left: calc(var(--pt) * 34.02 - var(--hair) / 2);
+  width: calc(var(--pt) * 1);
+  background: linear-gradient(var(--ink), var(--ink)) left / var(--hair) 100%
+    no-repeat;
 }
 .recto::before {
+  right: var(--right);
   left: 0;
-  right: calc(var(--pt) * 33.8);
 }
 .recto::after {
   top: calc(var(--pt) * 49);
@@ -74,34 +248,51 @@
 /* ── running head ─────────────────────────────────────────────────────── */
 .runningHead {
   position: absolute;
-  top: calc(var(--pt) * 24.5);
-  right: calc(var(--pt) * 33.8);
-  left: calc(var(--pt) * 40);
+  top: calc(var(--pt) * 20.56);
+  right: var(--right);
+  left: var(--left);
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
-  gap: calc(var(--pt) * 12);
+}
+/* Baseline 38.56 pt down the page. */
+.runningHead::before {
+  content: "";
+  height: calc(var(--pt) * 18);
 }
 .kind {
   margin: 0;
-  font-size: calc(var(--pt) * 14);
-  font-weight: 800;
-  line-height: calc(var(--pt) * 18);
-  letter-spacing: -0.012em;
+  font-size: calc(var(--pt) * var(--kind-size));
+  font-weight: var(--kind-weight);
+  font-variation-settings: var(--kind-axes);
+  line-height: 1;
+  letter-spacing: var(--kind-tracking);
 }
 .nav {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  margin-left: auto;
+}
+.nav,
+.folio {
   font-family: var(--sans);
-  font-size: calc(var(--pt) * 8);
+  font-size: calc(var(--pt) * var(--foot-size));
+  font-weight: var(--foot-weight);
+  font-variation-settings: var(--sans-axes);
   line-height: calc(var(--pt) * 12);
+  letter-spacing: var(--foot-tracking);
+  word-spacing: var(--foot-spacing);
 }
 .nav a + a::before,
 .folio > * + *::before {
   content: "|";
-  margin: 0 calc(var(--pt) * 5.5);
-  font-weight: 300;
+  margin: 0 calc(var(--pt) * 3.7);
+  font-weight: var(--bar-weight);
+}
+.nav a + a::before,
+.folio > * + *::before,
+.bar {
+  font-size: calc(var(--bar-size) * 1em);
 }
 .nav a:hover,
 .nav a:focus-visible {
@@ -109,80 +300,130 @@
   text-underline-offset: 0.2em;
 }
 .nav a[aria-current="page"] {
-  font-weight: 700;
+  font-weight: var(--foot-strong);
+}
+.folio b {
+  font-weight: var(--folio-weight);
+  letter-spacing: var(--folio-tracking);
 }
 
 /* ── title and front matter ───────────────────────────────────────────── */
+/* One line, its baseline 69.55 pt down the page. */
 .title {
-  margin: calc(var(--pt) * -1.4) 0 0;
-  font-size: calc(var(--pt) * 26);
-  font-weight: 800;
-  line-height: calc(var(--pt) * 27.4);
-  letter-spacing: -0.022em;
-  font-variation-settings: "opsz" 28;
+  height: calc(var(--pt) * 28);
+  margin: 0;
+  font-size: calc(var(--pt) * var(--title-size));
+  font-weight: var(--title-weight);
+  font-variation-settings: var(--title-axes);
+  line-height: calc(var(--pt) * 28);
+  letter-spacing: var(--title-tracking);
+  word-spacing: var(--title-spacing);
+  white-space: nowrap;
+}
+.title::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * 28);
 }
 
 .front {
   display: grid;
-  grid-template-columns: calc(var(--pt) * 166) minmax(0, 1fr);
-  column-gap: calc(var(--pt) * 11);
+  grid-template-columns: calc(var(--pt) * 166.3) minmax(0, 1fr);
+  column-gap: var(--gap);
   align-items: start;
-  margin-top: calc(var(--pt) * 40.6);
-  border-top: var(--rule);
+  margin-top: calc(var(--pt) * 43.54);
+  padding-top: calc(var(--pt) * 0.5);
+  background: var(--rule-above);
 }
+/* Fact rows 16.1 pt apart with a rule between them. */
 .meta {
   margin: 0;
   padding: 0;
   list-style: none;
   font-family: var(--sans);
-  font-weight: 500;
+  font-size: calc(var(--pt) * var(--fact-size));
+  font-weight: var(--fact-weight);
+  font-variation-settings: var(--sans-axes);
+  line-height: calc(var(--pt) * 10);
+  letter-spacing: var(--fact-tracking);
+  word-spacing: var(--fact-spacing);
 }
 .meta li {
-  height: calc(var(--pt) * 16);
-  line-height: calc(var(--pt) * 16);
+  height: calc(var(--pt) * 16.1);
+  padding-top: calc(var(--pt) * 0.5);
+  background: var(--rule-above);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.meta li + li {
-  border-top: var(--rule);
-  line-height: calc(var(--pt) * 15.5);
+.meta li::before,
+.byline::before,
+.lead p:first-child::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * 11.26);
 }
+.meta li:first-child {
+  height: calc(var(--pt) * 15.02);
+  padding-top: 0;
+  background: none;
+}
+.meta li:first-child::before,
+.byline::before {
+  height: calc(var(--pt) * 10.68);
+}
+/* The row of the palace button. */
 .meta .action {
   display: flex;
   align-items: center;
-  height: auto;
-  min-height: max(calc(var(--pt) * 19), 36px);
+  height: calc(var(--pt) * 21);
   overflow: visible;
 }
+.meta .action::before {
+  content: none;
+}
 .byline {
+  height: calc(var(--pt) * 31.16);
   margin: 0;
-  padding: calc(var(--pt) * 2.6) 0 calc(var(--pt) * 18.2);
   font-family: var(--sans);
-  font-weight: 600;
+  font-size: calc(var(--pt) * var(--byline-size));
+  font-weight: var(--byline-weight);
+  font-variation-settings: var(--sans-axes);
+  letter-spacing: var(--byline-tracking);
+  word-spacing: var(--byline-spacing);
 }
 .lead {
-  padding-top: calc(var(--pt) * 0.8);
-  border-top: var(--rule);
-  font-size: calc(var(--pt) * 9);
+  padding-top: calc(var(--pt) * 0.5);
+  background: var(--rule-above);
+  font-size: calc(var(--pt) * var(--lead-size));
   line-height: calc(var(--pt) * 13);
+  letter-spacing: var(--lead-tracking);
+  word-spacing: var(--lead-spacing);
 }
 .lead p {
   margin: 0;
 }
+/* The title block closes with the rule the body starts under. */
+.opening {
+  height: 100%;
+  padding-bottom: calc(var(--pt) * 22.6);
+  background: var(--rule-below);
+}
 
+/* A superscript is raised 0.424 em of the text it is in, a subscript
+   lowered 0.2 em. */
 .page sup,
 .page sub {
   position: relative;
-  font-size: 0.62em;
+  font-size: 0.6em;
   line-height: 0;
   vertical-align: baseline;
 }
 .page sup {
-  top: -0.52em;
+  top: calc(-0.424em / 0.6);
 }
 .page sub {
-  top: 0.22em;
+  top: calc(0.2em / 0.6);
 }
 .envelope {
   display: inline-block;
@@ -195,13 +436,13 @@
 
 /* ── body ─────────────────────────────────────────────────────────────── */
 .body {
-  margin-top: calc(var(--pt) * 24);
-  padding-top: calc(var(--pt) * 1.2);
-  border-top: var(--rule);
+  margin-top: calc(var(--pt) * 22.5);
+  padding-top: calc(var(--pt) * 5.08);
+  background: var(--rule-above);
 }
 /* Under a bare title the body rule stands where the front matter would. */
 .title + .body {
-  margin-top: calc(var(--pt) * 40.6);
+  margin-top: calc(var(--pt) * 43.54);
 }
 .columns {
   display: grid;
@@ -210,95 +451,97 @@
   align-items: start;
 }
 * + .block {
-  margin-top: calc(var(--pt) * 16);
-}
-.figure + .block {
-  margin-top: calc(var(--pt) * 18);
+  margin-top: calc(var(--pt) * 20);
 }
 
-/* Section and paper headings. A heading stands two lines below the text
-   before it and directly above the text after it. */
+/* Headings of a track and of a paper, the line of authors and venue under
+   a paper's title, and running text. */
 .section {
-  margin: calc(var(--pt) * -3.3) 0 calc(var(--pt) * 8);
-  font-size: calc(var(--pt) * 12);
-  font-weight: 700;
-  line-height: calc(var(--pt) * 15);
+  margin: 0 0 calc(var(--pt) * 2);
+  font-size: calc(var(--pt) * var(--section-size));
+  font-weight: var(--section-weight);
+  font-variation-settings: var(--section-axes);
+  letter-spacing: var(--section-tracking);
+  word-spacing: var(--section-spacing);
 }
 .entry + .entry {
-  margin-top: calc(var(--pt) * 30);
+  margin-top: calc(var(--pt) * 21.5);
 }
 .heading {
   margin: 0;
-  font-size: calc(var(--pt) * 10);
-  font-weight: 700;
-  line-height: calc(var(--pt) * 12);
+  font-size: calc(var(--pt) * var(--heading-size));
+  font-weight: var(--heading-weight);
+  font-variation-settings: var(--heading-axes);
+  letter-spacing: var(--heading-tracking);
+  word-spacing: var(--heading-spacing);
   text-wrap: balance;
 }
-.citation {
-  margin: calc(var(--pt) * 2) 0 0;
+.citation,
+.reference,
+.references,
+.footnotes {
   font-family: var(--sans);
-  font-size: var(--small);
-  line-height: 1.375;
+  font-size: calc(var(--pt) * var(--note-size));
+  font-weight: var(--note-weight);
+  font-variation-settings: var(--sans-axes);
+  line-height: calc(var(--pt) * 8);
+  letter-spacing: var(--note-tracking);
+  word-spacing: var(--note-spacing);
+}
+.citation,
+.reference {
+  margin: 0;
 }
 .citation b,
+.reference b,
 .references b {
-  font-weight: 600;
+  font-weight: var(--note-strong);
+  letter-spacing: var(--note-strong-tracking);
 }
-
-/* Running text: the paper's own abstract, in two justified columns. */
-.text {
-  margin-top: calc(var(--pt) * 5.5);
-  columns: 2;
-  column-gap: var(--gap);
+/* A word of seven characters or more may be broken, three or more before
+   the hyphen and four or more after it. */
+.paragraph {
+  margin: 0;
   text-align: justify;
   hyphens: auto;
   -webkit-hyphens: auto;
-  orphans: 2;
-  widows: 2;
+  hyphenate-limit-chars: 7 3 4;
 }
-.text p {
-  margin: 0;
+/* A line of running text may be set tighter or looser than the rest.
+   --track is its tracking in thousandths of an em; what draws its letters
+   together draws its word spaces together as well, 0.03 em at the tightest
+   a line may be. The proof is set that tight: no line is broken sooner
+   than it has to be, and the typesetter lets each one out again. */
+.paragraph,
+.tracked {
+  letter-spacing: calc(var(--body-tracking) + var(--track, 0) * 0.001em);
+  word-spacing: calc(var(--body-spacing) + min(0, var(--track, 0)) * 0.0025em);
 }
-.text p + p {
-  text-indent: calc(var(--pt) * 8);
+.proof .paragraph {
+  --track: -12;
 }
-
-/* A figure one column wide stands in the second column, beside the text of
-   its paper and of the paper after it. Where the figure is the taller side,
-   the two texts share the difference. */
-.spread {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: calc(var(--pt) * 21.5) var(--gap);
-  align-items: start;
+/* Inline markup of another size takes no part in the height of its line. */
+.paragraph b,
+.caption b {
+  font-size: calc(var(--strong-size) * 1em);
+  font-weight: var(--strong-weight);
+  font-variation-settings: var(--strong-axes);
+  line-height: 0;
 }
-.spread > * {
-  grid-column: 1;
-}
-.spread > .figure {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  margin-top: calc(var(--pt) * 2.6);
-}
-.spread .text {
-  columns: 1;
+.indent {
+  text-indent: calc(var(--pt) * 8.5);
 }
 
+/* A page prints no underlines: a link shows its own, as thick as a rule,
+   when it is pointed at or focused. */
 .link {
-  text-decoration: underline;
-  text-decoration-color: rgba(0, 0, 0, 0.3);
-  text-decoration-thickness: 1px;
+  text-decoration: underline transparent;
+  text-decoration-thickness: var(--hair);
   text-underline-offset: 0.17em;
 }
 .link:hover,
 .link:focus-visible {
   text-decoration-color: currentColor;
-}
-.meta .link,
-.lead .link,
-.folio .link,
-.quiet {
-  text-decoration-color: transparent;
 }
 .page a:focus-visible {
   outline: 2px solid #1a5fd0;
@@ -307,15 +550,13 @@
 
 /* ── figures ──────────────────────────────────────────────────────────── */
 .figure {
-  margin: calc(var(--pt) * 16) 0 0;
+  margin: 0;
 }
-.figure img {
+.print img,
+.plate img {
   display: block;
   width: 100%;
   height: auto;
-}
-.columns > .figure {
-  margin-top: calc(var(--pt) * 1.2);
 }
 /* A paper's figure keeps the width it has on the published page. */
 .print {
@@ -338,89 +579,28 @@
   aspect-ratio: 1;
 }
 .caption {
-  margin: calc(var(--pt) * 7.6) 0 0;
-  font-size: var(--label);
-  line-height: 1.4286;
+  margin: 0;
+  font-size: calc(var(--pt) * var(--caption-size));
+  line-height: calc(var(--pt) * 10);
+  letter-spacing: var(--caption-tracking);
+  word-spacing: var(--caption-spacing);
 }
-/* Under a figure wider than a column the caption runs in both columns. */
-.spanning > .caption {
-  columns: 2;
-  column-gap: var(--gap);
+.caption b {
+  letter-spacing: var(--caption-strong-tracking);
+  word-spacing: var(--caption-strong-spacing);
 }
-.caption code,
-.table code {
+/* The first baseline of a caption is 14 pt under its figure. */
+.figure > .caption::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * 14);
+}
+.caption code {
   font-size: 0.92em;
+  line-height: 0;
 }
-.credit {
-  color: var(--muted);
-}
-
-/* ── tables ───────────────────────────────────────────────────────────── */
-.tableTitle {
-  margin: 0 0 calc(var(--pt) * 3.4);
-  font-family: var(--sans);
-  font-size: var(--label);
-  line-height: 1.36;
-}
-.scroll {
-  overflow-x: auto;
-}
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--sans);
-  font-size: var(--label);
-  line-height: 1.286;
-  text-align: left;
-  font-variant-numeric: tabular-nums lining-nums;
-}
-.table th,
-.table td {
-  padding: calc(var(--pt) * 1.25) calc(var(--pt) * 8) calc(var(--pt) * 1.25) 0;
-  font-weight: 400;
-  vertical-align: top;
-}
-.table :is(th, td):last-child {
-  padding-right: 0;
-}
-.table thead tr:first-child > *,
-.table tbody:first-child tr:first-child > * {
-  border-top: var(--rule);
-}
-.table thead tr:last-child > * {
-  border-bottom: var(--rule);
-}
-.table thead th {
-  font-weight: 600;
-}
-.table tbody tr:last-child > * {
-  border-bottom: var(--rule);
-}
-.table tbody th {
-  font-weight: 600;
-}
-.table .ruled > * {
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
-}
-.table .center {
-  text-align: center;
-}
-.table .right {
-  text-align: right;
-}
-/* A paper's table is as wide as on the published page, or as its contents. */
-.fit {
-  width: auto;
-  min-width: min(100%, calc(var(--pt) * var(--print-width)));
-  margin: 0 auto;
-  white-space: nowrap;
-}
-.note {
-  display: block;
-  font-weight: 400;
-}
-.nowrap {
-  white-space: nowrap;
+.caption cite {
+  font-style: normal;
 }
 
 /* ── references ───────────────────────────────────────────────────────── */
@@ -430,65 +610,145 @@
   list-style: none;
   columns: 2;
   column-gap: var(--gap);
-  font-family: var(--sans);
-  font-size: var(--small);
-  line-height: 1.375;
 }
 .references li {
   display: grid;
-  grid-template-columns: calc(var(--pt) * 14) minmax(0, 1fr);
+  grid-template-columns: calc(var(--pt) * 14.2) minmax(0, 1fr);
   break-inside: avoid;
 }
-.heading + .references {
-  margin-top: calc(var(--pt) * 3);
-}
-.references li:target {
+.references li:target,
+.reference:target {
   background: #fff6c7;
+}
+/* The number of a reference hangs in the margin of its first line, on a
+   baseline --leading under the top of the reference. */
+.label {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: calc(var(--pt) * var(--hang));
+  white-space: nowrap;
+}
+.label::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * var(--leading));
 }
 
 /* ── foot of the page ─────────────────────────────────────────────────── */
-.footer {
-  font-family: var(--sans);
-}
+/* Footnotes stand on the last baseline of a full column, 743.52 pt down the
+   page, under a rule 8.68 pt above their first baseline. */
 .footnotes {
-  margin: calc(var(--pt) * 6) 0 0;
-  padding-top: calc(var(--pt) * 1);
-  border-top: var(--rule);
-  font-size: var(--small);
-  line-height: 1.5;
-}
-.folio {
+  position: absolute;
+  right: var(--right);
+  bottom: calc(var(--pt) * 37.346);
+  left: var(--left);
   display: flex;
-  flex-wrap: wrap;
-  margin: calc(var(--pt) * 15) 0 0;
-  line-height: calc(var(--pt) * 12);
+  align-items: last baseline;
+  line-height: calc(var(--pt) * 9);
+  letter-spacing: var(--footnote-tracking);
+}
+.footnotes::after {
+  content: "";
+  margin-bottom: calc(var(--pt) * 10);
+}
+.footnotes p {
+  flex: 1;
+  margin: 0;
+  padding-top: calc(var(--pt) * 0.5);
+  background: var(--rule-above);
+}
+.footnotes p::before {
+  content: "";
+  display: inline-block;
+  height: calc(var(--pt) * 8.43);
+}
+/* The page number and imprint, baseline 769.55 pt down the page. */
+.folio {
+  position: absolute;
+  right: var(--right);
+  bottom: calc(var(--pt) * 21.316);
+  left: var(--left);
+  display: flex;
+  align-items: baseline;
+  height: calc(var(--pt) * 12);
+  margin: 0;
+}
+.folio::before {
+  content: "";
+  height: calc(var(--pt) * 12);
 }
 .recto .folio {
   justify-content: flex-end;
 }
 
-/* ── narrower sheets: same page, fluid measure ────────────────────────── */
-@media (max-width: 760px) {
+/* ── the two renderings of an article ─────────────────────────────────── */
+/* The article is in the document twice: typeset in pages (the pieces are
+   placed by paged.module.css), and fluid. */
+.fluid {
+  display: none;
+}
+
+/* The proof the typesetter reads: one block under the other, on a sheet at
+   its full width in any window. */
+.galley {
+  --fit: var(--full);
+  overflow-x: auto;
+}
+.proof > * {
+  margin-bottom: calc(var(--pt) * 12);
+}
+
+/* ── narrower windows: the same content in one fluid column ───────────── */
+@media (max-width: 899.98px) {
+  .paged {
+    display: none;
+  }
+  .fluid {
+    display: block;
+  }
   .desk {
     padding: 0 0 72px;
     background: var(--paper);
   }
   .sheet {
     width: 100%;
+    aspect-ratio: auto;
     box-shadow: none;
   }
   .sheet + .sheet {
     margin-top: 0;
     border-top: 10px solid var(--desk);
   }
-  .page {
+  .page,
+  .tall > .page {
     --pt: 2px;
+    --section-size: 12.16;
+    --heading-size: 10;
+    --heading-weight: 714;
+    /* Ragged text keeps the word space of its face. */
+    --body-spacing: 0em;
+    position: relative;
+    width: auto;
+    max-width: 640px;
+    height: auto;
+    margin: 0 auto;
     padding: 22px 18px 26px 28px;
+    text-rendering: inherit;
   }
   .recto {
     padding-top: 30px;
   }
-  .page::before {
+  .page::before,
+  .runningHead::before,
+  .title::before,
+  .meta li::before,
+  .byline::before,
+  .lead p:first-child::before,
+  .footnotes::after,
+  .footnotes p::before,
+  .folio::before,
+  .label::before {
     content: none;
   }
   .page::after,
@@ -502,19 +762,22 @@
     flex-direction: column;
     gap: 6px;
     padding-bottom: 8px;
-    border-bottom: var(--rule);
+    background: var(--rule-below);
   }
   .nav {
     justify-content: flex-start;
     row-gap: 2px;
+    margin-left: 0;
   }
   .nav a + a::before {
     margin: 0 7px;
   }
   .title {
+    height: auto;
     margin-top: 10px;
     font-size: clamp(34px, 10.2vw, 49px);
     line-height: 1.06;
+    white-space: normal;
   }
   .front {
     grid-template-columns: minmax(0, 1fr);
@@ -522,7 +785,7 @@
     margin-top: 28px;
   }
   .meta li,
-  .meta li + li {
+  .meta li:first-child {
     height: auto;
     line-height: 2.1;
     white-space: normal;
@@ -531,6 +794,7 @@
     min-height: 44px;
   }
   .byline {
+    height: auto;
     padding: 0 0 12px;
   }
   .lead {
@@ -541,50 +805,46 @@
     margin-top: 28px;
     padding-top: 12px;
   }
-  .section {
-    margin-top: 16px;
+  .opening {
+    padding-bottom: 28px;
   }
-  .columns,
-  .spread {
+  .columns {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 24px;
   }
   .columns > .figure {
     order: -1;
   }
-  .spread > .figure {
-    grid-column: 1;
-    grid-row: auto;
+  * + .block {
+    margin-top: 24px;
+  }
+  .section {
+    margin: 16px 0 8px;
+    line-height: calc(var(--pt) * 15);
+  }
+  .entry + .entry,
+  * + .heading {
+    margin-top: 44px;
+  }
+  .section + .heading {
     margin-top: 0;
   }
-  .text {
-    columns: 1;
+  .heading {
+    line-height: calc(var(--pt) * 12);
+  }
+  .citation {
+    margin: 4px 0 11px;
+  }
+  .paragraph {
     text-align: left;
   }
-  .spanning > .caption {
-    columns: 1;
+  /* Under a finger a link is underlined, except in the title block, the
+     headings and the foot. */
+  .link {
+    text-decoration-color: var(--border);
   }
-  /* Education and Projects: one entry per block instead of three columns. */
-  .stack thead {
-    display: none;
-  }
-  .stack tr {
-    display: block;
-    padding: 9px 0;
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-  }
-  .stack tbody tr:first-child {
-    border-top: var(--rule);
-  }
-  .stack tbody tr:last-child {
-    border-bottom: var(--rule);
-  }
-  .stack :is(th, td) {
-    display: block;
-    padding: 0;
-    border: 0 !important;
-    white-space: normal;
-    overflow-wrap: anywhere;
+  :where(.meta, .lead, .folio, .heading) .link {
+    text-decoration-color: transparent;
   }
   .references {
     columns: 1;
@@ -593,11 +853,28 @@
     grid-template-columns: 22px minmax(0, 1fr);
     margin-bottom: 4px;
   }
+  .reference {
+    position: relative;
+    margin-bottom: 4px;
+    padding-left: 22px;
+  }
+  .label {
+    right: auto;
+    left: 0;
+  }
   .footnotes {
+    position: static;
+    display: block;
     margin-top: 28px;
+    line-height: 1.5;
+  }
+  .footnotes p {
     padding-top: 8px;
   }
   .folio {
+    position: static;
+    flex-wrap: wrap;
+    height: auto;
     margin-top: 20px;
     font-size: 12.5px;
   }

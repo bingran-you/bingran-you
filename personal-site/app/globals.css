@@ -2,12 +2,12 @@
 
 /* ──────────────────────────────────────────────────────────────────────
    Article theme — every route is a sheet of a journal article lying on a
-   grey desk: black ink, white paper, hairline rules. The page furniture
-   lives in components/article; this file holds only what is global.
+   desk: black ink, white paper, hairline rules. The page furniture lives
+   in components/article; this file holds only what is global.
 
-   Faces are loaded with next/font in app/layout.tsx: Source Serif 4 for
-   text and Hanken Grotesk for labels. CJK glyphs fall through to Noto
-   Serif SC.
+   Faces are loaded with next/font in app/fonts.ts and named here by their
+   families: Roboto Serif for text, with Noto Serif for its Greek, and Inter
+   for labels. CJK glyphs fall through to Noto Serif SC.
    ────────────────────────────────────────────────────────────────────── */
 
 /* Millennium is the face of the "Enter the Memory Palace" button, copied
@@ -52,10 +52,17 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
-  --font-sans: var(--font-hanken), "Helvetica Neue", Arial,
-    var(--font-noto-serif-sc), sans-serif;
-  --font-serif: var(--font-source-serif), "Iowan Old Style", Georgia,
-    var(--font-noto-serif-sc), "Songti SC", serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, "Noto Serif SC", sans-serif;
+  --font-serif: "Roboto Serif", "Noto Serif", Georgia, "Noto Serif SC",
+    "Songti SC", serif;
+}
+
+/* The desk is dark where the article is in pages (see the breakpoint in
+   components/article/article.module.css). */
+@media (min-width: 900px) {
+  :root {
+    --desk: #282828;
+  }
 }
 
 html {
@@ -72,8 +79,8 @@ html {
 body {
   background-color: var(--desk);
   color: var(--ink);
-  font-family: var(--font-source-serif), "Iowan Old Style", Georgia,
-    var(--font-noto-serif-sc), "Songti SC", serif;
+  font-family: "Roboto Serif", "Noto Serif", Georgia, "Noto Serif SC",
+    "Songti SC", serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;

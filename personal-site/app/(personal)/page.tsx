@@ -1,112 +1,44 @@
-import Image from "next/image";
-import {
-  EducationTable,
-  fitsColumn,
-  PaperFigure,
-  PaperTable,
-  PaperText,
-  ProjectsTable,
-  ReferenceItem,
-} from "@/components/article/blocks";
-import { Front } from "@/components/article/front";
+import { BoxContent, TextElement } from "@/components/article/flow";
+import { Pages } from "@/components/article/paged";
 import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
-import { PalaceCta } from "@/components/palace-cta";
-import {
-  CO_FIRST_NOTE,
-  education,
-  getPaperDetail,
-  hasCoFirstAuthors,
-  papers,
-  projects,
-  TRACK_LABEL,
-  type Paper,
-} from "@/lib/content";
+import { homeArticle, isText, type Block } from "@/lib/article";
+import { CO_FIRST_NOTE } from "@/lib/content";
 import { jsonLdScriptContent, profilePageJsonLd } from "@/lib/jsonld";
-import { PERSON } from "@/lib/site";
+import { homeLayout } from "@/lib/layout";
 
-type NumberedPaper = {
-  paper: Paper;
-  figureNumber: number;
-  tableNumber?: number;
-};
-
-const hasTable = (paper: Paper) => Boolean(getPaperDetail(paper.slug).table);
-
-/** Fig. 1 is the portrait and Tables 1–2 are on the title page. */
-function numberPapers(list: Paper[]): NumberedPaper[] {
-  let figure = 1;
-  let table = 2;
-  return list.map((paper) => ({
-    paper,
-    figureNumber: ++figure,
-    tableNumber: hasTable(paper) ? ++table : undefined,
-  }));
-}
-
-/**
- * A paper with a table fills a sheet; two of a track without one share a
- * sheet. A paper whose figure is one column wide always opens its sheet, so
- * the text can run beside the figure.
- */
-function paginate(list: NumberedPaper[]): NumberedPaper[][] {
-  const sheets: NumberedPaper[][] = [];
-  for (const entry of list) {
-    const last = sheets.at(-1);
-    const shares =
-      last?.length === 1 &&
-      last[0].paper.track === entry.paper.track &&
-      !hasTable(last[0].paper) &&
-      !hasTable(entry.paper) &&
-      !fitsColumn(entry.paper);
-    if (shares) last.push(entry);
-    else sheets.push([entry]);
+/** In the fluid column every section opens a sheet of its own. */
+function fluidSheets(blocks: Block[]): Block[][] {
+  const sheets: Block[][] = [[]];
+  for (const block of blocks) {
+    if (block.kind === "section") sheets.push([]);
+    sheets[sheets.length - 1].push(block);
   }
   return sheets;
 }
 
-/** A paper down the page: text in two columns, then its figure and table. */
-function Stacked({ paper, figureNumber, tableNumber }: NumberedPaper) {
-  return (
-    <div className={styles.entry}>
-      <PaperText paper={paper} />
-      <PaperFigure paper={paper} number={figureNumber} />
-      {tableNumber ? <PaperTable paper={paper} number={tableNumber} /> : null}
-    </div>
-  );
-}
-
-/**
- * A paper whose figure is one column wide: the figure stands in the second
- * column and the text runs beside it, followed by the text of the paper that
- * shares the sheet. That paper's own figure spans the page underneath.
- */
-function Spread({ entries }: { entries: NumberedPaper[] }) {
-  const [first, second] = entries;
-  return (
-    <div className={styles.entry}>
-      <div className={styles.spread}>
-        <PaperText paper={first.paper} />
-        <PaperFigure paper={first.paper} number={first.figureNumber} column />
-        {second ? <PaperText paper={second.paper} /> : null}
+/** A block in the fluid column: text, a figure over its caption, or a table. */
+function FluidBlock({ block }: { block: Block }) {
+  if (isText(block)) return <TextElement block={block} />;
+  if (!block.caption) {
+    return (
+      <div className={styles.block}>
+        <BoxContent block={block} />
       </div>
-      {second ? (
-        <PaperFigure paper={second.paper} number={second.figureNumber} />
-      ) : null}
-      {first.tableNumber ? (
-        <PaperTable paper={first.paper} number={first.tableNumber} />
-      ) : null}
-    </div>
+    );
+  }
+  return (
+    <figure className={`${styles.block} ${styles.figure}`}>
+      <BoxContent block={block} />
+      <TextElement block={block.caption} as="figcaption" />
+    </figure>
   );
 }
 
+// The article is rendered twice and a media query shows one: in pages, as
+// the typesetter laid it out, and in one fluid column for narrow windows.
 export default function Home() {
-  const sheets = paginate(numberPapers(papers));
-  const firstOfTrack = new Set(
-    Object.keys(TRACK_LABEL).map(
-      (track) => papers.find((paper) => paper.track === track)?.slug,
-    ),
-  );
+  const blocks = homeArticle();
 
   return (
     <>
@@ -117,76 +49,29 @@ export default function Home() {
         }}
       />
 
-      <Sheet current="/">
-        <h1 className={styles.title}>{PERSON.name}</h1>
-        <Front action={<PalaceCta />} />
+      <div className={styles.paged}>
+        <Pages
+          blocks={blocks}
+          layout={homeLayout()}
+          current="/"
+          footnote={CO_FIRST_NOTE}
+        />
+      </div>
 
-        <div className={styles.body}>
-          <div className={styles.columns}>
-            <EducationTable number={1} items={education} />
-            <figure className={styles.figure}>
-              <div className={styles.plate}>
-                <Image
-                  src={PERSON.portrait}
-                  alt={PERSON.name}
-                  fill
-                  priority
-                  sizes="(max-width: 760px) 100vw, 560px"
-                />
-              </div>
-              <figcaption className={styles.caption}>
-                <b>Fig. 1 | {PERSON.name}.</b>
-              </figcaption>
-            </figure>
-          </div>
-          <div className={styles.block}>
-            <ProjectsTable number={2} items={projects} />
-          </div>
-        </div>
-      </Sheet>
-
-      {sheets.map((entries, i) => {
-        const [first] = entries;
-        // The article closes with its reference list, on the last sheet.
-        const last = i === sheets.length - 1;
-        const listed = last ? papers : entries.map(({ paper }) => paper);
-        const coFirst = listed.some(hasCoFirstAuthors);
-        return (
+      <div className={styles.fluid}>
+        {fluidSheets(blocks).map((sheet, i) => (
           <Sheet
-            key={first.paper.slug}
-            page={i + 2}
+            key={sheet[0].id}
+            page={i + 1}
             current="/"
-            footnote={coFirst ? CO_FIRST_NOTE : undefined}
+            footnote={i === 0 ? CO_FIRST_NOTE : undefined}
           >
-            {firstOfTrack.has(first.paper.slug) ? (
-              <h2 className={styles.section}>
-                {TRACK_LABEL[first.paper.track]}
-              </h2>
-            ) : null}
-            {fitsColumn(first.paper) ? (
-              <Spread entries={entries} />
-            ) : (
-              entries.map((entry) => (
-                <Stacked key={entry.paper.slug} {...entry} />
-              ))
-            )}
-            {last ? (
-              <section className={styles.entry} id="references">
-                <h2 className={styles.heading}>References</h2>
-                <ol className={styles.references}>
-                  {papers.map((paper, n) => (
-                    <ReferenceItem
-                      key={paper.slug}
-                      paper={paper}
-                      number={n + 1}
-                    />
-                  ))}
-                </ol>
-              </section>
-            ) : null}
+            {sheet.map((block) => (
+              <FluidBlock key={block.id} block={block} />
+            ))}
           </Sheet>
-        );
-      })}
+        ))}
+      </div>
     </>
   );
 }

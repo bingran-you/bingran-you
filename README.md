@@ -81,10 +81,10 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
-- 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://www.nature.com/articles/s41586-025-09474-1)
+- 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://doi.org/10.1038/s41586-025-09474-1)
 - 📑 *Phys. Rev. Lett.* · [Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201)
 - 📑 *Phys. Rev. Applied* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://doi.org/10.1103/ppm8-8kx5)
-- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://www.nature.com/articles/s44310-025-00102-4)
+- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://doi.org/10.1038/s44310-025-00102-4)
 - 📑 *arXiv* · [A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control](https://arxiv.org/abs/2607.25062)
 
 ## Connect

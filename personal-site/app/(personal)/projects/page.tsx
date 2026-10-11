@@ -4,6 +4,7 @@ import { Sheet } from "@/components/article/sheet";
 import styles from "@/components/article/article.module.css";
 import { projects } from "@/lib/content";
 import { graphScriptContent, projectJsonLd } from "@/lib/jsonld";
+import { sheetLength } from "@/lib/layout";
 import { PERSON } from "@/lib/site";
 
 const names = projects.map((project) => project.name);
@@ -18,7 +19,7 @@ export default function ProjectsPage() {
   const jsonLd = graphScriptContent(projects.map(projectJsonLd));
 
   return (
-    <Sheet current="/projects">
+    <Sheet current="/projects" length={sheetLength("projects")}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}

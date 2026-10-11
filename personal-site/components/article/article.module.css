@@ -7,12 +7,16 @@
    34 pt. Every length is a point from that page times --pt (one point in
    CSS px).
 
-   From 900 px up a sheet is one such page. The page is laid out at one
-   size, that of a sheet at its full width (--full), and scaled to the
-   sheet it is on: its text is set at the size it was typeset at whatever
-   the window, and its smallest type (5.87 pt) clears a browser's minimum
-   font size of 12 px. Narrower windows get the same content in one fluid
-   column on sheets as tall as their content: the last block of this file.
+   From 900 px up a sheet of the home article is one such page. The page
+   is laid out at one size, that of a sheet at its full width (--full), and
+   scaled to the sheet it is on: its text is set at the size it was typeset
+   at whatever the window, and its smallest type (5.87 pt) clears a
+   browser's minimum font size of 12 px. The last sheet of the article and
+   the one sheet of /about, /projects and /papers are such pages too, but
+   end under their content: each is handed its own --page-length. /posts
+   lies on a sheet as tall as its content (.tall), which is not scaled.
+   Narrower windows get the same content in one fluid column on sheets as
+   tall as their content: the last block of this file.
 
    Where a baseline has to stand at a given height, an empty inline box of a
    known height stands on it (a ::before). Taller than the text beside it,
@@ -44,7 +48,7 @@
 .sheet + .sheet {
   margin-top: 16px;
 }
-/* A route that is not paginated lies on one sheet as tall as its content. */
+/* /posts and the proof lie on one sheet as tall as its content. */
 .tall {
   aspect-ratio: auto;
 }
@@ -71,6 +75,9 @@
   --left: calc(var(--pt) * 39.69);
   --right: calc(var(--pt) * 34.016);
   --gap: calc(var(--pt) * 11.33);
+  /* A sheet that ends under its content ends this many points under it:
+     room for a footnote and the page number. */
+  --foot: 68;
 
   /* Type: the families and, for every style on the page, its size (in
      points), weight, axes (optical size and width: font-variation-settings
@@ -174,7 +181,7 @@
   position: relative;
   width: auto;
   height: auto;
-  padding-bottom: calc(var(--pt) * 68);
+  padding-bottom: calc(var(--pt) * var(--foot));
 }
 /* What a sheet holds that is not set as part of the article takes none of
    its type. The size and leading are those the cards of /posts have always
@@ -829,7 +836,10 @@
   .section + .heading {
     margin-top: 0;
   }
+  /* A paper opens under a rule here as it does on a page. */
   .heading {
+    padding-top: 10px;
+    background: var(--rule-above);
     line-height: calc(var(--pt) * 12);
   }
   .citation {

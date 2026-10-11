@@ -7,6 +7,7 @@ import styles from "@/components/article/article.module.css";
 import tables from "@/components/article/table.module.css";
 import { PORTRAIT_CAPTION } from "@/lib/article";
 import { education } from "@/lib/content";
+import { sheetLength } from "@/lib/layout";
 import {
   jsonLdScriptContent,
   profilePageJsonLd,
@@ -31,7 +32,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <Sheet current="/about">
+    <Sheet current="/about" length={sheetLength("about")}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

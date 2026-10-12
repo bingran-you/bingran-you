@@ -47,11 +47,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  // The dark desk of the paged layout; narrower windows are all paper.
-  themeColor: [
-    { media: "(min-width: 900px)", color: "#282828" },
-    { media: "(max-width: 899.98px)", color: "#e8e9eb" },
-  ],
+  // The desk the sheets lie on (--desk in globals.css).
+  themeColor: "#dddddd",
 };
 
 export default function RootLayout({

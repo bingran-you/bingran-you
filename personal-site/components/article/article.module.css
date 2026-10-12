@@ -43,7 +43,7 @@
   aspect-ratio: var(--page-width) / var(--page-length);
   margin: 0 auto;
   background: var(--paper);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.22);
 }
 .sheet + .sheet {
   margin-top: 16px;

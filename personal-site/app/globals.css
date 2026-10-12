@@ -32,7 +32,7 @@
 
   --ink: #000;
   --paper: #fff;
-  --desk: #e8e9eb;
+  --desk: #ddd;
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -55,14 +55,6 @@
   --font-sans: "Inter", "Helvetica Neue", Arial, "Noto Serif SC", sans-serif;
   --font-serif: "Roboto Serif", "Noto Serif", Georgia, "Noto Serif SC",
     "Songti SC", serif;
-}
-
-/* The desk is dark where the article is in pages (see the breakpoint in
-   components/article/article.module.css). */
-@media (min-width: 900px) {
-  :root {
-    --desk: #282828;
-  }
 }
 
 html {

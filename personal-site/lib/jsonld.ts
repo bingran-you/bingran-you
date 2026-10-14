@@ -93,6 +93,7 @@ function personEntity() {
     sameAs: [
       "https://www.wikidata.org/wiki/Q139620371",
       "https://x.com/bingran_bry",
+      "https://www.instagram.com/bingran_you/",
       "https://github.com/bingran-you",
       "https://scholar.google.com/citations?user=ZJdz2UkAAAAJ&hl=en",
       "https://orcid.org/0000-0002-0316-2115",

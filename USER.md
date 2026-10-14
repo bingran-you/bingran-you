@@ -55,7 +55,7 @@ _The one you serve. Keep this living and current._
 ## Public Channels
 
 - 𝕏 / Twitter: [@bingran_bry](https://x.com/bingran_bry)
-- Xiaohongshu, YouTube, Bilibili, Discord, GitHub, Google Scholar, ORCID, Hugging Face, LinkedIn — links in `personal-site/lib/site.ts` (`SOCIALS`).
+- Xiaohongshu, Instagram, YouTube, Bilibili, Discord, GitHub, Google Scholar, ORCID, Hugging Face, LinkedIn — links in `personal-site/lib/site.ts` (`SOCIALS`).
 
 ---
 

@@ -92,6 +92,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 <p align="center">
   <a href="https://x.com/bingran_bry"><img alt="X" src="https://img.shields.io/badge/-X-000000?style=flat-square&logo=x&logoColor=white" /></a>
   <a href="https://xhslink.com/m/gFj0Vwr2Ak"><img alt="Rednote" src="https://img.shields.io/badge/-Rednote-FF2442?style=flat-square&logo=xiaohongshu&logoColor=white" /></a>
+  <a href="https://www.instagram.com/bingran_you/"><img alt="Instagram" src="https://img.shields.io/badge/-Instagram-E4405F?style=flat-square&logo=instagram&logoColor=white" /></a>
   <a href="https://www.youtube.com/@BingranBRY"><img alt="YouTube" src="https://img.shields.io/badge/-YouTube-FF0000?style=flat-square&logo=youtube&logoColor=white" /></a>
   <a href="https://space.bilibili.com/85906410"><img alt="Bilibili" src="https://img.shields.io/badge/-Bilibili-00A1D6?style=flat-square&logo=bilibili&logoColor=white" /></a>
   <a href="https://discord.gg/x2KYk4FVS"><img alt="Discord" src="https://img.shields.io/badge/-Discord-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>

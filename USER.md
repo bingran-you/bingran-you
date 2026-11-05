@@ -25,7 +25,7 @@ _The one you serve. Keep this living and current._
 
 ## Projects to Know
 
-- [FrontierPhysics](https://www.benchflow.ai/frontierphysics) — FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
+- [FrontierPhysics](https://www.benchflow.ai/frontierphysics) — FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research. Paper: [arXiv:2611.06910](https://arxiv.org/abs/2611.06910) (2026-11-04), Bingran first author (one of four co-first).
 - [BenchFlow](https://www.benchflow.ai/) — frontier environment lab building the runtime and benchmarks AI agents learn in.
 - [SkillsBench](https://github.com/benchflow-ai/skillsbench) — benchmark for evaluating how well AI agents use skills.
 - [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) — Open-source agent orchestration for engineers.

@@ -111,7 +111,7 @@ export const projects: Project[] = [
     name: "FrontierPhysics",
     href: "https://www.benchflow.ai/frontierphysics",
     description:
-      "FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
+      "FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
     emoji: "⚛️",
     track: "ai",
   },
@@ -200,6 +200,16 @@ export const papers: Paper[] = [
     track: "ai",
   },
   {
+    slug: "agents-last-exam",
+    title: "Agents’ Last Exam",
+    href: "https://arxiv.org/abs/2606.05405",
+    venue: "arXiv",
+    authors: "Sun, Y., Han, X., Zhang, W., …, You, B. et al.",
+    reference: { kind: "preprint", year: 2026 },
+    arxiv: "2606.05405",
+    track: "ai",
+  },
+  {
     slug: "clawsbench",
     title:
       "ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces",
@@ -220,6 +230,17 @@ export const papers: Paper[] = [
     authors: "Zheng, S., Di, Z., Liu, Y., …, You, B. et al.",
     reference: { kind: "preprint", year: 2026 },
     arxiv: "2609.11028",
+    track: "ai",
+  },
+  {
+    slug: "frontierphysics",
+    title:
+      "FrontierPhysics: Evaluating Agents for End-to-End Physics Research",
+    href: "https://arxiv.org/abs/2611.06910",
+    venue: "arXiv",
+    authors: "You, B.*, Ke, W.*, Rosenauer, R.*, Liu, B.* et al.",
+    reference: { kind: "preprint", year: 2026 },
+    arxiv: "2611.06910",
     track: "ai",
   },
   {

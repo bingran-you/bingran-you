@@ -13,7 +13,7 @@ const PROJECTS: ProjectEntry[] = [
     {
         title: 'FrontierPhysics',
         blurb:
-            'FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.',
+            'FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.',
         href: 'https://www.benchflow.ai/frontierphysics',
         tag: 'Agent',
     },

@@ -34,7 +34,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Work
 
-- ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - FrontierPhysics is an open benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
+- ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
 - 🌊 [BenchFlow](https://www.benchflow.ai/) - BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - SkillsBench evaluates how well skills work and how effective agents are at using them.
 - 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) - Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.
@@ -46,8 +46,10 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 ### Selected Papers
 
 - 📑 *NeurIPS 2026* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *arXiv* · [Agents’ Last Exam](https://arxiv.org/abs/2606.05405)
 - 📑 *COLM 2026* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
 - 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
+- 📑 *arXiv* · [FrontierPhysics: Evaluating Agents for End-to-End Physics Research](https://arxiv.org/abs/2611.06910)
 
 ## ⚛️ Experimental AMO Physics
 

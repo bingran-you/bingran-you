@@ -64,14 +64,14 @@ A page may end between two papers, between the parts of one, or inside an abstra
 
 The site carries facts and other people's own words, never prose composed for it:
 
-- **Papers** — title, authors, venue, abstract, first figure with its caption and, where the paper has one, its main table, all verbatim from the paper's arXiv version.
+- **Papers** — title, authors, venue, abstract, first figure with its caption and, where the paper has one that fits across a page, its main table, all verbatim from the paper's arXiv version.
 - **Projects** — the description each project gives itself on its site or repository.
 - **Everything else** — names, dates, links and labels.
 
 ### Add or update a paper
 
-1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page.
-2. Add its abstract, figure and table to `content/papers/details.json` under the same `slug`, copied verbatim from `https://arxiv.org/html/<id>`. Inline markup is limited to `<i>`, `<b>`, `<sup>`, `<sub>` and `<code>` (a test enforces this). A `license` named in `LICENSE_HREF` of `lib/article.ts` is linked to its deed in the credit of the figure and the table.
+1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, papers stand in the order of their Google Scholar citations, most cited first.
+2. Add its abstract, figure and table to `content/papers/details.json` under the same `slug`, copied verbatim from `https://arxiv.org/html/<id>`; a table the HTML has only as an image is copied from the PDF's text layer. Inline markup is limited to `<i>`, `<b>`, `<sup>`, `<sub>` and `<code>` (a test enforces this). A `license` named in `LICENSE_HREF` of `lib/article.ts` is linked to its deed in the credit of the figure and the table.
 3. Put the figure in `public/papers/` and record its pixel size in `details.json`, together with `printWidth`: the width of the figure (and of the table) on the published page, in points. Measure it in the journal PDF, or in the arXiv PDF when the journal's is not at hand (`pdftoppm -r 144`, then the extent of the ink above the caption).
 4. Run `npm run typeset` (see above) and look at every page.
 5. Mirror the title and venue in `palace-inner/src/components/showcase/Experience.tsx` and in the repository-root `README.md`.

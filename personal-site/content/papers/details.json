@@ -583,6 +583,21 @@
       ]
     }
   },
+  "agents-last-exam": {
+    "source": "https://arxiv.org/abs/2606.05405v4",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "Recent AI systems have achieved strong results on a wide range of benchmarks, yet these gains have not translated into economically meaningful deployment across many professional domains. We argue that this gap is largely an evaluation problem: widely used benchmarks lack sustained performance measurement on real and economically valuable workflows. This paper introduces <b>Agents’ Last Exam (ALE)</b>, a benchmark designed to evaluate AI agents on long horizon, economically valuable, real world tasks with verifiable outcomes. Developed in collaboration with 250+ industry experts, ALE covers non-physical industries defined with reference to O*NET / SOC 2018 (the U.S. federal occupational taxonomy). It is organized around a task taxonomy with 55 sub fields grouped into 13 industry clusters covering 1K+ tasks. Current results show that the hardest tier remains far from saturated: across mainstream harness and backbone configurations, the average full pass rate is below 1%. ALE is designed as a living benchmark: its task pool grows continuously as new workflows and industries are onboarded. More broadly, ALE is intended not merely as another leaderboard, but as an instrument for closing the gap between benchmark success and GDP relevant impact."
+    ],
+    "figure": {
+      "src": "/papers/agents-last-exam-fig1.jpg",
+      "width": 1956,
+      "height": 995,
+      "printWidth": 420,
+      "sourceLabel": "Figure 1",
+      "caption": "<b>Agents’ Last Exam</b> spans a broad taxonomy of professional tasks and realistic workflows."
+    }
+  },
   "clawsbench": {
     "source": "https://arxiv.org/abs/2604.05172v2",
     "license": null,
@@ -1357,6 +1372,807 @@
             },
             {
               "html": "$2.05",
+              "align": "right"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "frontierphysics": {
+    "source": "https://arxiv.org/abs/2611.06910v1",
+    "license": "CC BY 4.0",
+    "abstract": [
+      "AI agents are playing an increasingly important role in physics research. However, existing physics benchmarks only evaluate fixed questions, isolated sub-tasks, or paper reproduction with given solutions, and rarely check research quality alongside correctness. We introduce FrontierPhysics, an end-to-end benchmark with 56 tasks made by 42 physicists based on their own research, covering nine domains across theoretical, computational, and experimental physics. Each task requires agents to review the literature, develop a research plan, conduct research and experiments, and produce structured outputs and scientific manuscripts. Combining deterministic verifiers with expert-authored rubrics, FrontierPhysics evaluates whether agents’ research is correct and publishable. Across 22 models in 26 configurations, no configuration passes more than 46 of its 168 rollouts. Manual review of agent trajectories shows that frontier agents’ main weaknesses are insufficiently rigorous reasoning and limited expert intuition, rather than gaps in physics knowledge or execution errors."
+    ],
+    "figure": {
+      "src": "/papers/frontierphysics-fig1.png",
+      "width": 1587,
+      "height": 601,
+      "printWidth": 380.4,
+      "sourceLabel": "Figure 1",
+      "caption": "<b>FrontierPhysics leaderboard.</b> Overall pass rate (Pass@1) under the Table 2 configurations; a pass requires passing all verifier tests and blocker rubrics. Harnesses and inference level: GPT (Codex, max), Claude (Claude Code, max), Grok (Grok Build, xhigh), Gemini (Antigravity, high), Kimi (Claude Code, max), DeepSeek (Claude Code, max), MiMo (Claude Code, max), GLM (Claude Code, max), Mistral (Claude Code, max). Error bars show approximate 95% confidence intervals."
+    },
+    "table": {
+      "sourceLabel": "Table 2",
+      "printWidth": 394,
+      "caption": "Detailed Frontier-model performance across all 56 tasks. For the experiment we use the highest available inference effort by default, where configurable. GPT models also appear at xhigh. The Score column reports the score defined in Equation 1, averaged over the three rollouts for each task and then across all tasks. Deterministic pass requires all verifier tests to pass and overall pass additionally requires all blocking rubric criteria to pass. Pass@1 gives the average pass rate over the three rollouts, while Pass@3 gives the percentage of tasks with at least one passing rollout. Uncertainties are approximate 95% binomial confidence intervals over all rollouts, as in Figure 1. Table 8 gives 95% confidence intervals from a bootstrap over tasks, which account for the correlation of the three trials of a task. Rows are ordered by overall Pass@1, then by deterministic Pass@1 and Score.",
+      "head": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": ""
+            },
+            {
+              "html": ""
+            },
+            {
+              "html": "<b>Deterministic pass (%)</b>",
+              "align": "center",
+              "colSpan": 2
+            },
+            {
+              "html": "<b>Overall pass (%)</b>",
+              "align": "center",
+              "colSpan": 2
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Model</b>"
+            },
+            {
+              "html": "<b>Score</b>",
+              "align": "right"
+            },
+            {
+              "html": "Pass@1",
+              "align": "right"
+            },
+            {
+              "html": "Pass@3",
+              "align": "right"
+            },
+            {
+              "html": "Pass@1",
+              "align": "right"
+            },
+            {
+              "html": "Pass@3",
+              "align": "right"
+            }
+          ]
+        }
+      ],
+      "body": [
+        {
+          "rule": true,
+          "cells": [
+            {
+              "html": "<b>Claude Opus 5.5</b> Claude Code"
+            },
+            {
+              "html": "26.0 ± 6.4",
+              "align": "right"
+            },
+            {
+              "html": "45.8 ± 7.5",
+              "align": "right"
+            },
+            {
+              "html": "62.5",
+              "align": "right"
+            },
+            {
+              "html": "<b>27.4</b> ± 6.7",
+              "align": "right"
+            },
+            {
+              "html": "44.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-6 Astra (max)</b> Codex"
+            },
+            {
+              "html": "21.8 ± 6.0",
+              "align": "right"
+            },
+            {
+              "html": "39.3 ± 7.4",
+              "align": "right"
+            },
+            {
+              "html": "51.8",
+              "align": "right"
+            },
+            {
+              "html": "<b>23.2</b> ± 6.4",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-6 Astra (xhigh)</b> Codex"
+            },
+            {
+              "html": "18.0 ± 5.5",
+              "align": "right"
+            },
+            {
+              "html": "38.7 ± 7.4",
+              "align": "right"
+            },
+            {
+              "html": "51.8",
+              "align": "right"
+            },
+            {
+              "html": "<b>19.6</b> ± 6.0",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-6.1 Sol</b> Codex"
+            },
+            {
+              "html": "18.4 ± 5.7",
+              "align": "right"
+            },
+            {
+              "html": "33.3 ± 7.1",
+              "align": "right"
+            },
+            {
+              "html": "50.0",
+              "align": "right"
+            },
+            {
+              "html": "<b>19.6</b> ± 6.0",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-6.1 Terra</b> Codex"
+            },
+            {
+              "html": "12.6 ± 4.7",
+              "align": "right"
+            },
+            {
+              "html": "28.6 ± 6.8",
+              "align": "right"
+            },
+            {
+              "html": "39.3",
+              "align": "right"
+            },
+            {
+              "html": "<b>14.3</b> ± 5.3",
+              "align": "right"
+            },
+            {
+              "html": "21.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-6 Sol</b> Codex"
+            },
+            {
+              "html": "12.5 ± 4.7",
+              "align": "right"
+            },
+            {
+              "html": "27.4 ± 6.7",
+              "align": "right"
+            },
+            {
+              "html": "44.6",
+              "align": "right"
+            },
+            {
+              "html": "<b>14.3</b> ± 5.3",
+              "align": "right"
+            },
+            {
+              "html": "28.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Claude Fable 5.1</b> Claude Code"
+            },
+            {
+              "html": "10.2 ± 4.3",
+              "align": "right"
+            },
+            {
+              "html": "31.0 ± 7.0",
+              "align": "right"
+            },
+            {
+              "html": "44.6",
+              "align": "right"
+            },
+            {
+              "html": "<b>11.3</b> ± 4.8",
+              "align": "right"
+            },
+            {
+              "html": "21.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Claude Opus 5</b> Claude Code"
+            },
+            {
+              "html": "8.6 ± 4.0",
+              "align": "right"
+            },
+            {
+              "html": "20.2 ± 6.1",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>9.5</b> ± 4.4",
+              "align": "right"
+            },
+            {
+              "html": "17.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Gemini 4 Argon</b> Antigravity"
+            },
+            {
+              "html": "6.5 ± 3.3",
+              "align": "right"
+            },
+            {
+              "html": "31.5 ± 7.0",
+              "align": "right"
+            },
+            {
+              "html": "46.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>8.3</b> ± 4.2",
+              "align": "right"
+            },
+            {
+              "html": "17.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Sol (max)</b> Codex"
+            },
+            {
+              "html": "6.2 ± 3.4",
+              "align": "right"
+            },
+            {
+              "html": "19.6 ± 6.0",
+              "align": "right"
+            },
+            {
+              "html": "28.6",
+              "align": "right"
+            },
+            {
+              "html": "<b>7.1</b> ± 3.9",
+              "align": "right"
+            },
+            {
+              "html": "12.5",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Kimi K3.1 Pro</b> Claude Code"
+            },
+            {
+              "html": "6.1 ± 3.5",
+              "align": "right"
+            },
+            {
+              "html": "15.5 ± 5.5",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>6.5</b> ± 3.7",
+              "align": "right"
+            },
+            {
+              "html": "12.5",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Grok 4.7</b> Grok Build"
+            },
+            {
+              "html": "3.8 ± 2.8",
+              "align": "right"
+            },
+            {
+              "html": "16.7 ± 5.6",
+              "align": "right"
+            },
+            {
+              "html": "35.7",
+              "align": "right"
+            },
+            {
+              "html": "<b>4.2</b> ± 3.0",
+              "align": "right"
+            },
+            {
+              "html": "10.7",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Claude Haiku 5.5</b> Claude Code"
+            },
+            {
+              "html": "3.6 ± 2.6",
+              "align": "right"
+            },
+            {
+              "html": "15.5 ± 5.5",
+              "align": "right"
+            },
+            {
+              "html": "30.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>4.2</b> ± 3.0",
+              "align": "right"
+            },
+            {
+              "html": "10.7",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Sol (xhigh)</b> Codex"
+            },
+            {
+              "html": "3.5 ± 2.6",
+              "align": "right"
+            },
+            {
+              "html": "15.5 ± 5.5",
+              "align": "right"
+            },
+            {
+              "html": "26.8",
+              "align": "right"
+            },
+            {
+              "html": "<b>4.2</b> ± 3.0",
+              "align": "right"
+            },
+            {
+              "html": "8.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GLM-5.3</b> Claude Code"
+            },
+            {
+              "html": "3.6 ± 2.6",
+              "align": "right"
+            },
+            {
+              "html": "7.1 ± 3.9",
+              "align": "right"
+            },
+            {
+              "html": "14.3",
+              "align": "right"
+            },
+            {
+              "html": "<b>4.2</b> ± 3.0",
+              "align": "right"
+            },
+            {
+              "html": "8.9",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Terra (max)</b> Codex"
+            },
+            {
+              "html": "2.9 ± 2.3",
+              "align": "right"
+            },
+            {
+              "html": "16.1 ± 5.6",
+              "align": "right"
+            },
+            {
+              "html": "25.0",
+              "align": "right"
+            },
+            {
+              "html": "<b>3.6</b> ± 2.8",
+              "align": "right"
+            },
+            {
+              "html": "7.1",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Luna (max)</b> Codex"
+            },
+            {
+              "html": "2.9 ± 2.3",
+              "align": "right"
+            },
+            {
+              "html": "12.5 ± 5.0",
+              "align": "right"
+            },
+            {
+              "html": "21.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>3.6</b> ± 2.8",
+              "align": "right"
+            },
+            {
+              "html": "3.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>DeepSeek V4.1 Flash</b> Claude Code"
+            },
+            {
+              "html": "3.3 ± 2.6",
+              "align": "right"
+            },
+            {
+              "html": "10.7 ± 4.7",
+              "align": "right"
+            },
+            {
+              "html": "14.3",
+              "align": "right"
+            },
+            {
+              "html": "<b>3.6</b> ± 2.8",
+              "align": "right"
+            },
+            {
+              "html": "5.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Kimi K3</b> Claude Code"
+            },
+            {
+              "html": "1.8 ± 1.7",
+              "align": "right"
+            },
+            {
+              "html": "11.3 ± 4.8",
+              "align": "right"
+            },
+            {
+              "html": "21.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>2.4</b> ± 2.3",
+              "align": "right"
+            },
+            {
+              "html": "5.4",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Grok 4.6</b> Grok Build"
+            },
+            {
+              "html": "2.2 ± 2.1",
+              "align": "right"
+            },
+            {
+              "html": "10.7 ± 4.7",
+              "align": "right"
+            },
+            {
+              "html": "21.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>2.4</b> ± 2.3",
+              "align": "right"
+            },
+            {
+              "html": "3.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Luna (xhigh)</b> Codex"
+            },
+            {
+              "html": "1.4 ± 1.5",
+              "align": "right"
+            },
+            {
+              "html": "8.9 ± 4.3",
+              "align": "right"
+            },
+            {
+              "html": "16.1",
+              "align": "right"
+            },
+            {
+              "html": "<b>1.8</b> ± 2.0",
+              "align": "right"
+            },
+            {
+              "html": "3.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>MiMo V2.6 Pro</b> Claude Code"
+            },
+            {
+              "html": "1.0 ± 1.4",
+              "align": "right"
+            },
+            {
+              "html": "10.1 ± 4.6",
+              "align": "right"
+            },
+            {
+              "html": "19.6",
+              "align": "right"
+            },
+            {
+              "html": "<b>1.2</b> ± 1.6",
+              "align": "right"
+            },
+            {
+              "html": "3.6",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>GPT-5.6 Terra (xhigh)</b> Codex"
+            },
+            {
+              "html": "0.9 ± 1.3",
+              "align": "right"
+            },
+            {
+              "html": "9.5 ± 4.4",
+              "align": "right"
+            },
+            {
+              "html": "16.1",
+              "align": "right"
+            },
+            {
+              "html": "<b>1.2</b> ± 1.6",
+              "align": "right"
+            },
+            {
+              "html": "1.8",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>DeepSeek V4 Pro</b> Claude Code"
+            },
+            {
+              "html": "0.3 ± 0.6",
+              "align": "right"
+            },
+            {
+              "html": "3.0 ± 2.6",
+              "align": "right"
+            },
+            {
+              "html": "5.4",
+              "align": "right"
+            },
+            {
+              "html": "<b>0.6</b> ± 1.2",
+              "align": "right"
+            },
+            {
+              "html": "1.8",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Gemini 3.8 Flash</b> Antigravity"
+            },
+            {
+              "html": "0.0 ± 0.0",
+              "align": "right"
+            },
+            {
+              "html": "7.7 ± 4.0",
+              "align": "right"
+            },
+            {
+              "html": "14.3",
+              "align": "right"
+            },
+            {
+              "html": "<b>0.0</b> ± 0.0",
+              "align": "right"
+            },
+            {
+              "html": "0.0",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "rule": false,
+          "cells": [
+            {
+              "html": "<b>Mistral Large 4</b> Claude Code"
+            },
+            {
+              "html": "0.0 ± 0.0",
+              "align": "right"
+            },
+            {
+              "html": "5.4 ± 3.4",
+              "align": "right"
+            },
+            {
+              "html": "12.5",
+              "align": "right"
+            },
+            {
+              "html": "<b>0.0</b> ± 0.0",
+              "align": "right"
+            },
+            {
+              "html": "0.0",
               "align": "right"
             }
           ]

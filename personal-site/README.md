@@ -70,7 +70,7 @@ The site carries facts and other people's own words, never prose composed for it
 
 ### Add or update a paper
 
-1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, papers stand in the order of their Google Scholar citations, most cited first.
+1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, papers stand newest first, in descending order of their arXiv numbers.
 2. Add its abstract, figure and table to `content/papers/details.json` under the same `slug`, copied verbatim from `https://arxiv.org/html/<id>`; a table the HTML has only as an image is copied from the PDF's text layer. Inline markup is limited to `<i>`, `<b>`, `<sup>`, `<sub>` and `<code>` (a test enforces this). A `license` named in `LICENSE_HREF` of `lib/article.ts` is linked to its deed in the credit of the figure and the table.
 3. Put the figure in `public/papers/` and record its pixel size in `details.json`, together with `printWidth`: the width of the figure (and of the table) on the published page, in points. Measure it in the journal PDF, or in the arXiv PDF when the journal's is not at hand (`pdftoppm -r 144`, then the extent of the ink above the caption).
 4. Run `npm run typeset` (see above) and look at every page.

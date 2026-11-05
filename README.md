@@ -45,11 +45,11 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
-- 📑 *NeurIPS 2026* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
+- 📑 *arXiv* · [FrontierPhysics: Evaluating Agents for End-to-End Physics Research](https://arxiv.org/abs/2611.06910)
+- 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
 - 📑 *arXiv* · [Agents’ Last Exam](https://arxiv.org/abs/2606.05405)
 - 📑 *COLM 2026* · [ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces](https://arxiv.org/abs/2604.05172)
-- 📑 *arXiv* · [BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure](https://arxiv.org/abs/2609.11028)
-- 📑 *arXiv* · [FrontierPhysics: Evaluating Agents for End-to-End Physics Research](https://arxiv.org/abs/2611.06910)
+- 📑 *NeurIPS 2026* · [SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks](https://arxiv.org/abs/2602.12670)
 
 ## ⚛️ Experimental AMO Physics
 
@@ -83,11 +83,11 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 
 ### Selected Papers
 
+- 📑 *arXiv* · [A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control](https://arxiv.org/abs/2607.25062)
+- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://doi.org/10.1038/s44310-025-00102-4)
+- 📑 *Phys. Rev. Applied* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://doi.org/10.1103/ppm8-8kx5)
 - 📑 *Nature* · [3D-printed micro ion trap technology for quantum information applications](https://doi.org/10.1038/s41586-025-09474-1)
 - 📑 *Phys. Rev. Lett.* · [Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion](https://doi.org/10.1103/PhysRevLett.130.200201)
-- 📑 *Phys. Rev. Applied* · [Temporally multiplexed ion-photon quantum interface via fast ion-chain transport](https://doi.org/10.1103/ppm8-8kx5)
-- 📑 *npj Nanophotonics* · [Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits](https://doi.org/10.1038/s44310-025-00102-4)
-- 📑 *arXiv* · [A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control](https://arxiv.org/abs/2607.25062)
 
 ## Connect
 

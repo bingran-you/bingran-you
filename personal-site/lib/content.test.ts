@@ -44,8 +44,9 @@ describe("papers", () => {
     }
   });
 
-  // From each paper's own note on equal contribution. BenchShield, the Ramsey
-  // test and the adjoint paper name no co-first authors.
+  // From each paper's own note on equal contribution. Agents’ Last Exam,
+  // BenchShield, the Ramsey test and the adjoint paper name no co-first
+  // authors; the stars of Agents’ Last Exam mark its core contributors.
   it("marks the co-first authors of each paper", () => {
     const marked = Object.fromEntries(
       papers.map((paper) => [
@@ -55,8 +56,10 @@ describe("papers", () => {
     );
     expect(marked).toEqual({
       skillsbench: 4,
+      "agents-last-exam": 0,
       clawsbench: 2,
       benchshield: 0,
+      frontierphysics: 4,
       "printed-trap": 2,
       ramsey: 0,
       multiplexed: 2,

@@ -32,6 +32,11 @@ const PAPERS = [
         href: 'https://arxiv.org/abs/2602.12670',
     },
     {
+        venue: 'arXiv',
+        title: 'Agents’ Last Exam',
+        href: 'https://arxiv.org/abs/2606.05405',
+    },
+    {
         venue: 'COLM 2026',
         title: 'ClawsBench: Evaluating Capability and Safety of LLM Productivity Agents in Simulated Workspaces',
         href: 'https://arxiv.org/abs/2604.05172',
@@ -40,6 +45,11 @@ const PAPERS = [
         venue: 'arXiv',
         title: 'BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure',
         href: 'https://arxiv.org/abs/2609.11028',
+    },
+    {
+        venue: 'arXiv',
+        title: 'FrontierPhysics: Evaluating Agents for End-to-End Physics Research',
+        href: 'https://arxiv.org/abs/2611.06910',
     },
     {
         venue: 'Nature',

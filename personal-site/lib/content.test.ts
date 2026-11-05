@@ -31,6 +31,13 @@ describe("papers", () => {
     expect(new Set(papers.map((p) => p.href)).size).toBe(papers.length);
   });
 
+  it("lists each track newest first, by arXiv number", () => {
+    for (const track of new Set(papers.map((p) => p.track))) {
+      const ids = papers.filter((p) => p.track === track).map((p) => p.arxiv);
+      expect(ids, track).toEqual([...ids].sort().reverse());
+    }
+  });
+
   it("has every paper's own abstract and first figure", () => {
     for (const paper of papers) {
       const detail = getPaperDetail(paper.slug);

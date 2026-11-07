@@ -32,7 +32,6 @@ export function Front({ action }: { action?: React.ReactNode }) {
           {TRACK_LABEL.ai} <Bar /> {TRACK_LABEL.ion}
         </p>
         <div className={styles.lead}>
-          <p>{PERSON.position}</p>
           {AFFILIATIONS.map((affiliation) => (
             <p key={affiliation.href}>
               <a
@@ -45,6 +44,7 @@ export function Front({ action }: { action?: React.ReactNode }) {
               </a>
             </p>
           ))}
+          <p>{PERSON.position}</p>
         </div>
       </div>
     </div>

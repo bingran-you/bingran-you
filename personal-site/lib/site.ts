@@ -3,7 +3,7 @@ export const SITE_HOST = "bingran.ai";
 
 export const PERSON = {
   name: "Bingran You",
-  position: "PhD Candidate in Applied Science & Technology at UC Berkeley",
+  position: "PhD Candidate at UC Berkeley",
   field: "Applied Science & Technology",
   location: "Berkeley, CA",
   email: "me@bingranyou.com",
@@ -12,14 +12,17 @@ export const PERSON = {
 
 /** Where Bingran works now. */
 export const AFFILIATIONS = [
-  { name: "Haeffner Lab, UC Berkeley", href: "https://ions.berkeley.edu/" },
-  { name: "BenchFlow", href: "https://www.benchflow.ai/" },
+  { name: "Co-Founder of BenchFlow", href: "https://benchflow.ai/" },
+  {
+    name: "Ion Trapper in Haeffner Lab, UC Berkeley",
+    href: "https://ions.berkeley.edu/",
+  },
 ] as const;
 
 /** One line for link previews: position and affiliations. */
 export const PERSON_SUMMARY = [
-  PERSON.position,
   ...AFFILIATIONS.map((affiliation) => affiliation.name),
+  PERSON.position,
 ].join(" · ");
 
 type NavItem = {

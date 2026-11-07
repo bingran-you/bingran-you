@@ -39,9 +39,6 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - SkillsBench evaluates how well skills work and how effective agents are at using them.
 - 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) - Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.
 - 🧠 [DeepTutor](https://github.com/KnoWhiz/DeepTutorZotero) - DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.
-- 🐈 [mews](https://github.com/bingran-you/mews) - Represent you to finish all the work, when you are sleeping.
-- 🦞 [smolclaw](https://github.com/bingran-you/smolclaw) - High resolution mock environments for testing and improving claw like agents
-- 😜 [SBTI CLI](https://github.com/bingran-you/sbti-cli) - SBTI CLI - Test SBTI for your agents.
 
 ### Selected Papers
 

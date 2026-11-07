@@ -46,25 +46,6 @@ const PROJECTS: ProjectEntry[] = [
         tag: 'Agent',
     },
     {
-        title: 'mews',
-        blurb: 'Represent you to finish all the work, when you are sleeping.',
-        href: 'https://github.com/bingran-you/mews',
-        tag: 'Agent',
-    },
-    {
-        title: 'smolclaw',
-        blurb:
-            'High resolution mock environments for testing and improving claw like agents',
-        href: 'https://github.com/bingran-you/smolclaw',
-        tag: 'Agent',
-    },
-    {
-        title: 'SBTI CLI',
-        blurb: 'SBTI CLI - Test SBTI for your agents.',
-        href: 'https://github.com/bingran-you/sbti-cli',
-        tag: 'Agent',
-    },
-    {
         title: 'bem',
         blurb:
             'triangulation, boundary element method (BEM), fast multipole method (FMM) code for python',

@@ -149,28 +149,6 @@ export const projects: Project[] = [
     track: "ai",
   },
   {
-    name: "mews",
-    href: "https://github.com/bingran-you/mews",
-    description: "Represent you to finish all the work, when you are sleeping.",
-    emoji: "🐈",
-    track: "ai",
-  },
-  {
-    name: "smolclaw",
-    href: "https://github.com/bingran-you/smolclaw",
-    description:
-      "High resolution mock environments for testing and improving claw like agents",
-    emoji: "🦞",
-    track: "ai",
-  },
-  {
-    name: "SBTI CLI",
-    href: "https://github.com/bingran-you/sbti-cli",
-    description: "SBTI CLI - Test SBTI for your agents.",
-    emoji: "😜",
-    track: "ai",
-  },
-  {
     name: "bem",
     href: "https://github.com/HaeffnerLab/bem",
     description:

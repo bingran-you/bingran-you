@@ -34,9 +34,6 @@
   --paper: #fff;
   --desk: #ddd;
 
-  --background: var(--paper);
-  --foreground: var(--ink);
-  --muted: #4a4a4a;
   --border: rgba(0, 0, 0, 0.3);
 
   /* The palace button's own colours (see .palace-cta below). */
@@ -46,9 +43,6 @@
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
@@ -85,24 +79,6 @@ body {
 :lang(zh) {
   letter-spacing: 0.02em;
   font-feature-settings: normal;
-}
-
-/* react-tweet embeds: strip the default 550px max-width and outer
-   margin so the card fills its masonry column. */
-.post-tweet > div {
-  margin: 0 !important;
-}
-.post-tweet .react-tweet-theme {
-  max-width: 100% !important;
-}
-
-/* Cross-browser masonry stability. */
-.post-grid > * {
-  break-inside: avoid;
-  page-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  display: block;
-  width: 100%;
 }
 
 /* "Enter the Memory Palace" CTA — raised Win98 button (palace-inner

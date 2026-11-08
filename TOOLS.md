@@ -20,12 +20,8 @@ Fill in as you learn. Delete sections that don't apply.
 
 Some skills are the single source of truth for a domain — invoke them *first* and let them tell you what to do. Don't re-derive their lessons.
 
-- **`social-scraping-policy`** — anything touching X / Xiaohongshu / xhslink / YouTube / Bilibili / LinkedIn. Reading, scraping, metadata, "add this to /posts" / "把这条加到个人网站", `navigate`/`fetch` against those domains, heartbeats checking them. Owns scripts, fallbacks, account-safety budgets.
+- **`social-scraping-policy`** — anything touching X / Xiaohongshu / xhslink / YouTube / Bilibili / LinkedIn. Reading, scraping, metadata, `navigate`/`fetch` against those domains, heartbeats checking them. Owns scripts, fallbacks, account-safety budgets.
 - **`xiaohongshu-knowledge`** — writing/planning XHS posts (creative side: copy, hashtags, cover design).
-
-### Adding posts to /posts → `social-scraping-policy`
-
-Any pasted social post URL ("add this to /posts" / "把这条加到个人网站" / X / Xiaohongshu / YouTube / Bilibili / LinkedIn) is owned by the `social-scraping-policy` skill — invoke it first; it documents `npm run post:add`, the XHS Chrome-MCP fallback, and the diff discipline.
 
 ## Typical workflow
 

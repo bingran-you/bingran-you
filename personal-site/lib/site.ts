@@ -37,7 +37,6 @@ export const NAV: readonly NavItem[] = [
   { href: "/palace", label: "Palace", document: true },
   { href: "/projects", label: "Projects" },
   { href: "/papers", label: "Papers" },
-  { href: "/posts", label: "Posts" },
   { href: "/about", label: "About" },
 ];
 

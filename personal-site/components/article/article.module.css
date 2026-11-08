@@ -13,8 +13,7 @@
    at whatever the window, and its smallest type (5.87 pt) clears a
    browser's minimum font size of 12 px. The last sheet of the article and
    the one sheet of /about, /projects and /papers are such pages too, but
-   end under their content: each is handed its own --page-length. /posts
-   lies on a sheet as tall as its content (.tall), which is not scaled.
+   end under their content: each is handed its own --page-length.
    Narrower windows get the same content in one fluid column on sheets as
    tall as their content: the last block of this file.
 
@@ -48,7 +47,7 @@
 .sheet + .sheet {
   margin-top: 16px;
 }
-/* /posts and the proof lie on one sheet as tall as its content. */
+/* The proof lies on one sheet as tall as its content. */
 .tall {
   aspect-ratio: auto;
 }
@@ -182,19 +181,6 @@
   width: auto;
   height: auto;
   padding-bottom: calc(var(--pt) * var(--foot));
-}
-/* What a sheet holds that is not set as part of the article takes none of
-   its type. The size and leading are those the cards of /posts have always
-   had in a narrow window. */
-.plain {
-  font-size: 16px;
-  font-weight: 400;
-  font-variation-settings: normal;
-  font-variant-numeric: normal;
-  line-height: 21.5px;
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-rendering: optimizeLegibility;
 }
 
 /* The scaling: a page is laid out at the size of a full sheet and scaled to

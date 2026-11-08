@@ -23,7 +23,7 @@ Every route is one or more sheets of an article: a rule down the left margin, an
 
 From 900 px up a sheet of the home page is one page of 595.276 × 790.866 pt. A page is laid out at one size, that of a sheet at its full width of 1220 px, and scaled to its sheet with a transform, so its text is set at the size it was typeset at in every window. The smallest type on a page is 12.03 px before scaling: a browser's minimum font size of up to 12 px enlarges only super- and subscripts. The home page is typeset: each paper is a block under a rule, and the blocks follow one another down the pages (see Pages below). Narrower windows get the same content in one fluid column on sheets as tall as their content, without a transform; both renderings are in the document and a media query shows one. A page prints no underlines: a link shows its own when it is pointed at or focused, and in the fluid column always.
 
-`/about`, `/projects` and `/papers` each lie on one sheet that ends under its content: a page like those of the article and scaled like them, as long as the typesetter measured it to be (`content/layout/sheets.json`). The last sheet of the article ends under the reference list in the same way. `/posts` lies on a sheet as tall as its content, laid out at the size of the sheet and not scaled; its cards take none of the article's type (`.plain`).
+`/about`, `/projects` and `/papers` each lie on one sheet that ends under its content: a page like those of the article and scaled like them, as long as the typesetter measured it to be (`content/layout/sheets.json`). The last sheet of the article ends under the reference list in the same way.
 
 Type: Roboto Serif for text, with Noto Serif behind it for Greek, and Inter for labels, loaded in `app/fonts.ts`. The styles name the families themselves: the variable `next/font` offers also names a local face scaled to the web font's metrics, which would stand before Noto Serif and draw the Greek. Only the upright Latin of Roboto Serif and of Inter is preloaded. Every style's size, weight, optical size, width, tracking and word space is a token in `.page` of `article.module.css`. The faces are loaded with `display: "block"`: a frozen line fits its column in these faces only, so text waits for them instead of showing in a fallback. A reader who blocks web fonts gets Georgia and a system sans at the same sizes, in which a few lines run some points into the gutter. A minimum font size above 12 px makes lines run past their columns and tables outgrow their boxes. Nothing moves such a reader to the fluid column.
 
@@ -76,10 +76,6 @@ The site carries facts and other people's own words, never prose composed for it
 4. Run `npm run typeset` (see above) and look at every page.
 5. Mirror the title and venue in `palace-inner/src/components/showcase/Experience.tsx` and in the repository-root `README.md`.
 
-### Add a post to /posts
-
-See the `social-scraping-policy` skill; `npm run post:add -- <url>` appends to `content/posts/posts.json`.
-
 ## Layout
 
 ```
@@ -91,18 +87,15 @@ app/
   (personal)/about/page.tsx             education and contact
   (personal)/projects/page.tsx          projects table
   (personal)/papers/page.tsx            reference list
-  (personal)/posts/page.tsx             social posts
   llms.txt/route.ts                     crawler-friendly site index
   llms-full.txt/route.ts                the index plus every paper's abstract
 components/
   article/                              sheet, pages, front matter, figures, tables, references
   palace-cta.tsx                        the Memory Palace button
-  post-card.tsx                         one card on /posts
 content/
   layout/home.json                      the typeset home page
   layout/sheets.json                    the lengths of the sheets that end under their content
   papers/details.json                   abstracts, captions and tables, verbatim
-  posts/posts.json                      social posts
 lib/
   article.ts                            the home article as blocks
   content.ts                            projects + papers + education data
@@ -110,7 +103,6 @@ lib/
   layout.ts                             loads the layout, checks it is current
   paginate.ts                           page geometry and pagination
   site.ts                               site URL, affiliations, navigation, contact links
-  posts.ts                              posts loader
 public/
   papers/                               one figure per paper
 scripts/

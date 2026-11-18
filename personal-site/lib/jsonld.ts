@@ -126,13 +126,12 @@ export function websiteJsonLd() {
   } as const;
 }
 
-export function profilePageJsonLd(path: "/" | "/about" = "/") {
-  const url = path === "/" ? SITE_URL : `${SITE_URL}${path}`;
+export function profilePageJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    "@id": path === "/" ? PROFILE_PAGE_ID : `${url}#profile`,
-    url,
+    "@id": PROFILE_PAGE_ID,
+    url: SITE_URL,
     name: SITE_NAME,
     description: SITE_DESCRIPTION,
     inLanguage: "en",

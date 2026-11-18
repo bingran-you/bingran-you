@@ -7,8 +7,8 @@ export const TRACK_LABEL: Record<Track, string> = {
   ion: "Experimental AMO Physics",
 };
 
-// Site copy rule: nothing here is written for the site. Every description,
-// abstract, caption and table is the project's or the paper's own wording.
+// Site copy rule: nothing here is written for the site. Every description
+// and abstract is the project's or the paper's own wording.
 
 export type Project = {
   name: string;
@@ -16,8 +16,6 @@ export type Project = {
   repoHref?: string;
   /** Verbatim from the project's own site or repository. */
   description: string;
-  emoji: string;
-  track: Track;
 };
 
 export type PaperReference =
@@ -32,11 +30,11 @@ export type PaperReference =
   | { kind: "preprint"; year: number };
 
 export type Paper = {
-  /** Key into content/papers/details.json and public/papers/. */
+  /** Key into content/papers/details.json. */
   slug: PaperSlug;
   title: string;
   href: string;
-  /** Short tag shown beside the title, e.g. "NeurIPS 2026". */
+  /** Short tag for listings, e.g. "NeurIPS 2026". */
   venue: string;
   /** Reference-style author list. A co-first author carries CO_FIRST_MARK. */
   authors: string;
@@ -54,56 +52,31 @@ export const hasCoFirstAuthors = (paper: Paper) =>
 /** Explains the mark wherever marked author lists are shown. */
 export const CO_FIRST_NOTE = `${CO_FIRST_MARK}These authors contributed equally.`;
 
-export type TableCell = {
-  html: string;
-  align?: "center" | "right";
-  colSpan?: number;
-  rowSpan?: number;
-  header?: boolean;
-};
-
-export type TableRow = { rule: boolean; cells: TableCell[] };
-
 /**
- * Text and figures copied verbatim from a paper's arXiv version.
- * `abstract`, the captions and the table cells are inline HTML limited to
- * <i>, <b>, <sup>, <sub> and <code>.
+ * A paper's abstract, copied verbatim from its arXiv version: inline HTML
+ * limited to <i>, <b>, <sup>, <sub> and <code>.
  */
 export type PaperDetail = {
   source: string;
-  license: string | null;
   abstract: string[];
-  figure: {
-    src: string;
-    width: number;
-    height: number;
-    /** Width of the figure on the published page, in points. */
-    printWidth: number;
-    sourceLabel: string;
-    caption: string;
-  };
-  table?: {
-    sourceLabel: string;
-    /** Width of the table on the published page, in points. */
-    printWidth: number;
-    caption: string;
-    head: TableRow[];
-    body: TableRow[];
-  };
 };
 
 export type PaperSlug = keyof typeof paperDetails;
 
 export function getPaperDetail(slug: PaperSlug): PaperDetail {
-  return paperDetails[slug] as PaperDetail;
+  return paperDetails[slug];
 }
 
-export type Education = {
-  institution: string;
-  location: string;
-  degree: string;
+/** A line of Experience or Education, worded as on Bingran's LinkedIn. */
+export type Entry = {
+  /** The company or the school, and its site. */
+  org: string;
+  href: string;
+  /** The title, or the degree and field. */
+  title: string;
   period: string;
-  metrics?: string[];
+  location?: string;
+  note?: string;
 };
 
 export const projects: Project[] = [
@@ -112,24 +85,18 @@ export const projects: Project[] = [
     href: "https://www.benchflow.ai/frontierphysics",
     description:
       "FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
-    emoji: "⚛️",
-    track: "ai",
   },
   {
     name: "BenchFlow",
     href: "https://www.benchflow.ai/",
     description:
       "BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.",
-    emoji: "🌊",
-    track: "ai",
   },
   {
     name: "SkillsBench",
     href: "https://github.com/benchflow-ai/skillsbench",
     description:
       "SkillsBench evaluates how well skills work and how effective agents are at using them.",
-    emoji: "📐",
-    track: "ai",
   },
   {
     name: "first-tree",
@@ -137,31 +104,23 @@ export const projects: Project[] = [
     repoHref: "https://github.com/first-tree-ai/first-tree",
     description:
       "Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.",
-    emoji: "🌲",
-    track: "ai",
   },
   {
     name: "DeepTutor",
     href: "https://github.com/KnoWhiz/DeepTutorZotero",
     description:
       "DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.",
-    emoji: "🧠",
-    track: "ai",
   },
   {
     name: "bem",
     href: "https://github.com/HaeffnerLab/bem",
     description:
       "triangulation, boundary element method (BEM), fast multipole method (FMM) code for python",
-    emoji: "💻",
-    track: "ion",
   },
   {
     name: "artiq_photonics_integration",
     href: "https://github.com/HaeffnerLab/artiq_photonics_integration",
     description: "ARTIQ Control Framework (ACF) of Photonics Integration",
-    emoji: "🦾",
-    track: "ion",
   },
 ];
 
@@ -307,19 +266,31 @@ export const papers: Paper[] = [
   },
 ];
 
-export const education: Education[] = [
+export const experience: Entry[] = [
   {
-    institution: "University of California, Berkeley",
-    location: "Berkeley, California",
-    degree: "PhD Candidate in Applied Science & Technology",
-    period: "2022 — Present",
-    metrics: ["Haeffner Lab"],
+    org: "BenchFlow",
+    href: "https://www.benchflow.ai/",
+    title: "Co-Founder",
+    period: "2026 – Present",
+    location: "San Francisco, California, United States",
+    note: "FrontierPhysics, SkillsBench, PostTrain (Feynman-1)",
+  },
+];
+
+export const education: Entry[] = [
+  {
+    org: "University of California, Berkeley",
+    href: "https://www.berkeley.edu/",
+    title: "Doctor of Philosophy (PhD), Quantum Physics",
+    period: "2022 – 2027",
+    note: "Advised by Hartmut Haeffner",
   },
   {
-    institution: "University of Chinese Academy of Sciences",
-    location: "Beijing, China",
-    degree: "BS in Physics, Minor in Computer Science",
-    period: "2018 — 2022",
-    metrics: ["GPA 3.95 / 4.00", "Rank 1 / 54"],
+    org: "University of Chinese Academy of Sciences",
+    href: "https://english.ucas.ac.cn/",
+    title:
+      "Bachelor of Science (BS), Majoring in Physics, Minoring in Computer Science",
+    period: "2018 – 2022",
+    note: "Rank 1/54",
   },
 ];

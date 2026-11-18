@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // About, Projects and Papers were pages of their own before the site
+  // became one page; their old addresses lead to its sections.
+  async redirects() {
+    return ["about", "projects", "papers"].map((section) => ({
+      source: `/${section}`,
+      destination: `/#${section}`,
+      permanent: true,
+    }));
+  },
   async rewrites() {
     return [
       // Proxies an app deployed from another repository. It is deliberately

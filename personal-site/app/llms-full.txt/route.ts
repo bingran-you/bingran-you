@@ -1,14 +1,22 @@
 import {
   CO_FIRST_NOTE,
   education,
+  experience,
   getPaperDetail,
   papers,
   projects,
+  type Entry,
 } from "@/lib/content";
 import { SITE_DESCRIPTION } from "@/lib/jsonld";
 import { AFFILIATIONS, PERSON, SITE_URL as SITE, SOCIALS } from "@/lib/site";
 
 export const dynamic = "force-static";
+
+/** An entry of Experience or Education on one line. */
+function entryLine({ org, href, title, period, location, note }: Entry) {
+  const where = location ? `, ${location}` : "";
+  return `- ${org} (${href}): ${title}, ${period}${where}.${note ? ` ${note}.` : ""}`;
+}
 
 /** The paper's abstract as plain text. */
 function abstractOf(slug: (typeof papers)[number]["slug"]): string {
@@ -33,14 +41,13 @@ ${AFFILIATIONS.map((a) => `- Affiliation: ${a.name} (${a.href})`).join("\n")}
 - Wikidata: https://www.wikidata.org/wiki/Q139620371
 ${SOCIALS.map((social) => `- ${social.label}: ${social.href}`).join("\n")}
 
+## Experience
+
+${experience.map(entryLine).join("\n")}
+
 ## Education
 
-${education
-  .map(
-    (e) =>
-      `- ${e.institution} (${e.location}) — ${e.degree}, ${e.period}.${e.metrics?.length ? ` (${e.metrics.join(", ")})` : ""}`,
-  )
-  .join("\n")}
+${education.map(entryLine).join("\n")}
 
 ## Selected papers
 

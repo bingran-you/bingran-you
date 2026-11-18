@@ -1,6 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import "./globals.css";
-import "./fonts";
 import {
   jsonLdScriptContent,
   OG_IMAGE_URL,
@@ -47,8 +45,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  // The desk the sheets lie on (--desk in globals.css).
-  themeColor: "#dddddd",
 };
 
 export default function RootLayout({
@@ -57,8 +53,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
+    <html lang="en">
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

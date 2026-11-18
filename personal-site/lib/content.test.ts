@@ -1,8 +1,5 @@
-import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { CO_FIRST_MARK, getPaperDetail, papers, projects } from "./content";
-import { PAGE } from "./paginate";
 
 describe("projects", () => {
   it("leads with FrontierPhysics", () => {
@@ -38,16 +35,11 @@ describe("papers", () => {
     }
   });
 
-  it("has every paper's own abstract and first figure", () => {
+  it("has every paper's own abstract", () => {
     for (const paper of papers) {
       const detail = getPaperDetail(paper.slug);
       expect(detail.source, paper.slug).toContain(paper.arxiv);
       expect(detail.abstract.join(" ").length, paper.slug).toBeGreaterThan(400);
-      expect(detail.figure.caption.length, paper.slug).toBeGreaterThan(40);
-      const file = fileURLToPath(
-        new URL(`../public${detail.figure.src}`, import.meta.url),
-      );
-      expect(existsSync(file), detail.figure.src).toBe(true);
     }
   });
 
@@ -75,30 +67,11 @@ describe("papers", () => {
     });
   });
 
-  // Figures and tables are set at their printed width, in points. Nothing
-  // in print is wider than the text block of a sheet.
-  it("records the printed width of every figure and table", () => {
-    for (const paper of papers) {
-      const { figure, table } = getPaperDetail(paper.slug);
-      for (const width of [figure.printWidth, table?.printWidth ?? 1]) {
-        expect(width, paper.slug).toBeGreaterThan(0);
-        expect(width, paper.slug).toBeLessThanOrEqual(PAGE.textWidth);
-      }
-    }
-  });
-
-  // The copied text is rendered as HTML, so it may only carry inline markup.
+  // The copied text is HTML, so it may only carry inline markup.
   it("keeps the copied text to inline markup", () => {
     const allowed = new Set(["i", "b", "sup", "sub", "code"]);
     for (const paper of papers) {
-      const { abstract, figure, table } = getPaperDetail(paper.slug);
-      const rows = table ? [...table.head, ...table.body] : [];
-      const html = [
-        ...abstract,
-        figure.caption,
-        table?.caption ?? "",
-        ...rows.flatMap((row) => row.cells.map((cell) => cell.html)),
-      ].join(" ");
+      const html = getPaperDetail(paper.slug).abstract.join(" ");
       const tags = [...html.matchAll(/<\/?([a-z0-9]+)[^>]*>/gi)].map(
         (m) => m[1],
       );

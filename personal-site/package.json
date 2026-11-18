@@ -7,7 +7,6 @@
     "build": "npm run palace:build && next build",
     "start": "next start",
     "lint": "eslint",
-    "typeset": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/typeset.mjs",
     "indexnow:ping": "node scripts/ping-indexnow.mjs",
     "palace:install": "cd palace-outer && npm install --no-audit --no-fund && cd ../palace-inner && npm install --no-audit --no-fund",
     "palace:build": "node scripts/build-palace.mjs",
@@ -20,13 +19,11 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
-    "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.5"
   }

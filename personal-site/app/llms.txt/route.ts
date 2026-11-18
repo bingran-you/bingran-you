@@ -23,9 +23,6 @@ ${SOCIALS.map((social) => `- ${social.label}: ${social.href}`).join("\n")}
 ## Pages
 
 - [Home](${SITE}/)
-- [About](${SITE}/about)
-- [Projects](${SITE}/projects)
-- [Papers](${SITE}/papers)
 - [Memory Palace (3D room)](${SITE}/palace)
 
 ## Selected papers

@@ -24,39 +24,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/`,
       lastModified: await getLatestLastModified([
         "app/layout.tsx",
-        "app/(personal)/page.tsx",
+        "app/page.tsx",
         "lib/content.ts",
         "content/papers/details.json",
       ]),
       changeFrequency: "weekly",
       priority: 1,
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: await getLatestLastModified([
-        "app/layout.tsx",
-        "app/(personal)/about/page.tsx",
-      ]),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE_URL}/projects`,
-      lastModified: await getLatestLastModified([
-        "app/(personal)/projects/page.tsx",
-        "lib/content.ts",
-      ]),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${SITE_URL}/papers`,
-      lastModified: await getLatestLastModified([
-        "app/(personal)/papers/page.tsx",
-        "lib/content.ts",
-      ]),
-      changeFrequency: "monthly",
-      priority: 0.8,
     },
     {
       url: `${SITE_URL}/palace`,

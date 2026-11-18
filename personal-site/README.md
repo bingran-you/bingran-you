@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Design: one page of plain HTML
 
-The site is one page, `app/page.tsx`, set in the browser's default styles after [noahshinn.com](https://noahshinn.com/): the name, the portrait, then Contact, About, Experience, Education, Papers and Projects as headings over lines and bulleted lists, a rule and the month the page was built. It has no stylesheet at all.
+The site is one page, `app/page.tsx`, set in the browser's default styles after [noahshinn.com](https://noahshinn.com/): the name, the portrait, then Contact, About, Experience, Education, Papers and Projects as headings over lines and bulleted lists. It has no stylesheet at all.
 
 - The portrait is the way into the Memory Palace: it links to `/palace` (a plain anchor, since `/palace` is a static document served by a rewrite) and shows "Enter the Memory Palace" when pointed at. Nothing else on the page announces it.
 - `/about`, `/projects` and `/papers` were pages of their own; `next.config.ts` redirects them to the sections of the page.

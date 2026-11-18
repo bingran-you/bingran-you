@@ -94,13 +94,6 @@ const paperLinks = (paper: Paper): Link[] => [
     : []),
 ];
 
-/** The month the page was built, e.g. "11/2026". */
-const LAST_UPDATED = new Date().toLocaleDateString("en-US", {
-  month: "2-digit",
-  year: "numeric",
-  timeZone: "America/Los_Angeles",
-});
-
 export default function Home() {
   return (
     <>
@@ -195,11 +188,6 @@ export default function Home() {
           ))}
         </ul>
       </main>
-
-      <footer>
-        <hr />
-        Last updated: {LAST_UPDATED}
-      </footer>
     </>
   );
 }

@@ -5,7 +5,6 @@ Personal site of [Bingran You](https://bingran.ai), built with Next.js and deplo
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack, React 19)
-- **Tailwind CSS v4**, only for the Memory Palace button
 - **TypeScript**
 
 ## Develop
@@ -19,9 +18,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Design: one page of plain HTML
 
-The site is one page, `app/page.tsx`, set in the browser's default styles after [noahshinn.com](https://noahshinn.com/): the name, the portrait, then Contact, About, Education, Papers and Projects as headings over lines and bulleted lists, a rule and the month the page was built. It has no stylesheet of its own. `app/globals.css` imports Tailwind without Preflight, which would reset the browser's defaults, so that the only styled thing on the page is the "Enter the Memory Palace" button.
+The site is one page, `app/page.tsx`, set in the browser's default styles after [noahshinn.com](https://noahshinn.com/): the name, the portrait, then Contact, About, Experience, Education, Papers and Projects as headings over lines and bulleted lists, a rule and the month the page was built. It has no stylesheet at all.
 
-- `components/palace-cta.tsx`: the button. Its look is fixed by `.palace-cta` and `.palace-cta-slot` in `app/globals.css`; do not restyle it.
+- The portrait is the way into the Memory Palace: it links to `/palace` (a plain anchor, since `/palace` is a static document served by a rewrite) and shows "Enter the Memory Palace" when pointed at. Nothing else on the page announces it.
 - `/about`, `/projects` and `/papers` were pages of their own; `next.config.ts` redirects them to the sections of the page.
 
 ## Copy rule: nothing is written for the site
@@ -30,7 +29,8 @@ The site carries facts and other people's own words, never prose composed for it
 
 - **Papers**: title, authors and venue, and an abstract copied verbatim from the paper's arXiv version for `/llms-full.txt` and the structured data.
 - **Projects**: the description each project gives itself on its site or repository.
-- **About**: the line Bingran's GitHub profile (the repository-root `README.md`) opens with, and his affiliations.
+- **About**: the line Bingran's GitHub profile (the repository-root `README.md`) opens with.
+- **Experience** and **Education**: worded as on Bingran's LinkedIn (`experience` and `education` in `lib/content.ts`).
 - **Everything else**: names, dates, links and labels.
 
 ### Add or update a paper
@@ -47,12 +47,10 @@ app/
   layout.tsx                            metadata and structured data
   llms.txt/route.ts                     crawler-friendly site index
   llms-full.txt/route.ts                the index plus every paper's abstract
-components/
-  palace-cta.tsx                        the Memory Palace button
 content/
   papers/details.json                   abstracts, verbatim
 lib/
-  content.ts                            projects + papers + education data
+  content.ts                            projects, papers, experience and education
   site.ts                               site URL, person, affiliations, contact links
 scripts/
   build-palace.mjs                      build + combine the two Memory Palace apps

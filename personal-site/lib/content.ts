@@ -67,12 +67,16 @@ export function getPaperDetail(slug: PaperSlug): PaperDetail {
   return paperDetails[slug];
 }
 
-export type Education = {
-  institution: string;
-  location: string;
-  degree: string;
+/** A line of Experience or Education, worded as on Bingran's LinkedIn. */
+export type Entry = {
+  /** The company or the school, and its site. */
+  org: string;
+  href: string;
+  /** The title, or the degree and field. */
+  title: string;
   period: string;
-  metrics?: string[];
+  location?: string;
+  note?: string;
 };
 
 export const projects: Project[] = [
@@ -262,19 +266,31 @@ export const papers: Paper[] = [
   },
 ];
 
-export const education: Education[] = [
+export const experience: Entry[] = [
   {
-    institution: "University of California, Berkeley",
-    location: "Berkeley, California",
-    degree: "PhD Candidate in Applied Science & Technology",
-    period: "2022 – Present",
-    metrics: ["Haeffner Lab"],
+    org: "BenchFlow",
+    href: "https://www.benchflow.ai/",
+    title: "Co-Founder",
+    period: "2026 – Present",
+    location: "San Francisco, California, United States",
+    note: "FrontierPhysics, SkillsBench, PostTrain (Feynman-1)",
+  },
+];
+
+export const education: Entry[] = [
+  {
+    org: "University of California, Berkeley",
+    href: "https://www.berkeley.edu/",
+    title: "Doctor of Philosophy (PhD), Quantum Physics",
+    period: "2022 – 2027",
+    note: "Advised by Hartmut Haeffner",
   },
   {
-    institution: "University of Chinese Academy of Sciences",
-    location: "Beijing, China",
-    degree: "BS in Physics, Minor in Computer Science",
+    org: "University of Chinese Academy of Sciences",
+    href: "https://english.ucas.ac.cn/",
+    title:
+      "Bachelor of Science (BS), Majoring in Physics, Minoring in Computer Science",
     period: "2018 – 2022",
-    metrics: ["GPA 3.95 / 4.00", "Rank 1 / 54"],
+    note: "Rank 1/54",
   },
 ];

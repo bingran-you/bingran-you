@@ -1,13 +1,14 @@
 import Image from "next/image";
 import { Fragment } from "react";
-import { PalaceCta } from "@/components/palace-cta";
 import {
   CO_FIRST_NOTE,
   education,
+  experience,
   hasCoFirstAuthors,
   papers,
   projects,
   TRACK_LABEL,
+  type Entry,
   type Paper,
 } from "@/lib/content";
 import {
@@ -17,10 +18,11 @@ import {
   profilePageJsonLd,
   projectJsonLd,
 } from "@/lib/jsonld";
-import { AFFILIATIONS, PERSON, SOCIALS } from "@/lib/site";
+import { PERSON, SOCIALS } from "@/lib/site";
 
 // The whole site is this one page, set in the browser's default styles after
-// noahshinn.com. Only the Memory Palace button brings a style of its own.
+// noahshinn.com, with no stylesheet. The portrait is the way into the Memory
+// Palace.
 
 type Link = { label: string; href: string };
 
@@ -41,6 +43,35 @@ function LinkRow({ links }: { links: readonly Link[] }) {
       <A href={link.href}>{link.label}</A>
     </Fragment>
   ));
+}
+
+/** Experience or Education, an entry to an item as on LinkedIn. */
+function Entries({ items }: { items: Entry[] }) {
+  return (
+    <ul>
+      {items.map((entry) => (
+        <li key={entry.org}>
+          <p>
+            <strong>
+              <A href={entry.href}>{entry.org}</A>
+            </strong>
+            <br />
+            {entry.title}
+            <br />
+            {entry.location
+              ? `${entry.period} | ${entry.location}`
+              : entry.period}
+            {entry.note ? (
+              <>
+                <br />
+                {entry.note}
+              </>
+            ) : null}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 /** Where a paper appeared: its journal, its conference or arXiv. */
@@ -92,16 +123,17 @@ export default function Home() {
       <main>
         <h1>{PERSON.name}</h1>
         <p>
-          <Image
-            src={PERSON.portrait}
-            alt={PERSON.name}
-            width={160}
-            height={160}
-            preload
-          />
-        </p>
-        <p>
-          <PalaceCta />
+          {/* A plain anchor: /palace is a static document served by a
+              rewrite, which the router can neither prefetch nor open. */}
+          <a href="/palace" title="Enter the Memory Palace">
+            <Image
+              src={PERSON.portrait}
+              alt={PERSON.name}
+              width={160}
+              height={160}
+              preload
+            />
+          </a>
         </p>
 
         <h2 id="contact">Contact</h2>
@@ -115,36 +147,12 @@ export default function Home() {
 
         <h2 id="about">About</h2>
         <p>{PERSON.bio}</p>
-        <p>
-          {AFFILIATIONS.map((affiliation) => (
-            <Fragment key={affiliation.href}>
-              <A href={affiliation.href}>{affiliation.name}</A>
-              <br />
-            </Fragment>
-          ))}
-          {PERSON.position}
-        </p>
+
+        <h2 id="experience">Experience</h2>
+        <Entries items={experience} />
 
         <h2 id="education">Education</h2>
-        <ul>
-          {education.map((school) => (
-            <li key={school.institution}>
-              <p>
-                <strong>{school.institution}</strong>
-                <br />
-                {school.degree}
-                <br />
-                {school.metrics ? (
-                  <>
-                    {school.metrics.join(" | ")}
-                    <br />
-                  </>
-                ) : null}
-                {school.location} | {school.period}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <Entries items={education} />
 
         <h2 id="papers">Papers</h2>
         {Object.entries(TRACK_LABEL).map(([track, label]) => (

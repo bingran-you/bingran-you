@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { CO_FIRST_MARK, getPaperDetail, papers, projects } from "./content";
+import {
+  CO_FIRST_MARK,
+  getPaperDetail,
+  OWN_NAME,
+  papers,
+  projects,
+} from "./content";
 
 describe("projects", () => {
   it("leads with FrontierPhysics", () => {
@@ -65,6 +71,13 @@ describe("papers", () => {
       adjoint: 0,
       broadband: 5,
     });
+  });
+
+  // The page sets this name in bold, so every list has to spell it this way.
+  it("names Bingran as OWN_NAME in every author list", () => {
+    for (const paper of papers) {
+      expect(paper.authors.split(OWN_NAME).length - 1, paper.slug).toBe(1);
+    }
   });
 
   // The copied text is HTML, so it may only carry inline markup.

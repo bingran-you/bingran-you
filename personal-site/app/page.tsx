@@ -5,6 +5,7 @@ import {
   education,
   experience,
   hasCoFirstAuthors,
+  OWN_NAME,
   papers,
   projects,
   TRACK_LABEL,
@@ -41,6 +42,16 @@ function LinkRow({ links }: { links: readonly Link[] }) {
     <Fragment key={link.href}>
       {i > 0 ? " | " : null}
       <A href={link.href}>{link.label}</A>
+    </Fragment>
+  ));
+}
+
+/** An author list, with Bingran's name in bold. */
+function Authors({ list }: { list: string }) {
+  return list.split(OWN_NAME).map((part, i) => (
+    <Fragment key={i}>
+      {i > 0 ? <strong>{OWN_NAME}</strong> : null}
+      {part}
     </Fragment>
   ));
 }
@@ -159,7 +170,7 @@ export default function Home() {
                     <p>
                       <strong>{paper.title}</strong>
                       <br />
-                      {paper.authors}
+                      <Authors list={paper.authors} />
                       <br />
                       <strong>{venue(paper)}</strong>
                       <br />

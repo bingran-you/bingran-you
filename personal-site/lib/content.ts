@@ -36,7 +36,10 @@ export type Paper = {
   href: string;
   /** Short tag for listings, e.g. "NeurIPS 2026". */
   venue: string;
-  /** Reference-style author list. A co-first author carries CO_FIRST_MARK. */
+  /**
+   * Reference-style author list. A co-first author carries CO_FIRST_MARK,
+   * and Bingran is named as OWN_NAME.
+   */
   authors: string;
   reference: PaperReference;
   arxiv: string;
@@ -51,6 +54,9 @@ export const hasCoFirstAuthors = (paper: Paper) =>
 
 /** Explains the mark wherever marked author lists are shown. */
 export const CO_FIRST_NOTE = `${CO_FIRST_MARK}These authors contributed equally.`;
+
+/** Bingran's name as an author list gives it. The page sets it in bold. */
+export const OWN_NAME = "You, B.";
 
 /**
  * A paper's abstract, copied verbatim from its arXiv version: inline HTML

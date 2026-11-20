@@ -132,6 +132,17 @@ export const projects: Project[] = [
 
 export const papers: Paper[] = [
   {
+    slug: "skillsbench",
+    title:
+      "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
+    href: "https://arxiv.org/abs/2602.12670",
+    venue: "NeurIPS 2026",
+    authors: "Li, X.*, Liu, Y.*, Chen, W.*, You, B.* et al.",
+    reference: { kind: "conference", name: "NeurIPS", year: 2026 },
+    arxiv: "2602.12670",
+    track: "ai",
+  },
+  {
     slug: "frontierphysics",
     title:
       "FrontierPhysics: Evaluating Agents for End-to-End Physics Research",
@@ -140,17 +151,6 @@ export const papers: Paper[] = [
     authors: "You, B.*, Ke, W.*, Rosenauer, R.*, Liu, B.* et al.",
     reference: { kind: "preprint", year: 2026 },
     arxiv: "2611.06910",
-    track: "ai",
-  },
-  {
-    slug: "benchshield",
-    title:
-      "BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure",
-    href: "https://arxiv.org/abs/2609.11028",
-    venue: "arXiv",
-    authors: "Zheng, S., Di, Z., Liu, Y., …, You, B. et al.",
-    reference: { kind: "preprint", year: 2026 },
-    arxiv: "2609.11028",
     track: "ai",
   },
   {
@@ -176,45 +176,15 @@ export const papers: Paper[] = [
     track: "ai",
   },
   {
-    slug: "skillsbench",
+    slug: "benchshield",
     title:
-      "SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks",
-    href: "https://arxiv.org/abs/2602.12670",
-    venue: "NeurIPS 2026",
-    authors: "Li, X.*, Liu, Y.*, Chen, W.*, You, B.* et al.",
-    reference: { kind: "conference", name: "NeurIPS", year: 2026 },
-    arxiv: "2602.12670",
-    track: "ai",
-  },
-  {
-    slug: "broadband",
-    title:
-      "A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control",
-    href: "https://arxiv.org/abs/2607.25062",
+      "BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure",
+    href: "https://arxiv.org/abs/2609.11028",
     venue: "arXiv",
-    authors:
-      "Klawson, D.*, Zhi, Y.*, You, B.*, Bareian, M.*, Mossman, E.* et al.",
+    authors: "Zheng, S., Di, Z., Liu, Y., …, You, B. et al.",
     reference: { kind: "preprint", year: 2026 },
-    arxiv: "2607.25062",
-    track: "ion",
-  },
-  {
-    slug: "adjoint",
-    title:
-      "Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits",
-    href: "https://doi.org/10.1038/s44310-025-00102-4",
-    venue: "npj Nanophotonics",
-    authors:
-      "Momenzadeh, M., Sun, K., Wu, Q., You, B., Tang, Y.-L., Häffner, H. & Shcherbakov, M. R.",
-    reference: {
-      kind: "journal",
-      journal: "npj Nanophotonics",
-      volume: "3",
-      pages: "3",
-      year: 2026,
-    },
-    arxiv: "2505.08997",
-    track: "ion",
+    arxiv: "2609.11028",
+    track: "ai",
   },
   {
     slug: "multiplexed",
@@ -232,6 +202,18 @@ export const papers: Paper[] = [
       year: 2026,
     },
     arxiv: "2405.10501",
+    track: "ion",
+  },
+  {
+    slug: "broadband",
+    title:
+      "A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control",
+    href: "https://arxiv.org/abs/2607.25062",
+    venue: "arXiv",
+    authors:
+      "Klawson, D.*, Zhi, Y.*, You, B.*, Bareian, M.*, Mossman, E.* et al.",
+    reference: { kind: "preprint", year: 2026 },
+    arxiv: "2607.25062",
     track: "ion",
   },
   {
@@ -268,6 +250,24 @@ export const papers: Paper[] = [
       year: 2023,
     },
     arxiv: "2206.12976",
+    track: "ion",
+  },
+  {
+    slug: "adjoint",
+    title:
+      "Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits",
+    href: "https://doi.org/10.1038/s44310-025-00102-4",
+    venue: "npj Nanophotonics",
+    authors:
+      "Momenzadeh, M., Sun, K., Wu, Q., You, B., Tang, Y.-L., Häffner, H. & Shcherbakov, M. R.",
+    reference: {
+      kind: "journal",
+      journal: "npj Nanophotonics",
+      volume: "3",
+      pages: "3",
+      year: 2026,
+    },
+    arxiv: "2505.08997",
     track: "ion",
   },
 ];

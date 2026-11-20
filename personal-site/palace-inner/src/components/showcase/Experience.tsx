@@ -27,14 +27,14 @@ const ROLES: RoleEntry[] = [
 
 const PAPERS = [
     {
-        venue: 'arXiv',
-        title: 'FrontierPhysics: Evaluating Agents for End-to-End Physics Research',
-        href: 'https://arxiv.org/abs/2611.06910',
+        venue: 'NeurIPS 2026',
+        title: 'SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks',
+        href: 'https://arxiv.org/abs/2602.12670',
     },
     {
         venue: 'arXiv',
-        title: 'BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure',
-        href: 'https://arxiv.org/abs/2609.11028',
+        title: 'FrontierPhysics: Evaluating Agents for End-to-End Physics Research',
+        href: 'https://arxiv.org/abs/2611.06910',
     },
     {
         venue: 'arXiv',
@@ -47,24 +47,19 @@ const PAPERS = [
         href: 'https://arxiv.org/abs/2604.05172',
     },
     {
-        venue: 'NeurIPS 2026',
-        title: 'SkillsBench: Benchmarking How Well Agent Skills Work Across Diverse Tasks',
-        href: 'https://arxiv.org/abs/2602.12670',
-    },
-    {
         venue: 'arXiv',
-        title: 'A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control',
-        href: 'https://arxiv.org/abs/2607.25062',
-    },
-    {
-        venue: 'npj Nanophotonics',
-        title: 'Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits',
-        href: 'https://doi.org/10.1038/s44310-025-00102-4',
+        title: 'BenchShield: Formal Model-Backed Instrumentation for Reward Integrity in LLM-Agent Evaluation Infrastructure',
+        href: 'https://arxiv.org/abs/2609.11028',
     },
     {
         venue: 'Phys. Rev. Applied',
         title: 'Temporally multiplexed ion-photon quantum interface via fast ion-chain transport',
         href: 'https://doi.org/10.1103/ppm8-8kx5',
+    },
+    {
+        venue: 'arXiv',
+        title: 'A broadband, individually addressing two- and three-dimensional photonic integrated circuit for trapped-ion qubit control',
+        href: 'https://arxiv.org/abs/2607.25062',
     },
     {
         venue: 'Nature',
@@ -75,6 +70,11 @@ const PAPERS = [
         venue: 'Phys. Rev. Lett.',
         title: 'Test of Causal Nonlinear Quantum Mechanics by Ramsey Interferometry with a Trapped Ion',
         href: 'https://doi.org/10.1103/PhysRevLett.130.200201',
+    },
+    {
+        venue: 'npj Nanophotonics',
+        title: 'Individual trapped-ion addressing with adjoint-optimized multimode photonic circuits',
+        href: 'https://doi.org/10.1038/s44310-025-00102-4',
     },
 ];
 

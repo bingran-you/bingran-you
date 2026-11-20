@@ -34,10 +34,19 @@ describe("papers", () => {
     expect(new Set(papers.map((p) => p.href)).size).toBe(papers.length);
   });
 
-  it("lists each track newest first, by arXiv number", () => {
+  // The rest of the order, by citations, is kept by hand (see the README).
+  it("leads each track with Bingran's first- and co-first-author papers", () => {
     for (const track of new Set(papers.map((p) => p.track))) {
-      const ids = papers.filter((p) => p.track === track).map((p) => p.arxiv);
-      expect(ids, track).toEqual([...ids].sort().reverse());
+      const leads = papers
+        .filter((p) => p.track === track)
+        .map(
+          ({ authors }) =>
+            authors.startsWith(OWN_NAME) ||
+            authors.includes(`${OWN_NAME}${CO_FIRST_MARK}`),
+        );
+      expect(leads, track).toEqual(
+        [...leads].sort((a, b) => Number(b) - Number(a)),
+      );
     }
   });
 

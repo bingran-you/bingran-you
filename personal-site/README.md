@@ -35,7 +35,7 @@ The site carries facts and other people's own words, never prose composed for it
 
 ### Add or update a paper
 
-1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, papers stand newest first, in descending order of their arXiv numbers.
+1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, the papers Bingran wrote as first or co-first author come first (a test checks this); within each group, papers stand in descending order of their Google Scholar citations, and the higher-impact venue goes first where citations are level.
 2. Add its abstract to `content/papers/details.json` under the same `slug`, copied verbatim from `https://arxiv.org/html/<id>`. Inline markup is limited to `<i>`, `<b>`, `<sup>`, `<sub>` and `<code>` (a test enforces this).
 3. Mirror the title and venue in `palace-inner/src/components/showcase/Experience.tsx` and in the repository-root `README.md`.
 

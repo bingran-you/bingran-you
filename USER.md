@@ -13,7 +13,7 @@ _The one you serve. Keep this living and current._
 ## Role
 
 - PhD Candidate in Applied Science & Technology, UC Berkeley
-- Affiliations: [Haeffner Lab](https://ions.berkeley.edu/), UC Berkeley, and [BenchFlow](https://www.benchflow.ai/)
+- Affiliations: Co-Founder of [BenchFlow](https://www.benchflow.ai/), the frontier environment lab building the runtime and benchmarks AI agents learn in (2026 – present), and Ion Trapper in [Haeffner Lab](https://ions.berkeley.edu/), UC Berkeley
 - **Two areas of work:**
   - 💻 **Agent Evaluation** — skills-based benchmarking, deterministic test environments for long-horizon workflows, applied AI systems across existing tools.
   - ⚛︎ **Experimental AMO Physics** — trapped-ion experiments in atomic, molecular and optical (AMO) physics: integrated photonics, ion-photon interfaces, multiplexed networking, 3D-printed microtraps.
@@ -26,7 +26,7 @@ _The one you serve. Keep this living and current._
 ## Projects to Know
 
 - [FrontierPhysics](https://www.benchflow.ai/frontierphysics) — FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research. Paper: [arXiv:2611.06910](https://arxiv.org/abs/2611.06910) (2026-11-04), Bingran first author (one of four co-first).
-- [BenchFlow](https://www.benchflow.ai/) — frontier environment lab building the runtime and benchmarks AI agents learn in.
+- [BenchFlow CLI](https://github.com/benchflow-ai/benchflow) — runs AI agents on benchmark tasks in sandboxes and scores them (Claude Code, Codex, Gemini CLI, OpenHands and more, over ACP). It is the BenchFlow entry in the site's Projects; the company itself is listed under Experience.
 - [SkillsBench](https://github.com/benchflow-ai/skillsbench) — benchmark for evaluating how well AI agents use skills.
 - [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) — Open-source agent orchestration for engineers.
 - [DoWhiz](https://github.com/KnoWhiz/DoWhiz) — agent-native product for getting work done across email, chat, documents, and related tools.

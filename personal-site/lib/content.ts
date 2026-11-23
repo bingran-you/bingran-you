@@ -93,10 +93,10 @@ export const projects: Project[] = [
       "FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.",
   },
   {
-    name: "BenchFlow",
-    href: "https://www.benchflow.ai/",
+    name: "BenchFlow CLI",
+    href: "https://github.com/benchflow-ai/benchflow",
     description:
-      "BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.",
+      "BenchFlow runs AI agents on tasks in sandboxes and scores them. Point it at a benchmark's tasks and pick an agent: Claude Code, Codex, Gemini CLI, OpenHands and more, over ACP. Each run records its reward, cost and full trajectory.",
   },
   {
     name: "SkillsBench",

@@ -30,7 +30,7 @@ The site carries facts and other people's own words, never prose composed for it
 - **Papers**: title, authors and venue, and an abstract copied verbatim from the paper's arXiv version for `/llms-full.txt` and the structured data.
 - **Projects**: the description each project gives itself on its site or repository.
 - **About**: the line Bingran's GitHub profile (the repository-root `README.md`) opens with.
-- **Experience** and **Education**: worded as on Bingran's LinkedIn (`experience` and `education` in `lib/content.ts`).
+- **Experience** and **Education**: worded as on Bingran's LinkedIn (`experience` and `education` in `lib/content.ts`, repeated in `palace-inner/src/components/showcase/Experience.tsx`).
 - **Everything else**: names, dates, links and labels.
 
 ### Add or update a paper
@@ -38,6 +38,11 @@ The site carries facts and other people's own words, never prose composed for it
 1. Add the entry to `papers` in `lib/content.ts` (title, link, venue tag, authors, reference, arXiv id, track). A published paper links through its DOI (`https://doi.org/…`), not to the publisher's page. Within a track, the papers Bingran wrote as first or co-first author come first (a test checks this); within each group, papers stand in descending order of their Google Scholar citations, and the higher-impact venue goes first where citations are level.
 2. Add its abstract to `content/papers/details.json` under the same `slug`, copied verbatim from `https://arxiv.org/html/<id>`. Inline markup is limited to `<i>`, `<b>`, `<sup>`, `<sub>` and `<code>` (a test enforces this).
 3. Mirror the title and venue in `palace-inner/src/components/showcase/Experience.tsx` and in the repository-root `README.md`.
+
+### Add or update a project
+
+1. Edit its entry in `projects` in `lib/content.ts`: the name, a link to its site or repository, and the description it gives itself there, verbatim. BenchFlow the company stands under Experience; under Projects, BenchFlow is its CLI (`github.com/benchflow-ai/benchflow`), and a test checks that the company site is not listed.
+2. Mirror the entry in `palace-inner/src/components/showcase/Projects.tsx` and under Selected Work in the repository-root `README.md`.
 
 ## Layout
 

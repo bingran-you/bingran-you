@@ -6,22 +6,38 @@ interface RoleEntry {
     role: string;
     period: string;
     lines: string[];
-    href?: string;
+    href: string;
 }
 
-const ROLES: RoleEntry[] = [
+// Experience and Education as on the parent site (`experience` and
+// `education` in lib/content.ts), worded as on Bingran's LinkedIn.
+const EXPERIENCE: RoleEntry[] = [
+    {
+        org: 'BenchFlow',
+        role: 'Co-Founder',
+        period: '2026 – Present',
+        href: 'https://www.benchflow.ai/',
+        lines: [
+            'San Francisco, California, United States',
+            'FrontierPhysics, SkillsBench, PostTrain (Feynman-1)',
+        ],
+    },
+];
+
+const EDUCATION: RoleEntry[] = [
     {
         org: 'University of California, Berkeley',
-        role: 'PhD Candidate in Applied Science & Technology',
-        period: '2022 — Present',
-        href: 'https://ions.berkeley.edu/',
-        lines: ['Berkeley, California', 'Haeffner Lab'],
+        role: 'Doctor of Philosophy (PhD), Quantum Physics',
+        period: '2022 – 2027',
+        href: 'https://www.berkeley.edu/',
+        lines: ['Advised by Hartmut Haeffner'],
     },
     {
         org: 'University of Chinese Academy of Sciences',
-        role: 'BS in Physics, Minor in Computer Science',
-        period: '2018 — 2022',
-        lines: ['Beijing, China', 'GPA 3.95 / 4.00', 'Rank 1 / 54'],
+        role: 'Bachelor of Science (BS), Majoring in Physics, Minoring in Computer Science',
+        period: '2018 – 2022',
+        href: 'https://english.ucas.ac.cn/',
+        lines: ['Rank 1/54'],
     },
 ];
 
@@ -78,39 +94,43 @@ const PAPERS = [
     },
 ];
 
+const RoleSection: React.FC<{ title: string; roles: RoleEntry[] }> = ({
+    title,
+    roles,
+}) => (
+    <div style={styles.section}>
+        <h1>{title}</h1>
+        <br />
+        {roles.map((r) => (
+            <div key={r.org} style={styles.role}>
+                <div style={styles.roleHeader}>
+                    <a
+                        href={r.href}
+                        rel="noreferrer"
+                        target="_blank"
+                        style={styles.orgLink}
+                    >
+                        <h2>{r.org}</h2>
+                    </a>
+                    <p style={styles.period}>{r.period}</p>
+                </div>
+                <h3 style={styles.roleTitle}>{r.role}</h3>
+                <ul style={styles.ul}>
+                    {r.lines.map((l) => (
+                        <li key={l}>{l}</li>
+                    ))}
+                </ul>
+            </div>
+        ))}
+    </div>
+);
+
 const Experience = () => {
     return (
         <div className="site-page-content">
             <ResumeDownload />
-            <div style={styles.section}>
-                <h1>Education</h1>
-                <br />
-                {ROLES.map((r) => (
-                    <div key={r.org} style={styles.role}>
-                        <div style={styles.roleHeader}>
-                            {r.href ? (
-                                <a
-                                    href={r.href}
-                                    rel="noreferrer"
-                                    target="_blank"
-                                    style={styles.orgLink}
-                                >
-                                    <h2>{r.org}</h2>
-                                </a>
-                            ) : (
-                                <h2>{r.org}</h2>
-                            )}
-                            <p style={styles.period}>{r.period}</p>
-                        </div>
-                        <h3 style={styles.roleTitle}>{r.role}</h3>
-                        <ul style={styles.ul}>
-                            {r.lines.map((l) => (
-                                <li key={l}>{l}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
-            </div>
+            <RoleSection title="Experience" roles={EXPERIENCE} />
+            <RoleSection title="Education" roles={EDUCATION} />
             <div style={styles.section}>
                 <h1>Selected papers</h1>
                 <br />

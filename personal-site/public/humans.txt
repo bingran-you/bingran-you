@@ -11,7 +11,7 @@
 
 /* SITE */
 
-   Last update:  2026/11/17
+   Last update:  2026/11/23
    Standards:    HTML5, TypeScript
    Components:   Next.js 16, React 19
    Hosting:      Vercel

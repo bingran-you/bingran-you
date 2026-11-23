@@ -35,7 +35,7 @@ I build reliable AI systems and run trapped-ion experiments in atomic, molecular
 ### Selected Work
 
 - ⚛️ [FrontierPhysics](https://www.benchflow.ai/frontierphysics) - FrontierPhysics is a benchmark measuring whether AI agents can carry out authentic, specialist-level physics research.
-- 🌊 [BenchFlow](https://www.benchflow.ai/) - BenchFlow is a frontier environment lab. We build the environments AI agents learn in. We ship SkillsBench, ClawsBench, PostTrain, and the runtime.
+- 🌊 [BenchFlow CLI](https://github.com/benchflow-ai/benchflow) - BenchFlow runs AI agents on tasks in sandboxes and scores them. Point it at a benchmark's tasks and pick an agent: Claude Code, Codex, Gemini CLI, OpenHands and more, over ACP. Each run records its reward, cost and full trajectory.
 - 📐 [SkillsBench](https://github.com/benchflow-ai/skillsbench) - SkillsBench evaluates how well skills work and how effective agents are at using them.
 - 🌲 [first-tree](https://first-tree.ai/) ([repo](https://github.com/first-tree-ai/first-tree)) - Open-source agent orchestration for engineers. Put Claude Code, Codex, Cursor and your own agents on one backlog — parallel runs on your keys, review before merge, everything lands as a pull request.
 - 🧠 [DeepTutor](https://github.com/KnoWhiz/DeepTutorZotero) - DeepTutorZotero is a research sources manager based on Zotero, with amazing AI capability powered by DeepTutor.

@@ -26,6 +26,15 @@ describe("projects", () => {
       projects.some(({ name, href }) => /dowhiz/i.test(`${name} ${href}`)),
     ).toBe(false);
   });
+
+  // The company stands under Experience; as a project, BenchFlow is its CLI.
+  it("does not list the BenchFlow company as a project", () => {
+    expect(
+      projects.some(({ href }) =>
+        /^https:\/\/(www\.)?benchflow\.ai\/?$/.test(href),
+      ),
+    ).toBe(false);
+  });
 });
 
 describe("papers", () => {
